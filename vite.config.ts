@@ -1,9 +1,11 @@
 import { defineConfig } from "vite";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 
-// https://vite.dev/config/
+// https://vite.dev
+// this uses pnpm
 export default defineConfig({
   plugins: [
     tanstackRouter({
@@ -18,9 +20,3 @@ export default defineConfig({
     port: 4000,
   },
 });
-function tanstackRouter(arg0: {
-  target: string;
-  autoCodeSplitting: boolean;
-}): import("vite").PluginOption {
-  throw new Error("Function not implemented.");
-}
