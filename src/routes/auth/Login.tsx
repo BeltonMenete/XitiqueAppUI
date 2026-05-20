@@ -54,14 +54,17 @@ function RouteComponent() {
               transition={{ duration: 0.15, delay: 0.05 }}
               className="flex justify-between items-center"
             >
-              <div className="flex items-center gap-3">
-                <motion.div
+              <div className="flex items-center gap-2.5">
+                {/* Teu SVG - 40x40 pra manter o mesmo tamanho do bloco anterior */}
+                <motion.img
                   whileHover={{ rotate: 15 }}
                   transition={{ duration: 0.15, ease: "easeOut" }}
-                  className="w-10 h-10 bg-[var(--color-mint-leaf-500)] rounded-2xl flex items-center justify-center"
-                >
-                  <span className="text-white text-3xl font-bold">×</span>
-                </motion.div>
+                  src="/xitique-logo.svg"
+                  alt="Xitique"
+                  width={40}
+                  height={40}
+                  className="w-10 h-10"
+                />
                 <span className="text-3xl font-semibold text-gray-900">
                   Xitique
                 </span>
