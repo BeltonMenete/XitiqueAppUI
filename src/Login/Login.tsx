@@ -1,5 +1,5 @@
 function Login() {
-   return <h1>Hey buddy</h1>;
+  return <></>;
 }
 
 export default Login;
