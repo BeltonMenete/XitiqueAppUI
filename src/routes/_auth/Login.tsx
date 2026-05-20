@@ -3,11 +3,11 @@ import { useState } from "react";
 import { Eye, EyeOff, User, Lock, UserPlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const Route = createFileRoute("/auth/Login")({
-  component: RouteComponent,
+export const Route = createFileRoute("/_auth/Login")({
+  component: Login,
 });
 
-function RouteComponent() {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
