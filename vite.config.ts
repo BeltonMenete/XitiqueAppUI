@@ -1,22 +1,19 @@
-import { defineConfig } from "vite";
-import { tanstackRouter } from "@tanstack/router-plugin/vite";
-import react, { reactCompilerPreset } from "@vitejs/plugin-react";
-import babel from "@rolldown/plugin-babel";
-import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from 'vite'
+import { devtools } from '@tanstack/devtools-vite'
 
-// https://vite.dev
-// this uses pnpm
-export default defineConfig({
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
+
+import viteReact from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+
+const config = defineConfig({
+  resolve: { tsconfigPaths: true },
   plugins: [
-    tanstackRouter({
-      target: "react",
-      autoCodeSplitting: true,
-    }),
-    react(),
-    babel({ presets: [reactCompilerPreset()] }),
+    devtools(),
     tailwindcss(),
+    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    viteReact(),
   ],
-  server: {
-    port: 4000,
-  },
-});
+})
+
+export default config
