@@ -55,7 +55,6 @@ function RouteComponent() {
               className="flex justify-between items-center"
             >
               <div className="flex items-center gap-2.5">
-                {/* Teu SVG - 40x40 pra manter o mesmo tamanho do bloco anterior */}
                 <motion.img
                   whileHover={{ rotate: 15 }}
                   transition={{ duration: 0.15, ease: "easeOut" }}
@@ -252,7 +251,8 @@ function RouteComponent() {
               transition={{ duration: 0.15, delay: 0.18 }}
               className="text-center text-xs text-gray-500 pt-2"
             >
-              © 2025 Xitique. Todos os direitos reservados.
+              © {new Date().getFullYear()} Xitique. Todos os direitos
+              reservados.
             </motion.p>
           </div>
         </motion.div>
