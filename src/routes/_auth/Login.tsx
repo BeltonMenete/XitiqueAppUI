@@ -24,7 +24,7 @@ function Login() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 overflow-hidden">
       <div className="relative w-full max-w-5xl">
-        {/* Left image - sutil */}
+        {/* Left image */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -40,7 +40,7 @@ function Login() {
           />
         </motion.div>
 
-        {/* Right card - rápido */}
+        {/* Right card  */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -120,7 +120,7 @@ function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-11 pr-5 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mint-leaf-500)] transition-all"
-                    placeholder="o.seu@email.com"
+                    placeholder="exemplo@email.com"
                     required
                   />
                 </motion.div>
