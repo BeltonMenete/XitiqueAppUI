@@ -17,38 +17,32 @@ function RouteComponent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="flex w-full max-w-5xl mx-auto overflow-hidden bg-white shadow-xl rounded- max-h-">
-        {/* Left Side - Image */}
-        <div className="hidden lg:block w-1/2 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="relative w-full max-w-5xl">
+        {/* Left image - moved 32px to the left */}
+        <div className="hidden lg:block absolute inset-y-0 -left-8 w-3/5 rounded-3xl overflow-hidden">
           <img
             src="/xitique-left-panel.avif"
-            alt="Xitique Promo"
-            className="absolute inset-0 w-full h-full object-cover scale-105"
+            alt="Promo"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/25 to-transparent" />
         </div>
 
-        {/* Right Side - Login Panel */}
-        <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-8 lg:p-12 rounded-">
-          <div className="w-full max-w-md space-y-6">
-            {/* Header */}
+        {/* Right card - overlaps left image */}
+        <div className="relative lg:ml-auto lg:w-1/2 bg-white rounded-3xl shadow-xl p-8 lg:p-12">
+          <div className="w-full max-w-md mx-auto space-y-6">
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-[var(--color-mint-leaf-500)] rounded-2xl flex items-center justify-center">
-                  <span className="text-white text-3xl font-bold leading-none">
-                    ×
-                  </span>
+                  <span className="text-white text-3xl font-bold">×</span>
                 </div>
                 <span className="text-3xl font-semibold text-gray-900">
                   Xitique
                 </span>
               </div>
-
-              {/* Criar conta with Icon */}
               <a
                 href="#"
-                className="flex items-center gap-1.5 text-sm font-medium text-[var(--color-sky-blue-600)] hover:text-[var(--color-sky-blue-700)] transition-colors"
+                className="flex items-center gap-1.5 text-sm font-medium text-[var(--color-sky-blue-600)]"
               >
                 <UserPlus size={18} />
                 Criar conta
@@ -56,14 +50,13 @@ function RouteComponent() {
             </div>
 
             <div>
-              <h1 className="text-[2.1rem] font-semibold text-gray-900 mb-1">
+              <h1 className="text-3xl font-semibold text-gray-900 mb-1">
                 Entrar
               </h1>
               <p className="text-gray-600">Acesse a sua conta</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email Field */}
               <div className="space-y-1.5">
                 <label
                   htmlFor="email"
@@ -81,14 +74,13 @@ function RouteComponent() {
                     type="text"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-11 pr-5 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mint-leaf-500)] text-base"
+                    className="w-full pl-11 pr-5 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mint-leaf-500)]"
                     placeholder="seu@email.com"
                     required
                   />
                 </div>
               </div>
 
-              {/* Password Field */}
               <div className="space-y-1.5">
                 <label
                   htmlFor="password"
@@ -106,14 +98,14 @@ function RouteComponent() {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-11 pr-12 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mint-leaf-500)] text-base"
+                    className="w-full pl-11 pr-12 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mint-leaf-500)]"
                     placeholder="••••••••"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -123,7 +115,7 @@ function RouteComponent() {
               <div className="flex justify-end">
                 <a
                   href="#"
-                  className="text-sm text-[var(--color-sky-blue-600)] hover:text-[var(--color-sky-blue-700)] font-medium"
+                  className="text-sm text-[var(--color-sky-blue-600)] font-medium"
                 >
                   Esqueceu a palavra-passe?
                 </a>
@@ -131,11 +123,7 @@ function RouteComponent() {
 
               <button
                 type="submit"
-                className="w-full py-4 rounded-2xl text-white font-semibold text-lg
-                           bg-[var(--color-mint-leaf-500)]
-                           hover:bg-[var(--color-mint-leaf-600)]
-                           active:bg-[var(--color-mint-leaf-700)]
-                           transition-all duration-200 shadow-lg"
+                className="w-full py-4 rounded-2xl text-white font-semibold text-lg bg-[var(--color-mint-leaf-500)] hover:bg-[var(--color-mint-leaf-600)] transition-all shadow-lg"
               >
                 Entrar
               </button>
