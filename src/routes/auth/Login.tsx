@@ -24,7 +24,7 @@ function RouteComponent() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 overflow-hidden">
       <div className="relative w-full max-w-5xl">
-        {/* Left image - mantive sutil como tu pediu antes */}
+        {/* Left image - sutil */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -40,7 +40,7 @@ function RouteComponent() {
           />
         </motion.div>
 
-        {/* Right card - rápido agora: 0.15s */}
+        {/* Right card - rápido */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -48,7 +48,6 @@ function RouteComponent() {
           className="relative lg:ml-auto lg:w-1/2 bg-white rounded-3xl shadow-xl p-8 lg:p-12"
         >
           <div className="w-full max-w-md mx-auto space-y-6">
-            {/* Header - rápido */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -86,13 +85,12 @@ function RouteComponent() {
               transition={{ duration: 0.15, delay: 0.08 }}
             >
               <h1 className="text-3xl font-semibold text-gray-900 mb-1">
-                Entrar
+                Iniciar sessão
               </h1>
-              <p className="text-gray-600">Acesse a sua conta</p>
+              <p className="text-gray-600">Aceda à sua conta</p>
             </motion.div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Input email - rápido */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -103,7 +101,7 @@ function RouteComponent() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Email ou Nome de Usuário
+                  Email ou Nome de Utilizador
                 </label>
                 <motion.div
                   whileFocus={{ scale: 1.005 }}
@@ -120,13 +118,12 @@ function RouteComponent() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-11 pr-5 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mint-leaf-500)] transition-all"
-                    placeholder="seu@email.com"
+                    placeholder="o.seu@email.com"
                     required
                   />
                 </motion.div>
               </motion.div>
 
-              {/* Input password - rápido */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -162,7 +159,7 @@ function RouteComponent() {
                     whileTap={{ scale: 0.95 }}
                     transition={{ duration: 0.08 }}
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
                   >
                     <AnimatePresence mode="wait">
                       <motion.div
@@ -195,11 +192,10 @@ function RouteComponent() {
                   transition={{ duration: 0.1 }}
                   className="text-sm text-[var(--color-sky-blue-600)] font-medium"
                 >
-                  Esqueceu a palavra-passe?
+                  Esqueceu-se da palavra-passe?
                 </motion.a>
               </motion.div>
 
-              {/* Botão - rápido */}
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -209,7 +205,7 @@ function RouteComponent() {
                 transition={{ duration: 0.1 }}
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-4 rounded-2xl text-white font-semibold text-lg bg-[var(--color-mint-leaf-500)] hover:bg-[var(--color-mint-leaf-600)] transition-colors shadow-lg disabled:opacity-70"
+                className="w-full py-4 rounded-2xl text-white font-semibold text-lg bg-[var(--color-mint-leaf-500)] hover:bg-[var(--color-mint-leaf-600)] transition-colors shadow-lg disabled:opacity-70 cursor-pointer"
               >
                 <AnimatePresence mode="wait">
                   {isLoading ? (
@@ -230,7 +226,7 @@ function RouteComponent() {
                         }}
                         className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                       />
-                      Entrando...
+                      A iniciar sessão...
                     </motion.div>
                   ) : (
                     <motion.span
@@ -240,7 +236,7 @@ function RouteComponent() {
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.1 }}
                     >
-                      Entrar
+                      Iniciar sessão
                     </motion.span>
                   )}
                 </AnimatePresence>
