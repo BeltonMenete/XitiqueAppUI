@@ -23,7 +23,7 @@ function Home() {
 						Olá, bem-vindo ao {APP_NAME}
 					</h1>
 					<p className="text-lg text-gray-600">
-						Grupo de poupança digital inspirado no Xitique
+						plataforma de Gestão de Poupanças e Organização Financeiray
 					</p>
 				</motion.div>
 
