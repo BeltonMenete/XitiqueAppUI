@@ -36,7 +36,7 @@ git commit -m "funcionalidade(auth): adicionar página de login"
 
 ## PR Guidelines
 
-- Single feature/fix per PR
+- Single feature/fix per PR aka Github flow
 - Follow Conventional Commits in PR title
 - Pass all tests: `pnpm test`
 - Pass linting: `pnpm check`
