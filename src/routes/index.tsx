@@ -23,7 +23,7 @@ function Home() {
 						Olá, bem-vindo ao {APP_NAME}
 					</h1>
 					<p className="text-lg text-gray-600">
-						plataforma de Gestão de Poupanças e Organização Financeiray
+						plataforma de Gestão de Poupanças e Organização Financeira
 					</p>
 				</motion.div>
 
