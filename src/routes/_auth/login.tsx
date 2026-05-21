@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Eye, EyeOff, User, Lock, UserPlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { LineSpinner } from "ldrs/react";
+import "ldrs/react/LineSpinner.css";
 
 export const Route = createFileRoute("/_auth/login")({
   component: Login,
@@ -201,10 +203,9 @@ function Login() {
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.15, delay: 0.16 }}
+                transition={{ duration: 0.1, delay: 0.16 }}
                 whileHover={{ scale: 1.005 }}
                 whileTap={{ scale: 0.995 }}
-                transition={{ duration: 0.1 }}
                 type="submit"
                 disabled={isLoading}
                 className="w-full py-4 rounded-2xl text-white font-semibold text-lg bg-[var(--color-mint-leaf-500)] hover:bg-[var(--color-mint-leaf-600)] transition-colors shadow-lg disabled:opacity-70 cursor-pointer"
@@ -219,14 +220,11 @@ function Login() {
                       transition={{ duration: 0.1 }}
                       className="flex items-center justify-center gap-2"
                     >
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: 0.8,
-                          ease: "linear",
-                        }}
-                        className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                      <LineSpinner
+                        size="40"
+                        stroke="3"
+                        speed="1"
+                        color="white"
                       />
                       A iniciar sessão...
                     </motion.div>
