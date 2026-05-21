@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Eye, EyeOff, User, Lock, UserPlus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const Route = createFileRoute("/_auth/Login")({
+export const Route = createFileRoute("/_auth/login")({
   component: Login,
 });
 
@@ -89,7 +89,7 @@ function Login() {
               <h1 className="text-3xl font-semibold text-gray-900 mb-1">
                 Iniciar sessão
               </h1>
-              <p className="text-gray-600">Aceda à sua conta</p>
+              <p className="text-gray-600 text-center">Aceda à sua conta</p>
             </motion.div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
