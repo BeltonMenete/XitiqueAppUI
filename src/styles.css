@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
+
 * {
   box-sizing: border-box;
 }
+
 
 html,
 body,

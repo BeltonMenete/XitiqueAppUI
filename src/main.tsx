@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom/client";
+import 'ldrs/react/Ring2.css'
 import { RouterProvider } from "@tanstack/react-router";
 import { getRouter } from "#/router";
 import "#/styles.css";
