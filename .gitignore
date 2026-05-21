@@ -13,4 +13,3 @@ __unconfig*
 todos.json
 .cta.json
 package-lock.json
-src/routeTree.gen.ts
