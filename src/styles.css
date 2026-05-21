@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
+
 * {
   box-sizing: border-box;
 }
+
 
 html,
 body,
@@ -15,31 +17,9 @@ body {
 }
 
 :root {
-  /* Xitique Color Palette */
-  --color-sky-blue-50: oklch(96.67% 0.01 204.92);
-  --color-sky-blue-100: oklch(93.21% 0.017 210.19);
-  --color-sky-blue-200: oklch(86.56% 0.037 209.45);
-  --color-sky-blue-300: oklch(79.76% 0.054 209.83);
-  --color-sky-blue-400: oklch(73.22% 0.071 209.9);
-  --color-sky-blue-500: oklch(66.59% 0.084 210.76);
-  --color-sky-blue-600: oklch(56.74% 0.071 210.55);
-  --color-sky-blue-700: oklch(46.17% 0.056 210.7);
-  --color-sky-blue-800: oklch(35.24% 0.041 210.29);
-  --color-sky-blue-900: oklch(23.08% 0.022 210.75);
-  --color-sky-blue-950: oklch(19.43% 0.018 209.06);
+	/* Xitique Color Palette */
+	--color-sky-blue-600: oklch(56.74% 0.071 210.55);
 
-  --color-mint-leaf-50: oklch(96.92% 0.014 162.48);
-  --color-mint-leaf-100: oklch(93.63% 0.027 160.86);
-  --color-mint-leaf-200: oklch(87.32% 0.055 159.98);
-  --color-mint-leaf-300: oklch(81.28% 0.084 158.86);
-  --color-mint-leaf-400: oklch(75.26% 0.111 157.37);
-  --color-mint-leaf-500: oklch(69.49% 0.134 155.4);
-  --color-mint-leaf-600: oklch(59.08% 0.112 155.54);
-  --color-mint-leaf-700: oklch(48.2% 0.09 155.74);
-  --color-mint-leaf-800: oklch(36.4% 0.063 156.23);
-  --color-mint-leaf-900: oklch(23.84% 0.036 157.16);
-  --color-mint-leaf-950: oklch(19.68% 0.026 159.36);
-
-  --color-pearl-aqua-500: oklch(67.82% 0.09 173.6);
-  --color-pearl-aqua-600: oklch(57.67% 0.075 174.13);
+	--color-mint-leaf-500: oklch(69.49% 0.134 155.4);
+	--color-mint-leaf-600: oklch(59.08% 0.112 155.54);
 }
