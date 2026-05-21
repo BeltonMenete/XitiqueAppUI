@@ -20,7 +20,7 @@ function Home() {
           transition={{ duration: ANIMATION_DURATION.NORMAL }}
         >
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
-            Olá, bem-vindo ao {APP_NAME}
+            OLÁ, SEJA BEM-VINDO AO {APP_NAME}
           </h1>
           <p className="text-lg text-gray-600">
             Plataforma de Gestão de ooupanças e organização Financeira
