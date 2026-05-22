@@ -34,7 +34,7 @@ function Home() {
         >
           <Link
             to="/login"
-            className="inline-block px-8 py-3 bg-[var(--color-mint-leaf-500)] hover:bg-[var(--color-mint-leaf-600)] text-white font-semibold rounded-2xl shadow-lg transition-colors"
+            className="inline-block px-8 py-3 bg-(--color-mint-leaf-500) hover:bg-(--color-mint-leaf-600) text-white font-semibold rounded-2xl shadow-lg transition-colors"
           >
             Entrar
           </Link>

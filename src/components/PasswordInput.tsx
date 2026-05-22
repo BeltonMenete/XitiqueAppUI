@@ -19,6 +19,7 @@ export function PasswordInput({
 }: PasswordInputProps) {
 	return (
 		<motion.div
+			layout
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
 			transition={{ duration: ANIMATION_DURATION.NORMAL, delay }}
@@ -46,7 +47,6 @@ export function PasswordInput({
 					onChange={(e) => onChange(e.target.value)}
 					className="w-full pl-11 pr-12 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-mint-leaf-500)] transition-all"
 					placeholder="••••••••"
-					required
 				/>
 				<motion.button
 					type="button"

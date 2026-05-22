@@ -1,32 +1,37 @@
-export function validateEmail(email: string): boolean {
-	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	return emailRegex.test(email);
-}
+import * as v from "valibot";
 
-export function validatePassword(password: string): boolean {
-	return password.length >= 6;
-}
+const LoginSchema = v.object({
+	email: v.pipe(
+		v.string("Email é obrigatório"),
+		v.trim(),
+		v.nonEmpty("Email é obrigatório"),
+		v.email("Por favor, introduza um email válido")
+	),
+	password: v.pipe(
+		v.string("Palavra-passe é obrigatória"),
+		v.nonEmpty("Palavra-passe é obrigatória"),
+		v.minLength(6, "Palavra-passe deve ter pelo menos 6 caracteres")
+	),
+});
+
+export type LoginInput = v.InferInput<typeof LoginSchema>;
+export type LoginOutput = v.InferOutput<typeof LoginSchema>;
 
 export function validateLoginForm(
 	email: string,
 	password: string
 ): { valid: boolean; errors: Record<string, string> } {
+	const result = v.safeParse(LoginSchema, { email, password });
+
+	if (result.success) {
+		return { valid: true, errors: {} };
+	}
+
 	const errors: Record<string, string> = {};
-
-	if (!email) {
-		errors.email = "Email é obrigatório";
-	} else if (!validateEmail(email)) {
-		errors.email = "Email inválido";
+	for (const issue of result.issues) {
+		const path = issue.path?.[0]?.key || "general";
+		errors[path] = issue.message;
 	}
 
-	if (!password) {
-		errors.password = "Palavra-passe é obrigatória";
-	} else if (!validatePassword(password)) {
-		errors.password = "Palavra-passe deve ter pelo menos 6 caracteres";
-	}
-
-	return {
-		valid: Object.keys(errors).length === 0,
-		errors,
-	};
+	return { valid: false, errors };
 }
