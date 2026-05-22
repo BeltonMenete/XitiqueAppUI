@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { UserPlus } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { APP_NAME, ANIMATION_DURATION } from "#/lib/constants";
 
 export function LoginHeader() {
@@ -33,7 +34,7 @@ export function LoginHeader() {
 				className="flex items-center gap-1.5 text-sm font-medium text-[var(--color-sky-blue-600)]"
 			>
 				<UserPlus size={18} />
-				Criar conta
+				<Link to="/signup">Criar conta</Link>
 			</motion.a>
 		</motion.div>
 	);

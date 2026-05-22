@@ -119,7 +119,7 @@ function Login() {
                   href="#"
                   whileHover={{ x: 1 }}
                   transition={{ duration: ANIMATION_DURATION.FAST }}
-                  className="text-sm text-[var(--color-sky-blue-600)] font-medium"
+                  className="text-sm text-(--color-sky-blue-600) font-medium"
                 >
                   Esqueceu-se da palavra-passe?
                 </motion.a>
@@ -133,7 +133,7 @@ function Login() {
                 whileTap={{ scale: 0.995 }}
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-4 rounded-2xl text-white font-semibold text-lg bg-[var(--color-mint-leaf-500)] hover:bg-[var(--color-mint-leaf-600)] transition-colors shadow-lg disabled:opacity-70 cursor-pointer"
+                className="w-full py-4 rounded-2xl text-white font-semibold text-lg bg-(--color-mint-leaf-500) hover:bg-(--color-mint-leaf-600) transition-colors shadow-lg disabled:opacity-70 cursor-pointer"
               >
                 <AnimatePresence mode="wait">
                   {isLoading ? (
