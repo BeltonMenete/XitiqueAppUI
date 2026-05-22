@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LoginHeader } from "#/components/LoginHeader";
 import { EmailInput } from "#/components/EmailInput";
 import { PasswordInput } from "#/components/PasswordInput";
+import { FormError } from "#/components/FormError";
 import { validateLoginForm } from "#/lib/validation";
 import { LOGIN_SUBMIT_DELAY, ANIMATION_DURATION } from "#/lib/constants";
 import { Ring2 } from 'ldrs/react'
@@ -41,7 +42,12 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: ANIMATION_DURATION.NORMAL }}
+      className="login-bg min-h-screen flex items-center justify-center p-4 overflow-hidden"
+    >
       <div className="relative w-full max-w-5xl">
         {/* Left image */}
         <motion.div
@@ -61,9 +67,9 @@ function Login() {
 
         {/* Right card */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: ANIMATION_DURATION.NORMAL }}
+          initial={{ opacity: 0, scale: 0.95, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: ANIMATION_DURATION.NORMAL, delay: 0.08 }}
           className="relative lg:ml-auto lg:w-1/2 bg-white rounded-3xl shadow-xl p-8 lg:p-12"
         >
           <div className="w-full max-w-md mx-auto space-y-6">
@@ -80,22 +86,29 @@ function Login() {
               <p className="text-gray-600 text-center">Aceda à sua conta</p>
             </motion.div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <EmailInput value={email} onChange={setEmail} />
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email}</p>
-              )}
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+              <motion.div layout className="space-y-2">
+                <EmailInput value={email} onChange={setEmail} />
+                <AnimatePresence mode="wait">
+                  {errors.email && (
+                    <FormError message={errors.email} />
+                  )}
+                </AnimatePresence>
+              </motion.div>
 
-              <PasswordInput
-                value={password}
-                onChange={setPassword}
-                showPassword={showPassword}
-                onToggleShow={() => setShowPassword(!showPassword)}
-              />
-              {errors.password && (
-                <p className="text-sm text-red-500">{errors.password}</p>
-              )}
-
+              <motion.div layout className="space-y-2">
+                <PasswordInput
+                  value={password}
+                  onChange={setPassword}
+                  showPassword={showPassword}
+                  onToggleShow={() => setShowPassword(!showPassword)}
+                />
+                <AnimatePresence mode="wait">
+                  {errors.password && (
+                    <FormError message={errors.password} />
+                  )}
+                </AnimatePresence>
+              </motion.div>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -133,7 +146,7 @@ function Login() {
                       className="flex items-center justify-center gap-2"
                     >
                       <Ring2
-                        size="20"
+                        size="18"
                         stroke="3"
                         strokeLength="0.20"
                         bgOpacity="0.1"
@@ -169,6 +182,6 @@ function Login() {
           </div>
         </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
