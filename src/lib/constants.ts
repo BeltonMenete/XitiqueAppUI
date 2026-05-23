@@ -1,4 +1,4 @@
-export const APP_NAME = "XITIQUE";
+export const APP_NAME = 'XITIQUE';
 export const LOGIN_SUBMIT_DELAY = 1500;
 export const ANIMATION_DURATION = {
   FAST: 0.08,
