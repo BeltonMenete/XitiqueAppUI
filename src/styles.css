@@ -1,88 +1,80 @@
-@import "tailwindcss";
-
+@import 'tailwindcss';
 
 * {
-  box-sizing: border-box;
+   box-sizing: border-box;
 }
-
 
 html,
 body,
 #app {
-  min-height: 100%;
+   min-height: 100%;
 }
 
 body {
-  margin: 0;
+   margin: 0;
 }
 
 :root {
-	/* Xitique Color Palette */
-	--color-sky-blue-600: oklch(56.74% 0.071 210.55);
+   /* Xitique Color Palette */
+   --color-sky-blue-600: oklch(56.74% 0.071 210.55);
 
-	--color-mint-leaf-500: oklch(69.49% 0.134 155.4);
-	--color-mint-leaf-600: oklch(59.08% 0.112 155.54);
+   --color-mint-leaf-500: oklch(69.49% 0.134 155.4);
+   --color-mint-leaf-600: oklch(59.08% 0.112 155.54);
 }
 
 /* Beautiful animated gradient background */
 @keyframes gradient-shift {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+   0% {
+      background-position: 0% 50%;
+   }
+   50% {
+      background-position: 100% 50%;
+   }
+   100% {
+      background-position: 0% 50%;
+   }
 }
 
 .login-bg {
-	background: linear-gradient(
-		-45deg,
-		#daf7e0,
-		#d0ebf7,
-		#e8e2f9,
-		#f5dff0
-	);
-	background-size: 400% 400%;
-	animation: gradient-shift 15s ease infinite;
-	position: relative;
-	overflow: hidden;
+   background: linear-gradient(-45deg, #daf7e0, #d0ebf7, #e8e2f9, #f5dff0);
+   background-size: 400% 400%;
+   animation: gradient-shift 15s ease infinite;
+   position: relative;
+   overflow: hidden;
 }
 
 .login-bg::before {
-	content: "";
-	position: absolute;
-	top: -50%;
-	right: -10%;
-	width: 500px;
-	height: 500px;
-	background: radial-gradient(circle, rgba(105, 198, 145, 0.1) 0%, transparent 70%);
-	border-radius: 50%;
-	animation: float 6s ease-in-out infinite;
-	pointer-events: none;
+   content: '';
+   position: absolute;
+   top: -50%;
+   right: -10%;
+   width: 500px;
+   height: 500px;
+   background: radial-gradient(circle, rgba(105, 198, 145, 0.1) 0%, transparent 70%);
+   border-radius: 50%;
+   animation: float 6s ease-in-out infinite;
+   pointer-events: none;
 }
 
 .login-bg::after {
-	content: "";
-	position: absolute;
-	bottom: -10%;
-	left: -5%;
-	width: 400px;
-	height: 400px;
-	background: radial-gradient(circle, rgba(79, 172, 254, 0.08) 0%, transparent 70%);
-	border-radius: 50%;
-	animation: float 8s ease-in-out infinite reverse;
-	pointer-events: none;
+   content: '';
+   position: absolute;
+   bottom: -10%;
+   left: -5%;
+   width: 400px;
+   height: 400px;
+   background: radial-gradient(circle, rgba(79, 172, 254, 0.08) 0%, transparent 70%);
+   border-radius: 50%;
+   animation: float 8s ease-in-out infinite reverse;
+   pointer-events: none;
 }
 
 @keyframes float {
-	0%, 100% {
-		transform: translateY(0px);
-	}
-	50% {
-		transform: translateY(30px);
-	}
+   0%,
+   100% {
+      transform: translateY(0px);
+   }
+   50% {
+      transform: translateY(30px);
+   }
 }
-

@@ -9,6 +9,7 @@ Use **Conventional Commits**. Messages may be in **Portuguese** or **English**.
 ```
 
 **Types:**
+
 - `feat` / `funcionalidade` — New feature
 - `fix` / `correção` — Bug fix
 - `docs` / `documentação` — Documentation
@@ -19,6 +20,7 @@ Use **Conventional Commits**. Messages may be in **Portuguese** or **English**.
 - `chore` / `manutenção` — Build/tooling
 
 **Examples:**
+
 ```bash
 git commit -m "feat(auth): add login page"
 git commit -m "fix: resolve button loading state"
@@ -46,6 +48,7 @@ git commit -m "funcionalidade(auth): adicionar página de login"
 ## Reporting Issues
 
 Include:
+
 - Clear description
 - Reproduction steps
 - Expected vs actual behavior
