@@ -1,0 +1,536 @@
+XITIQUE DIGITAL - ESPECIFICAÇÃO EXAUSTIVA DE TELAS WEB
+================================================================================
+DOCUMENTO COMPLETO: TODAS AS TELAS DA VERSÃO WEB
+O QUE CADA TELA PRECISA TER E POR QUÊ
+================================================================================
+
+MÓDULO 1: AUTENTICAÇÃO E ONBOARDING WEB
+--------------------------------------------------------------------------------
+
+TELA 1.1: LANDING PAGE / PÁGINA INICIAL PÚBLICA
+O QUE PRECISA TER:
+1. Cabeçalho: Logo Xitique Digital, Menu [Funcionalidades] [Preços] [Contato] [Entrar]
+2. Hero Section: Título "Digitalize seu Xitique em 5 minutos", Subtítulo "Substitua caderno e cartão", Botão "Começar Grátis" + Botão "Ver Demo"
+3. Seção Problema: 3 cards com ícones - "Caderno perde" + "Cálculo erra" + "Fraude invisível"
+4. Seção Solução: Screenshot app mobile + web lado a lado, texto "Collector na rua, você no escritório"
+5. Seção Funcionalidades: Grid 6 cards - Offline, Anti-fraude, Relatórios, Empréstimo, Gamificação, API
+6. Seção Preços: 3 planos - Básico 500 MZN/mês até 50 clientes, Pro 1500 MZN até 200, Enterprise custom
+7. Seção Depoimentos: 3 cards "Ana Maputo: Reduzi 90% do tempo"
+8. Rodapé: Links, Redes Sociais, Telefone +258
+9. Botão WhatsApp flutuante canto inferior direito
+
+POR QUÊ:
+- Hero claro porque organizador chega com dor específica, precisa ver solução em 3s
+- "Começar Grátis" trial 14 dias reduz fricção, organizador testa sem cartão
+- Problema/Solução porque venda consultiva: primeiro dói, depois cura
+- Screenshot lado a lado porque prova que existe mobile + web integrados
+- Preços transparentes porque organizador calcula ROI antes de ligar
+- WhatsApp flutuante porque público MZ prefere WhatsApp que email
+
+TELA 1.2: CADASTRO ORGANIZAÇÃO
+O QUE PRECISA TER:
+1. Step 1: Dados Organização - Nome grupo, Província dropdown, Cidade dropdown, Telefone +258
+2. Step 2: Dados Owner - Nome completo, Email, Senha forte indicador
+3. Step 3: Plano - Radio Básico/Pro/Enterprise, Mostra limite clientes
+4. Step 4: Resumo + Checkbox "Aceito Termos" + "Aceito LGPD"
+5. Botão "Criar Conta" desabilitado até marcar checkboxes
+6. Texto "Aguardando aprovação" após submit
+7. Tela Sucesso: "Recebemos seu cadastro! Vamos ligar em 24h para ativar" + Número protocolo
+
+POR QUÊ:
+- 4 steps porque formulário longo assusta, dividir reduz abandono
+- Província/Cidade cascata porque System Owner segmenta suporte
+- Senha forte indicador porque organizador guarda dinheiro de terceiros
+- "Aguardando aprovação" porque não é auto-serviço, evita fraude, System Owner valida se é xitique real
+- Protocolo porque organizador cobra "cadê meu cadastro?"
+
+TELA 1.3: LOGIN WEB
+O QUE PRECISA TER:
+1. Abas: Email | Telefone
+2. Aba Email: Input email, Input senha, Checkbox "Lembrar-me"
+3. Aba Telefone: Input +258 + 9 dígitos, Input PIN 4-6
+4. Botão "Entrar" primário largura total
+5. Link "Esqueci senha" abaixo
+6. Link "Criar conta" abaixo
+7. Se erro: mensagem vermelha "Email ou senha incorretos" sem dizer qual
+8. Após 5 erros: "Conta bloqueada 15min" + contador regressivo
+
+POR QUÊ:
+- Abas porque organizador usa desktop = email, collector usa = telefone
+- Não dizer qual errou porque segurança, não dar dica para hacker
+- Bloqueio 15min porque brute force, mas não eterno para não travar legítimo
+
+TELA 1.4: RECUPERAR SENHA
+O QUE PRECISA TER:
+1. Input Email ou Telefone
+2. Botão "Enviar Link"
+3. Mensagem "Se existir conta, enviamos link"
+4. Tela link: Input Nova Senha + Confirmar + Indicador força
+5. Botão "Redefinir"
+
+POR QUÊ:
+- "Se existir" porque não confirma se email existe, evita enumeração
+- Indicador força porque organizador precisa senha forte
+
+MÓDULO 2: DASHBOARD E VISÃO GERAL
+--------------------------------------------------------------------------------
+
+TELA 2.1: DASHBOARD ORGANIZADOR
+O QUE PRECISA TER:
+1. Header: "Olá, Ana - Xitique Central" + Seletor Período [Este Mês] dropdown + Botão Notificações sino com badge
+2. Linha 1 - 4 Cards KPI:
+   Card 1: Ícone gráfico verde + "Arrecadado Mês" + "450.000 MZN" + "↑12% vs mês passado" verde
+   Card 2: Ícone cofre azul + "Comissão Mês" + "45.000 MZN" + "10% do arrecadado"
+   Card 3: Ícone mão laranja + "Emprestado" + "60.000 MZN" + "13% do arrecadado"
+   Card 4: Ícone alerta vermelho + "Diferença Caixa" + "-2.300 MZN" + "↓ Clique para ver"
+3. Linha 2 - 3 Gráficos:
+   Gráfico 1: Line Chart "Evolução Arrecadação 6 Meses" X=mes Y=MZN
+   Gráfico 2: Bar Chart "Top 5 Collectors" X=nome Y=volume
+   Gráfico 3: Pie Chart "Status Clientes" 85% Em Dia verde, 15% Dívida vermelho
+4. Linha 3 - Tabela Alertas:
+   Colunas: Collector | Tipo | Descrição | Data | Ação
+   Linha exemplo: João | Quebra Caixa | 3 dias seguidos com diferença | Hoje | [Ver]
+   Linha exemplo: Maria | Retroativo | 4 lançamentos semana | Ontem | [Ver]
+5. Linha 4 - Tabela Pedidos Empréstimo Pendentes:
+   Colunas: Cliente | Dias Pagos | Poupado | Solicitado | Equivale | Ação
+   Linha exemplo: Ana | 8/30 | 4.000 MZN | 2.000 MZN | 20 dias | [Aprovar] [Rejeitar]
+6. Rodapé: Última atualização "há 2 minutos" + Botão Refresh
+
+POR QUÊ:
+- 4 Cards porque são 4 números que organizador olha todo dia ao abrir
+- % vs mês passado porque organizador quer saber se cresceu sem calcular
+- Comissão mostra 10% porque prova que regra 1 dia está funcionando
+- Diferença Caixa vermelho clicável porque é problema urgente, leva direto para relatório
+- Gráfico 6 meses porque sazonalidade: Dezembro arrecada mais, Janeiro cai
+- Top 5 collectors porque organizador premia melhor e treina pior
+- Pizza dívida porque se >30% liga alerta, risco alto
+- Tabela Alertas na home porque organizador não pode perder notificação crítica
+- Pedidos pendentes na home porque empréstimo é urgente, cliente esperando na loja
+
+TELA 2.2: NOTIFICAÇÕES
+O QUE PRECISA TER:
+1. Modal ou página lista notificações
+2. Filtro: Todas | Não lidas | Alertas | Info
+3. Item: Ícone tipo, Título bold, Mensagem, Tempo "há 2h", Botão "Marcar lida"
+4. Tipos: Fechamento com diferença, Pedido empréstimo, Retroativo suspeito, Inatividade collector
+5. Badge número não lidas no sino header
+
+POR QUÊ:
+- Filtro porque organizador recebe 50/dia, precisa ver só alertas
+- Marcar lida porque some badge, organizador sabe que viu
+
+MÓDULO 3: GESTÃO DE PESSOAS
+--------------------------------------------------------------------------------
+
+TELA 3.1: LISTA COLLECTORS
+O QUE PRECISA TER:
+1. Cabeçalho: Título "Collectors" + Botão "+ Novo Collector" primário direita
+2. Barra filtros: Busca nome/telefone + Dropdown Status [Todos|Ativo|Inativo|Suspenso]
+3. Tabela:
+   Colunas: Foto 40px | Nome | Telefone | Clientes | Arrecadado Mês | Diferença Total | Status Badge | Ações
+   Status Badge: Ativo=verde, Inativo=cinza, Suspenso=vermelho
+   Ações: [Editar] [Atribuir Clientes] [Ver Relatório] [Desativar]
+4. Linha exemplo: [Foto] João Silva | +258841234567 | 47 | 125.000 MZN | -350 MZN vermelho | Ativo | [...]
+5. Rodapé tabela: "Mostrando 8 de 8" + Paginação
+6. Totalizadores acima tabela: "8 Collectors Ativos | 450.000 MZN Arrecadado | -2.300 MZN Diferença"
+
+POR QUÊ:
+- Foto porque organizador reconhece visual, tem 20 Joões
+- Coluna Clientes porque balanceia: collector com 80 está sobrecarregado
+- Coluna Diferença Total vermelha se negativa porque identifica problemático em 1s
+- Status Suspenso porque collector pode ser afastado temporário sem deletar
+- Atribuir Clientes na linha porque ação mais comum
+- Totalizadores porque organizador soma para folha pagamento
+
+TELA 3.2: CADASTRAR/EDITAR COLLECTOR - MODAL
+O QUE PRECISA TER:
+1. Upload Foto circular preview
+2. Input Nome completo obrigatório
+3. Input Telefone +258 obrigatório
+4. Input Email opcional
+5. Textarea Observação opcional "Trabalha região X"
+6. Toggle "Ativo" default on
+7. Botão "Salvar" primário + "Cancelar" secundário
+8. Ao salvar: Toast "Collector criado" + SMS automático para telefone "Baixe app, PIN: 1234"
+
+POR QUÊ:
+- Foto porque collector usa tablet, cliente vê foto no app e confia
+- Telefone obrigatório porque login e SMS
+- Email opcional porque muitos collectors não têm
+- SMS automático porque organizador não precisa avisar manual
+- Toggle Ativo porque desativa sem deletar histórico
+
+TELA 3.3: ATRIBUIR CLIENTES A COLLECTOR
+O QUE PRECISA TER:
+1. Título "Atribuir Clientes para João Silva"
+2. Coluna Esquerda "Sem Collector" - Lista clientes: Checkbox + Nome + Telefone + Taxa
+3. Botões meio: ">" mover direita, "<" mover esquerda, ">>" todos, "<<" todos
+4. Coluna Direita "Com João Silva" - Lista clientes atribuídos
+5. Busca em ambas colunas
+6. Contador: "0 selecionados" + "47 atribuídos"
+7. Botão "Salvar Alterações"
+
+POR QUÊ:
+- Duas colunas porque visual, arrasta mentalmente
+- Busca porque organizador tem 500 clientes
+- Contador porque organizador balanceia: "João com 47, Maria com 50, ok"
+
+TELA 3.4: LISTA CLIENTES/TICANTES
+O QUE PRECISA TER:
+1. Cabeçalho: Título "Clientes" + Botão "+ Novo Cliente" + Botão "Importar Excel" + Botão "Export Excel"
+2. Barra Filtros: Busca nome/telefone + Dropdown Collector [Todos] + Dropdown Status [Todos|Ativo|Devedor|Incompleto|Inativo] + Dropdown Ciclo [Todos|Completo|Incompleto]
+3. Tabela:
+   Colunas: Nome | Telefone | Taxa/Dia | Collector | Dias Pagos | Dívida | Status | Ações
+   Dias Pagos: "18/30" + ProgressBar 60%
+   Dívida: "2.200 MZN" vermelho se >0, "-" se 0
+   Status: Badge Ativo verde, Devedor vermelho, Incompleto amarelo, Inativo cinza
+   Ações: [Ver] [Editar] [Transferir] [Desativar]
+4. Totalizadores: "234 Clientes | 180 Ativos | 35 Devedores | 19 Incompletos"
+5. Paginação 50 por página
+
+POR QUÊ:
+- Filtro Devedor porque organizador cobra lista todo dia
+- Filtro Incompleto porque fim do mês liga para esses
+- ProgressBar 18/30 porque visual rápido: >25 verde, 15-25 amarelo, <15 vermelho
+- Dívida vermelho porque chama atenção
+- Transferir na linha porque collector sai férias, transfere 1 cliente rápido
+- Import Excel porque migram de caderno com 500 linhas
+- Export porque contador pede para imposto
+
+TELA 3.5: CADASTRAR CLIENTE - MODAL
+O QUE PRECISA TER:
+1. Input Nome completo obrigatório
+2. Input Telefone +258 obrigatório + validação duplicado
+3. Input Taxa Diária MZN obrigatório, teclado numérico, placeholder "500"
+4. Dropdown Collector obrigatório, default "Selecionar"
+5. Dropdown Taxa Juros opcional, default "10%" da org, pode customizar
+6. Textarea Observação "Cliente do mercado central"
+7. Botão "Salvar e Novo" + "Salvar" + "Cancelar"
+8. Ao salvar: Toast "Cliente criado" + Pergunta "Deseja imprimir cartão?" Sim/Não
+
+POR QUÊ:
+- Validação duplicado porque mesmo telefone não pode 2 clientes
+- Taxa obrigatória porque sem ela não calcula
+- Collector obrigatório porque cliente não pode ficar órfão
+- Taxa juros customizável porque cliente VIP pode ter 5%
+- "Salvar e Novo" porque cadastra 20 seguidos
+- Pergunta imprimir porque fluxo: cadastra > imprime > entrega
+
+TELA 3.6: DETALHE CLIENTE
+O QUE PRECISA TER:
+1. Cabeçalho: Foto/Avatar + Nome grande + Telefone com ícone ligar + Badges Status
+2. Cards resumo: Taxa/Dia 500 MZN | Dias Pagos 18/30 | Total Poupado 9.000 MZN | Dívida 2.200 MZN vermelho
+3. Tabs: Cartão | Extrato | Empréstimos | Histórico | Configurações
+4. Tab Cartão:
+   - Grid 30 dias 6x5 clicável
+   - Legenda: O=Cinza Aberto, X=Azul Pago, P=Verde Confirmado, C=Laranja Comissão
+   - Click no X: Modal "Reverter depósito?" + Input Motivo + Botão Confirmar
+   - Click no O: Modal "Marcar depósito?" + Date picker + Checkbox "Retroativo"
+   - Botão "Fechar Ciclo" se dias_pagos=30
+   - Botão "Transportar Dias" se dias_pagos<30
+5. Tab Extrato:
+   - Tabela: Data | Dia | Valor | Collector | Modo | Status | Ações
+   - Modo: Badge Online verde, Offline laranja
+   - Ações: [Ver Detalhe] abre modal com IP, device, timestamp
+   - Filtro Período
+   - Botão Export PDF
+6. Tab Empréstimos:
+   - Lista cards: Data | Solicitado 2.000 | Juros 200 | Total 2.200 | Pago 0 | Restante 2.200 | Status Pendente
+   - Botão "+ Novo Empréstimo" abre modal
+   - Modal Novo: Input Valor + Mostra cálculo juros automático + Textarea Observação
+7. Tab Histórico:
+   - Timeline vertical: Ícone + "10/05 14:30 - João marcou dia 10" + "10/05 14:35 - Revertido por Ana motivo: erro" + "11/05 09:00 - Empréstimo 2.000 aprovado por Ana"
+8. Tab Configurações:
+   - Input Taxa/Dia editável com aviso "Muda só próximo ciclo"
+   - Dropdown Collector para transferir
+   - Toggle "Ativo" desativa cliente
+   - Botão "Ajustar Dívida" abre modal + Input Valor + Motivo "Perdão dívida"
+   - Botão "Deletar Cliente" vermelho com confirmação dupla
+
+POR QUÊ:
+- Cards resumo porque organizador abre cliente e em 2s sabe situação
+- Grid clicável porque organizador corrige erro de collector
+- Legenda C Comissão porque visual diferente, não confunde
+- Modal reverter com motivo porque auditoria exige
+- Checkbox Retroativo porque organizador marca passado
+- Modo online/offline no extrato porque se muito offline, suspeito
+- Ver Detalhe extrato porque auditor pede "qual IP marcou dia 10?"
+- Timeline histórico porque "quem mexeu?" é pergunta #1 em auditoria
+- Ajustar Dívida porque às vezes perdoa, precisa registrar motivo
+- Taxa muda só próximo ciclo porque não pode mudar regra no meio do jogo
+
+MÓDULO 4: OPERAÇÕES FINANCEIRAS
+--------------------------------------------------------------------------------
+
+TELA 4.1: FECHAMENTO DIÁRIO - LISTA
+O QUE PRECISA TER:
+1. Filtro Data: Date picker default hoje
+2. Tabela:
+   Colunas: Collector | Hora Fechamento | Sistema | Declarado | Diferença | Status | Ações
+   Sistema: 12.600 MZN cinza calculado
+   Declarado: 12.500 MZN bold
+   Diferença: -100 MZN vermelho se negativo, 0 verde, +100 amarelo
+   Status: Badge OK verde, Alerta amarelo, Crítico vermelho
+   Ações: [Ver Detalhe]
+3. Totalizadores rodapé: Total Sistema 450.000 | Total Declarado 447.700 | Diferença -2.300
+4. Botão "Export Excel"
+
+POR QUÊ:
+- Filtro hoje default porque organizador confere todo fim de dia
+- Status cor porque bate olho vê problema
+- Diferença -2.300 vermelho porque é dinheiro sumido
+- Ver Detalhe porque clica e vê quais depósitos somaram 12.600
+
+TELA 4.2: FECHAMENTO DIÁRIO - DETALHE MODAL
+O QUE PRECISA TER:
+1. Título "Fechamento João Silva - 16/05/2026 18:30"
+2. Card Sistema: 12.600 MZN + "45 depósitos"
+3. Card Declarado: 12.500 MZN
+4. Card Diferença: -100 MZN vermelho grande
+5. Tabela Depósitos do Dia:
+   Colunas: Hora | Cliente | Dia | Valor | Modo
+   Linha: 08:30 | Maria | Dia 14 | 500 MZN | Online
+6. Se diferença ≠ 0, alerta amarelo: "Revisar com collector"
+
+POR QUÊ:
+- Hora fechamento porque se fechou 23h, suspeito
+- Lista depósitos porque organizador confere se soma bate
+- Alerta porque força ação, não deixa passar
+
+TELA 4.3: APROVAR EMPRÉSTIMO
+O QUE PRECISA TER:
+1. Card Cliente Esquerda:
+   Foto + Nome + Telefone
+   Dias Pagos: 8/30 + ProgressBar 27% vermelho
+   Poupado: 4.000 MZN
+   Dívida Atual: 0 MZN verde
+   Histórico: "3 empréstimos anteriores, todos pagos"
+2. Card Pedido Direita:
+   Solicitado: 2.000 MZN grande
+   Equivale a: 20 dias (2.000 ÷ 100 taxa)
+   Alerta: "⚠️ Cliente tem só 27% do ciclo pago" amarelo
+3. Seção Cálculo:
+   Input Valor Aprovado: default 2000, editável
+   Label Juros: 200 MZN (10%) automático
+   Label Total Dívida: 2.200 MZN automático
+   Label Parcela: "Se pagar 500/dia, quita em 5 dias"
+4. Textarea Observação: "Cliente confiável, paga sempre"
+5. Botões: "Rejeitar" vermelho + "Aprovar" verde
+6. Modal Confirmar: "Aprovar 2.000 MZN para Maria? Dívida total será 2.200 MZN"
+
+POR QUÊ:
+- Card cliente porque decisão baseada em histórico
+- 27% vermelho porque risco alto, visual alerta
+- Histórico pagos porque se pagou 3 antes, confia
+- Equivale a 20 dias porque organizador pensa em dias, não MZN
+- Input editável porque pode aprovar 1.500 em vez de 2.000
+- Cálculo automático porque erro de juros = prejuízo
+- Parcela porque organizador explica para cliente plano pagamento
+- Modal confirmar porque é dinheiro saindo, dupla confirmação
+
+TELA 4.4: GESTÃO DE CICLOS
+O QUE PRECISA TER:
+1. Filtro: Mês dropdown + Ano + Status [Todos|Abertos|Fechados|Incompletos]
+2. Tabela:
+   Colunas: Cliente | Taxa/Dia | Dias Pagos | Total Poupado | Comissão | Liberar | Status | Ações
+   Dias Pagos: "30/30" verde se completo, "18/30" amarelo se incompleto
+   Liberar: "14.500 MZN" se completo, "-" se incompleto
+   Status: Badge Fechado verde, Aberto azul, Incompleto amarelo
+   Ações: [Fechar] se 30/30, [Transportar] [Multar] se <30
+3. Totalizadores: "120 Ciclos | 100 Completos | 20 Incompletos | Comissão Total 60.000 MZN"
+4. Botão "Fechar Todos Completos" ação em massa
+
+POR QUÊ:
+- Filtro Mês porque organizador fecha mês a mês
+- Status Incompleto amarelo porque precisa ação
+- Botão Transportar vs Multar porque decisão por cliente
+- Fechar Todos porque fim do mês tem 100 clientes, clica 1 vez
+
+TELA 4.5: SACAR CICLO - MODAL
+O QUE PRECISA TER:
+1. Título "Saque Ciclo Maria - Maio 2026"
+2. Breakdown:
+   Total Poupado: 15.000 MZN (30 × 500)
+   - Comissão (Dia 1): 500 MZN
+   = Liberar: 14.500 MZN grande verde
+3. Checkbox "Confirmo que entreguei dinheiro físico ao cliente"
+4. Input "Observação" opcional "Pago via M-Pesa"
+5. Botão "Confirmar Saque" desabilitado até marcar checkbox
+
+POR QUÊ:
+- Breakdown transparente porque cliente questiona "por que não 15.000?"
+- Checkbox obrigatório porque compliance, prova que entregou
+- Observação porque alguns pagam M-Pesa, outros cash
+
+MÓDULO 5: RELATÓRIOS E EXPORTAÇÃO
+--------------------------------------------------------------------------------
+
+TELA 5.1: RELATÓRIO ARRECADAÇÃO
+O QUE PRECISA TER:
+1. Filtros: Data Início, Data Fim, Collector dropdown Todos, Cliente busca
+2. Gráfico Linha: X=data Y=valor, mostra evolução
+3. Tabela:
+   Colunas: Data | Collector | Cliente | Dia Ciclo | Valor | Modo | Hora
+4. Totalizadores: Total Período, Média Diária, Maior Dia, Menor Dia
+5. Botão "Export Excel" + "Export PDF"
+
+POR QUÊ:
+- Gráfico linha porque organizador vê tendência: segunda arrecada mais
+- Modo coluna porque se muito offline, suspeito
+- Média Diária porque projeta: média 15.000 × 30 = 450.000 mês
+- Maior/Menor dia porque identifica sazonalidade
+
+TELA 5.2: RELATÓRIO DIFERENÇA CAIXA
+O QUE PRECISA TER:
+1. Filtro Período + Collector
+2. Tabela:
+   Colunas: Data | Collector | Sistema | Declarado | Diferença | % Diferença | Status
+   % Diferença: -0.8% se 12.500/12.600
+   Status: OK <1%, Atenção 1-3%, Crítico >3%
+3. Gráfico Barras: X=collector Y=diferença total período
+4. Card Alerta: "João Silva: 5 dias com diferença nos últimos 7"
+
+POR QUÊ:
+- % Diferença porque -100 em 12.600 é 0.8%, aceitável. -100 em 1.000 é 10%, grave
+- Status cor porque prioriza quem investigar
+- Gráfico barras porque visual compara collectors rápido
+- Card alerta porque automatiza "quem está roubando?"
+
+TELA 5.3: RELATÓRIO RETROATIVOS
+O QUE PRECISA TER:
+1. Filtro Período + Collector + Dias Diferença mínimo slider 1-30
+2. Tabela:
+   Colunas: Data Real | Data Depósito | Dias Dif | Collector | Cliente | Motivo | Hora
+   Dias Dif: Badge 1-2 verde, 3-7 amarelo, 8+ vermelho
+3. Totalizadores: Total Retroativos, Média Dias, Collector com mais
+4. Gráfico: Collectors X Quantidade retroativos
+
+POR QUÊ:
+- Slider dias porque organizador define "mostrar só >3 dias"
+- Badge cor porque >7 dias é manobra
+- Collector com mais porque identifica quem esquece muito
+
+TELA 5.4: RELATÓRIO DÍVIDAS
+O QUE PRECISA TER:
+1. Filtro: Todas | Vencidas >30 dias | Vencendo 7 dias
+2. Tabela:
+   Colunas: Cliente | Telefone | Valor Emprestado | Juros | Total Dívida | Dias Atraso | Último Pagamento | Collector | Ações
+   Dias Atraso: 45 vermelho se >30
+   Ações: [Cobrar] abre WhatsApp + [Registrar Pagamento]
+3. Totalizadores: Total Emprestado, Total Juros a Receber, Total Inadimplente >30d
+4. Gráfico Pizza: Em Dia 70% | Atrasado 1-30d 20% | Inadimplente >30d 10%
+
+POR QUÊ:
+- Filtro Vencidas porque cobra primeiro esses
+- Dias Atraso vermelho porque urgência
+- Botão Cobrar abre WhatsApp com mensagem pronta "Olá Maria, sua dívida 2.200 MZN vence..."
+- Pizza porque se >30% inadimplente, negócio risco
+
+TELA 5.5: EXPORTAÇÃO PDF CARTÕES
+O QUE PRECISA TER:
+1. Filtro Clientes: Todos | Novos | Selecionar checkboxes
+2. Layout Radio: 1 por página A4, 2 por página, 4 por página, Etiqueta 10x5cm
+3. Preview: mostra 1ª página
+4. Opções: Checkbox "Incluir QR Code", Checkbox "Incluir Logo Org", Checkbox "Incluir Taxa/Dia"
+5. Botão "Gerar PDF"
+6. PDF gerado: Cada cartão tem Nome, Telefone, Taxa, Grid 30 dias vazio, QR code, Logo
+
+POR QUÊ:
+- Filtro Novos porque imprime só para quem entrou
+- 4 por página porque economiza papel, org imprime 200
+- QR code porque futuro cliente escaneia e abre app
+- Preview porque evita erro antes de imprimir 100 páginas
+
+MÓDULO 6: CONFIGURAÇÕES E ADMINISTRAÇÃO
+--------------------------------------------------------------------------------
+
+TELA 6.1: CONFIGURAÇÕES ORGANIZAÇÃO
+O QUE PRECISA TER:
+1. Aba Geral: Nome org, Logo upload preview, Telefone, Endereço, Descrição
+2. Aba Regras:
+   Slider "Limite Retroativo" 1-30 dias, mostra "7 dias" ao lado
+   Input "Taxa Juros Padrão %" 0-100, default 10
+   Input "Alerta Quebra Caixa" MZN, default 1000
+   Checkbox "Permitir Transporte Dias" default on
+3. Aba Módulos:
+   Toggle "Empréstimo" on/off + Descrição "Permite clientes pedirem emprestado"
+   Toggle "Foto Comprovante" on/off
+   Toggle "GPS" on/off
+4. Aba Notificações:
+   Checkbox "Lembrete Diário Ticante" + Time picker 08:00
+   Checkbox "Alerta Diferença Caixa" + Input "acima de 100 MZN"
+   Checkbox "Resumo Semanal Domingo" + Time 18:00
+5. Botão "Salvar Alterações"
+
+POR QUÊ:
+- Logo porque branding, PDF e app mostram
+- Slider retroativo porque visual, não digita número
+- Taxa juros custom porque org conservadora usa 5%
+- Toggle Empréstimo porque desliga se muitos calotes
+- Time picker porque organizador escolhe hora que collector recebe lembrete
+
+TELA 6.2: GESTÃO WEBHOOKS
+O QUE PRECISA TER:
+1. Tabela: URL | Eventos | Status | Última Execução | Ações
+2. Botão "+ Novo Webhook"
+3. Modal Novo:
+   Input URL https:// obrigatório
+   Checkboxes Eventos: [x] ciclo.fechado [x] emprestimo.aprovado [ ] fechamento.realizado
+   Botão "Testar" envia payload teste
+   Botão "Salvar"
+4. Botão "Ver Logs" abre tabela: Data | Evento | Status Code | Tentativas | Payload
+
+POR QUÊ:
+- Testar porque organizador valida antes de salvar
+- Logs porque debug se integração falhou
+- Checkboxes porque escolhe só eventos que usa
+
+TELA 6.3: AUDITORIA LOGS
+O QUE PRECISA TER:
+1. Filtros: Data início/fim, Usuário dropdown, Ação dropdown [Login, Marcar X, Reverter, Aprovar Empréstimo], Entidade [Deposit, Client, Loan]
+2. Tabela:
+   Colunas: Data/Hora | Usuário | Ação | Entidade | ID | IP | Detalhes
+   Detalhes: Botão "Ver" abre modal com JSON Antes/Depois
+3. Modal Detalhe: Aba "Antes" JSON, Aba "Depois" JSON, Diff highlight
+4. Botão "Export CSV"
+
+POR QUÊ:
+- Filtro Usuário porque auditor pergunta "o que João fez dia 10?"
+- JSON Antes/Depois porque prova o que mudou
+- Diff highlight porque visual rápido vê campo alterado
+- Export porque auditor leva para advogado
+
+MÓDULO 7: SISTEMA - SYSTEM OWNER
+--------------------------------------------------------------------------------
+
+TELA 7.1: DASHBOARD SAAS
+O QUE PRECISA TER:
+1. 4 Cards: Orgs Ativas "127" ↑5 | MRR "50.000 MZN" ↑8% | Churn "2%" ↓1% | Volume Total "5M MZN" ↑15%
+2. Gráfico Crescimento: Line chart Orgs novas por mês últimos 12
+3. Tabela Top Orgs: Nome | Clientes | Volume Mês | Plano | Status Pagamento | Ações
+4. Status Pagamento: Badge Pago verde, Pendente amarelo, Atrasado vermelho
+5. Ações: [Ver Detalhe] [Suspender] [Login Como]
+6. Mapa: Pins coloridos por cidade, tamanho = volume
+
+POR QUÊ:
+- MRR porque métrica #1 de SaaS
+- Churn porque se >5% produto tem problema grave
+- Login Como porque suporte entra na conta para ajudar sem pedir senha
+- Mapa porque vê expansão geográfica, decide onde abrir escritório
+
+TELA 7.2: GESTÃO ORGANIZAÇÕES
+O QUE PRECISA TER:
+1. Tabela: Nome | Owner | Telefone | Clientes | Collectors | Volume Mês | Plano | Status | Criado Em | Ações
+2. Status: Trial azul, Ativo verde, Suspenso vermelho, Cancelado cinza
+3. Ações: [Ver] [Editar] [Suspender] [Ativar] [Deletar]
+4. Modal Suspender: Textarea "Motivo" obrigatório + Checkbox "Enviar email aviso"
+5. Filtro Status + Busca
+
+POR QUÊ:
+- Suspender porque se não paga, corta acesso
+- Motivo obrigatório porque legal, cliente pode processar
+- Email aviso porque profissionalismo
+
+================================================================================
+FIM DO DOCUMENTO DE TELAS WEB
+================================================================================

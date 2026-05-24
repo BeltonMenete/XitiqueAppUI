@@ -58,7 +58,7 @@ function Signup() {
                     transition={{ duration: ANIMATION_DURATION.NORMAL, delay: 0.08 }}
                     className='relative lg:ml-auto lg:w-1/2 bg-white rounded-3xl shadow-xl p-8 lg:p-12'
                 >
-                    <div className='w-full max-w-md mx-auto space-y-6'>
+                    <div className='w-full max-w-md mx-auto space-y-2'>
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -88,7 +88,7 @@ function Signup() {
                             <p className='text-gray-600 text-center'>Registe-se para começar</p>
                         </motion.div>
 
-                        <form onSubmit={handleSubmit} noValidate className='space-y-4'>
+                        <form onSubmit={handleSubmit} noValidate className='space-y-2'>
                             <motion.div layout className='space-y-2'>
                                 <EmailInput value={email} onChange={setEmail} />
                                 <AnimatePresence mode='wait'>
