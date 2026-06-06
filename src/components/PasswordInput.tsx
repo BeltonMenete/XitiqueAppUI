@@ -8,9 +8,10 @@ interface PasswordInputProps {
 	showPassword: boolean;
 	onToggleShow: () => void;
 	delay?: number;
+	label?: string;
 }
 
-export function PasswordInput({ value, onChange, showPassword, onToggleShow, delay = 0.12 }: PasswordInputProps) {
+export function PasswordInput({ value, onChange, showPassword, onToggleShow, delay = 0.12, label = 'Palavra-passe' }: PasswordInputProps) {
 	return (
 		<motion.div
 			layout
@@ -20,7 +21,7 @@ export function PasswordInput({ value, onChange, showPassword, onToggleShow, del
 			className='space-y-1.5'
 		>
 			<label htmlFor='password' className='block text-sm font-medium text-gray-700'>
-				Palavra-passe
+				{label}
 			</label>
 			<motion.div
 				whileFocus={{ scale: 1.005 }}
