@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 export function FormField({
 	label,
 	icon: Icon,
@@ -20,7 +18,7 @@ export function FormField({
 	delay?: number;
 }) {
 	return (
-		<motion.div className='space-y-1.5'>
+		<div className='space-y-1.5'>
 			<label className='block text-sm font-medium text-gray-700'>{label}</label>
 			<div className='relative'>
 				<Icon className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-400' size={20} />
@@ -41,6 +39,6 @@ export function FormField({
 					</button>
 				)}
 			</div>
-		</motion.div>
+		</div>
 	);
 }
