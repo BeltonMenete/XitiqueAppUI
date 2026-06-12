@@ -7,6 +7,7 @@ import '../styles.css';
 export const Route = createRootRoute({
   component: RootComponent,
 });
+// ok
 
 function RootComponent() {
   return (
