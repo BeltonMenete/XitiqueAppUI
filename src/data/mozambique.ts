@@ -1,0 +1,49 @@
+export const PROVINCIAS_MZ = [
+    {
+        nome: 'Maputo Cidade',
+        distritos: ['KaMpfumo', 'Nlhamankulu', 'KaMaxakeni', 'KaMavota', 'KaMubukwana', 'KaTembe', 'KaNyaka']
+    },
+    {
+        nome: 'Maputo Província',
+        distritos: ['Boane', 'Magude', 'Manhiça', 'Marracuene', 'Matola', 'Matutuíne', 'Moamba', 'Namaacha']
+    },
+    {
+        nome: 'Gaza',
+        distritos: ['Xai-Xai', 'Bilene', 'Chibuto', 'Chicualacuala', 'Chigubo', 'Chókwè', 'Guijá', 'Mabalane', 'Manjacaze', 'Massangena', 'Massingir']
+    },
+    {
+        nome: 'Inhambane',
+        distritos: ['Inhambane', 'Funhalouro', 'Govuro', 'Homoíne', 'Inharrime', 'Inhassoro', 'Jangamo', 'Mabote', 'Massinga', 'Maxixe', 'Morrumbene', 'Panda', 'Vilanculos', 'Zavala']
+    },
+    {
+        nome: 'Sofala',
+        distritos: ['Beira', 'Búzi', 'Caia', 'Chemba', 'Cheringoma', 'Chibabava', 'Dondo', 'Gorongosa', 'Machanga', 'Maringué', 'Marromeu', 'Muanza', 'Nhamatanda']
+    },
+    {
+        nome: 'Manica',
+        distritos: ['Chimoio', 'Bárue', 'Gondola', 'Guro', 'Macate', 'Machaze', 'Macossa', 'Manie', 'Mossurize', 'Sussundenga', 'Tambara', 'Vanduzi']
+    },
+    {
+        nome: 'Tete',
+        distritos: ['Tete', 'Angónia', 'Cahora-Bassa', 'Changara', 'Chifunde', 'Chiuta', 'Dôa', 'Macanga', 'Magoé', 'Marara', 'Marávia', 'Moatize', 'Mutarara', 'Tsangano', 'Zumbo']
+    },
+    {
+        nome: 'Zambézia',
+        distritos: ['Quelimane', 'Alto Molócue', 'Chinde', 'Gilé', 'Gurué', 'Ile', 'Inhassunge', 'Luabo', 'Lugela', 'Maganja da Costa', 'Milange', 'Mocuba', 'Mopeia', 'Morrumbala', 'Namacurra', 'Namarroi', 'Nicoadala', 'Pebane']
+    },
+    {
+        nome: 'Nampula',
+        distritos: ['Nampula', 'Angoche', 'Eráti', 'Ilha de Moçambique', 'Lalaua', 'Malema', 'Meconta', 'Mecubúri', 'Memba', 'Mogincual', 'Mogovolas', 'Moma', 'Monapo', 'Mossuril', 'Muecate', 'Murrupula', 'Nacala', 'Nacala-a-Velha', 'Nacarôa', 'Rapale', 'Ribáuè']
+    },
+    {
+        nome: 'Cabo Delgado',
+        distritos: ['Pemba', 'Ancuabe', 'Balama', 'Chiúre', 'Ibo', 'Macomia', 'Mecúfi', 'Meluco', 'Metuge', 'Mocímboa da Praia', 'Montepuez', 'Mueda', 'Muidumbe', 'Namuno', 'Nangade', 'Palma', 'Quissanga']
+    },
+    {
+        nome: 'Niassa',
+        distritos: ['Lichinga', 'Chimbonila', 'Cuamba', 'Lago', 'Majune', 'Mandalimba', 'Marrupa', 'Maúa', 'Mavago', 'Mecanhelas', 'Mecula', 'Metarica', 'Muembe', 'Ngauma', 'Nipepe', 'Sanga']
+    }
+] as const
+
+// Validação de telefone MZ: 82, 83, 84, 85, 86, 87 + 7 dígitos
+export const isValidMozPhone = (phone: string) => /^8[2-7][0-9]{7}$/.test(phone)
