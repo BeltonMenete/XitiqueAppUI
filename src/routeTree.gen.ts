@@ -14,6 +14,7 @@ import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as OrganizationAuthStep2RouteImport } from './routes/organization/_auth/step-2'
 import { Route as OrganizationAuthStep1RouteImport } from './routes/organization/_auth/step-1'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrganizationAuthStep2Route = OrganizationAuthStep2RouteImport.update({
+  id: '/organization/_auth/step-2',
+  path: '/organization/step-2',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrganizationAuthStep1Route = OrganizationAuthStep1RouteImport.update({
   id: '/organization/_auth/step-1',
   path: '/organization/step-1',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthResetPasswordRoute
   '/signup': typeof AuthSignupRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
+  '/organization/step-2': typeof OrganizationAuthStep2Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof AuthResetPasswordRoute
   '/signup': typeof AuthSignupRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
+  '/organization/step-2': typeof OrganizationAuthStep2Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/organization/_auth/step-1': typeof OrganizationAuthStep1Route
+  '/organization/_auth/step-2': typeof OrganizationAuthStep2Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/organization/step-1'
+    | '/organization/step-2'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/organization/step-1'
+    | '/organization/step-2'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/_auth/reset-password'
     | '/_auth/signup'
     | '/organization/_auth/step-1'
+    | '/organization/_auth/step-2'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthSignupRoute: typeof AuthSignupRoute
   OrganizationAuthStep1Route: typeof OrganizationAuthStep1Route
+  OrganizationAuthStep2Route: typeof OrganizationAuthStep2Route
 }
 
 declare module '@tanstack/react-router' {
@@ -145,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organization/_auth/step-2': {
+      id: '/organization/_auth/step-2'
+      path: '/organization/step-2'
+      fullPath: '/organization/step-2'
+      preLoaderRoute: typeof OrganizationAuthStep2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/organization/_auth/step-1': {
       id: '/organization/_auth/step-1'
       path: '/organization/step-1'
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthSignupRoute: AuthSignupRoute,
   OrganizationAuthStep1Route: OrganizationAuthStep1Route,
+  OrganizationAuthStep2Route: OrganizationAuthStep2Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
