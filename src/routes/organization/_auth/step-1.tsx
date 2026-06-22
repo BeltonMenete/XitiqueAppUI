@@ -17,13 +17,13 @@ function StepOne() {
    });
 
    const distritos = PROVINCIAS_MZ.find((p) => p.nome === form.provincia)?.distritos || [];
-
-   const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      // TODO: Next step is saving this to global state
-      console.log('Step 1 data:', form);
-      navigate({ to: '/organization/_auth/step-2' });
-   };
+   /* 
+      const handleSubmit = (e: React.FormEvent) => {
+         e.preventDefault();
+         // TODO: Next step is saving this to global state
+         console.log('Step 1 data:', form);
+         navigate({ to: '/organization/_auth/step-2' });
+      }; */
 
    return (
       <div className='min-h-screen flex'>
@@ -69,7 +69,7 @@ function StepOne() {
                <h2 className='text-3xl font-bold text-gray-900 mb-2'>Criar Conta da Organização</h2>
                <p className='text-gray-600 mb-8'>Comece a organizar os seus grupos financeiros hoje mesmo.</p>
 
-               <form onSubmit={handleSubmit} className='space-y-6'>
+               <form onSubmit={() => { }/* handleSubmit */} className='space-y-6'>
                   <div>
                      <label className='block text-sm font-medium text-gray-700 mb-2'>Nome da Organização</label>
                      <div className='relative'>

@@ -10,6 +10,12 @@ body,
    min-height: 100%;
 }
 
+@layer base {
+  html, body, #app {
+    @apply h-full overflow-hidden;
+  }
+}
+
 body {
    margin: 0;
 }
