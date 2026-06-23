@@ -163,7 +163,7 @@ function StepOne() {
                       telefone: e.target.value.replace(/\D/g, ""),
                     })
                   }
-                  placeholder="84 XXX XXXX"
+                  placeholder="84 000 0000"
                   maxLength={9}
                   pattern="[82|83|84|85|86|87][0-9]{7}"
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-emerald-500"
