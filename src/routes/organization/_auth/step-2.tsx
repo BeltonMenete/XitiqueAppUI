@@ -7,7 +7,7 @@ export const Route = createFileRoute('/organization/_auth/step-2')({
 function StepTwo() {
     return (
         <>
-            <h1>Step II am coming</h1>
+            <h1>Step 2 is coming...</h1>
         </>
     );
 }
