@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from '@tanstack/react-router'
 
 const IconShield = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -28,13 +29,22 @@ const IconArrowLeft = () => (
 
 export default function NotFoundPage() {
     const [mounted, setMounted] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    const handleDashboard = () => window.location.href = '/dashboard';
-    const handleSupport = () => window.location.href = '/suporte';
+
+    const handleHomePage = async () => {
+        // await loginUser()
+
+        // Redirect programmatically with full autocomplete safety
+        navigate({
+            to: '/',
+            search: { welcome: true }
+        })
+    }
 
     return (
         <div className="min-h-screen bg-[#FBF8F3] relative overflow-hidden flex flex-col">
@@ -51,7 +61,7 @@ export default function NotFoundPage() {
             />
 
             {/* Decorative Circles - usando size-* da v3.4 */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] md:size-[800px] bg-[#0A4834]/5 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-150 md:size-200 bg-[#0A4834]/5 rounded-full blur-3xl animate-pulse" />
             <div className="absolute top-20 right-0 size-96 bg-[#0A4834]/5 rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 size-96 bg-[#0A4834]/5 rounded-full blur-3xl" />
 
@@ -97,7 +107,7 @@ export default function NotFoundPage() {
             <footer className="relative z-10 pb-8 pt-4">
                 <div className="flex justify-center">
                     <button
-                        onClick={() => window.location.href = '/sistema-gestao'}
+                        onClick={() => handleHomePage}
                         className="group inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full border border-[#0A4834]/10 shadow-sm transition-all duration-200 hover:bg-[#0A4834] hover:border-[#0A4834] hover:shadow-lg hover:shadow-[#0A4834]/25 active:scale-[0.97] cursor-pointer"
                     >
                         <div className="size-2 bg-[#0A4834] rounded-full transition-colors duration-200 group-hover:bg-white" />
