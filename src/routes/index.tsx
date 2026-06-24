@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Link } from '@tanstack/react-router';
-import { APP_NAME, ANIMATION_DURATION } from '#/lib/constants';
+import { APP_NAME } from '#/lib/constants';
 
 export const Route = createFileRoute('/')({ component: Home });
 
