@@ -1,13 +1,16 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { NotFoundRoute, Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 
 import '../styles.css';
+import NotFoundPage from '#/components/NotFound';
 
 export const Route = createRootRoute({
   component: RootComponent,
+  notFoundComponent: () => (<NotFoundPage />)
 });
 // ok
+
 
 function RootComponent() {
   return (
@@ -25,5 +28,7 @@ function RootComponent() {
         ]}
       />
     </>
+
   );
 }
+

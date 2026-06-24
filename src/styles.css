@@ -78,3 +78,7 @@ body {
       transform: translateY(30px);
    }
 }
+
+button:hover{
+   cursor: pointer;
+}
