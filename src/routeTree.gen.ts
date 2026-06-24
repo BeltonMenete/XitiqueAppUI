@@ -14,6 +14,9 @@ import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as OrganizationAuthStep5RouteImport } from './routes/organization/_auth/step-5'
+import { Route as OrganizationAuthStep4RouteImport } from './routes/organization/_auth/step-4'
+import { Route as OrganizationAuthStep3RouteImport } from './routes/organization/_auth/step-3'
 import { Route as OrganizationAuthStep2RouteImport } from './routes/organization/_auth/step-2'
 import { Route as OrganizationAuthStep1RouteImport } from './routes/organization/_auth/step-1'
 
@@ -42,6 +45,21 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrganizationAuthStep5Route = OrganizationAuthStep5RouteImport.update({
+  id: '/organization/_auth/step-5',
+  path: '/organization/step-5',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationAuthStep4Route = OrganizationAuthStep4RouteImport.update({
+  id: '/organization/_auth/step-4',
+  path: '/organization/step-4',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationAuthStep3Route = OrganizationAuthStep3RouteImport.update({
+  id: '/organization/_auth/step-3',
+  path: '/organization/step-3',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrganizationAuthStep2Route = OrganizationAuthStep2RouteImport.update({
   id: '/organization/_auth/step-2',
   path: '/organization/step-2',
@@ -61,6 +79,9 @@ export interface FileRoutesByFullPath {
   '/signup': typeof AuthSignupRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
   '/organization/step-2': typeof OrganizationAuthStep2Route
+  '/organization/step-3': typeof OrganizationAuthStep3Route
+  '/organization/step-4': typeof OrganizationAuthStep4Route
+  '/organization/step-5': typeof OrganizationAuthStep5Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +91,9 @@ export interface FileRoutesByTo {
   '/signup': typeof AuthSignupRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
   '/organization/step-2': typeof OrganizationAuthStep2Route
+  '/organization/step-3': typeof OrganizationAuthStep3Route
+  '/organization/step-4': typeof OrganizationAuthStep4Route
+  '/organization/step-5': typeof OrganizationAuthStep5Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +104,9 @@ export interface FileRoutesById {
   '/_auth/signup': typeof AuthSignupRoute
   '/organization/_auth/step-1': typeof OrganizationAuthStep1Route
   '/organization/_auth/step-2': typeof OrganizationAuthStep2Route
+  '/organization/_auth/step-3': typeof OrganizationAuthStep3Route
+  '/organization/_auth/step-4': typeof OrganizationAuthStep4Route
+  '/organization/_auth/step-5': typeof OrganizationAuthStep5Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +118,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/organization/step-1'
     | '/organization/step-2'
+    | '/organization/step-3'
+    | '/organization/step-4'
+    | '/organization/step-5'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +130,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/organization/step-1'
     | '/organization/step-2'
+    | '/organization/step-3'
+    | '/organization/step-4'
+    | '/organization/step-5'
   id:
     | '__root__'
     | '/'
@@ -109,6 +142,9 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/organization/_auth/step-1'
     | '/organization/_auth/step-2'
+    | '/organization/_auth/step-3'
+    | '/organization/_auth/step-4'
+    | '/organization/_auth/step-5'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +155,9 @@ export interface RootRouteChildren {
   AuthSignupRoute: typeof AuthSignupRoute
   OrganizationAuthStep1Route: typeof OrganizationAuthStep1Route
   OrganizationAuthStep2Route: typeof OrganizationAuthStep2Route
+  OrganizationAuthStep3Route: typeof OrganizationAuthStep3Route
+  OrganizationAuthStep4Route: typeof OrganizationAuthStep4Route
+  OrganizationAuthStep5Route: typeof OrganizationAuthStep5Route
 }
 
 declare module '@tanstack/react-router' {
@@ -158,6 +197,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organization/_auth/step-5': {
+      id: '/organization/_auth/step-5'
+      path: '/organization/step-5'
+      fullPath: '/organization/step-5'
+      preLoaderRoute: typeof OrganizationAuthStep5RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organization/_auth/step-4': {
+      id: '/organization/_auth/step-4'
+      path: '/organization/step-4'
+      fullPath: '/organization/step-4'
+      preLoaderRoute: typeof OrganizationAuthStep4RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organization/_auth/step-3': {
+      id: '/organization/_auth/step-3'
+      path: '/organization/step-3'
+      fullPath: '/organization/step-3'
+      preLoaderRoute: typeof OrganizationAuthStep3RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/organization/_auth/step-2': {
       id: '/organization/_auth/step-2'
       path: '/organization/step-2'
@@ -183,6 +243,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthSignupRoute: AuthSignupRoute,
   OrganizationAuthStep1Route: OrganizationAuthStep1Route,
   OrganizationAuthStep2Route: OrganizationAuthStep2Route,
+  OrganizationAuthStep3Route: OrganizationAuthStep3Route,
+  OrganizationAuthStep4Route: OrganizationAuthStep4Route,
+  OrganizationAuthStep5Route: OrganizationAuthStep5Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

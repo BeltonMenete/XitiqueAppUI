@@ -1,120 +1,110 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { Building2, ArrowRight, Shield, Landmark } from "lucide-react";
-import { PROVINCIAS_MZ } from "../../../data/mozambique";
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
+import { Building2, ArrowRight, Shield, Landmark } from 'lucide-react';
+import { PROVINCIAS_MZ } from '../../../data/mozambique';
 
-export const Route = createFileRoute("/organization/_auth/step-1")({
+export const Route = createFileRoute('/organization/_auth/step-1')({
   component: StepOne,
 });
 
 function StepOne() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    nome: "",
-    provincia: "",
-    distrito: "",
-    telefone: "",
+    nome: '',
+    provincia: '',
+    distrito: '',
+    telefone: '',
   });
 
-  const distritos =
-    PROVINCIAS_MZ.find((p) => p.nome === form.provincia)?.distritos || [];
+  const distritos = PROVINCIAS_MZ.find((p) => p.nome === form.provincia)?.distritos || [];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: save to Zustand/Context
-    console.log("Step 1 data:", form);
-    navigate({ to: "/organization/step-2" });
+    console.log('Step 1 data:', form);
+    navigate({ to: '/organization/step-2' });
   };
 
   return (
-    <div className="min-h-screen flex">
+    // Restricted total height to viewport height and disabled global overflow
+    <div className='h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10'>
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-12 flex-col justify-between">
-        <div>
-          <h2 className="text-3xl font-bold mb-8">Xitique</h2>
-          <h1 className="text-5xl font-bold leading-tight mb-6">
+      <div className='hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-8 xl:p-12 flex-col justify-between h-full'>
+        <div className='space-y-4 my-auto'>
+          <h2 className='text-2xl font-bold text-amber-400'>Xitique</h2>
+          <h1 className='text-3xl xl:text-4xl font-bold leading-tight text-white'>
             Digitalize o seu Xitique com segurança e transparência.
           </h1>
-          <p className="text-emerald-100 text-lg">
-            Modernize a gestão da sua comunidade financeira. Unimos tradição
-            Moçambicana com a eficiência da tecnologia moderna.
+          <p className='text-emerald-100 text-sm xl:text-base leading-relaxed max-w-md'>
+            Modernize a gestão da sua comunidade financeira. Unimos tradição Moçambicana com a eficiência da
+            tecnologia moderna.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="border border-emerald-700 rounded-lg p-4">
-            <Shield className="text-amber-400 mb-2" />
-            <p className="font-bold text-sm">SEGURANÇA TOTAL</p>
-            <p className="text-emerald-200 text-sm">Dados encriptados</p>
+        <div className='grid grid-cols-2 gap-3 mt-auto'>
+          <div className='border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5'>
+            <Shield className='text-amber-400 mb-1.5 h-5 w-5' />
+            <p className='font-bold text-xs tracking-wider text-white'>SEGURANÇA TOTAL</p>
+            <p className='text-emerald-300 text-xs mt-0.5'>Dados encriptados</p>
           </div>
-          <div className="border border-emerald-700 rounded-lg p-4">
-            <Landmark className="text-amber-400 mb-2" />
-            <p className="font-bold text-sm">AUDITÁVEL</p>
-            <p className="text-emerald-200 text-sm">Histórico completo</p>
+          <div className='border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5'>
+            <Landmark className='text-amber-400 mb-1.5 h-5 w-5' />
+            <p className='font-bold text-xs tracking-wider text-white'>AUDITÁVEL</p>
+            <p className='text-emerald-300 text-xs mt-0.5'>Histórico completo</p>
           </div>
         </div>
       </div>
 
-      {/* Right Panel - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          {/* Stepper */}
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-semibold text-gray-600">
-              PASSO 1 DE 4
-            </span>
-            <span className="text-sm text-gray-500">Dados Iniciais</span>
+      {/* Right Panel - Form Container */}
+      <div className='w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50/50 h-full overflow-y-auto'>
+        <div className='w-full max-w-md my-auto'>
+          {/* Stepper atualizado para o fluxo de 5 passos */}
+          <div className='flex justify-between items-center mb-1.5'>
+            <span className='text-xs font-bold text-emerald-700 tracking-wider'>PASSO 1 DE 5</span>
+            <span className='text-xs text-gray-500 font-medium'>Dados Iniciais</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
+          <div className='w-full bg-gray-200 rounded-full h-1.5 mb-5'>
             <div
-              className="bg-emerald-500 h-2 rounded-full"
-              style={{ width: "25%" }}
+              className='bg-emerald-500 h-1.5 rounded-full transition-all duration-300'
+              style={{ width: '20%' }}
             ></div>
           </div>
 
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Criar Conta da Organização
-          </h2>
-          <p className="text-gray-600 mb-8">
-            Comece a organizar os seus grupos financeiros hoje mesmo.
-          </p>
+          <h2 className='text-2xl font-bold text-gray-900 mb-1'>Criar Conta da Organização</h2>
+          <p className='text-sm text-gray-500 mb-5'>Comece a organizar os seus grupos financeiros hoje mesmo.</p>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Form with optimized paddings and spacing */}
+          <form onSubmit={handleSubmit} className='space-y-4'>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nome da Organização
-              </label>
-              <div className="relative">
-                <Building2 className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+              <label className='block text-xs font-semibold text-gray-700 mb-1.5'>Nome da Organização</label>
+              <div className='relative'>
+                <Building2 className='absolute left-3 top-3 h-4 w-4 text-gray-400' />
                 <input
-                  type="text"
+                  type='text'
                   value={form.nome}
                   onChange={(e) => setForm({ ...form, nome: e.target.value })}
-                  placeholder="Ex: Cooperativa de Poupança Mavalane"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  placeholder='Ex: Cooperativa de Poupança Mavalane'
+                  className='w-full pl-9 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 bg-white'
                   required
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className='grid grid-cols-2 gap-3'>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Província
-                </label>
+                <label className='block text-xs font-semibold text-gray-700 mb-1.5'>Província</label>
                 <select
                   value={form.provincia}
                   onChange={(e) =>
                     setForm({
                       ...form,
                       provincia: e.target.value,
-                      distrito: "",
+                      distrito: '',
                     })
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                  className='w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 bg-white'
                   required
                 >
-                  <option value="">Selecionar...</option>
+                  <option value=''>Selecionar...</option>
                   {PROVINCIAS_MZ.map((p) => (
                     <option key={p.nome} value={p.nome}>
                       {p.nome}
@@ -124,19 +114,15 @@ function StepOne() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Cidade / Distrito
-                </label>
+                <label className='block text-xs font-semibold text-gray-700 mb-1.5'>Cidade / Distrito</label>
                 <select
                   value={form.distrito}
-                  onChange={(e) =>
-                    setForm({ ...form, distrito: e.target.value })
-                  }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-100"
+                  onChange={(e) => setForm({ ...form, distrito: e.target.value })}
+                  className='w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 bg-white disabled:bg-gray-100 disabled:text-gray-400'
                   disabled={!form.provincia}
                   required
                 >
-                  <option value="">Selecionar...</option>
+                  <option value=''>Selecionar...</option>
                   {distritos.map((d) => (
                     <option key={d} value={d}>
                       {d}
@@ -147,51 +133,39 @@ function StepOne() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Telefone
-              </label>
-              <div className="flex">
-                <span className="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500">
+              <label className='block text-xs font-semibold text-gray-700 mb-1.5'>Telefone</label>
+              <div className='flex shadow-sm rounded-lg overflow-hidden'>
+                <span className='inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm select-none'>
                   +258
                 </span>
                 <input
-                  type="tel"
+                  type='tel'
                   value={form.telefone}
                   onChange={(e) =>
                     setForm({
                       ...form,
-                      telefone: e.target.value.replace(/\D/g, ""),
+                      telefone: e.target.value.replace(/\D/g, ''),
                     })
                   }
-                  placeholder="84 000 0000"
+                  placeholder='84 000 0000'
                   maxLength={9}
-                  pattern="[82|83|84|85|86|87][0-9]{7}"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-emerald-500"
+                  pattern='[82|83|84|85|86|87][0-9]{7}'
+                  className='flex-1 px-3 py-2.5 text-sm border border-gray-300 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-r-lg bg-white'
                   required
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className='text-[11px] text-gray-400 mt-1'>
                 Enviaremos um código SMS para validação no passo seguinte.
               </p>
             </div>
 
             <button
-              type="submit"
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center gap-2 transition"
+              type='submit'
+              className='w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition shadow-sm hover:shadow active:scale-[0.99] text-sm mt-2 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500'
             >
-              Próximo <ArrowRight className="h-5 w-5" />
+              Próximo <ArrowRight className='h-4 w-4' />
             </button>
           </form>
-
-          <div className="mt-8 pt-6 border-t text-center text-sm text-gray-600">
-            Já tem uma conta?{" "}
-            <a
-              href="/login"
-              className="font-bold text-emerald-600 hover:underline"
-            >
-              Entrar agora
-            </a>
-          </div>
         </div>
       </div>
     </div>
