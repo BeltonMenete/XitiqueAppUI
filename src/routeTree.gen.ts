@@ -20,6 +20,7 @@ import { Route as OrganizationAuthStep3RouteImport } from './routes/organization
 import { Route as OrganizationAuthStep2RouteImport } from './routes/organization/_auth/step-2'
 import { Route as OrganizationAuthStep1RouteImport } from './routes/organization/_auth/step-1'
 import { Route as OrganizationAuthPaymentsMobilePaymentRouteImport } from './routes/organization/_auth/payments/mobile-payment'
+import { Route as OrganizationAuthPaymentsBankPaymentRouteImport } from './routes/organization/_auth/payments/bank-payment'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -77,6 +78,12 @@ const OrganizationAuthPaymentsMobilePaymentRoute =
     path: '/organization/payments/mobile-payment',
     getParentRoute: () => rootRouteImport,
   } as any)
+const OrganizationAuthPaymentsBankPaymentRoute =
+  OrganizationAuthPaymentsBankPaymentRouteImport.update({
+    id: '/organization/_auth/payments/bank-payment',
+    path: '/organization/payments/bank-payment',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/organization/step-3': typeof OrganizationAuthStep3Route
   '/organization/step-4': typeof OrganizationAuthStep4Route
   '/organization/step-5': typeof OrganizationAuthStep5Route
+  '/organization/payments/bank-payment': typeof OrganizationAuthPaymentsBankPaymentRoute
   '/organization/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
 }
 export interface FileRoutesByTo {
@@ -102,6 +110,7 @@ export interface FileRoutesByTo {
   '/organization/step-3': typeof OrganizationAuthStep3Route
   '/organization/step-4': typeof OrganizationAuthStep4Route
   '/organization/step-5': typeof OrganizationAuthStep5Route
+  '/organization/payments/bank-payment': typeof OrganizationAuthPaymentsBankPaymentRoute
   '/organization/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
 }
 export interface FileRoutesById {
@@ -116,6 +125,7 @@ export interface FileRoutesById {
   '/organization/_auth/step-3': typeof OrganizationAuthStep3Route
   '/organization/_auth/step-4': typeof OrganizationAuthStep4Route
   '/organization/_auth/step-5': typeof OrganizationAuthStep5Route
+  '/organization/_auth/payments/bank-payment': typeof OrganizationAuthPaymentsBankPaymentRoute
   '/organization/_auth/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
 }
 export interface FileRouteTypes {
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/organization/step-3'
     | '/organization/step-4'
     | '/organization/step-5'
+    | '/organization/payments/bank-payment'
     | '/organization/payments/mobile-payment'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/organization/step-3'
     | '/organization/step-4'
     | '/organization/step-5'
+    | '/organization/payments/bank-payment'
     | '/organization/payments/mobile-payment'
   id:
     | '__root__'
@@ -157,6 +169,7 @@ export interface FileRouteTypes {
     | '/organization/_auth/step-3'
     | '/organization/_auth/step-4'
     | '/organization/_auth/step-5'
+    | '/organization/_auth/payments/bank-payment'
     | '/organization/_auth/payments/mobile-payment'
   fileRoutesById: FileRoutesById
 }
@@ -171,6 +184,7 @@ export interface RootRouteChildren {
   OrganizationAuthStep3Route: typeof OrganizationAuthStep3Route
   OrganizationAuthStep4Route: typeof OrganizationAuthStep4Route
   OrganizationAuthStep5Route: typeof OrganizationAuthStep5Route
+  OrganizationAuthPaymentsBankPaymentRoute: typeof OrganizationAuthPaymentsBankPaymentRoute
   OrganizationAuthPaymentsMobilePaymentRoute: typeof OrganizationAuthPaymentsMobilePaymentRoute
 }
 
@@ -253,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationAuthPaymentsMobilePaymentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organization/_auth/payments/bank-payment': {
+      id: '/organization/_auth/payments/bank-payment'
+      path: '/organization/payments/bank-payment'
+      fullPath: '/organization/payments/bank-payment'
+      preLoaderRoute: typeof OrganizationAuthPaymentsBankPaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -267,6 +288,8 @@ const rootRouteChildren: RootRouteChildren = {
   OrganizationAuthStep3Route: OrganizationAuthStep3Route,
   OrganizationAuthStep4Route: OrganizationAuthStep4Route,
   OrganizationAuthStep5Route: OrganizationAuthStep5Route,
+  OrganizationAuthPaymentsBankPaymentRoute:
+    OrganizationAuthPaymentsBankPaymentRoute,
   OrganizationAuthPaymentsMobilePaymentRoute:
     OrganizationAuthPaymentsMobilePaymentRoute,
 }
