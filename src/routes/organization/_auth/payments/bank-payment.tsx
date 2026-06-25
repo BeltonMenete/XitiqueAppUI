@@ -92,8 +92,9 @@ function RouteComponent() {
   };
 
   return (
-    <div className='min-h-screen w-full flex bg-[#f8faf6] text-[#191c1b] overflow-y-auto'>
+    <div className='min-h-screen w-full flex bg-[#f8faf6] text-[#191c1b] overflow-y-auto font-sans selection:bg-[#b0f0d6]'>
       <div className='flex w-full min-h-screen flex-col lg:flex-row'>
+
         {/* Painel Esquerdo - Branding */}
         <section className='w-full lg:w-[42%] bg-[#003527] text-white p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden shrink-0 lg:min-h-screen'>
           {/* Capulana / Textura sutil de fundo */}
@@ -106,26 +107,22 @@ function RouteComponent() {
           />
 
           <div className='relative z-10 flex items-center gap-3 mb-12 lg:mb-0'>
-            <div className='bg-[#064e3b] p-2.5 rounded-xl border border-white/5'>
-              {/* Xitique icon <Landmark className='h-6 w-6 text-white' /> */}
-            </div>
-            <span className='text-xl font-bold tracking-tight font-sans'>Xitique</span>
+            <span className='text-xl font-bold tracking-tight select-none'>Xitique</span>
           </div>
 
           <div className='relative z-10 space-y-4 my-auto max-w-sm py-8 lg:py-0'>
-            <h1 className='text-3xl xl:text-4xl font-bold leading-tight font-sans text-white'>
+            <h1 className='text-3xl xl:text-4xl font-bold leading-tight text-white'>
               Pagamento via Cartão
             </h1>
             <p className='text-[#80bea6]/90 text-sm leading-relaxed'>
-              Finalize sua assinatura para começar a gerenciar seus ciclos mensais de Xitique com total transparência e
-              segurança.
+              Finalize sua assinatura para começar a gerenciar seus ciclos mensais de Xitique com total transparência e segurança.
             </p>
           </div>
 
           <div className='relative z-10 space-y-3 mt-auto lg:mt-0 w-full'>
             <div className='border border-white/10 bg-white/5 backdrop-blur-sm rounded-xl p-5 space-y-5'>
               <div className='flex items-start gap-3.5'>
-                <ShieldCheck className='text-[#F59E0B] h-5 w-5 flex-shrink-0 mt-0.5' />
+                <ShieldCheck className='text-[#F59E0B] h-5 w-5 shrink-0 mt-0.5' />
                 <div>
                   <p className='font-bold text-sm text-white mb-0.5'>Segurança Nível Bancário</p>
                   <p className='text-[#80bea6]/80 text-xs leading-relaxed'>
@@ -135,7 +132,7 @@ function RouteComponent() {
               </div>
 
               <div className='border-t border-white/10 pt-4 flex items-start gap-3.5'>
-                <Lock className='text-[#F59E0B] h-5 w-5 flex-shrink-0 mt-0.5' />
+                <Lock className='text-[#F59E0B] h-5 w-5 shrink-0 mt-0.5' />
                 <div>
                   <p className='font-bold text-sm text-white mb-0.5'>Processamento Stripe</p>
                   <p className='text-[#80bea6]/80 text-xs leading-relaxed'>
@@ -163,16 +160,21 @@ function RouteComponent() {
         <section className='w-full lg:w-[58%] flex items-center justify-center p-6 sm:p-12 md:p-16 bg-white lg:min-h-screen overflow-y-visible'>
           <div className='w-full max-w-md mx-auto py-2'>
             <header className='mb-8'>
-              <h2 className='text-2xl sm:text-3xl font-bold text-black mb-2 tracking-tight font-sans'>
+              {/* Título Principal - Preto Puro */}
+              <h2 className='text-2xl sm:text-3xl font-bold text-black mb-2 tracking-tight'>
                 Pagamento Seguro com Cartão
               </h2>
-              <p className='text-sm text-gray-500'>Insira os dados do seu cartão de crédito ou débito abaixo.</p>
+              {/* Subtexto - Cinza Escuro para contraste */}
+              <p className='text-sm text-gray-900 font-medium opacity-80'>
+                Insira os dados do seu cartão de crédito ou débito abaixo.
+              </p>
             </header>
 
             <form onSubmit={handleSubmit} className='space-y-5'>
               {/* Nome no Cartão */}
               <div>
-                <label className='block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2'>
+                {/* Label - Mudado para text-black para maior legibilidade */}
+                <label className='block text-xs font-bold uppercase tracking-wider text-black mb-2'>
                   Nome no Cartão
                 </label>
                 <input
@@ -180,10 +182,10 @@ function RouteComponent() {
                   value={formData.cardName}
                   onChange={(e) => handleInputChange('cardName', e.target.value)}
                   placeholder='Ex: Nome Completo'
-                  className={`w-full px-4 py-3 rounded-xl border text-sm transition-all outline-none bg-[#f8faf6]
+                  className={`w-full px-4 py-3 rounded-xl border text-sm text-black transition-all duration-100 ease-in-out outline-none bg-[#f8faf6]
                     ${errors.cardName
                       ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                      : 'border-[#bfc9c3] hover:border-gray-400 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
+                      : 'border-[#bfc9c3] hover:border-gray-500 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
                     }`}
                 />
                 {errors.cardName && <p className='text-red-500 text-xs mt-1.5'>{errors.cardName}</p>}
@@ -191,32 +193,23 @@ function RouteComponent() {
 
               {/* Número do Cartão */}
               <div>
-                <label className='block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2'>
+                {/* Label - Mudado para text-black */}
+                <label className='block text-xs font-bold uppercase tracking-wider text-black mb-2'>
                   Número do Cartão
                 </label>
                 <div className='relative'>
-                  <CreditCard className='absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400' />
+                  <CreditCard className='absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500' />
                   <input
                     type='text'
                     value={formData.cardNumber}
                     onChange={(e) => handleInputChange('cardNumber', e.target.value)}
                     placeholder='0000 0000 0000 0000'
-                    className={`w-full pl-11 pr-4 py-3 rounded-xl border text-sm font-medium tracking-wider transition-all outline-none bg-[#f8faf6]
+                    className={`w-full pl-11 pr-4 py-3 rounded-xl border text-sm text-black font-medium tracking-wider transition-all duration-100 ease-in-out outline-none bg-[#f8faf6]
                       ${errors.cardNumber
                         ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                        : 'border-[#bfc9c3] hover:border-gray-400 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
+                        : 'border-[#bfc9c3] hover:border-gray-500 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
                       }`}
                   />
-
-                  {/* PLACEHOLDER: Insira o link da imagem do logotipo da bandeira do cartão ou dinâmico aqui */}
-                  {/* <div className='absolute right-4 top-1/2 -translate-y-1/2 flex items-center'>
-                    <img
-                      src="SEU_LINK_AQUI"
-                      alt="Card Flag Logo"
-                      className='h-5 w-auto object-contain'
-                    />
-                  </div> 
-                  */}
                 </div>
                 {errors.cardNumber && <p className='text-red-500 text-xs mt-1.5'>{errors.cardNumber}</p>}
               </div>
@@ -224,7 +217,8 @@ function RouteComponent() {
               {/* Validade e CVV */}
               <div className='grid grid-cols-2 gap-4'>
                 <div>
-                  <label className='block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2'>
+                  {/* Label - Mudado para text-black */}
+                  <label className='block text-xs font-bold uppercase tracking-wider text-black mb-2'>
                     Validade
                   </label>
                   <input
@@ -232,17 +226,18 @@ function RouteComponent() {
                     value={formData.expiry}
                     onChange={(e) => handleInputChange('expiry', e.target.value)}
                     placeholder='MM / AA'
-                    className={`w-full px-4 py-3 rounded-xl border text-sm font-medium tracking-wider transition-all outline-none bg-[#f8faf6]
+                    className={`w-full px-4 py-3 rounded-xl border text-sm text-black font-medium tracking-wider transition-all duration-100 ease-in-out outline-none bg-[#f8faf6]
                       ${errors.expiry
                         ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                        : 'border-[#bfc9c3] hover:border-gray-400 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
+                        : 'border-[#bfc9c3] hover:border-gray-500 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
                       }`}
                   />
                   {errors.expiry && <p className='text-red-500 text-xs mt-1.5'>{errors.expiry}</p>}
                 </div>
 
                 <div>
-                  <label className='block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2'>
+                  {/* Label - Mudado para text-black */}
+                  <label className='block text-xs font-bold uppercase tracking-wider text-black mb-2'>
                     CVV
                   </label>
                   <div className='relative'>
@@ -251,15 +246,15 @@ function RouteComponent() {
                       value={formData.cvv}
                       onChange={(e) => handleInputChange('cvv', e.target.value)}
                       placeholder='123'
-                      className={`w-full px-4 py-3 pr-10 rounded-xl border text-sm font-medium tracking-wider transition-all outline-none bg-[#f8faf6]
+                      className={`w-full px-4 py-3 pr-10 rounded-xl border text-sm text-black font-medium tracking-wider transition-all duration-100 ease-in-out outline-none bg-[#f8faf6]
                         ${errors.cvv
                           ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                          : 'border-[#bfc9c3] hover:border-gray-400 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
+                          : 'border-[#bfc9c3] hover:border-gray-500 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
                         }`}
                     />
                     <button
                       type='button'
-                      className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-150'
+                      className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black cursor-pointer transition-colors duration-100'
                       title='Código de 3 ou 4 dígitos no verso do cartão'
                     >
                       <Info className='h-4 w-4' />
@@ -276,20 +271,21 @@ function RouteComponent() {
                   id='saveCard'
                   checked={formData.saveCard}
                   onChange={(e) => handleInputChange('saveCard', e.target.checked)}
-                  className='w-4 h-4 rounded border-gray-300 text-[#10B981] focus:ring-2 focus:ring-[#10B981] focus:ring-offset-0 cursor-pointer transition-all'
+                  className='w-4 h-4 rounded border-gray-300 text-[#10B981] focus:ring-2 focus:ring-[#10B981] focus:ring-offset-0 cursor-pointer transition-all duration-100'
                 />
+                {/* Texto do Checkbox - Mudado para text-gray-900 para destacar mais */}
                 <label
                   htmlFor='saveCard'
-                  className='text-xs text-gray-600 group-hover:text-gray-900 cursor-pointer select-none transition-colors duration-150'
+                  className='text-xs text-gray-900 font-medium group-hover:text-black cursor-pointer select-none transition-colors duration-100'
                 >
                   Salvar este cartão para pagamentos futuros.
                 </label>
               </div>
 
-              {/* Botão de Submissão Sem Sombras */}
+              {/* Botão de Submissão Snappy & Smooth */}
               <button
                 type='submit'
-                className='w-full bg-[#10B981] hover:bg-emerald-600 text-white font-bold text-sm py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 transition-all duration-150 active:scale-[0.985] focus:outline-none focus:ring-2 focus:ring-[#eceeeb]'
+                className='w-full bg-[#10B981] hover:bg-emerald-600 text-white font-bold text-sm py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all duration-100 ease-in-out active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-[#eceeeb]'
               >
                 Finalizar e Pagar com Segurança
                 <Send className='h-4 w-4' />
@@ -300,7 +296,8 @@ function RouteComponent() {
             <footer className='mt-8 space-y-4 border-t border-gray-100 pt-6'>
               <div className='flex items-center justify-center gap-2 text-gray-400 text-xs'>
                 <span>Powered by</span>
-                <span className='font-bold text-gray-600 tracking-tight text-sm'>stripe</span>
+                {/* Marca Stripe - Mudada para text-black puro */}
+                <span className='font-bold text-black tracking-tight text-sm select-none'>stripe</span>
               </div>
             </footer>
           </div>

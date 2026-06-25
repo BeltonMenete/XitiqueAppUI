@@ -91,6 +91,7 @@ function StepFive() {
                 <span className='text-[10px] font-bold text-gray-400 uppercase tracking-widest block'>
                   Plano Selecionado
                 </span>
+
                 <h3 className='font-bold text-gray-900 text-base'>Xitique Pro</h3>
               </div>
             </div>
