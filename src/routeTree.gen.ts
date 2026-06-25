@@ -19,6 +19,7 @@ import { Route as OrganizationAuthStep4RouteImport } from './routes/organization
 import { Route as OrganizationAuthStep3RouteImport } from './routes/organization/_auth/step-3'
 import { Route as OrganizationAuthStep2RouteImport } from './routes/organization/_auth/step-2'
 import { Route as OrganizationAuthStep1RouteImport } from './routes/organization/_auth/step-1'
+import { Route as OrganizationAuthPaymentsMobilePaymentRouteImport } from './routes/organization/_auth/payments/mobile-payment'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +71,12 @@ const OrganizationAuthStep1Route = OrganizationAuthStep1RouteImport.update({
   path: '/organization/step-1',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrganizationAuthPaymentsMobilePaymentRoute =
+  OrganizationAuthPaymentsMobilePaymentRouteImport.update({
+    id: '/organization/_auth/payments/mobile-payment',
+    path: '/organization/payments/mobile-payment',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/organization/step-3': typeof OrganizationAuthStep3Route
   '/organization/step-4': typeof OrganizationAuthStep4Route
   '/organization/step-5': typeof OrganizationAuthStep5Route
+  '/organization/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,6 +102,7 @@ export interface FileRoutesByTo {
   '/organization/step-3': typeof OrganizationAuthStep3Route
   '/organization/step-4': typeof OrganizationAuthStep4Route
   '/organization/step-5': typeof OrganizationAuthStep5Route
+  '/organization/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +116,7 @@ export interface FileRoutesById {
   '/organization/_auth/step-3': typeof OrganizationAuthStep3Route
   '/organization/_auth/step-4': typeof OrganizationAuthStep4Route
   '/organization/_auth/step-5': typeof OrganizationAuthStep5Route
+  '/organization/_auth/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/organization/step-3'
     | '/organization/step-4'
     | '/organization/step-5'
+    | '/organization/payments/mobile-payment'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/organization/step-3'
     | '/organization/step-4'
     | '/organization/step-5'
+    | '/organization/payments/mobile-payment'
   id:
     | '__root__'
     | '/'
@@ -145,6 +157,7 @@ export interface FileRouteTypes {
     | '/organization/_auth/step-3'
     | '/organization/_auth/step-4'
     | '/organization/_auth/step-5'
+    | '/organization/_auth/payments/mobile-payment'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,6 +171,7 @@ export interface RootRouteChildren {
   OrganizationAuthStep3Route: typeof OrganizationAuthStep3Route
   OrganizationAuthStep4Route: typeof OrganizationAuthStep4Route
   OrganizationAuthStep5Route: typeof OrganizationAuthStep5Route
+  OrganizationAuthPaymentsMobilePaymentRoute: typeof OrganizationAuthPaymentsMobilePaymentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -232,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationAuthStep1RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organization/_auth/payments/mobile-payment': {
+      id: '/organization/_auth/payments/mobile-payment'
+      path: '/organization/payments/mobile-payment'
+      fullPath: '/organization/payments/mobile-payment'
+      preLoaderRoute: typeof OrganizationAuthPaymentsMobilePaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -246,6 +267,8 @@ const rootRouteChildren: RootRouteChildren = {
   OrganizationAuthStep3Route: OrganizationAuthStep3Route,
   OrganizationAuthStep4Route: OrganizationAuthStep4Route,
   OrganizationAuthStep5Route: OrganizationAuthStep5Route,
+  OrganizationAuthPaymentsMobilePaymentRoute:
+    OrganizationAuthPaymentsMobilePaymentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

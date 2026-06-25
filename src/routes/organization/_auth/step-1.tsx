@@ -25,7 +25,6 @@ function StepOne() {
   };
 
   return (
-    // Restricted total height to viewport height and disabled global overflow
     <div className='h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10'>
       {/* Left Panel - Branding */}
       <div className='hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-8 xl:p-12 flex-col justify-between h-full'>
@@ -57,7 +56,7 @@ function StepOne() {
       {/* Right Panel - Form Container */}
       <div className='w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50/50 h-full overflow-y-auto'>
         <div className='w-full max-w-md my-auto'>
-          {/* Stepper atualizado para o fluxo de 5 passos */}
+          {/* Stepper */}
           <div className='flex justify-between items-center mb-1.5'>
             <span className='text-xs font-bold text-emerald-700 tracking-wider'>PASSO 1 DE 5</span>
             <span className='text-xs text-gray-500 font-medium'>Dados Iniciais</span>
@@ -72,23 +71,27 @@ function StepOne() {
           <h2 className='text-2xl font-bold text-gray-900 mb-1'>Criar Conta da Organização</h2>
           <p className='text-sm text-gray-500 mb-5'>Comece a organizar os seus grupos financeiros hoje mesmo.</p>
 
-          {/* Form with optimized paddings and spacing */}
+          {/* Form */}
           <form onSubmit={handleSubmit} className='space-y-4'>
-            <div>
-              <label className='block text-xs font-semibold text-gray-700 mb-1.5'>Nome da Organização</label>
+            {/* Campo: Nome da Organização */}
+            <div className='group'>
+              <label className='block text-xs font-semibold text-gray-700 mb-1.5 group-focus-within:text-emerald-700 transition-colors'>
+                Nome da Organização
+              </label>
               <div className='relative'>
-                <Building2 className='absolute left-3 top-3 h-4 w-4 text-gray-400' />
+                <Building2 className='absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-emerald-600 transition-colors' />
                 <input
                   type='text'
                   value={form.nome}
                   onChange={(e) => setForm({ ...form, nome: e.target.value })}
                   placeholder='Ex: Cooperativa de Poupança Mavalane'
-                  className='w-full pl-9 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 bg-white'
+                  className='w-full pl-9 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 bg-white hover:border-gray-400 focus:hover:border-emerald-500 transition-all duration-200'
                   required
                 />
               </div>
             </div>
 
+            {/* Campos Regionais em Grid */}
             <div className='grid grid-cols-2 gap-3'>
               <div>
                 <label className='block text-xs font-semibold text-gray-700 mb-1.5'>Província</label>
@@ -101,7 +104,7 @@ function StepOne() {
                       distrito: '',
                     })
                   }
-                  className='w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 bg-white'
+                  className='w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 bg-white hover:border-gray-400 focus:hover:border-emerald-500 transition-all duration-200 cursor-pointer'
                   required
                 >
                   <option value=''>Selecionar...</option>
@@ -118,7 +121,7 @@ function StepOne() {
                 <select
                   value={form.distrito}
                   onChange={(e) => setForm({ ...form, distrito: e.target.value })}
-                  className='w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 bg-white disabled:bg-gray-100 disabled:text-gray-400'
+                  className='w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 bg-white hover:border-gray-400 focus:hover:border-emerald-500 disabled:hover:border-gray-200 transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400'
                   disabled={!form.provincia}
                   required
                 >
@@ -132,10 +135,13 @@ function StepOne() {
               </div>
             </div>
 
-            <div>
-              <label className='block text-xs font-semibold text-gray-700 mb-1.5'>Telefone</label>
-              <div className='flex shadow-sm rounded-lg overflow-hidden'>
-                <span className='inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm select-none'>
+            {/* Campo: Telefone */}
+            <div className='group'>
+              <label className='block text-xs font-semibold text-gray-700 mb-1.5 group-focus-within:text-emerald-700 transition-colors'>
+                Telefone
+              </label>
+              <div className='flex rounded-lg overflow-hidden border border-gray-300 group-hover:border-gray-400 group-focus-within:border-emerald-500 group-focus-within:ring-2 group-focus-within:ring-emerald-500/20 transition-all duration-200'>
+                <span className='inline-flex items-center px-3 bg-gray-50 text-gray-500 border-r border-gray-200 text-sm select-none'>
                   +258
                 </span>
                 <input
@@ -150,7 +156,7 @@ function StepOne() {
                   placeholder='84 000 0000'
                   maxLength={9}
                   pattern='[82|83|84|85|86|87][0-9]{7}'
-                  className='flex-1 px-3 py-2.5 text-sm border border-gray-300 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-r-lg bg-white'
+                  className='flex-1 px-3 py-2.5 text-sm focus:outline-none bg-white'
                   required
                 />
               </div>
@@ -159,11 +165,12 @@ function StepOne() {
               </p>
             </div>
 
+            {/* Botão de Submissão */}
             <button
               type='submit'
-              className='w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition shadow-sm hover:shadow active:scale-[0.99] text-sm mt-2 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500'
+              className='w-full bg-emerald-600 hover:bg-emerald-700 hover:shadow-md text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] text-sm mt-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2'
             >
-              Próximo <ArrowRight className='h-4 w-4' />
+              Próximo <ArrowRight className='h-4 w-4 transition-transform group-hover:translate-x-0.5' />
             </button>
           </form>
         </div>

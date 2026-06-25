@@ -25,8 +25,7 @@ function StepFive() {
     setTimeout(() => {
       setIsProcessing(false);
       alert("Cadastro e ativação efetuados com sucesso!");
-      // Redirecionamento descomentado e ativado para ir à aplicação
-      //   navigate({ to: "/dashboard" });
+      // navigate({ to: "/dashboard" });
     }, 2000);
   };
 
@@ -38,7 +37,6 @@ function StepFive() {
 
         <div className="space-y-4 my-auto relative z-20">
           <div className="flex items-center gap-2 mb-2">
-            <Landmark className="text-amber-400 h-8 w-8" />
             <h2 className="text-2xl font-bold tracking-tighter text-amber-400">XITIQUE</h2>
           </div>
           <h1 className="text-3xl xl:text-4xl font-bold leading-tight text-white">
@@ -83,7 +81,7 @@ function StepFive() {
           </nav>
 
           {/* Resumo do Plano */}
-          <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+          <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100">
                 <CheckCircle2 className="h-6 w-6" />
@@ -105,17 +103,17 @@ function StepFive() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-              {/* Botão M-Pesa com SVG oficial dinâmico */}
+              {/* Botão M-Pesa */}
               <button
                 type="button"
                 onClick={() => setSelectedMethod("mpesa")}
-                className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all h-24 ${selectedMethod === "mpesa"
-                  ? "border-emerald-600 bg-emerald-50/20 ring-1 ring-emerald-600 shadow-sm"
-                  : "border-gray-200 bg-white hover:bg-gray-50/50 hover:border-gray-300"
+                className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all h-24 duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#E60000]/20 ${selectedMethod === "mpesa"
+                  ? "border-[#E60000] bg-[#E60000]/5 ring-1 ring-[#E60000] shadow-sm"
+                  : "border-gray-200 bg-white hover:bg-[#E60000]/5 hover:border-[#E60000]/40 hover:shadow-sm"
                   }`}
               >
-                <div className="w-16 h-12 flex items-center justify-center flex-shrink-0">
-                  <MPesaIcon className="h-7 w-auto object-contain" />
+                <div className="w-16 h-12 flex items-center justify-center flex-shrink-0 bg-white rounded-lg p-1 border border-gray-100 shadow-2xl">
+                  <MPesaIcon className="h-8 w-auto object-contain scale-110" />
                 </div>
                 <div>
                   <p className="font-bold text-gray-900 text-sm">M-Pesa</p>
@@ -123,17 +121,17 @@ function StepFive() {
                 </div>
               </button>
 
-              {/* Botão e-Mola com SVG oficial dinâmico */}
+              {/* Botão e-Mola */}
               <button
                 type="button"
                 onClick={() => setSelectedMethod("emola")}
-                className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all h-24 ${selectedMethod === "emola"
-                  ? "border-emerald-600 bg-emerald-50/20 ring-1 ring-emerald-600 shadow-sm"
-                  : "border-gray-200 bg-white hover:bg-gray-50/50 hover:border-gray-300"
+                className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all h-24 duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#F37227]/20 ${selectedMethod === "emola"
+                  ? "border-[#F37227] bg-[#F37227]/5 ring-1 ring-[#F37227] shadow-sm"
+                  : "border-gray-200 bg-white hover:bg-[#F37227]/5 hover:border-[#F37227]/40 hover:shadow-sm"
                   }`}
               >
-                <div className="w-16 h-12 flex items-center justify-center flex-shrink-0">
-                  <EMolaIcon className="h-7 w-auto object-contain" />
+                <div className="w-16 h-12 flex items-center justify-center flex-shrink-0 bg-white rounded-lg p-1 border border-gray-100 shadow-2xl">
+                  <EMolaIcon className="h-8 w-auto object-contain scale-110" />
                 </div>
                 <div>
                   <p className="font-bold text-gray-900 text-sm">e-Mola</p>
@@ -145,12 +143,12 @@ function StepFive() {
               <button
                 type="button"
                 onClick={() => setSelectedMethod("card")}
-                className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all h-24 ${selectedMethod === "card"
-                  ? "border-emerald-600 bg-emerald-50/20 ring-1 ring-emerald-600 shadow-sm"
-                  : "border-gray-200 bg-white hover:bg-gray-50/50 hover:border-gray-300"
+                className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all h-24 duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${selectedMethod === "card"
+                  ? "border-emerald-600 bg-emerald-50/30 ring-1 ring-emerald-600 shadow-sm"
+                  : "border-gray-200 bg-white hover:bg-emerald-50/10 hover:border-emerald-500/40 hover:shadow-sm"
                   }`}
               >
-                <div className={`w-12 h-12 flex items-center justify-center rounded-xl border flex-shrink-0 ${selectedMethod === "card" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-gray-50 text-gray-500 border-gray-200"}`}>
+                <div className={`w-12 h-12 flex items-center justify-center rounded-xl border flex-shrink-0 transition-colors ${selectedMethod === "card" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-gray-50 text-gray-500 border-gray-200"}`}>
                   <CreditCard className="h-5 w-5" />
                 </div>
                 <div>
@@ -163,12 +161,12 @@ function StepFive() {
               <button
                 type="button"
                 onClick={() => setSelectedMethod("bank")}
-                className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all h-24 ${selectedMethod === "bank"
-                  ? "border-emerald-600 bg-emerald-50/20 ring-1 ring-emerald-600 shadow-sm"
-                  : "border-gray-200 bg-white hover:bg-gray-50/50 hover:border-gray-300"
+                className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all h-24 duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${selectedMethod === "bank"
+                  ? "border-emerald-600 bg-emerald-50/30 ring-1 ring-emerald-600 shadow-sm"
+                  : "border-gray-200 bg-white hover:bg-emerald-50/10 hover:border-emerald-500/40 hover:shadow-sm"
                   }`}
               >
-                <div className={`w-12 h-12 flex items-center justify-center rounded-xl border flex-shrink-0 ${selectedMethod === "bank" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-gray-50 text-gray-500 border-gray-200"}`}>
+                <div className={`w-12 h-12 flex items-center justify-center rounded-xl border flex-shrink-0 transition-colors ${selectedMethod === "bank" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-gray-50 text-gray-500 border-gray-200"}`}>
                   <Landmark className="h-5 w-5" />
                 </div>
                 <div>
@@ -186,7 +184,7 @@ function StepFive() {
                 type="button"
                 disabled={isProcessing}
                 onClick={() => navigate({ to: "/organization/step-4" })}
-                className="w-full sm:w-1/3 order-2 sm:order-1 border border-gray-300 hover:bg-gray-100 text-gray-600 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition text-sm active:scale-[0.99] disabled:opacity-50 focus:outline-none"
+                className="w-full sm:w-1/3 order-2 sm:order-1 border border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm text-gray-600 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 text-sm active:scale-[0.98] disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
               >
                 <ArrowLeft className="h-4 w-4" /> Voltar
               </button>
@@ -195,14 +193,14 @@ function StepFive() {
                 type="button"
                 disabled={!selectedMethod || isProcessing}
                 onClick={handleConfirmPayment}
-                className="w-full sm:w-2/3 order-1 sm:order-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition shadow-md text-sm active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600 focus:outline-none"
+                className="w-full sm:w-2/3 order-1 sm:order-2 bg-emerald-600 hover:bg-emerald-700 hover:shadow-lg text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 text-sm active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600 disabled:hover:shadow-none focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 {isProcessing ? "A processar..." : "Confirmar e Ativar Conta"}
               </button>
             </div>
 
-            <div className="flex items-center justify-center gap-1.5 text-gray-400 text-xs font-medium">
-              <Lock className="h-3.5 w-3.5" />
+            <div className="flex items-center justify-center gap-1.5 text-gray-400 text-xs font-medium transition-colors hover:text-gray-500 cursor-default">
+              <Lock className="h-3.5 w-3.5 animate-pulse" />
               <span>Transação encriptada via SSL Seguro</span>
             </div>
           </div>
