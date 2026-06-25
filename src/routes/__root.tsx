@@ -3,7 +3,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 
 import '../styles.css';
-import NotFoundPage from '#/components/NotFound';
+import NotFoundPage from '#/components/NotFoundPage';
 
 export const Route = createRootRoute({
   component: RootComponent,
