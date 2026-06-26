@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthTermsRouteImport } from './routes/_auth/terms'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthResetRouteImport } from './routes/_auth/reset'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
@@ -27,6 +28,11 @@ import { Route as OrganizationAuthPaymentsBankRouteImport } from './routes/organ
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthTermsRoute = AuthTermsRouteImport.update({
+  id: '/_auth/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/reset': typeof AuthResetRoute
   '/signup': typeof AuthSignupRoute
+  '/terms': typeof AuthTermsRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
   '/organization/step-2': typeof OrganizationAuthStep2Route
   '/organization/step-3': typeof OrganizationAuthStep3Route
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/reset': typeof AuthResetRoute
   '/signup': typeof AuthSignupRoute
+  '/terms': typeof AuthTermsRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
   '/organization/step-2': typeof OrganizationAuthStep2Route
   '/organization/step-3': typeof OrganizationAuthStep3Route
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/reset': typeof AuthResetRoute
   '/_auth/signup': typeof AuthSignupRoute
+  '/_auth/terms': typeof AuthTermsRoute
   '/organization/_auth/step-1': typeof OrganizationAuthStep1Route
   '/organization/_auth/step-2': typeof OrganizationAuthStep2Route
   '/organization/_auth/step-3': typeof OrganizationAuthStep3Route
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset'
     | '/signup'
+    | '/terms'
     | '/organization/step-1'
     | '/organization/step-2'
     | '/organization/step-3'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset'
     | '/signup'
+    | '/terms'
     | '/organization/step-1'
     | '/organization/step-2'
     | '/organization/step-3'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_auth/reset'
     | '/_auth/signup'
+    | '/_auth/terms'
     | '/organization/_auth/step-1'
     | '/organization/_auth/step-2'
     | '/organization/_auth/step-3'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetRoute: typeof AuthResetRoute
   AuthSignupRoute: typeof AuthSignupRoute
+  AuthTermsRoute: typeof AuthTermsRoute
   OrganizationAuthStep1Route: typeof OrganizationAuthStep1Route
   OrganizationAuthStep2Route: typeof OrganizationAuthStep2Route
   OrganizationAuthStep3Route: typeof OrganizationAuthStep3Route
@@ -223,6 +236,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/terms': {
+      id: '/_auth/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof AuthTermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/signup': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthResetRoute: AuthResetRoute,
   AuthSignupRoute: AuthSignupRoute,
+  AuthTermsRoute: AuthTermsRoute,
   OrganizationAuthStep1Route: OrganizationAuthStep1Route,
   OrganizationAuthStep2Route: OrganizationAuthStep2Route,
   OrganizationAuthStep3Route: OrganizationAuthStep3Route,
