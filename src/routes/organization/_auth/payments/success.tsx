@@ -1,12 +1,5 @@
-import React from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import {
-    CheckCircle,
-    Verified,
-    Info,
-    ArrowRight,
-    Download,
-} from 'lucide-react';
+import { CheckCircle, Verified, Info, ArrowRight, Download } from 'lucide-react';
 
 export const Route = createFileRoute('/organization/_auth/payments/success')({
     component: RouteComponent,
@@ -21,7 +14,6 @@ function RouteComponent() {
     return (
         <div className='h-screen w-full flex bg-[#f8faf6] text-[#191c1b] lg:overflow-hidden overflow-y-auto font-sans selection:bg-[#b0f0d6]'>
             <div className='flex w-full h-full flex-col lg:flex-row'>
-
                 {/* ================= PAINEL ESQUERDO: BRANDING & CONTEXTO ================= */}
                 <section className='w-full lg:w-[40%] bg-[#003527] text-white p-6 sm:p-10 flex flex-col justify-between relative overflow-hidden shrink-0 h-auto lg:h-full'>
                     {/* Textura Capulana Sutil baseada no Design System */}
@@ -42,7 +34,8 @@ function RouteComponent() {
                     <div className='relative z-10 space-y-3 my-auto max-w-sm py-4 lg:py-0'>
                         <div className='h-1 w-12 bg-[#10B981] rounded-full'></div>
                         <p className='text-[#80bea6]/90 text-sm leading-relaxed'>
-                            A segurança dos seus fundos é a nossa prioridade. Cada cêntimo ticado é um passo firme em direção à prosperidade da sua comunidade.
+                            A segurança dos seus fundos é a nossa prioridade. Cada cêntimo ticado é um passo firme em direção à
+                            prosperidade da sua comunidade.
                         </p>
                     </div>
 
@@ -59,7 +52,6 @@ function RouteComponent() {
                 {/* ================= PAINEL DIREITO: CONFIRMAÇÃO & RECIBO (TEXTOS EM PRETO) ================= */}
                 <section className='w-full lg:w-[60%] flex items-center justify-center p-4 sm:p-8 md:p-12 bg-[#F8FAFC] h-full lg:overflow-y-auto'>
                     <div className='w-full max-w-xl mx-auto my-auto space-y-5 text-center lg:text-left'>
-
                         {/* Cabeçalho de Sucesso */}
                         <div className='space-y-2'>
                             <div className='inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#10B981]/10 text-[#10B981] mb-2 lg:mb-0'>
@@ -71,7 +63,8 @@ function RouteComponent() {
                             </h2>
                             {/* Ajustado para text-black com opacidade sutil */}
                             <p className='text-sm text-black/70 font-medium leading-relaxed max-w-md mx-auto lg:mx-0'>
-                                A sua organização já está activa e pronta para começar a ticar. Bem-vindo à nova era da gestão financeira comunitária em Moçambique.
+                                A sua organização já está activa e pronta para começar a ticar. Bem-vindo à nova era da gestão
+                                financeira comunitária em Moçambique.
                             </p>
                         </div>
 
@@ -92,17 +85,23 @@ function RouteComponent() {
                             {/* Informações da Transação */}
                             <div className='grid grid-cols-2 gap-4 text-left'>
                                 <div className='space-y-0.5'>
-                                    <p className='text-[10px] font-semibold uppercase tracking-wider text-black/40'>Número da Transação</p>
+                                    <p className='text-[10px] font-semibold uppercase tracking-wider text-black/40'>
+                                        Número da Transação
+                                    </p>
                                     {/* Alterado para text-black */}
                                     <p className='font-mono text-xs font-medium text-black'>#XM-2024-998102</p>
                                 </div>
                                 <div className='space-y-0.5'>
-                                    <p className='text-[10px] font-semibold uppercase tracking-wider text-black/40'>Próxima Cobrança</p>
+                                    <p className='text-[10px] font-semibold uppercase tracking-wider text-black/40'>
+                                        Próxima Cobrança
+                                    </p>
                                     {/* Alterado para text-black */}
                                     <p className='text-xs font-bold text-black'>15 de Julho, 2024</p>
                                 </div>
                                 <div className='space-y-0.5'>
-                                    <p className='text-[10px] font-semibold uppercase tracking-wider text-black/40'>Valor Pago</p>
+                                    <p className='text-[10px] font-semibold uppercase tracking-wider text-black/40'>
+                                        Valor Pago
+                                    </p>
                                     <p className='text-lg font-bold text-[#10B981]'>1.500,00 MZN</p>
                                 </div>
                                 <div className='space-y-0.5'>
@@ -119,7 +118,9 @@ function RouteComponent() {
                                 <div className='flex items-center gap-2 text-black/70 bg-[#f2f4f1] p-2.5 rounded-lg text-left'>
                                     {/* Alterado para text-black */}
                                     <Info className='h-4 w-4 text-black shrink-0' />
-                                    <p className='text-[11px] font-medium leading-tight'>Uma cópia deste recibo foi enviada para o seu email registado.</p>
+                                    <p className='text-[11px] font-medium leading-tight'>
+                                        Uma cópia deste recibo foi enviada para o seu email registado.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +145,6 @@ function RouteComponent() {
                                 Recibo (PDF)
                             </button>
                         </div>
-
                     </div>
                 </section>
             </div>
