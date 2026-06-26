@@ -135,7 +135,10 @@ function Signup() {
                       Para quem deseja poupar dinheiro diariamente e acompanhar
                       o seu progresso digital.
                     </p>
-                    <button className="mt-2 text-(--color-mint-leaf-500) text-xs font-medium flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
+                    <button
+                      type="button"
+                      className="mt-2 text-(--color-mint-leaf-500) text-xs font-medium flex items-center gap-0.5 group-hover:translate-x-1 transition-transform"
+                    >
                       Começar como Ticante
                       <ChevronRight size={14} />
                     </button>

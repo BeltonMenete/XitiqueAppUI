@@ -108,15 +108,19 @@ function ForgotPassword() {
                   </p>
                 </div>
 
-                {/* Alternador de Método */}
-                <div className="grid grid-cols-2 gap-1 p-0.5 bg-gray-100 border border-gray-200 rounded-xl">
+                {/* Alternador de Método Corrigido (Sem Linhas Pretas/Contornos Extras) */}
+                <div className="grid grid-cols-2 gap-1 p-1 bg-gray-100/80 rounded-xl">
                   <button
                     type="button"
                     onClick={() => {
                       setMethod("email");
                       setErrors({});
                     }}
-                    className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md transition-all duration-300 active:scale-[0.99] cursor-pointer ${method === "email" ? "bg-white text-gray-900 border border-gray-200/80 shadow-sm font-semibold" : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"}`}
+                    className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 active:scale-[0.99] cursor-pointer focus:outline-none ${
+                      method === "email"
+                        ? "bg-white text-gray-900 shadow-sm font-semibold"
+                        : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/40"
+                    }`}
                   >
                     <Mail size={14} /> E-mail
                   </button>
@@ -126,7 +130,11 @@ function ForgotPassword() {
                       setMethod("phone");
                       setErrors({});
                     }}
-                    className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md transition-all duration-300 active:scale-[0.99] cursor-pointer ${method === "phone" ? "bg-white text-gray-900 border border-gray-200/80 shadow-sm font-semibold" : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"}`}
+                    className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 active:scale-[0.99] cursor-pointer focus:outline-none ${
+                      method === "phone"
+                        ? "bg-white text-gray-900 shadow-sm font-semibold"
+                        : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/40"
+                    }`}
                   >
                     <Phone size={14} /> Telefone / SMS
                   </button>
