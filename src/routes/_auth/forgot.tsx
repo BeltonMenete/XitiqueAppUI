@@ -6,7 +6,7 @@ import { LOGIN_SUBMIT_DELAY, APP_NAME } from "#/lib/constants";
 import { Ring2 } from "ldrs/react";
 import { ArrowLeft, Mail, Phone } from "lucide-react";
 
-export const Route = createFileRoute("/_auth/forgot-password")({
+export const Route = createFileRoute("/_auth/forgot")({
   component: ForgotPassword,
 });
 

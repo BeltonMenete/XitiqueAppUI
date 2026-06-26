@@ -8,7 +8,7 @@ import {
     Download,
 } from 'lucide-react';
 
-export const Route = createFileRoute('/organization/_auth/payments/payment-success')({
+export const Route = createFileRoute('/organization/_auth/payments/success')({
     component: RouteComponent,
 });
 

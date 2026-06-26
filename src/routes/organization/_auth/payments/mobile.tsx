@@ -4,7 +4,7 @@ import { MPesaIcon } from "@/components/icons/MPesaIcon";
 import { EMolaIcon } from "@/components/icons/EMolaIcon";
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/organization/_auth/payments/mobile-payment')({
+export const Route = createFileRoute('/organization/_auth/payments/mobile')({
   component: RouteComponent,
 });
 

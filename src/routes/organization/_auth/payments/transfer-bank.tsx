@@ -13,7 +13,7 @@ import {
   X,
 } from 'lucide-react';
 
-export const Route = createFileRoute('/organization/_auth/payments/transfer-payment')({
+export const Route = createFileRoute('/organization/_auth/payments/transfer-bank')({
   component: RouteComponent,
 });
 

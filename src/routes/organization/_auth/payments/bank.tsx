@@ -10,7 +10,7 @@ import {
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/organization/_auth/payments/bank-payment",
+  "/organization/_auth/payments/bank",
 )({
   component: RouteComponent,
 });

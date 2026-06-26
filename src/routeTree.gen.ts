@@ -11,18 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
-import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
+import { Route as AuthResetRouteImport } from './routes/_auth/reset'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as AuthForgotRouteImport } from './routes/_auth/forgot'
 import { Route as OrganizationAuthStep5RouteImport } from './routes/organization/_auth/step-5'
 import { Route as OrganizationAuthStep4RouteImport } from './routes/organization/_auth/step-4'
 import { Route as OrganizationAuthStep3RouteImport } from './routes/organization/_auth/step-3'
 import { Route as OrganizationAuthStep2RouteImport } from './routes/organization/_auth/step-2'
 import { Route as OrganizationAuthStep1RouteImport } from './routes/organization/_auth/step-1'
-import { Route as OrganizationAuthPaymentsTransferPaymentRouteImport } from './routes/organization/_auth/payments/transfer-payment'
-import { Route as OrganizationAuthPaymentsPaymentSuccessRouteImport } from './routes/organization/_auth/payments/payment-success'
-import { Route as OrganizationAuthPaymentsMobilePaymentRouteImport } from './routes/organization/_auth/payments/mobile-payment'
-import { Route as OrganizationAuthPaymentsBankPaymentRouteImport } from './routes/organization/_auth/payments/bank-payment'
+import { Route as OrganizationAuthPaymentsTransferBankRouteImport } from './routes/organization/_auth/payments/transfer-bank'
+import { Route as OrganizationAuthPaymentsSuccessRouteImport } from './routes/organization/_auth/payments/success'
+import { Route as OrganizationAuthPaymentsMobileRouteImport } from './routes/organization/_auth/payments/mobile'
+import { Route as OrganizationAuthPaymentsBankRouteImport } from './routes/organization/_auth/payments/bank'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,9 +34,9 @@ const AuthSignupRoute = AuthSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
-  id: '/_auth/reset-password',
-  path: '/reset-password',
+const AuthResetRoute = AuthResetRouteImport.update({
+  id: '/_auth/reset',
+  path: '/reset',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
@@ -44,9 +44,9 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
-  id: '/_auth/forgot-password',
-  path: '/forgot-password',
+const AuthForgotRoute = AuthForgotRouteImport.update({
+  id: '/_auth/forgot',
+  path: '/forgot',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrganizationAuthStep5Route = OrganizationAuthStep5RouteImport.update({
@@ -74,146 +74,146 @@ const OrganizationAuthStep1Route = OrganizationAuthStep1RouteImport.update({
   path: '/organization/step-1',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OrganizationAuthPaymentsTransferPaymentRoute =
-  OrganizationAuthPaymentsTransferPaymentRouteImport.update({
-    id: '/organization/_auth/payments/transfer-payment',
-    path: '/organization/payments/transfer-payment',
+const OrganizationAuthPaymentsTransferBankRoute =
+  OrganizationAuthPaymentsTransferBankRouteImport.update({
+    id: '/organization/_auth/payments/transfer-bank',
+    path: '/organization/payments/transfer-bank',
     getParentRoute: () => rootRouteImport,
   } as any)
-const OrganizationAuthPaymentsPaymentSuccessRoute =
-  OrganizationAuthPaymentsPaymentSuccessRouteImport.update({
-    id: '/organization/_auth/payments/payment-success',
-    path: '/organization/payments/payment-success',
+const OrganizationAuthPaymentsSuccessRoute =
+  OrganizationAuthPaymentsSuccessRouteImport.update({
+    id: '/organization/_auth/payments/success',
+    path: '/organization/payments/success',
     getParentRoute: () => rootRouteImport,
   } as any)
-const OrganizationAuthPaymentsMobilePaymentRoute =
-  OrganizationAuthPaymentsMobilePaymentRouteImport.update({
-    id: '/organization/_auth/payments/mobile-payment',
-    path: '/organization/payments/mobile-payment',
+const OrganizationAuthPaymentsMobileRoute =
+  OrganizationAuthPaymentsMobileRouteImport.update({
+    id: '/organization/_auth/payments/mobile',
+    path: '/organization/payments/mobile',
     getParentRoute: () => rootRouteImport,
   } as any)
-const OrganizationAuthPaymentsBankPaymentRoute =
-  OrganizationAuthPaymentsBankPaymentRouteImport.update({
-    id: '/organization/_auth/payments/bank-payment',
-    path: '/organization/payments/bank-payment',
+const OrganizationAuthPaymentsBankRoute =
+  OrganizationAuthPaymentsBankRouteImport.update({
+    id: '/organization/_auth/payments/bank',
+    path: '/organization/payments/bank',
     getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
-  '/reset-password': typeof AuthResetPasswordRoute
+  '/reset': typeof AuthResetRoute
   '/signup': typeof AuthSignupRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
   '/organization/step-2': typeof OrganizationAuthStep2Route
   '/organization/step-3': typeof OrganizationAuthStep3Route
   '/organization/step-4': typeof OrganizationAuthStep4Route
   '/organization/step-5': typeof OrganizationAuthStep5Route
-  '/organization/payments/bank-payment': typeof OrganizationAuthPaymentsBankPaymentRoute
-  '/organization/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
-  '/organization/payments/payment-success': typeof OrganizationAuthPaymentsPaymentSuccessRoute
-  '/organization/payments/transfer-payment': typeof OrganizationAuthPaymentsTransferPaymentRoute
+  '/organization/payments/bank': typeof OrganizationAuthPaymentsBankRoute
+  '/organization/payments/mobile': typeof OrganizationAuthPaymentsMobileRoute
+  '/organization/payments/success': typeof OrganizationAuthPaymentsSuccessRoute
+  '/organization/payments/transfer-bank': typeof OrganizationAuthPaymentsTransferBankRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
-  '/reset-password': typeof AuthResetPasswordRoute
+  '/reset': typeof AuthResetRoute
   '/signup': typeof AuthSignupRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
   '/organization/step-2': typeof OrganizationAuthStep2Route
   '/organization/step-3': typeof OrganizationAuthStep3Route
   '/organization/step-4': typeof OrganizationAuthStep4Route
   '/organization/step-5': typeof OrganizationAuthStep5Route
-  '/organization/payments/bank-payment': typeof OrganizationAuthPaymentsBankPaymentRoute
-  '/organization/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
-  '/organization/payments/payment-success': typeof OrganizationAuthPaymentsPaymentSuccessRoute
-  '/organization/payments/transfer-payment': typeof OrganizationAuthPaymentsTransferPaymentRoute
+  '/organization/payments/bank': typeof OrganizationAuthPaymentsBankRoute
+  '/organization/payments/mobile': typeof OrganizationAuthPaymentsMobileRoute
+  '/organization/payments/success': typeof OrganizationAuthPaymentsSuccessRoute
+  '/organization/payments/transfer-bank': typeof OrganizationAuthPaymentsTransferBankRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/forgot': typeof AuthForgotRoute
   '/_auth/login': typeof AuthLoginRoute
-  '/_auth/reset-password': typeof AuthResetPasswordRoute
+  '/_auth/reset': typeof AuthResetRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/organization/_auth/step-1': typeof OrganizationAuthStep1Route
   '/organization/_auth/step-2': typeof OrganizationAuthStep2Route
   '/organization/_auth/step-3': typeof OrganizationAuthStep3Route
   '/organization/_auth/step-4': typeof OrganizationAuthStep4Route
   '/organization/_auth/step-5': typeof OrganizationAuthStep5Route
-  '/organization/_auth/payments/bank-payment': typeof OrganizationAuthPaymentsBankPaymentRoute
-  '/organization/_auth/payments/mobile-payment': typeof OrganizationAuthPaymentsMobilePaymentRoute
-  '/organization/_auth/payments/payment-success': typeof OrganizationAuthPaymentsPaymentSuccessRoute
-  '/organization/_auth/payments/transfer-payment': typeof OrganizationAuthPaymentsTransferPaymentRoute
+  '/organization/_auth/payments/bank': typeof OrganizationAuthPaymentsBankRoute
+  '/organization/_auth/payments/mobile': typeof OrganizationAuthPaymentsMobileRoute
+  '/organization/_auth/payments/success': typeof OrganizationAuthPaymentsSuccessRoute
+  '/organization/_auth/payments/transfer-bank': typeof OrganizationAuthPaymentsTransferBankRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/forgot-password'
+    | '/forgot'
     | '/login'
-    | '/reset-password'
+    | '/reset'
     | '/signup'
     | '/organization/step-1'
     | '/organization/step-2'
     | '/organization/step-3'
     | '/organization/step-4'
     | '/organization/step-5'
-    | '/organization/payments/bank-payment'
-    | '/organization/payments/mobile-payment'
-    | '/organization/payments/payment-success'
-    | '/organization/payments/transfer-payment'
+    | '/organization/payments/bank'
+    | '/organization/payments/mobile'
+    | '/organization/payments/success'
+    | '/organization/payments/transfer-bank'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/forgot-password'
+    | '/forgot'
     | '/login'
-    | '/reset-password'
+    | '/reset'
     | '/signup'
     | '/organization/step-1'
     | '/organization/step-2'
     | '/organization/step-3'
     | '/organization/step-4'
     | '/organization/step-5'
-    | '/organization/payments/bank-payment'
-    | '/organization/payments/mobile-payment'
-    | '/organization/payments/payment-success'
-    | '/organization/payments/transfer-payment'
+    | '/organization/payments/bank'
+    | '/organization/payments/mobile'
+    | '/organization/payments/success'
+    | '/organization/payments/transfer-bank'
   id:
     | '__root__'
     | '/'
-    | '/_auth/forgot-password'
+    | '/_auth/forgot'
     | '/_auth/login'
-    | '/_auth/reset-password'
+    | '/_auth/reset'
     | '/_auth/signup'
     | '/organization/_auth/step-1'
     | '/organization/_auth/step-2'
     | '/organization/_auth/step-3'
     | '/organization/_auth/step-4'
     | '/organization/_auth/step-5'
-    | '/organization/_auth/payments/bank-payment'
-    | '/organization/_auth/payments/mobile-payment'
-    | '/organization/_auth/payments/payment-success'
-    | '/organization/_auth/payments/transfer-payment'
+    | '/organization/_auth/payments/bank'
+    | '/organization/_auth/payments/mobile'
+    | '/organization/_auth/payments/success'
+    | '/organization/_auth/payments/transfer-bank'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthForgotRoute: typeof AuthForgotRoute
   AuthLoginRoute: typeof AuthLoginRoute
-  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthResetRoute: typeof AuthResetRoute
   AuthSignupRoute: typeof AuthSignupRoute
   OrganizationAuthStep1Route: typeof OrganizationAuthStep1Route
   OrganizationAuthStep2Route: typeof OrganizationAuthStep2Route
   OrganizationAuthStep3Route: typeof OrganizationAuthStep3Route
   OrganizationAuthStep4Route: typeof OrganizationAuthStep4Route
   OrganizationAuthStep5Route: typeof OrganizationAuthStep5Route
-  OrganizationAuthPaymentsBankPaymentRoute: typeof OrganizationAuthPaymentsBankPaymentRoute
-  OrganizationAuthPaymentsMobilePaymentRoute: typeof OrganizationAuthPaymentsMobilePaymentRoute
-  OrganizationAuthPaymentsPaymentSuccessRoute: typeof OrganizationAuthPaymentsPaymentSuccessRoute
-  OrganizationAuthPaymentsTransferPaymentRoute: typeof OrganizationAuthPaymentsTransferPaymentRoute
+  OrganizationAuthPaymentsBankRoute: typeof OrganizationAuthPaymentsBankRoute
+  OrganizationAuthPaymentsMobileRoute: typeof OrganizationAuthPaymentsMobileRoute
+  OrganizationAuthPaymentsSuccessRoute: typeof OrganizationAuthPaymentsSuccessRoute
+  OrganizationAuthPaymentsTransferBankRoute: typeof OrganizationAuthPaymentsTransferBankRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -232,11 +232,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/reset-password': {
-      id: '/_auth/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordRouteImport
+    '/_auth/reset': {
+      id: '/_auth/reset'
+      path: '/reset'
+      fullPath: '/reset'
+      preLoaderRoute: typeof AuthResetRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/login': {
@@ -246,11 +246,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/forgot-password': {
-      id: '/_auth/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+    '/_auth/forgot': {
+      id: '/_auth/forgot'
+      path: '/forgot'
+      fullPath: '/forgot'
+      preLoaderRoute: typeof AuthForgotRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/organization/_auth/step-5': {
@@ -288,32 +288,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationAuthStep1RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/organization/_auth/payments/transfer-payment': {
-      id: '/organization/_auth/payments/transfer-payment'
-      path: '/organization/payments/transfer-payment'
-      fullPath: '/organization/payments/transfer-payment'
-      preLoaderRoute: typeof OrganizationAuthPaymentsTransferPaymentRouteImport
+    '/organization/_auth/payments/transfer-bank': {
+      id: '/organization/_auth/payments/transfer-bank'
+      path: '/organization/payments/transfer-bank'
+      fullPath: '/organization/payments/transfer-bank'
+      preLoaderRoute: typeof OrganizationAuthPaymentsTransferBankRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/organization/_auth/payments/payment-success': {
-      id: '/organization/_auth/payments/payment-success'
-      path: '/organization/payments/payment-success'
-      fullPath: '/organization/payments/payment-success'
-      preLoaderRoute: typeof OrganizationAuthPaymentsPaymentSuccessRouteImport
+    '/organization/_auth/payments/success': {
+      id: '/organization/_auth/payments/success'
+      path: '/organization/payments/success'
+      fullPath: '/organization/payments/success'
+      preLoaderRoute: typeof OrganizationAuthPaymentsSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/organization/_auth/payments/mobile-payment': {
-      id: '/organization/_auth/payments/mobile-payment'
-      path: '/organization/payments/mobile-payment'
-      fullPath: '/organization/payments/mobile-payment'
-      preLoaderRoute: typeof OrganizationAuthPaymentsMobilePaymentRouteImport
+    '/organization/_auth/payments/mobile': {
+      id: '/organization/_auth/payments/mobile'
+      path: '/organization/payments/mobile'
+      fullPath: '/organization/payments/mobile'
+      preLoaderRoute: typeof OrganizationAuthPaymentsMobileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/organization/_auth/payments/bank-payment': {
-      id: '/organization/_auth/payments/bank-payment'
-      path: '/organization/payments/bank-payment'
-      fullPath: '/organization/payments/bank-payment'
-      preLoaderRoute: typeof OrganizationAuthPaymentsBankPaymentRouteImport
+    '/organization/_auth/payments/bank': {
+      id: '/organization/_auth/payments/bank'
+      path: '/organization/payments/bank'
+      fullPath: '/organization/payments/bank'
+      preLoaderRoute: typeof OrganizationAuthPaymentsBankRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -321,23 +321,20 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthForgotRoute: AuthForgotRoute,
   AuthLoginRoute: AuthLoginRoute,
-  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthResetRoute: AuthResetRoute,
   AuthSignupRoute: AuthSignupRoute,
   OrganizationAuthStep1Route: OrganizationAuthStep1Route,
   OrganizationAuthStep2Route: OrganizationAuthStep2Route,
   OrganizationAuthStep3Route: OrganizationAuthStep3Route,
   OrganizationAuthStep4Route: OrganizationAuthStep4Route,
   OrganizationAuthStep5Route: OrganizationAuthStep5Route,
-  OrganizationAuthPaymentsBankPaymentRoute:
-    OrganizationAuthPaymentsBankPaymentRoute,
-  OrganizationAuthPaymentsMobilePaymentRoute:
-    OrganizationAuthPaymentsMobilePaymentRoute,
-  OrganizationAuthPaymentsPaymentSuccessRoute:
-    OrganizationAuthPaymentsPaymentSuccessRoute,
-  OrganizationAuthPaymentsTransferPaymentRoute:
-    OrganizationAuthPaymentsTransferPaymentRoute,
+  OrganizationAuthPaymentsBankRoute: OrganizationAuthPaymentsBankRoute,
+  OrganizationAuthPaymentsMobileRoute: OrganizationAuthPaymentsMobileRoute,
+  OrganizationAuthPaymentsSuccessRoute: OrganizationAuthPaymentsSuccessRoute,
+  OrganizationAuthPaymentsTransferBankRoute:
+    OrganizationAuthPaymentsTransferBankRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
