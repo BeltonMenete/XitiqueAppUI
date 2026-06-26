@@ -55,7 +55,7 @@ function Login() {
 
               <Link
                 to='/signup'
-                className='flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:translate-x-[2px]'
+                className='flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:translate-x-0.5'
               >
                 <UserPlus size={14} /> Criar conta
               </Link>
