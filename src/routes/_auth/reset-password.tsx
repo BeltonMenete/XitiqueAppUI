@@ -1,133 +1,170 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
-import { PasswordInput } from '#/components/PasswordInput';
-import { LOGIN_SUBMIT_DELAY, ANIMATION_DURATION, APP_NAME } from '#/lib/constants';
-import { Ring2 } from 'ldrs/react';
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, FormEvent } from "react";
+import { PasswordInput } from "#/components/PasswordInput";
+import { FormError } from "#/components/FormError";
+import { LOGIN_SUBMIT_DELAY, APP_NAME } from "#/lib/constants";
+import { Ring2 } from "ldrs/react";
+import { ArrowLeft } from "lucide-react";
 
-export const Route = createFileRoute('/_auth/reset-password')({
-    component: ResetPassword,
+export const Route = createFileRoute("/_auth/reset-password")({
+  component: ResetPassword,
 });
 
 function ResetPassword() {
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-        await new Promise((r) => setTimeout(r, LOGIN_SUBMIT_DELAY));
-        setIsLoading(false);
-        setIsSubmitted(true);
-    };
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setErrors({});
 
-    return (
-        <div className='login-bg min-h-screen flex items-center justify-center p-4 overflow-hidden'>
-            <div className='relative w-full max-w-5xl'>
-                {/* Left image */}
-                <div className='hidden lg:block absolute inset-y-0 -left-8 w-3/5 rounded-3xl overflow-hidden'>
-                    <img src='/xitique-left-panel.avif' alt='Promo' className='w-full h-full object-cover' />
-                </div>
+    const newErrors: Record<string, string> = {};
 
-                {/* Right card */}
-                <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-3xl shadow-xl p-8 lg:p-12'>
-                    <div className='w-full max-w-md mx-auto space-y-6'>
-                        <div className='flex justify-between items-center'>
-                            <div className='flex items-center gap-2.5'>
-                                <img src='/xitique-logo.svg' alt={APP_NAME} width={40} height={40} className='w-10 h-10' />
-                                <span className='text-3xl font-semibold text-gray-900'>{APP_NAME}</span>
-                            </div>
-                        </div>
+    if (password.length < 6) {
+      newErrors.password = "A palavra-passe deve ter pelo menos 6 caracteres.";
+    }
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword =
+        "As palavras-passe introduzidas não coincidem.";
+    }
 
-                        {!isSubmitted ? (
-                            <div className='space-y-6'>
-                                <div>
-                                    <h1 className='text-3xl font-semibold text-gray-900 mb-2'>Redefinir Senha</h1>
-                                    <p className='text-gray-600 text-center'>Crie uma nova senha segura para sua conta</p>
-                                </div>
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
-                                <form onSubmit={handleSubmit} noValidate className='space-y-4'>
-                                    <div className='space-y-2'>
-                                        <PasswordInput
-                                            value={password}
-                                            onChange={setPassword}
-                                            showPassword={showPassword}
-                                            onToggleShow={() => setShowPassword(!showPassword)}
-                                        />
-                                    </div>
+    setIsLoading(true);
+    await new Promise((r) => setTimeout(r, LOGIN_SUBMIT_DELAY));
+    console.log("Password reset successfully");
+    setIsLoading(false);
+    // Aqui podes redirecionar para o /login após o sucesso
+  };
 
-                                    <div className='space-y-2'>
-                                        <PasswordInput
-                                            value={confirmPassword}
-                                            onChange={setConfirmPassword}
-                                            showPassword={showConfirmPassword}
-                                            onToggleShow={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        />
-                                    </div>
-
-                                    <button className='w-full py-4 rounded-2xl text-white font-semibold text-lg bg-(--color-mint-leaf-500) hover:bg-(--color-mint-leaf-600) transition-colors shadow-lg disabled:opacity-70 cursor-pointer'>
-                                        {isLoading ? (
-                                            <div className='flex items-center justify-center gap-2'>
-                                                <Ring2
-                                                    size='18'
-                                                    stroke='3'
-                                                    strokeLength='0.20'
-                                                    bgOpacity='0.1'
-                                                    speed='0.4'
-                                                    color='white'
-                                                />
-                                                A Redefinir...
-                                            </div>
-                                        ) : (
-                                            <span>Redefinir Senha</span>
-                                        )}
-                                    </button>
-                                </form>
-
-                                <div className='text-center'>
-                                    <a href='/login' className='text-sm text-(--color-sky-blue-600) font-medium hover:underline'>
-                                        ← Voltar para Login
-                                    </a>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className='space-y-6 text-center'>
-                                <div className='w-16 h-16 mx-auto bg-(--color-mint-leaf-100) rounded-full flex items-center justify-center'>
-                                    <span className='text-3xl text-(--color-mint-leaf-600)'>✓</span>
-                                </div>
-
-                                <div>
-                                    <h2 className='text-2xl font-semibold text-gray-900 mb-2'>Senha Redefinida!</h2>
-                                    <p className='text-gray-600 mb-4'>Sua senha foi redefinida com sucesso.</p>
-                                    <p className='text-sm text-gray-500 leading-relaxed'>
-                                        Pode agora iniciar sessão com sua nova senha.
-                                    </p>
-                                </div>
-
-                                <a
-                                    href='/login'
-                                    className='w-full py-4 rounded-2xl text-white font-semibold text-lg bg-(--color-mint-leaf-500) hover:bg-(--color-mint-leaf-600) transition-colors shadow-lg cursor-pointer inline-block text-center'
-                                >
-                                    Ir para Login
-                                </a>
-
-                                <div>
-                                    <a href='/login' className='text-sm text-(--color-sky-blue-600) font-medium hover:underline'>
-                                        ← Voltar para Login
-                                    </a>
-                                </div>
-                            </div>
-                        )}
-
-                        <p className='text-center text-xs text-gray-500 pt-2'>
-                            © {new Date().getFullYear()} Xitique. Todos os direitos reservados.
-                        </p>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="login-bg min-h-screen flex items-center justify-center p-3 sm:p-4 overflow-hidden">
+      <div className="relative w-full max-w-4xl">
+        {/* Imagem Lateral (Desktop) */}
+        <div className="hidden lg:block absolute inset-y-0 -left-6 w-3/5 rounded-2xl overflow-hidden opacity-100 translate-x-0">
+          <img
+            src="/xitique-left-panel.avif"
+            alt="Promo"
+            className="w-full h-full object-cover"
+          />
         </div>
-    );
+
+        {/* Card do Formulário Otimizado para Baixa Resolução */}
+        <div className="relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8 min-h-[420px] flex flex-col justify-between transition-all duration-500 ease-in-out">
+          <div className="w-full max-w-sm mx-auto flex-1 flex flex-col justify-center space-y-3.5">
+            {/* Cabeçalho */}
+            <div className="flex justify-between items-center mb-0.5">
+              <div className="flex items-center gap-2">
+                <img
+                  src="/xitique-logo.svg"
+                  alt={APP_NAME}
+                  width={28}
+                  height={28}
+                  className="w-7 h-7"
+                />
+                <span className="text-xl font-semibold text-gray-900">
+                  {APP_NAME}
+                </span>
+              </div>
+              <Link
+                to="/login"
+                className="flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:translate-x-[-2px]"
+              >
+                <ArrowLeft size={13} /> Voltar ao login
+              </Link>
+            </div>
+
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900 mb-0.5">
+                Definir nova senha
+              </h1>
+              <p className="text-gray-500 text-[11px]">
+                Escolha uma palavra-passe forte e segura para a sua conta.
+              </p>
+            </div>
+
+            <form
+              onSubmit={handleSubmit}
+              noValidate
+              className="flex flex-col space-y-1"
+            >
+              {/* Campo Nova Palavra-passe */}
+              <div className="flex flex-col">
+                <PasswordInput
+                  value={password}
+                  onChange={setPassword}
+                  showPassword={showPassword}
+                  onToggleShow={() => setShowPassword(!showPassword)}
+                  label="Nova palavra-passe"
+                />
+                <div className="h-4 flex items-center pl-1 mt-1">
+                  <div
+                    className={`text-[11px] transition-opacity duration-150 ${errors.password ? "opacity-100" : "opacity-0 invisible"}`}
+                  >
+                    <FormError message={errors.password || ""} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Campo Confirmar Palavra-passe */}
+              <div className="flex flex-col">
+                <PasswordInput
+                  value={confirmPassword}
+                  onChange={setConfirmPassword}
+                  showPassword={showConfirmPassword}
+                  onToggleShow={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
+                  label="Confirmar nova palavra-passe"
+                />
+                <div className="h-4 flex items-center pl-1 mt-1">
+                  <div
+                    className={`text-[11px] transition-opacity duration-150 ${errors.confirmPassword ? "opacity-100" : "opacity-0 invisible"}`}
+                  >
+                    <FormError message={errors.confirmPassword || ""} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Botão de Submissão */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-2.5 mt-1 rounded-xl text-white font-semibold text-sm bg-(--color-mint-leaf-500) hover:bg-(--color-mint-leaf-600) transition-all duration-300 active:scale-[0.99] shadow-md disabled:opacity-70 cursor-pointer flex items-center justify-center"
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <Ring2
+                      size="14"
+                      stroke="2.5"
+                      strokeLength="0.20"
+                      bgOpacity="0.1"
+                      speed="0.4"
+                      color="white"
+                    />
+                    <span>A atualizar senha...</span>
+                  </div>
+                ) : (
+                  <span>Alterar palavra-passe</span>
+                )}
+              </button>
+            </form>
+
+            {/* Rodapé */}
+            <p className="text-center text-[9px] text-gray-400 pt-2 border-t border-gray-100">
+              © {new Date().getFullYear()} Xitique. Todos os direitos
+              reservados.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

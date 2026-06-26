@@ -1,304 +1,200 @@
-import React, { useState } from 'react';
-import { ShieldCheck, Lock, CreditCard, Info, Send } from 'lucide-react';
-import { createFileRoute } from '@tanstack/react-router';
+import React, { useState } from "react";
+import {
+  ShieldCheck,
+  Lock,
+  CreditCard,
+  Info,
+  Send,
+  Loader2,
+} from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/organization/_auth/payments/bank-payment')({
+export const Route = createFileRoute(
+  "/organization/_auth/payments/bank-payment",
+)({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
-    cardName: '',
-    cardNumber: '',
-    expiry: '',
-    cvv: '',
+    cardName: "",
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
     saveCard: false,
   });
 
-  const [errors, setErrors] = useState({
-    cardName: '',
-    cardNumber: '',
-    expiry: '',
-    cvv: '',
-  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const formatCardNumber = (value: string) => {
-    const cleaned = value.replace(/\s/g, '');
-    const match = cleaned.match(/.{1,4}/g);
-    return match ? match.join(' ') : '';
-  };
-
+  // Formatações de Input
+  const formatCardNumber = (value: string) =>
+    value
+      .replace(/\D/g, "")
+      .replace(/(.{4})/g, "$1 ")
+      .trim();
   const formatExpiry = (value: string) => {
-    const cleaned = value.replace(/\D/g, '');
-    if (cleaned.length >= 3) {
-      return `${cleaned.slice(0, 2)} / ${cleaned.slice(2, 4)}`;
-    }
-    return cleaned;
+    const v = value.replace(/\D/g, "");
+    return v.length >= 2 ? `${v.slice(0, 2)} / ${v.slice(2, 4)}` : v;
   };
 
-  const handleInputChange = (field: keyof typeof formData, value: string | boolean) => {
+  const handleInputChange = (field: string, value: string | boolean) => {
     let formattedValue = value;
-
-    if (typeof value === 'string') {
-      if (field === 'cardNumber') {
-        formattedValue = formatCardNumber(value.replace(/\D/g, '').slice(0, 16));
-      } else if (field === 'expiry') {
-        formattedValue = formatExpiry(value).slice(0, 7);
-      } else if (field === 'cvv') {
-        formattedValue = value.replace(/\D/g, '').slice(0, 4);
-      }
+    if (typeof value === "string") {
+      if (field === "cardNumber")
+        formattedValue = formatCardNumber(value).slice(0, 19);
+      if (field === "expiry") formattedValue = formatExpiry(value).slice(0, 7);
+      if (field === "cvv")
+        formattedValue = value.replace(/\D/g, "").slice(0, 4);
     }
-
     setFormData((prev) => ({ ...prev, [field]: formattedValue }));
-
-    if (errors[field as keyof typeof errors]) {
-      setErrors((prev) => ({ ...prev, [field]: '' }));
-    }
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
-  const validateForm = () => {
-    const newErrors = { cardName: '', cardNumber: '', expiry: '', cvv: '' };
-    let isValid = true;
-
-    if (!formData.cardName.trim()) {
-      newErrors.cardName = 'Nome no cartão é obrigatório';
-      isValid = false;
-    }
-
-    if (formData.cardNumber.replace(/\s/g, '').length < 16) {
-      newErrors.cardNumber = 'Número de cartão inválido';
-      isValid = false;
-    }
-
-    if (formData.expiry.length < 7) {
-      newErrors.expiry = 'Data inválida';
-      isValid = false;
-    }
-
-    if (formData.cvv.length < 3) {
-      newErrors.cvv = 'CVV inválido';
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Processing payment...', formData);
-    }
+    setIsProcessing(true);
+
+    // Simulação de delay de processamento
+    setTimeout(() => {
+      setIsProcessing(false);
+      alert("Pagamento processado com sucesso!");
+      // navigate({ to: '/dashboard' });
+    }, 2500);
   };
 
   return (
-    <div className='min-h-screen w-full flex bg-[#f8faf6] text-[#191c1b] overflow-y-auto font-sans selection:bg-[#b0f0d6]'>
-      <div className='flex w-full min-h-screen flex-col lg:flex-row'>
-
-        {/* Painel Esquerdo - Branding */}
-        <section className='w-full lg:w-[42%] bg-[#003527] text-white p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden shrink-0 lg:min-h-screen'>
-          {/* Capulana / Textura sutil de fundo */}
-          <div
-            className='absolute inset-0 opacity-5 pointer-events-none'
-            style={{
-              backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-            }}
-          />
-
-          <div className='relative z-10 flex items-center gap-3 mb-12 lg:mb-0'>
-            <span className='text-xl font-bold tracking-tight select-none'>Xitique</span>
-          </div>
-
-          <div className='relative z-10 space-y-4 my-auto max-w-sm py-8 lg:py-0'>
-            <h1 className='text-3xl xl:text-4xl font-bold leading-tight text-white'>
-              Pagamento via Cartão
+    <div className="min-h-screen w-full flex bg-[#f8faf6] text-[#191c1b] font-sans">
+      <div className="flex w-full flex-col lg:flex-row">
+        {/* Painel Esquerdo - Branding e Confiança */}
+        <section className="w-full lg:w-[42%] bg-[#003527] text-white p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden">
+          <div className="relative z-10">
+            <h2 className="text-xl font-bold tracking-tight">Xitique</h2>
+            <h1 className="text-4xl font-bold mt-12 leading-tight">
+              Pagamento Seguro
             </h1>
-            <p className='text-[#80bea6]/90 text-sm leading-relaxed'>
-              Finalize sua assinatura para começar a gerenciar seus ciclos mensais de Xitique com total transparência e segurança.
+            <p className="text-[#80bea6] mt-4 text-sm max-w-sm">
+              Finalize sua assinatura com total transparência. Seus dados estão
+              protegidos com criptografia de ponta a ponta.
             </p>
           </div>
 
-          <div className='relative z-10 space-y-3 mt-auto lg:mt-0 w-full'>
-            <div className='border border-white/10 bg-white/5 backdrop-blur-sm rounded-xl p-5 space-y-5'>
-              <div className='flex items-start gap-3.5'>
-                <ShieldCheck className='text-[#F59E0B] h-5 w-5 shrink-0 mt-0.5' />
-                <div>
-                  <p className='font-bold text-sm text-white mb-0.5'>Segurança Nível Bancário</p>
-                  <p className='text-[#80bea6]/80 text-xs leading-relaxed'>
-                    Seus dados são criptografados de ponta a ponta e nunca armazenados em nossos servidores.
-                  </p>
-                </div>
-              </div>
-
-              <div className='border-t border-white/10 pt-4 flex items-start gap-3.5'>
-                <Lock className='text-[#F59E0B] h-5 w-5 shrink-0 mt-0.5' />
-                <div>
-                  <p className='font-bold text-sm text-white mb-0.5'>Processamento Stripe</p>
-                  <p className='text-[#80bea6]/80 text-xs leading-relaxed'>
-                    Utilizamos a infraestrutura líder mundial para garantir transações sem falhas.
-                  </p>
-                </div>
+          <div className="space-y-6 z-10 mt-12">
+            <div className="flex gap-4">
+              <ShieldCheck className="text-[#F59E0B] shrink-0" />
+              <div>
+                <p className="font-bold text-sm">Segurança Nível Bancário</p>
+                <p className="text-[#80bea6] text-xs mt-1">
+                  Seus dados nunca são armazenados em nossos servidores.
+                </p>
               </div>
             </div>
-          </div>
-
-          {/* Elemento Gráfico Inferior */}
-          <div className='absolute bottom-0 left-0 right-0 h-[25%] opacity-10 mix-blend-overlay pointer-events-none'>
-            <svg
-              className='w-full h-full'
-              viewBox='0 0 400 200'
-              preserveAspectRatio='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path d='M0,150 Q100,80 200,130 T400,90 L400,200 L0,200 Z' fill='#ffffff' />
-            </svg>
+            <div className="flex gap-4 border-t border-white/10 pt-6">
+              <Lock className="text-[#F59E0B] shrink-0" />
+              <div>
+                <p className="font-bold text-sm">Processamento via Stripe</p>
+                <p className="text-[#80bea6] text-xs mt-1">
+                  Infraestrutura líder mundial para pagamentos.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Painel Direito - Formulário */}
-        <section className='w-full lg:w-[58%] flex items-center justify-center p-6 sm:p-12 md:p-16 bg-white lg:min-h-screen overflow-y-visible'>
-          <div className='w-full max-w-md mx-auto py-2'>
-            <header className='mb-8'>
-              {/* Título Principal - Preto Puro */}
-              <h2 className='text-2xl sm:text-3xl font-bold text-black mb-2 tracking-tight'>
-                Pagamento Seguro com Cartão
+        <section className="w-full lg:w-[58%] flex items-center justify-center p-6 sm:p-16 bg-white">
+          <div className="w-full max-w-md">
+            <header className="mb-8">
+              <h2 className="text-2xl font-bold text-black">
+                Informações de Pagamento
               </h2>
-              {/* Subtexto - Cinza Escuro para contraste */}
-              <p className='text-sm text-gray-900 font-medium opacity-80'>
-                Insira os dados do seu cartão de crédito ou débito abaixo.
+              <p className="text-sm text-gray-600 mt-2">
+                Complete a transação abaixo.
               </p>
             </header>
 
-            <form onSubmit={handleSubmit} className='space-y-5'>
-              {/* Nome no Cartão */}
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                {/* Label - Mudado para text-black para maior legibilidade */}
-                <label className='block text-xs font-bold uppercase tracking-wider text-black mb-2'>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">
                   Nome no Cartão
                 </label>
                 <input
-                  type='text'
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                  placeholder="Nome completo"
                   value={formData.cardName}
-                  onChange={(e) => handleInputChange('cardName', e.target.value)}
-                  placeholder='Ex: Nome Completo'
-                  className={`w-full px-4 py-3 rounded-xl border text-sm text-black transition-all duration-100 ease-in-out outline-none bg-[#f8faf6]
-                    ${errors.cardName
-                      ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                      : 'border-[#bfc9c3] hover:border-gray-500 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
-                    }`}
+                  onChange={(e) =>
+                    handleInputChange("cardName", e.target.value)
+                  }
                 />
-                {errors.cardName && <p className='text-red-500 text-xs mt-1.5'>{errors.cardName}</p>}
               </div>
 
-              {/* Número do Cartão */}
               <div>
-                {/* Label - Mudado para text-black */}
-                <label className='block text-xs font-bold uppercase tracking-wider text-black mb-2'>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">
                   Número do Cartão
                 </label>
-                <div className='relative'>
-                  <CreditCard className='absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500' />
+                <div className="relative">
+                  <CreditCard className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
                   <input
-                    type='text'
+                    required
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none"
+                    placeholder="0000 0000 0000 0000"
                     value={formData.cardNumber}
-                    onChange={(e) => handleInputChange('cardNumber', e.target.value)}
-                    placeholder='0000 0000 0000 0000'
-                    className={`w-full pl-11 pr-4 py-3 rounded-xl border text-sm text-black font-medium tracking-wider transition-all duration-100 ease-in-out outline-none bg-[#f8faf6]
-                      ${errors.cardNumber
-                        ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                        : 'border-[#bfc9c3] hover:border-gray-500 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
-                      }`}
+                    onChange={(e) =>
+                      handleInputChange("cardNumber", e.target.value)
+                    }
                   />
                 </div>
-                {errors.cardNumber && <p className='text-red-500 text-xs mt-1.5'>{errors.cardNumber}</p>}
               </div>
 
-              {/* Validade e CVV */}
-              <div className='grid grid-cols-2 gap-4'>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  {/* Label - Mudado para text-black */}
-                  <label className='block text-xs font-bold uppercase tracking-wider text-black mb-2'>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">
                     Validade
                   </label>
                   <input
-                    type='text'
+                    required
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="MM / AA"
                     value={formData.expiry}
-                    onChange={(e) => handleInputChange('expiry', e.target.value)}
-                    placeholder='MM / AA'
-                    className={`w-full px-4 py-3 rounded-xl border text-sm text-black font-medium tracking-wider transition-all duration-100 ease-in-out outline-none bg-[#f8faf6]
-                      ${errors.expiry
-                        ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                        : 'border-[#bfc9c3] hover:border-gray-500 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
-                      }`}
+                    onChange={(e) =>
+                      handleInputChange("expiry", e.target.value)
+                    }
                   />
-                  {errors.expiry && <p className='text-red-500 text-xs mt-1.5'>{errors.expiry}</p>}
                 </div>
-
                 <div>
-                  {/* Label - Mudado para text-black */}
-                  <label className='block text-xs font-bold uppercase tracking-wider text-black mb-2'>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">
                     CVV
                   </label>
-                  <div className='relative'>
-                    <input
-                      type='text'
-                      value={formData.cvv}
-                      onChange={(e) => handleInputChange('cvv', e.target.value)}
-                      placeholder='123'
-                      className={`w-full px-4 py-3 pr-10 rounded-xl border text-sm text-black font-medium tracking-wider transition-all duration-100 ease-in-out outline-none bg-[#f8faf6]
-                        ${errors.cvv
-                          ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                          : 'border-[#bfc9c3] hover:border-gray-500 focus:border-[#003527] focus:bg-white focus:ring-2 focus:ring-[#eceeeb]'
-                        }`}
-                    />
-                    <button
-                      type='button'
-                      className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black cursor-pointer transition-colors duration-100'
-                      title='Código de 3 ou 4 dígitos no verso do cartão'
-                    >
-                      <Info className='h-4 w-4' />
-                    </button>
-                  </div>
-                  {errors.cvv && <p className='text-red-500 text-xs mt-1.5'>{errors.cvv}</p>}
+                  <input
+                    required
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="123"
+                    value={formData.cvv}
+                    onChange={(e) => handleInputChange("cvv", e.target.value)}
+                  />
                 </div>
               </div>
 
-              {/* Checkbox Salvar Cartão */}
-              <div className='flex items-center gap-3 pt-1 group w-max'>
-                <input
-                  type='checkbox'
-                  id='saveCard'
-                  checked={formData.saveCard}
-                  onChange={(e) => handleInputChange('saveCard', e.target.checked)}
-                  className='w-4 h-4 rounded border-gray-300 text-[#10B981] focus:ring-2 focus:ring-[#10B981] focus:ring-offset-0 cursor-pointer transition-all duration-100'
-                />
-                {/* Texto do Checkbox - Mudado para text-gray-900 para destacar mais */}
-                <label
-                  htmlFor='saveCard'
-                  className='text-xs text-gray-900 font-medium group-hover:text-black cursor-pointer select-none transition-colors duration-100'
-                >
-                  Salvar este cartão para pagamentos futuros.
-                </label>
-              </div>
-
-              {/* Botão de Submissão Snappy & Smooth */}
               <button
-                type='submit'
-                className='w-full bg-[#10B981] hover:bg-emerald-600 text-white font-bold text-sm py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all duration-100 ease-in-out active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-[#eceeeb]'
+                type="submit"
+                disabled={isProcessing}
+                className="w-full mt-4 bg-[#10B981] hover:bg-emerald-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70 active:scale-[0.98]"
               >
-                Finalizar e Pagar com Segurança
-                <Send className='h-4 w-4' />
+                {isProcessing ? (
+                  <Loader2 className="animate-spin h-5 w-5" />
+                ) : (
+                  "Finalizar Pagamento"
+                )}
+                {!isProcessing && <Send className="h-4 w-4" />}
               </button>
             </form>
 
-            {/* Rodapé e Stripe Info */}
-            <footer className='mt-8 space-y-4 border-t border-gray-100 pt-6'>
-              <div className='flex items-center justify-center gap-2 text-gray-400 text-xs'>
-                <span>Powered by</span>
-                {/* Marca Stripe - Mudada para text-black puro */}
-                <span className='font-bold text-black tracking-tight text-sm select-none'>stripe</span>
-              </div>
+            <footer className="mt-8 text-center">
+              <p className="text-[10px] text-gray-400">
+                Transação protegida por SSL e PCI DSS
+              </p>
             </footer>
           </div>
         </section>
