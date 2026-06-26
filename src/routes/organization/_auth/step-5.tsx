@@ -33,7 +33,7 @@ function StepFive() {
     // Simulação de chamada de API
     setTimeout(() => {
       setIsProcessing(false);
-      navigate({ to: "/organization/success" }); // Ajuste conforme seu fluxo
+      navigate({ to: "/organization/payments/success" }); // Ajuste conforme seu fluxo
     }, 2000);
   };
 
@@ -117,11 +117,10 @@ function StepFive() {
               <button
                 key={m.id}
                 onClick={() => setSelectedMethod(m.id as PaymentMethod)}
-                className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${
-                  selectedMethod === m.id
+                className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${selectedMethod === m.id
                     ? "border-emerald-600 bg-emerald-50"
                     : "border-gray-200 hover:border-gray-300"
-                }`}
+                  }`}
               >
                 <m.icon className="h-8 w-8" />
                 <div>
@@ -147,7 +146,7 @@ function StepFive() {
             </button>
 
             <button
-              onClick={() => navigate({ to: "/organization/_auth/step-4" })}
+              onClick={() => navigate({ to: "/organization/step-4" })}
               className="w-full text-gray-500 text-sm font-semibold flex items-center justify-center gap-2 hover:text-gray-800"
             >
               <ArrowLeft size={16} /> Voltar para revisão

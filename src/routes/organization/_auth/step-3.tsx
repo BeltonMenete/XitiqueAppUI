@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, FormEvent } from "react";
+import { useState, type SyntheticEvent, } from "react";
 import {
   ArrowRight,
   ArrowLeft,
@@ -18,7 +18,8 @@ function StepThree() {
   const [selectedPlan, setSelectedPlan] = useState("pro");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: SyntheticEvent) => {
+    console.log(e)
     e.preventDefault();
     setError("");
 
@@ -101,11 +102,10 @@ function StepThree() {
             {/* Plano Inicial */}
             <div
               onClick={() => setSelectedPlan("inicial")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-                selectedPlan === "inicial"
-                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-              }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "inicial"
+                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+                }`}
             >
               <div className="flex justify-between items-start">
                 <div>
@@ -139,11 +139,10 @@ function StepThree() {
             {/* Plano Pro */}
             <div
               onClick={() => setSelectedPlan("pro")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-                selectedPlan === "pro"
-                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-              }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "pro"
+                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+                }`}
             >
               <div className="absolute -top-2.5 right-4 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
                 Mais Popular
@@ -188,11 +187,10 @@ function StepThree() {
             {/* Plano Enterprise */}
             <div
               onClick={() => setSelectedPlan("enterprise")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-                selectedPlan === "enterprise"
-                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-              }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "enterprise"
+                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+                }`}
             >
               <div className="flex justify-between items-start">
                 <div>

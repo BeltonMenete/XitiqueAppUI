@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { Building2, ArrowRight, Shield, Landmark } from "lucide-react";
 import { PROVINCIAS_MZ } from "../../../data/mozambique";
 import { FormError } from "#/components/FormError"; // Certifica-te de que o import está correto para o teu projeto
@@ -21,7 +21,7 @@ function StepOne() {
   const distritos =
     PROVINCIAS_MZ.find((p) => p.nome === form.provincia)?.distritos || [];
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
     setErrors({});
     const newErrors: Record<string, string> = {};
