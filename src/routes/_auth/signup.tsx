@@ -30,7 +30,7 @@ function Signup() {
         </div>
 
         {/* Card do Formulário Adaptado para Seleção de Conta */}
-        <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-[500px] flex flex-col justify-between transition-all duration-500 ease-in-out'>
+        <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-125 flex flex-col justify-between transition-all duration-500 ease-in-out'>
           <div className='w-full max-w-sm mx-auto flex-1 flex flex-col justify-center space-y-5'>
             {/* Cabeçalho */}
             <div className='flex justify-between items-center mb-1'>
@@ -41,7 +41,7 @@ function Signup() {
 
               <Link
                 to='/login'
-                className='flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:translate-x-[2px]'
+                className='flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:translate-x-0.5'
               >
                 <UserPlus size={14} /> Iniciar sessão
               </Link>

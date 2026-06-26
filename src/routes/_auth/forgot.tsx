@@ -65,7 +65,7 @@ function ForgotPassword() {
         </div>
 
         {/* Card do Formulário */}
-        <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-[500px] flex flex-col justify-between transition-all duration-500 ease-in-out'>
+        <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-125 flex flex-col justify-between transition-all duration-500 ease-in-out'>
           <div className='w-full max-w-sm mx-auto flex-1 flex flex-col justify-center space-y-5'>
             {/* Cabeçalho */}
             <div className='flex justify-between items-center mb-1'>
@@ -75,7 +75,7 @@ function ForgotPassword() {
               </div>
               <Link
                 to='/login'
-                className='flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:translate-x-[-2px]'
+                className='flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:-translate-x-0.5'
               >
                 <ArrowLeft size={14} /> Voltar ao login
               </Link>
@@ -101,8 +101,8 @@ function ForgotPassword() {
                       setErrors({});
                     }}
                     className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 active:scale-[0.99] cursor-pointer focus:outline-none ${method === 'email'
-                        ? 'bg-white text-gray-900 shadow-sm font-semibold'
-                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200/40'
+                      ? 'bg-white text-gray-900 shadow-sm font-semibold'
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200/40'
                       }`}
                   >
                     <Mail size={14} /> E-mail
@@ -114,8 +114,8 @@ function ForgotPassword() {
                       setErrors({});
                     }}
                     className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 active:scale-[0.99] cursor-pointer focus:outline-none ${method === 'phone'
-                        ? 'bg-white text-gray-900 shadow-sm font-semibold'
-                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200/40'
+                      ? 'bg-white text-gray-900 shadow-sm font-semibold'
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200/40'
                       }`}
                   >
                     <Phone size={14} /> Telefone / SMS
@@ -123,7 +123,7 @@ function ForgotPassword() {
                 </div>
 
                 <form onSubmit={handleSubmit} noValidate className='flex flex-col'>
-                  <div className='w-full relative h-[110px]'>
+                  <div className='w-full relative h-27.5'>
                     {/* Input de E-mail */}
                     <div
                       className={`absolute inset-x-0 bottom-0 flex flex-col transition-all duration-200 ease-in-out ${method === 'email' ? 'opacity-100 translate-y-0 pointer-events-auto z-10' : 'opacity-0 translate-y-2 pointer-events-none z-0'}`}

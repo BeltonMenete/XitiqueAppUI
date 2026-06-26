@@ -29,7 +29,7 @@ function TermsAndConditions() {
                 </div>
 
                 {/* Card de Conteúdo dos Termos */}
-                <div className="relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-[500px] flex flex-col justify-between transition-all duration-500 ease-in-out">
+                <div className="relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-125 flex flex-col justify-between transition-all duration-500 ease-in-out">
                     <div className="w-full max-w-sm mx-auto flex-1 flex flex-col justify-center space-y-5">
                         {/* Cabeçalho */}
                         <div className="flex justify-between items-center mb-1">
@@ -48,7 +48,7 @@ function TermsAndConditions() {
 
                             <Link
                                 to="/signup"
-                                className="flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:translate-x-[-2px]"
+                                className="flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:-translate-x-0.5"
                             >
                                 <ArrowLeft size={14} /> Voltar ao registo
                             </Link>
@@ -65,7 +65,7 @@ function TermsAndConditions() {
                         </div>
 
                         {/* Renderização Dinâmica do JSON */}
-                        <div className="flex flex-col space-y-3.5 max-h-[240px] overflow-y-auto pr-1 py-1 scrollbar-thin">
+                        <div className="flex flex-col space-y-3.5 max-h-60 overflow-y-auto pr-1 py-1 scrollbar-thin">
                             {termsData.map((term) => {
                                 const IconComponent = iconMap[term.icon as keyof typeof iconMap] || FileText;
 

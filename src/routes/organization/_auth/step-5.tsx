@@ -55,7 +55,7 @@ function StepFive() {
           </p>
         </div>
         <div className="border border-emerald-700/60 bg-emerald-950/40 rounded-xl p-4 flex gap-4 items-center z-10">
-          <ShieldCheck className="text-emerald-400 h-8 w-8 flex-shrink-0" />
+          <ShieldCheck className="text-emerald-400 h-8 w-8 shrink-0" />
           <p className="text-xs text-emerald-100">
             Os seus dados e fundos estão protegidos por criptografia de nível
             bancário e conformidade local.
@@ -118,8 +118,8 @@ function StepFive() {
                 key={m.id}
                 onClick={() => setSelectedMethod(m.id as PaymentMethod)}
                 className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${selectedMethod === m.id
-                    ? "border-emerald-600 bg-emerald-50"
-                    : "border-gray-200 hover:border-gray-300"
+                  ? "border-emerald-600 bg-emerald-50"
+                  : "border-gray-200 hover:border-gray-300"
                   }`}
               >
                 <m.icon className="h-8 w-8" />

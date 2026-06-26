@@ -64,7 +64,7 @@ function StepFour() {
 
         <div className='grid grid-cols-2 gap-3 mt-auto relative z-10'>
           <div className='border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 hover:bg-emerald-950/40 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group cursor-default'>
-            <Shield className='text-amber-400 mb-1.5 h-5 w-5 transition-transform duration-500 group-hover:rotate-[360deg]' />
+            <Shield className='text-amber-400 mb-1.5 h-5 w-5 transition-transform duration-500 group-hover:rotate-360' />
             <p className='font-bold text-xs tracking-wider text-white'>SEGURANÇA TOTAL</p>
             <p className='text-emerald-300 text-xs mt-0.5'>Dados encriptados</p>
           </div>
@@ -78,7 +78,7 @@ function StepFour() {
 
       {/* Painel Direito - Confirmação de Dados */}
       <div className='w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 bg-gray-50/50 h-full overflow-y-auto'>
-        <div className='w-full max-w-md my-auto py-2 transition-all duration-500 ease-out animate-in fade-in slide-in-from-bottom-4 duration-700'>
+        <div className='w-full max-w-md my-auto py-2 transition-all duration-500 ease-out animate-in fade-in slide-in-from-bottom-4'>
           {/* Stepper */}
           <div className='flex justify-between items-center mb-1.5 select-none'>
             <span className='text-xs font-bold text-emerald-700 tracking-wider'>PASSO 4 DE 5</span>

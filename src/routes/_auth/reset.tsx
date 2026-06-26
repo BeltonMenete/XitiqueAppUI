@@ -52,7 +52,7 @@ function ResetPassword() {
         </div>
 
         {/* Card do Formulário Otimizado para Baixa Resolução */}
-        <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8 min-h-[420px] flex flex-col justify-between transition-all duration-500 ease-in-out'>
+        <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-5 sm:p-6 lg:p-8 min-h-105 flex flex-col justify-between transition-all duration-500 ease-in-out'>
           <div className='w-full max-w-sm mx-auto flex-1 flex flex-col justify-center space-y-3.5'>
             {/* Cabeçalho */}
             <div className='flex justify-between items-center mb-0.5'>
@@ -62,7 +62,7 @@ function ResetPassword() {
               </div>
               <Link
                 to='/login'
-                className='flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:translate-x-[-2px]'
+                className='flex items-center gap-1 text-xs font-medium text-(--color-sky-blue-600) transition-all duration-300 hover:text-(--color-sky-blue-700) hover:-translate-x-0.5'
               >
                 <ArrowLeft size={13} /> Voltar ao login
               </Link>

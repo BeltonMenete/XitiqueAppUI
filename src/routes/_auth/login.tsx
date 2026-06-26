@@ -44,7 +44,7 @@ function Login() {
         </div>
 
         {/* Card do Formulário */}
-        <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-[500px] flex flex-col justify-between transition-all duration-500 ease-in-out'>
+        <div className='relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-125 flex flex-col justify-between transition-all duration-500 ease-in-out'>
           <div className='w-full max-w-sm mx-auto flex-1 flex flex-col justify-center space-y-5'>
             {/* Cabeçalho */}
             <div className='flex justify-between items-center mb-1'>
