@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, type SubmitEvent } from "react";
+import { useState, type FormEvent } from "react";
 import {
   User,
   Mail,
@@ -29,8 +29,9 @@ function StepTwo() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isShaking, setIsShaking] = useState(false);
 
-  const handleSubmit = (e: SubmitEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setErrors({});
     const newErrors: Record<string, string> = {};
@@ -57,6 +58,9 @@ function StepTwo() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setIsShaking(true);
+      // Remove o efeito após a animação de 400ms para reiniciar nos próximos cliques inválidos
+      setTimeout(() => setIsShaking(false), 400);
       return;
     }
 
@@ -66,7 +70,20 @@ function StepTwo() {
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
-      {/*  Painel Esquerdo Centralizado e Reutilizável */}
+      {/* Estilo CSS Isolado para o Shake apenas das mensagens de erro */}
+      <style>{`
+        @keyframes shakeErrorText {
+          0%, 100% { transform: translateX(0); }
+          15%, 45%, 75% { transform: translateX(-4px); }
+          30%, 60%, 90% { transform: translateX(4px); }
+        }
+        .animate-shake-error {
+          animation: shakeErrorText 0.4s ease-in-out;
+          display: inline-block;
+        }
+      `}</style>
+
+      {/* Painel Esquerdo Centralizado e Reutilizável */}
       <AuthSidebar />
 
       {/* Painel Direito - Container do Formulário */}
@@ -121,7 +138,7 @@ function StepTwo() {
               </div>
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div
-                  className={`text-[11px] transition-opacity duration-150 ${errors.nomeResponsavel ? "opacity-100" : "opacity-0 invisible"}`}
+                  className={`text-[11px] transition-opacity duration-150 ${errors.nomeResponsavel ? "opacity-100" : "opacity-0 invisible"} ${isShaking && errors.nomeResponsavel ? "animate-shake-error" : ""}`}
                 >
                   <FormError message={errors.nomeResponsavel || ""} />
                 </div>
@@ -146,7 +163,7 @@ function StepTwo() {
               </div>
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div
-                  className={`text-[11px] transition-opacity duration-150 ${errors.email ? "opacity-100" : "opacity-0 invisible"}`}
+                  className={`text-[11px] transition-opacity duration-150 ${errors.email ? "opacity-100" : "opacity-0 invisible"} ${isShaking && errors.email ? "animate-shake-error" : ""}`}
                 >
                   <FormError message={errors.email || ""} />
                 </div>
@@ -184,7 +201,7 @@ function StepTwo() {
               </div>
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div
-                  className={`text-[11px] transition-opacity duration-150 ${errors.password ? "opacity-100" : "opacity-0 invisible"}`}
+                  className={`text-[11px] transition-opacity duration-150 ${errors.password ? "opacity-100" : "opacity-0 invisible"} ${isShaking && errors.password ? "animate-shake-error" : ""}`}
                 >
                   <FormError message={errors.password || ""} />
                 </div>
@@ -205,11 +222,7 @@ function StepTwo() {
                     setForm({ ...form, confirmPassword: e.target.value })
                   }
                   placeholder="••••••••"
-                  className={`w-full pl-9 pr-10 py-2.5 text-sm border rounded-lg focus:outline-none bg-white transition-all duration-200 ${
-                    errors.confirmPassword
-                      ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
-                      : "border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 hover:border-gray-400 focus:hover:border-emerald-500"
-                  }`}
+                  className="w-full pl-9 pr-10 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 bg-white hover:border-gray-400 focus:hover:border-emerald-500 transition-all duration-200"
                   required
                 />
                 <button
@@ -226,7 +239,7 @@ function StepTwo() {
               </div>
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div
-                  className={`text-[11px] transition-opacity duration-150 ${errors.confirmPassword ? "opacity-100" : "opacity-0 invisible"}`}
+                  className={`text-[11px] transition-opacity duration-150 ${errors.confirmPassword ? "opacity-100" : "opacity-0 invisible"} ${isShaking && errors.confirmPassword ? "animate-shake-error" : ""}`}
                 >
                   <FormError message={errors.confirmPassword || ""} />
                 </div>

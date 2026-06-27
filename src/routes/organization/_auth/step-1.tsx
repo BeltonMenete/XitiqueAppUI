@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, type SubmitEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Building2, ArrowRight } from "lucide-react";
 import { PROVINCIAS_MZ } from "../../../data/mozambique";
 import { FormError } from "#/components/FormError";
@@ -19,11 +19,12 @@ function StepOne() {
     telefone: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isShaking, setIsShaking] = useState(false);
 
   const distritos =
     PROVINCIAS_MZ.find((p) => p.nome === form.provincia)?.distritos || [];
 
-  const handleSubmit = (e: SubmitEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setErrors({});
     const newErrors: Record<string, string> = {};
@@ -52,6 +53,9 @@ function StepOne() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setIsShaking(true);
+      // Remove o efeito após 400ms para permitir novas execuções no clique
+      setTimeout(() => setIsShaking(false), 400);
       return;
     }
 
@@ -61,7 +65,20 @@ function StepOne() {
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
-      {/*  Painel Esquerdo Centralizado e Reutilizável */}
+      {/* Estilo CSS Isolado para o Shake apenas das mensagens de erro */}
+      <style>{`
+        @keyframes shakeErrorText {
+          0%, 100% { transform: translateX(0); }
+          15%, 45%, 75% { transform: translateX(-4px); }
+          30%, 60%, 90% { transform: translateX(4px); }
+        }
+        .animate-shake-error {
+          animation: shakeErrorText 0.4s ease-in-out;
+          display: inline-block;
+        }
+      `}</style>
+
+      {/* Painel Esquerdo Centralizado e Reutilizável */}
       <AuthSidebar />
 
       {/* Painel Direito - Container do Formulário */}
@@ -114,7 +131,7 @@ function StepOne() {
               </div>
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div
-                  className={`text-[11px] transition-opacity duration-150 ${errors.nome ? "opacity-100" : "opacity-0 invisible"}`}
+                  className={`text-[11px] transition-opacity duration-150 ${errors.nome ? "opacity-100" : "opacity-0 invisible"} ${isShaking && errors.nome ? "animate-shake-error" : ""}`}
                 >
                   <FormError message={errors.nome || ""} />
                 </div>
@@ -173,7 +190,7 @@ function StepOne() {
               </div>
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div
-                  className={`text-[11px] transition-opacity duration-150 ${errors.provincia || errors.distrito ? "opacity-100" : "opacity-0 invisible"}`}
+                  className={`text-[11px] transition-opacity duration-150 ${errors.provincia || errors.distrito ? "opacity-100" : "opacity-0 invisible"} ${isShaking && (errors.provincia || errors.distrito) ? "animate-shake-error" : ""}`}
                 >
                   <FormError
                     message={errors.provincia || errors.distrito || ""}
@@ -209,7 +226,9 @@ function StepOne() {
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div className="text-[11px] w-full">
                   {errors.telefone ? (
-                    <div className="animate-in fade-in duration-150">
+                    <div
+                      className={`animate-in fade-in duration-150 ${isShaking ? "animate-shake-error" : ""}`}
+                    >
                       <FormError message={errors.telefone} />
                     </div>
                   ) : (
