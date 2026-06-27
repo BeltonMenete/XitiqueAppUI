@@ -15,7 +15,8 @@ type RecoveryMethod = 'email' | 'phone';
 function ForgotPassword() {
   const [method, setMethod] = useState<RecoveryMethod>('email');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  // Inicializa já com o prefixo nacional obrigatório
+  const [phone, setPhone] = useState('+258 ');
   const [otpCode, setOtpCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -31,8 +32,23 @@ function ForgotPassword() {
       newErrors.email = 'Por favor, introduza um e-mail válido.';
     }
 
-    if (method === 'phone' && (!phone || phone.replace(/\s/g, '').length < 4)) {
-      newErrors.phone = 'Introduza os 4 dígitos finais corretamente.';
+    if (method === 'phone') {
+      // Remove espaços para validar o tamanho real dos números crus
+      const rawNumbers = phone.replace(/\s/g, ''); // Ex: +258841234567
+
+      // Valida se tem o tamanho completo (+258 + 9 dígitos = 13 caracteres)
+      if (rawNumbers.length !== 13) {
+        newErrors.phone = 'O número de telefone deve conter exatamente 9 dígitos.';
+      } else {
+        // Extrai apenas os 9 dígitos para validar o prefixo das operadoras moçambicanas
+        const digits = rawNumbers.substring(4);
+        const validPrefixes = ['82', '83', '84', '85', '86', '87'];
+        const hasValidPrefix = validPrefixes.some(prefix => digits.startsWith(prefix));
+
+        if (!hasValidPrefix) {
+          newErrors.phone = 'Introduza um número de celular válido de Moçambique.';
+        }
+      }
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -54,7 +70,28 @@ function ForgotPassword() {
     setIsLoading(false);
   };
 
-  const getPhonePlaceholder = () => '____'.slice(phone.length);
+  // Impede que o utilizador apague o prefixo e formata a digitação
+  const handlePhoneChange = (value: string) => {
+    // Se o utilizador tentar apagar o prefixo fixo, força-o de volta
+    if (!value.startsWith('+258 ')) {
+      setPhone('+258 ');
+      return;
+    }
+
+    // Filtra apenas o que vem após o "+258 " mantendo apenas números
+    const digitsOnly = value.substring(5).replace(/\D/g, '');
+
+    // Limita a 9 dígitos após o prefixo
+    if (digitsOnly.length <= 9) {
+      setPhone(`+258 ${digitsOnly}`);
+    }
+  };
+
+  // Placeholder inteligente que mostra os traços restantes apenas para os 9 dígitos
+  const getPhonePlaceholder = () => {
+    const digitsLength = phone.substring(5).length;
+    return '_________'.slice(digitsLength);
+  };
 
   return (
     <div className='login-bg min-h-screen flex items-center justify-center p-4 overflow-hidden'>
@@ -92,7 +129,7 @@ function ForgotPassword() {
                   <p className='text-gray-500 text-xs'>Escolha o método mais acessível para si de momento.</p>
                 </div>
 
-                {/* Alternador de Método Corrigido (Sem Linhas Pretas/Contornos Extras) */}
+                {/* Alternador de Método */}
                 <div className='grid grid-cols-2 gap-1 p-1 bg-gray-100/80 rounded-xl'>
                   <button
                     type='button'
@@ -138,13 +175,12 @@ function ForgotPassword() {
                       </div>
                     </div>
 
-                    {/* Input de Contacto */}
+                    {/* Input de Contacto Modificado para 9 Dígitos com Prefixo Fixo */}
                     <div
                       className={`absolute inset-x-0 bottom-0 flex flex-col space-y-1.5 transition-all duration-200 ease-in-out ${method === 'phone' ? 'opacity-100 translate-y-0 pointer-events-auto z-10' : 'opacity-0 translate-y-2 pointer-events-none z-0'}`}
                     >
                       <label className='block text-sm font-medium text-gray-700'>
-                        Confirmar contacto:{' '}
-                        <span className='text-gray-400 font-normal font-mono'>+258 84 ••• •</span>
+                        Confirmar contacto celular
                       </label>
                       <div className='relative'>
                         <Phone
@@ -153,11 +189,11 @@ function ForgotPassword() {
                         />
                         <input
                           type='text'
-                          maxLength={4}
+                          maxLength={14} // +258 mais 9 dígitos = 14 caracteres no total com o espaço
                           value={phone}
-                          onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                          onChange={(e) => handlePhoneChange(e.target.value)}
                           placeholder={getPhonePlaceholder()}
-                          className='w-full pl-11 pr-5 py-3.5 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:border-(--color-mint-leaf-500) focus:ring-2 focus:ring-(--color-mint-leaf-500)/20 transition-all duration-200 placeholder-gray-400 font-mono tracking-[0.15em] font-semibold bg-white text-gray-900'
+                          className='w-full pl-11 pr-5 py-3.5 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:border-(--color-mint-leaf-500) focus:ring-2 focus:ring-(--color-mint-leaf-500)/20 transition-all duration-200 placeholder-gray-400 font-mono tracking-[0.10em] font-semibold bg-white text-gray-900'
                         />
                       </div>
                       <div className='h-5 flex items-center pl-1'>
@@ -194,7 +230,7 @@ function ForgotPassword() {
                 </form>
               </div>
 
-              {/* PASSO 2: Validação Única do Código OTP (E-mail ou SMS) */}
+              {/* PASSO 2: Validação Única do Código OTP */}
               <div
                 className={`space-y-5 transition-all duration-500 ease-in-out absolute inset-x-0 ${isSubmitted ? 'opacity-100 pointer-events-auto scale-100 z-10' : 'opacity-0 pointer-events-none scale-95 z-0'}`}
               >
@@ -204,8 +240,8 @@ function ForgotPassword() {
                   </h1>
                   <p className='text-gray-500 text-xs'>
                     Introduza o código de 6 dígitos enviado para{' '}
-                    <strong className='text-gray-900'>
-                      {method === 'email' ? email : `+258 84 ••• •${phone}`}
+                    <strong className='text-gray-900 font-mono tracking-wide'>
+                      {method === 'email' ? email : phone}
                     </strong>
                     .
                   </p>
