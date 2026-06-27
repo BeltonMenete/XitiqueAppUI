@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@tailwindcss/vite':
-        specifier: ^4.3.0
+        specifier: ^4.3.1
         version: 4.3.1(vite@8.1.0(@types/node@25.9.4)(jiti@2.7.0))
       '@tanstack/react-devtools':
         specifier: latest
@@ -30,10 +30,10 @@ importers:
         specifier: ^1.1.9
         version: 1.1.9
       lucide-react:
-        specifier: ^1.18.0
+        specifier: ^1.21.0
         version: 1.21.0(react@19.2.7)
       pnpm:
-        specifier: ^11.6.0
+        specifier: ^11.9.0
         version: 11.9.0
       react:
         specifier: ^19.2.7
@@ -42,7 +42,7 @@ importers:
         specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
       tailwindcss:
-        specifier: ^4.3.0
+        specifier: ^4.3.1
         version: 4.3.1
       valibot:
         specifier: ^1.4.1
@@ -70,7 +70,7 @@ importers:
         specifier: ^16.3.2
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@types/node':
-        specifier: ^25.9.3
+        specifier: ^25.9.4
         version: 25.9.4
       '@types/react':
         specifier: ^19.2.17
@@ -79,7 +79,7 @@ importers:
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
-        specifier: ^6.0.2
+        specifier: ^6.0.3
         version: 6.0.3(vite@8.1.0(@types/node@25.9.4)(jiti@2.7.0))
       jsdom:
         specifier: ^29.1.1
@@ -88,10 +88,10 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       vite:
-        specifier: ^8.0.16
+        specifier: ^8.1.0
         version: 8.1.0(@types/node@25.9.4)(jiti@2.7.0)
       vitest:
-        specifier: ^4.1.8
+        specifier: ^4.1.9
         version: 4.1.9(@types/node@25.9.4)(jsdom@29.1.1)(vite@8.1.0(@types/node@25.9.4)(jiti@2.7.0))
 
 packages:
@@ -1266,8 +1266,8 @@ packages:
     resolution: {integrity: sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  prettier@3.8.5:
-    resolution: {integrity: sha512-zxcTTCedNGJM4R8sj/Cq/F0W/c4iE0afWBcBwMTRtw4WHYP9TWkYjdiH3npPRUYsXQCPR0hTU9yjovOu+E6EQA==}
+  prettier@3.9.0:
+    resolution: {integrity: sha512-LjIqSIC5VYLzs9WedVmJ2ljNAGnU+DteIClbahu4L/DBeWjZ6iT/k1lAYyu9JUh+1xINxWadaPw/Pl63y/agAw==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -2221,7 +2221,7 @@ snapshots:
       '@tanstack/virtual-file-routes': 1.162.0
       jiti: 2.7.0
       magic-string: 0.30.21
-      prettier: 3.8.5
+      prettier: 3.9.0
       zod: 4.4.3
     transitivePeerDependencies:
       - supports-color
@@ -2680,7 +2680,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  prettier@3.8.5: {}
+  prettier@3.9.0: {}
 
   pretty-format@27.5.1:
     dependencies:

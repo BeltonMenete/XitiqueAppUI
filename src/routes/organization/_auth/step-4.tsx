@@ -3,8 +3,6 @@ import { type SyntheticEvent } from "react";
 import {
   ArrowRight,
   ArrowLeft,
-  Shield,
-  Landmark,
   Building2,
   User,
   BadgeCheck,
