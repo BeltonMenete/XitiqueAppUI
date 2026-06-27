@@ -1,4 +1,4 @@
-// /routes/organization/_auth/step-2.tsx
+// /routes/client/_auth/step-2.tsx
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import {
@@ -28,11 +28,19 @@ function StepTwoRegistration() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isShaking, setIsShaking] = useState(false);
 
-  // Formatação em tempo real do BI de Moçambique: 12 dígitos + 1 letra (Ex: 120101234567M)
+  // Formatação e controle estrito em tempo real do BI (12 dígitos + 1 letra no final)
   const handleBiChange = (value: string) => {
-    const cleaned = value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
-    if (cleaned.length <= 13) {
-      setBiNumber(cleaned);
+    const cleaned = value.toUpperCase();
+
+    // Se o comprimento for até 12, aceita apenas dígitos numéricos
+    if (cleaned.length <= 12) {
+      setBiNumber(cleaned.replace(/\D/g, ""));
+    }
+    // No 13º caractere, aceita apenas se o último caractere for uma letra (A-Z)
+    else if (cleaned.length === 13) {
+      const firstTwelve = cleaned.slice(0, 12).replace(/\D/g, "");
+      const lastChar = cleaned.charAt(12).replace(/[^A-Z]/g, "");
+      setBiNumber(firstTwelve + lastChar);
     }
   };
 
@@ -45,13 +53,17 @@ function StepTwoRegistration() {
     // Validação do Nome Completo
     if (!fullName.trim()) {
       newErrors.fullName = "O nome completo é obrigatório.";
-    } else if (fullName.trim().split(" ").length < 2) {
+    } else if (fullName.trim().split(/\s+/).length < 2) {
       newErrors.fullName = "Introduza pelo menos o seu nome e apelido.";
     }
 
-    // Validação do BI (Se preenchido, deve ter o formato correto de 13 dígitos/letras)
-    if (biNumber && biNumber.length !== 13) {
-      newErrors.biNumber = "O BI deve conter exatamente 13 caracteres.";
+    // Validação do BI (Opcional, mas se preenchido deve ser válido: 12 números + 1 letra)
+    if (biNumber) {
+      const biRegex = /^\d{12}[A-Z]$/;
+      if (biNumber.length !== 13 || !biRegex.test(biNumber)) {
+        newErrors.biNumber =
+          "Formato de BI inválido. Deve conter 12 números e terminar com uma letra.";
+      }
     }
 
     // Validação do Género
@@ -67,7 +79,7 @@ function StepTwoRegistration() {
     }
 
     console.log("Valores válidos do Passo 2:", { fullName, biNumber, gender });
-    navigate({ to: "/client/step-3" }); // Rota para o próximo passo
+    navigate({ to: "/client/step-3" });
   };
 
   return (
@@ -126,7 +138,7 @@ function StepTwoRegistration() {
           <div className="w-full bg-gray-200 rounded-full h-1 mb-4 overflow-hidden">
             <div
               className="bg-emerald-500 h-1 rounded-full transition-all duration-500 ease-out shadow-[0_0_8px_rgba(16,185,129,0.5)]"
-              style={{ width: "40%" }} // 40% concluído no passo 2
+              style={{ width: "40%" }}
             />
           </div>
 
@@ -147,7 +159,8 @@ function StepTwoRegistration() {
                 className="block text-xs font-semibold text-gray-700"
                 htmlFor="fullName"
               >
-                Nome Completo
+                Nome Completo{" "}
+                <span className="text-red-500 font-normal">*</span>
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
@@ -158,7 +171,11 @@ function StepTwoRegistration() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all text-sm text-gray-900"
+                  className={`w-full pl-11 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm text-gray-900 ${
+                    errors.fullName
+                      ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
+                      : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
+                  }`}
                   placeholder="Ex: Albino Manuel"
                 />
               </div>
@@ -181,7 +198,7 @@ function StepTwoRegistration() {
                 <span className="text-gray-400 font-normal">(Opcional)</span>
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-mono font-bold text-xs tracking-wider">
+                <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-mono font-bold text-xs tracking-wider select-none">
                   DOC
                 </span>
                 <input
@@ -190,7 +207,11 @@ function StepTwoRegistration() {
                   maxLength={13}
                   value={biNumber}
                   onChange={(e) => handleBiChange(e.target.value)}
-                  className="w-full pl-14 pr-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-mono text-sm tracking-wider text-gray-900"
+                  className={`w-full pl-14 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all font-mono text-sm tracking-wider text-gray-900 ${
+                    errors.biNumber
+                      ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
+                      : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
+                  }`}
                   placeholder="120101234567M"
                 />
               </div>
@@ -205,15 +226,17 @@ function StepTwoRegistration() {
 
             {/* Campo de Seleção de Gênero */}
             <div className="space-y-1">
-              <label className="block text-xs font-semibold text-gray-700">
-                Género
+              <label className="block text-xs font-semibold text-gray-700 select-none">
+                Género <span className="text-red-500 font-normal">*</span>
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <label
                   className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${
                     gender === "M"
                       ? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold"
-                      : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+                      : errors.gender
+                        ? "border-red-300 bg-white text-gray-600 hover:bg-gray-50"
+                        : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
                   }`}
                 >
                   <input
@@ -230,7 +253,9 @@ function StepTwoRegistration() {
                   className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${
                     gender === "F"
                       ? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold"
-                      : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+                      : errors.gender
+                        ? "border-red-300 bg-white text-gray-600 hover:bg-gray-50"
+                        : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
                   }`}
                 >
                   <input

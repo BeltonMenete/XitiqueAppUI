@@ -5,9 +5,9 @@ import {
   ArrowRight,
   LogIn,
   Lock,
-  Phone,
   ShieldCheck,
   Landmark,
+  HelpCircle,
 } from "lucide-react";
 import { FormError } from "#/components/FormError";
 import { APP_NAME } from "#/lib/constants";
@@ -20,8 +20,8 @@ export const Route = createFileRoute("/client/_auth/step-1")({
 function StepOneRegistration() {
   const navigate = useNavigate();
 
-  // Estados do formulário
-  const [phone, setPhone] = useState("+258 ");
+  // Estados do formulário (O estado de telefone armazena apenas os dígitos úteis pós-+258)
+  const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
   const [showPin, setShowPin] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -30,22 +30,17 @@ function StepOneRegistration() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isShaking, setIsShaking] = useState(false);
 
-  // Formatação em tempo real do celular padrão Moçambique: +258 8X XXX XXXX
+  // Formatação em tempo real para o padrão nacional de Moçambique: 8X XXX XXXX
   const handlePhoneChange = (value: string) => {
-    if (!value.startsWith("+258 ")) {
-      setPhone("+258 ");
-      return;
-    }
-
-    const digitsOnly = value.substring(5).replace(/\D/g, "");
+    const digitsOnly = value.replace(/\D/g, "").slice(0, 9);
 
     if (digitsOnly.length <= 2) {
-      setPhone(`+258 ${digitsOnly}`);
+      setPhone(digitsOnly);
     } else if (digitsOnly.length <= 5) {
-      setPhone(`+258 ${digitsOnly.slice(0, 2)} ${digitsOnly.slice(2)}`);
-    } else if (digitsOnly.length <= 9) {
+      setPhone(`${digitsOnly.slice(0, 2)} ${digitsOnly.slice(2)}`);
+    } else {
       setPhone(
-        `+258 ${digitsOnly.slice(0, 2)} ${digitsOnly.slice(2, 5)} ${digitsOnly.slice(5, 9)}`,
+        `${digitsOnly.slice(0, 2)} ${digitsOnly.slice(2, 5)} ${digitsOnly.slice(5, 9)}`,
       );
     }
   };
@@ -55,28 +50,28 @@ function StepOneRegistration() {
     setErrors({});
 
     const newErrors: Record<string, string> = {};
-    const rawNumbers = phone.replace(/\s/g, "");
+    const rawDigits = phone.replace(/\s/g, "");
 
     // Validação OBRIGATÓRIA dos Termos de Serviço
     if (!agreeTerms) {
       newErrors.terms = "Deve aceitar os Termos de Serviço para avançar.";
     }
 
-    // Se o usuário começar a digitar o telefone, valida as regras locais
-    if (rawNumbers.length > 4) {
-      if (rawNumbers.length !== 13) {
-        newErrors.phone =
-          "O número de telefone deve conter exatamente 9 dígitos.";
-      } else {
-        const digits = rawNumbers.substring(4);
-        const validPrefixes = ["82", "83", "84", "85", "86", "87"];
-        const hasValidPrefix = validPrefixes.some((prefix) =>
-          digits.startsWith(prefix),
-        );
+    // Validação OBRIGATÓRIA do Número de Telefone
+    if (!rawDigits) {
+      newErrors.phone = "O número de telefone é obrigatório.";
+    } else if (rawDigits.length !== 9) {
+      newErrors.phone =
+        "O número de telefone deve conter exatamente 9 dígitos.";
+    } else {
+      const validPrefixes = ["82", "83", "84", "85", "86", "87"];
+      const hasValidPrefix = validPrefixes.some((prefix) =>
+        rawDigits.startsWith(prefix),
+      );
 
-        if (!hasValidPrefix) {
-          newErrors.phone = "Introduza um prefixo válido (ex: 84, 85, 82).";
-        }
+      if (!hasValidPrefix) {
+        newErrors.phone =
+          "Introduza um prefixo nacional válido (ex: 84, 85, 82).";
       }
     }
 
@@ -92,13 +87,18 @@ function StepOneRegistration() {
       return;
     }
 
-    console.log("Valores válidos do Passo 1:", { phone, pin });
+    // Envia o valor final tratado contendo o DDI completo internacional
+    const finalPhoneNumber = `+258${rawDigits}`;
+    console.log("Valores válidos do Passo 1:", {
+      phone: finalPhoneNumber,
+      pin,
+    });
     navigate({ to: "/client/step-2" });
   };
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10 font-sans">
-      {/* Estilos Globais CSS Inline Isolados do Efeito Shake */}
+      {/* Estilos Globais CSS Inline Isolados */}
       <style>{`
         @keyframes shakeErrorText {
           0%, 100% { transform: translateX(0); }
@@ -160,32 +160,40 @@ function StepOneRegistration() {
           </h1>
           <div className="bg-emerald-50/50 rounded-xl p-3 border-l-4 border-emerald-600 mb-4">
             <p className="text-xs text-gray-600 font-body leading-relaxed">
-              <strong className="text-emerald-700">Opcional:</strong> Comece o
-              seu registro usando o seu número de telefone celular moçambicano.
+              <strong className="text-emerald-700">
+                Contacto Obrigatório:
+              </strong>{" "}
+              Insira o seu número de telefone celular ativo. Este número
+              permitirá que o gestor da organização escolhida entre em contacto
+              consigo para validar e ativar a sua adesão.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} noValidate className="space-y-3">
-            {/* Campo de Telefone Celular */}
+            {/* Campo de Telefone Celular (Obrigatório) */}
             <div className="space-y-1">
               <label
                 className="block text-xs font-semibold text-gray-700"
                 htmlFor="phone"
               >
                 Número de Telefone{" "}
-                <span className="text-gray-400 font-normal">(Opcional)</span>
+                <span className="text-red-500 font-normal">*</span>
               </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-mono font-bold text-xs tracking-wider">
+              <div className="relative flex items-center">
+                <span className="absolute left-0 pl-4 flex items-center pointer-events-none text-gray-400 font-mono font-bold text-sm tracking-wider select-none">
                   +258
                 </span>
                 <input
                   id="phone"
                   type="tel"
-                  maxLength={14}
+                  maxLength={11} // Comporta "8X XXX XXXX" incluindo os espaços gerados pela máscara
                   value={phone}
                   onChange={(e) => handlePhoneChange(e.target.value)}
-                  className="w-full pl-14 pr-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-mono text-sm tracking-wide text-gray-900"
+                  className={`w-full pl-16 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all font-mono text-sm tracking-wide text-gray-900 ${
+                    errors.phone
+                      ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
+                      : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
+                  }`}
                   placeholder="8X XXX XXXX"
                 />
               </div>
@@ -198,17 +206,39 @@ function StepOneRegistration() {
               </div>
             </div>
 
-            {/* Campo de PIN de Acesso */}
+            {/* Campo de PIN de Acesso com Tooltip do Design System */}
             <div className="space-y-1">
               <div className="flex justify-between items-center">
-                <label
-                  className="block text-xs font-semibold text-gray-700"
-                  htmlFor="pin"
-                >
-                  PIN de Acesso{" "}
-                  <span className="text-gray-400 font-normal">(Opcional)</span>
-                </label>
-                <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">
+                <div className="flex items-center gap-1.5 relative group">
+                  <label
+                    className="block text-xs font-semibold text-gray-700 select-none"
+                    htmlFor="pin"
+                  >
+                    PIN de Acesso{" "}
+                    <span className="text-gray-400 font-normal">
+                      (Opcional)
+                    </span>
+                  </label>
+
+                  {/* Ícone Disparador do Tooltip */}
+                  <div className="text-gray-400 group-hover:text-emerald-600 transition-colors cursor-help pt-0.5">
+                    <HelpCircle size={13} />
+                  </div>
+
+                  {/* Tooltip integrado ao Design System (Bento/Tonal Layering) */}
+                  <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-white border border-emerald-100 text-[11px] text-gray-600 rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-200 z-50 leading-relaxed font-medium">
+                    O PIN configurado permitirá que faça login na nossa{" "}
+                    <strong className="text-emerald-700 font-semibold">
+                      aplicação móvel
+                    </strong>{" "}
+                    para acompanhar o progresso das suas poupanças e extratos em
+                    tempo real.
+                    {/* Seta Indicativa Alinhada com as Cores */}
+                    <div className="absolute top-full left-4 -mt-1 w-2 h-2 bg-white border-r border-b border-emerald-100 rotate-45" />
+                  </div>
+                </div>
+
+                <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider select-none">
                   4 a 6 dígitos
                 </span>
               </div>
