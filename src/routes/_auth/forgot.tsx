@@ -193,7 +193,7 @@ function ForgotPassword() {
                           value={phone}
                           onChange={(e) => handlePhoneChange(e.target.value)}
                           placeholder={getPhonePlaceholder()}
-                          className='w-full pl-11 pr-5 py-3.5 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:border-(--color-mint-leaf-500) focus:ring-2 focus:ring-(--color-mint-leaf-500)/20 transition-all duration-200 placeholder-gray-400 font-mono tracking-[0.10em] font-semibold bg-white text-gray-900'
+                          className='w-full pl-11 pr-5 py-3.5 border border-gray-300 rounded-2xl text-sm focus:outline-none focus:border-(--color-mint-leaf-500) focus:ring-2 focus:ring-(--color-mint-leaf-500)/20 transition-all duration-200 placeholder-gray-400 font-mono tracking-widest font-semibold bg-white text-gray-900'
                         />
                       </div>
                       <div className='h-5 flex items-center pl-1'>
