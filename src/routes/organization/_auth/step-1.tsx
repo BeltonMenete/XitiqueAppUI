@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, type SubmitEvent } from "react";
-import { Building2, ArrowRight, Shield, Landmark } from "lucide-react";
+import { Building2, ArrowRight } from "lucide-react";
 import { PROVINCIAS_MZ } from "../../../data/mozambique";
-import { FormError } from "#/components/FormError"; // Certifica-te de que o import está correto para o teu projeto
+import { FormError } from "#/components/FormError";
+// Importação do componente unificado
+import { AuthSidebar } from "#/components/AuthSidebar";
 
 export const Route = createFileRoute("/organization/_auth/step-1")({
   component: StepOne,
@@ -26,13 +28,11 @@ function StepOne() {
     setErrors({});
     const newErrors: Record<string, string> = {};
 
-    // 1. Validação do Nome
     if (!form.nome.trim() || form.nome.trim().length < 3) {
       newErrors.nome =
         "O nome da organização deve ter pelo menos 3 caracteres.";
     }
 
-    // 2. Validação de Região
     if (!form.provincia) {
       newErrors.provincia = "Selecione uma província.";
     }
@@ -40,7 +40,6 @@ function StepOne() {
       newErrors.distrito = "Selecione um distrito.";
     }
 
-    // 3. Validação do Prefixo e Tamanho de Telefone de Moçambique (82-87)
     const telefoneLimpo = form.telefone.replace(/\D/g, "");
     const numRegex = /^(82|83|84|85|86|87)\d{7}$/;
 
@@ -62,42 +61,8 @@ function StepOne() {
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
-      {/* Painel Esquerdo - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-8 xl:p-12 flex-col justify-between h-full relative overflow-hidden">
-        <div className="absolute -right-16 -top-16 w-64 h-64 bg-emerald-800/20 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="space-y-4 my-auto">
-          <h2 className="text-2xl font-bold text-amber-400 tracking-wide hover:scale-105 inline-block origin-left transition-transform duration-300 cursor-default">
-            Xitique
-          </h2>
-          <h1 className="text-3xl xl:text-4xl font-bold leading-tight text-white">
-            Digitalize o seu Xitique com segurança e transparência.
-          </h1>
-          <p className="text-emerald-100 text-sm xl:text-base leading-relaxed max-w-md opacity-90">
-            Modernize a gestão da sua comunidade financeira. Unimos tradição
-            Moçambicana com a eficiência da tecnologia moderna.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 mt-auto relative z-10">
-          <div className="border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 hover:bg-emerald-950/40 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group cursor-default">
-            <Shield className="text-amber-400 mb-1.5 h-5 w-5 transition-transform duration-500 group-hover:rotate-360" />
-            <p className="font-bold text-xs tracking-wider text-white">
-              SEGURANÇA TOTAL
-            </p>
-            <p className="text-emerald-300 text-xs mt-0.5">Dados encriptados</p>
-          </div>
-          <div className="border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 hover:bg-emerald-950/40 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group cursor-default">
-            <Landmark className="text-amber-400 mb-1.5 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-            <p className="font-bold text-xs tracking-wider text-white">
-              AUDITÁVEL
-            </p>
-            <p className="text-emerald-300 text-xs mt-0.5">
-              Histórico completo
-            </p>
-          </div>
-        </div>
-      </div>
+      {/*  Painel Esquerdo Centralizado e Reutilizável */}
+      <AuthSidebar />
 
       {/* Painel Direito - Container do Formulário */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50/50 h-full overflow-y-auto">
@@ -147,7 +112,6 @@ function StepOne() {
                   required
                 />
               </div>
-              {/* Slot Fixo de Erro anti-CLS */}
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div
                   className={`text-[11px] transition-opacity duration-150 ${errors.nome ? "opacity-100" : "opacity-0 invisible"}`}
@@ -207,7 +171,6 @@ function StepOne() {
                   </select>
                 </div>
               </div>
-              {/* Slot Fixo de Erro Regional combinado */}
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div
                   className={`text-[11px] transition-opacity duration-150 ${errors.provincia || errors.distrito ? "opacity-100" : "opacity-0 invisible"}`}
@@ -243,7 +206,6 @@ function StepOne() {
                   required
                 />
               </div>
-              {/* Slot Fixo de Erro para o Telefone ou Info */}
               <div className="h-4 flex items-center pl-1 mt-0.5">
                 <div className="text-[11px] w-full">
                   {errors.telefone ? (

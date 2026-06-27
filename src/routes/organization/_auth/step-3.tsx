@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, type SyntheticEvent, } from "react";
+import { useState, type SyntheticEvent } from "react";
 import {
   ArrowRight,
   ArrowLeft,
@@ -8,6 +8,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { FormError } from "#/components/FormError";
+import { AuthSidebar } from "#/components/AuthSidebar";
 
 export const Route = createFileRoute("/organization/_auth/step-3")({
   component: StepThree,
@@ -19,7 +20,7 @@ function StepThree() {
   const [error, setError] = useState("");
 
   const handleSubmit = (e: SyntheticEvent) => {
-    console.log(e)
+    console.log(e);
     e.preventDefault();
     setError("");
 
@@ -34,42 +35,8 @@ function StepThree() {
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
-      {/* Painel Esquerdo - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-8 xl:p-12 flex-col justify-between h-full relative overflow-hidden">
-        <div className="absolute -right-16 -top-16 w-64 h-64 bg-emerald-800/20 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="space-y-4 my-auto">
-          <h2 className="text-2xl font-bold text-amber-400 tracking-wide hover:scale-105 inline-block origin-left transition-transform duration-300 cursor-default">
-            Xitique
-          </h2>
-          <h1 className="text-3xl xl:text-4xl font-bold leading-tight text-white">
-            Digitalize o seu Xitique com segurança e transparência.
-          </h1>
-          <p className="text-emerald-100 text-sm xl:text-base leading-relaxed max-w-md opacity-90">
-            Modernize a gestão da sua comunidade financeira. Unimos tradição
-            Moçambicana com a eficiência da tecnologia moderna.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 mt-auto relative z-10">
-          <div className="border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 hover:bg-emerald-950/40 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group cursor-default">
-            <Shield className="text-amber-400 mb-1.5 h-5 w-5 transition-transform duration-500 group-hover:rotate-360" />
-            <p className="font-bold text-xs tracking-wider text-white">
-              SEGURANÇA TOTAL
-            </p>
-            <p className="text-emerald-300 text-xs mt-0.5">Dados encriptados</p>
-          </div>
-          <div className="border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 hover:bg-emerald-950/40 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group cursor-default">
-            <Landmark className="text-amber-400 mb-1.5 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-            <p className="font-bold text-xs tracking-wider text-white">
-              AUDITÁVEL
-            </p>
-            <p className="text-emerald-300 text-xs mt-0.5">
-              Histórico completo
-            </p>
-          </div>
-        </div>
-      </div>
+      {/*  Painel Esquerdo Centralizado e Reutilizável */}
+      <AuthSidebar />
 
       {/* Painel Direito - Seleção de Planos */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50/50 h-full overflow-y-auto">
@@ -102,10 +69,11 @@ function StepThree() {
             {/* Plano Inicial */}
             <div
               onClick={() => setSelectedPlan("inicial")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "inicial"
-                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-                }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
+                selectedPlan === "inicial"
+                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+              }`}
             >
               <div className="flex justify-between items-start">
                 <div>
@@ -139,10 +107,11 @@ function StepThree() {
             {/* Plano Pro */}
             <div
               onClick={() => setSelectedPlan("pro")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "pro"
-                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-                }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
+                selectedPlan === "pro"
+                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+              }`}
             >
               <div className="absolute -top-2.5 right-4 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
                 Mais Popular
@@ -187,10 +156,11 @@ function StepThree() {
             {/* Plano Enterprise */}
             <div
               onClick={() => setSelectedPlan("enterprise")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "enterprise"
-                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-                }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
+                selectedPlan === "enterprise"
+                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+              }`}
             >
               <div className="flex justify-between items-start">
                 <div>

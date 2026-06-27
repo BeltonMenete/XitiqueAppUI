@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { ShieldCheck, Lock, CreditCard, Info, Send, Loader2 } from 'lucide-react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useState } from "react";
+import { ShieldCheck, Lock, CreditCard, Send, Loader2 } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/organization/_auth/payments/bank')({
+export const Route = createFileRoute("/organization/_auth/payments/bank")({
   component: RouteComponent,
 });
 
@@ -10,10 +10,10 @@ function RouteComponent() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
-    cardName: '',
-    cardNumber: '',
-    expiry: '',
-    cvv: '',
+    cardName: "",
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
     saveCard: false,
   });
 
@@ -22,152 +22,200 @@ function RouteComponent() {
   // Formatações de Input
   const formatCardNumber = (value: string) =>
     value
-      .replace(/\D/g, '')
-      .replace(/(.{4})/g, '$1 ')
+      .replace(/\D/g, "")
+      .replace(/(.{4})/g, "$1 ")
       .trim();
+
   const formatExpiry = (value: string) => {
-    const v = value.replace(/\D/g, '');
+    const v = value.replace(/\D/g, "");
     return v.length >= 2 ? `${v.slice(0, 2)} / ${v.slice(2, 4)}` : v;
   };
 
   const handleInputChange = (field: string, value: string | boolean) => {
     let formattedValue = value;
-    if (typeof value === 'string') {
-      if (field === 'cardNumber') formattedValue = formatCardNumber(value).slice(0, 19);
-      if (field === 'expiry') formattedValue = formatExpiry(value).slice(0, 7);
-      if (field === 'cvv') formattedValue = value.replace(/\D/g, '').slice(0, 4);
+    if (typeof value === "string") {
+      if (field === "cardNumber")
+        formattedValue = formatCardNumber(value).slice(0, 19);
+      if (field === "expiry") formattedValue = formatExpiry(value).slice(0, 7);
+      if (field === "cvv")
+        formattedValue = value.replace(/\D/g, "").slice(0, 4);
     }
     setFormData((prev) => ({ ...prev, [field]: formattedValue }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: '' }));
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
 
-    // Simulação de delay de processamento
     setTimeout(() => {
       setIsProcessing(false);
-      alert('Pagamento processado com sucesso!');
-      // navigate({ to: '/dashboard' });
+      navigate({ to: "/organization/payments/success" });
     }, 2500);
   };
 
   return (
-    <div className='min-h-screen w-full flex bg-[#f8faf6] text-[#191c1b] font-sans'>
-      <div className='flex w-full flex-col lg:flex-row'>
-        {/* Painel Esquerdo - Branding e Confiança */}
-        <section className='w-full lg:w-[42%] bg-[#003527] text-white p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden'>
-          <div className='relative z-10'>
-            <h2 className='text-xl font-bold tracking-tight'>Xitique</h2>
-            <h1 className='text-4xl font-bold mt-12 leading-tight'>Pagamento Seguro</h1>
-            <p className='text-[#80bea6] mt-4 text-sm max-w-sm'>
-              Finalize sua assinatura com total transparência. Seus dados estão protegidos com criptografia de
-              ponta a ponta.
+    <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
+      {/* 🛡️ PAINEL ESQUERDO: Branding de Alta Confiança Dedicado (Estático) */}
+      <section className="hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-8 xl:p-12 flex-col justify-between h-full relative overflow-hidden">
+        {/* Círculo decorativo de fundo */}
+        <div className="absolute -right-16 -top-16 w-64 h-64 bg-emerald-800/20 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Topo com Logotipo e Nome do App alinhados */}
+        <div className="flex items-center gap-3 relative z-10 select-none">
+          <img
+            src="/Xitique-logo-transparent-compressed.svg"
+            alt="Xitique Logo"
+            className="w-9 h-9 object-contain"
+          />
+          <span className="text-xl font-bold tracking-wide text-white">
+            Xitique
+          </span>
+        </div>
+
+        {/* Mensagem Principal Centralizada */}
+        <div className="space-y-4 my-auto relative z-10">
+          <h1 className="text-3xl xl:text-4xl font-bold leading-tight text-white">
+            Pagamento Seguro
+          </h1>
+          <p className="text-emerald-100 text-sm xl:text-base leading-relaxed max-w-sm opacity-90">
+            Finalize a sua assinatura com total transparência. Os seus dados de
+            faturamento estão protegidos com criptografia de ponta a ponta.
+          </p>
+        </div>
+
+        {/* Badges de Confiança Estáticas */}
+        <div className="space-y-3 mt-auto relative z-10 w-full">
+          <div className="border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 flex gap-3.5 items-center cursor-default">
+            <ShieldCheck className="text-emerald-400 h-6 w-6 shrink-0" />
+            <div>
+              <p className="font-bold text-xs tracking-wider text-white">
+                SEGURANÇA NÍVEL BANCÁRIO
+              </p>
+              <p className="text-emerald-300 text-xs mt-0.5">
+                Os seus dados sensíveis nunca são armazenados na nossa
+                infraestrutura.
+              </p>
+            </div>
+          </div>
+          <div className="border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 flex gap-3.5 items-center cursor-default">
+            <Lock className="text-emerald-400 h-6 w-6 shrink-0" />
+            <div>
+              <p className="font-bold text-xs tracking-wider text-white">
+                PROCESSAMENTO VIA STRIPE
+              </p>
+              <p className="text-emerald-300 text-xs mt-0.5">
+                Utilizamos a infraestrutura líder mundial para processamento
+                resiliente de pagamentos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PAINEL DIREITO: Formulário */}
+      <section className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50/50 h-full overflow-y-auto">
+        <div className="w-full max-w-md my-auto transition-all ease-out animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <header className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
+              Informações de Pagamento
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Complete os detalhes do cartão para concluir a transação.
             </p>
-          </div>
+          </header>
 
-          <div className='space-y-6 z-10 mt-12'>
-            <div className='flex gap-4'>
-              <ShieldCheck className='text-[#F59E0B] shrink-0' />
-              <div>
-                <p className='font-bold text-sm'>Segurança Nível Bancário</p>
-                <p className='text-[#80bea6] text-xs mt-1'>
-                  Seus dados nunca são armazenados em nossos servidores.
-                </p>
-              </div>
+          <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+            {/* Campo: Nome no Cartão */}
+            <div className="group flex flex-col">
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5 group-focus-within:text-emerald-700 transition-colors duration-200">
+                Nome no Cartão
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="Como impresso no cartão"
+                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 bg-white hover:border-gray-400 focus:hover:border-emerald-500 transition-all duration-200"
+                value={formData.cardName}
+                onChange={(e) => handleInputChange("cardName", e.target.value)}
+              />
             </div>
-            <div className='flex gap-4 border-t border-white/10 pt-6'>
-              <Lock className='text-[#F59E0B] shrink-0' />
-              <div>
-                <p className='font-bold text-sm'>Processamento via Stripe</p>
-                <p className='text-[#80bea6] text-xs mt-1'>Infraestrutura líder mundial para pagamentos.</p>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Painel Direito - Formulário */}
-        <section className='w-full lg:w-[58%] flex items-center justify-center p-6 sm:p-16 bg-white'>
-          <div className='w-full max-w-md'>
-            <header className='mb-8'>
-              <h2 className='text-2xl font-bold text-black'>Informações de Pagamento</h2>
-              <p className='text-sm text-gray-600 mt-2'>Complete a transação abaixo.</p>
-            </header>
-
-            <form onSubmit={handleSubmit} className='space-y-5'>
-              <div>
-                <label className='block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5'>
-                  Nome no Cartão
-                </label>
+            {/* Campo: Número do Cartão */}
+            <div className="group flex flex-col">
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5 group-focus-within:text-emerald-700 transition-colors duration-200">
+                Número do Cartão
+              </label>
+              <div className="relative">
+                <CreditCard className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-emerald-600 transition-all duration-200" />
                 <input
+                  type="text"
                   required
-                  className='w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all'
-                  placeholder='Nome completo'
-                  value={formData.cardName}
-                  onChange={(e) => handleInputChange('cardName', e.target.value)}
+                  placeholder="0000 0000 0000 0000"
+                  className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 bg-white hover:border-gray-400 focus:hover:border-emerald-500 transition-all duration-200 font-mono tracking-wider"
+                  value={formData.cardNumber}
+                  onChange={(e) =>
+                    handleInputChange("cardNumber", e.target.value)
+                  }
                 />
               </div>
+            </div>
 
-              <div>
-                <label className='block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5'>
-                  Número do Cartão
+            {/* Grid: Validade e CVV */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="group flex flex-col">
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5 group-focus-within:text-emerald-700 transition-colors duration-200">
+                  Validade
                 </label>
-                <div className='relative'>
-                  <CreditCard className='absolute left-3 top-3.5 h-4 w-4 text-gray-400' />
-                  <input
-                    required
-                    className='w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none'
-                    placeholder='0000 0000 0000 0000'
-                    value={formData.cardNumber}
-                    onChange={(e) => handleInputChange('cardNumber', e.target.value)}
-                  />
-                </div>
+                <input
+                  type="text"
+                  required
+                  placeholder="MM / AA"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 bg-white hover:border-gray-400 focus:hover:border-emerald-500 transition-all duration-200 font-mono"
+                  value={formData.expiry}
+                  onChange={(e) => handleInputChange("expiry", e.target.value)}
+                />
               </div>
-
-              <div className='grid grid-cols-2 gap-4'>
-                <div>
-                  <label className='block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5'>
-                    Validade
-                  </label>
-                  <input
-                    required
-                    className='w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-emerald-500'
-                    placeholder='MM / AA'
-                    value={formData.expiry}
-                    onChange={(e) => handleInputChange('expiry', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className='block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5'>
-                    CVV
-                  </label>
-                  <input
-                    required
-                    className='w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-emerald-500'
-                    placeholder='123'
-                    value={formData.cvv}
-                    onChange={(e) => handleInputChange('cvv', e.target.value)}
-                  />
-                </div>
+              <div className="group flex flex-col">
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5 group-focus-within:text-emerald-700 transition-colors duration-200">
+                  CVV
+                </label>
+                <input
+                  type="password"
+                  required
+                  placeholder="123"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 bg-white hover:border-gray-400 focus:hover:border-emerald-500 transition-all duration-200 font-mono"
+                  value={formData.cvv}
+                  onChange={(e) => handleInputChange("cvv", e.target.value)}
+                />
               </div>
+            </div>
 
-              <button
-                type='submit'
-                disabled={isProcessing}
-                className='w-full mt-4 bg-[#10B981] hover:bg-emerald-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70 active:scale-[0.98]'
-              >
-                {isProcessing ? <Loader2 className='animate-spin h-5 w-5' /> : 'Finalizar Pagamento'}
-                {!isProcessing && <Send className='h-4 w-4' />}
-              </button>
-            </form>
+            {/* Botão de Finalização */}
+            <button
+              type="submit"
+              disabled={isProcessing}
+              className="group/btn w-full bg-emerald-600 hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-700/10 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 active:scale-[0.98] text-sm mt-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50"
+            >
+              {isProcessing ? (
+                <Loader2 className="animate-spin h-5 w-5" />
+              ) : (
+                <>
+                  <span>Finalizar Pagamento</span>
+                  <Send className="h-4 w-4 transition-transform duration-300 ease-in-out group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                </>
+              )}
+            </button>
+          </form>
 
-            <footer className='mt-8 text-center'>
-              <p className='text-[10px] text-gray-400'>Transação protegida por SSL e PCI DSS</p>
-            </footer>
-          </div>
-        </section>
-      </div>
+          <footer className="mt-6 text-center">
+            <p className="text-[10px] text-gray-400 flex items-center justify-center gap-1 font-medium tracking-wide uppercase select-none">
+              <Lock size={12} className="text-gray-400" /> Transação protegida
+              por SSL e PCI DSS
+            </p>
+          </footer>
+        </div>
+      </section>
     </div>
   );
 }

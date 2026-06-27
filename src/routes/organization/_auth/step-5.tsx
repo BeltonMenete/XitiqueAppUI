@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   ArrowLeft,
-  ShieldCheck,
   CheckCircle2,
   CreditCard,
   Landmark,
@@ -12,6 +11,8 @@ import {
 
 import { MPesaIcon } from "@/components/icons/MPesaIcon";
 import { EMolaIcon } from "@/components/icons/EMolaIcon";
+// Importação do painel unificado
+import { AuthSidebar } from "#/components/AuthSidebar";
 
 export const Route = createFileRoute("/organization/_auth/step-5")({
   component: StepFive,
@@ -39,29 +40,8 @@ function StepFive() {
 
   return (
     <div className="h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
-      {/* PAINEL ESQUERDO: Branding e Confiança */}
-      <div className="hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-12 flex-col justify-between relative overflow-hidden">
-        <div className="absolute -right-16 -top-16 w-64 h-64 bg-emerald-800/20 rounded-full blur-3xl" />
-        <div className="space-y-6 z-10">
-          <h2 className="text-2xl font-bold text-amber-400 tracking-tighter">
-            XITIQUE
-          </h2>
-          <h1 className="text-4xl font-bold leading-tight">
-            Digitalize o seu Xitique com segurança.
-          </h1>
-          <p className="text-emerald-100/80 leading-relaxed max-w-sm">
-            Junte-se à maior rede de poupança comunitária de Moçambique com
-            transparência total e gestão moderna.
-          </p>
-        </div>
-        <div className="border border-emerald-700/60 bg-emerald-950/40 rounded-xl p-4 flex gap-4 items-center z-10">
-          <ShieldCheck className="text-emerald-400 h-8 w-8 shrink-0" />
-          <p className="text-xs text-emerald-100">
-            Os seus dados e fundos estão protegidos por criptografia de nível
-            bancário e conformidade local.
-          </p>
-        </div>
-      </div>
+      {/* 🔄 Painel Esquerdo Centralizado e Reutilizável com mensagem customizada para fundos */}
+      <AuthSidebar securityMessage="Fundos protegidos localmente" />
 
       {/* PAINEL DIREITO: Seleção de Pagamento */}
       <div className="w-full lg:w-1/2 p-6 sm:p-12 bg-gray-50/50 flex flex-col justify-center overflow-y-auto">
@@ -117,10 +97,11 @@ function StepFive() {
               <button
                 key={m.id}
                 onClick={() => setSelectedMethod(m.id as PaymentMethod)}
-                className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${selectedMethod === m.id
-                  ? "border-emerald-600 bg-emerald-50"
-                  : "border-gray-200 hover:border-gray-300"
-                  }`}
+                className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${
+                  selectedMethod === m.id
+                    ? "border-emerald-600 bg-emerald-50"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
               >
                 <m.icon className="h-8 w-8" />
                 <div>
@@ -136,7 +117,7 @@ function StepFive() {
             <button
               onClick={handleConfirmPayment}
               disabled={!selectedMethod || isProcessing}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-all"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
               {isProcessing ? (
                 <Loader2 className="animate-spin" />
@@ -147,7 +128,7 @@ function StepFive() {
 
             <button
               onClick={() => navigate({ to: "/organization/step-4" })}
-              className="w-full text-gray-500 text-sm font-semibold flex items-center justify-center gap-2 hover:text-gray-800"
+              className="w-full text-gray-500 text-sm font-semibold flex items-center justify-center gap-2 hover:text-gray-800 focus:outline-none"
             >
               <ArrowLeft size={16} /> Voltar para revisão
             </button>
