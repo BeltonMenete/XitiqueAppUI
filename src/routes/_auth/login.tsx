@@ -58,6 +58,7 @@ function Login() {
         {/* Imagem Lateral (Desktop) */}
         <div className="hidden lg:block absolute inset-y-0 -left-6 w-3/5 rounded-2xl overflow-hidden opacity-100 translate-x-0">
           <img
+            loading="lazy"
             src="/xitique-left-panel.avif"
             alt="Promo"
             className="w-full h-full object-cover"

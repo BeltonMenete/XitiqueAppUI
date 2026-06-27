@@ -151,6 +151,7 @@ function ResetPassword() {
                 <div className="flex justify-between items-center mb-0.5">
                   <div className="flex items-center gap-2">
                     <img
+                      loading="lazy"
                       src="/xitique-logo.svg"
                       alt={APP_NAME}
                       width={28}
