@@ -123,20 +123,18 @@ function RouteComponent() {
             <span>Pagamento via</span>
             <span className="relative inline-flex items-center h-9 w-36 overflow-hidden align-middle">
               <span
-                className={`absolute left-0 transition-all duration-500 ease-in-out ${
-                  method === "emola"
+                className={`absolute left-0 transition-all duration-500 ease-in-out ${method === "emola"
                     ? "opacity-100 translate-y-0 visible"
                     : "opacity-0 -translate-y-2 invisible pointer-events-none"
-                }`}
+                  }`}
               >
                 e-Mola
               </span>
               <span
-                className={`absolute left-0 transition-all duration-500 ease-in-out ${
-                  method === "mpesa"
+                className={`absolute left-0 transition-all duration-500 ease-in-out ${method === "mpesa"
                     ? "opacity-100 translate-y-0 visible"
                     : "opacity-0 translate-y-2 invisible pointer-events-none"
-                }`}
+                  }`}
               >
                 M-Pesa
               </span>
@@ -180,11 +178,10 @@ function RouteComponent() {
                 type="button"
                 disabled={isProcessing}
                 onClick={() => handleMethodChange("emola")}
-                className={`group flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all duration-200 focus:outline-none ${
-                  method === "emola"
+                className={`group flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all duration-200 focus:outline-none ${method === "emola"
                     ? "border-[#F37227] bg-[#F37227]/5 shadow-sm ring-1 ring-[#F37227]/20 scale-[1.02]"
                     : "border-[#e7e9e5] bg-white hover:bg-[#F37227]/5 hover:border-[#F37227]/40 active:scale-[0.98] disabled:opacity-50"
-                }`}
+                  }`}
               >
                 <div className="h-9 w-20 flex items-center justify-center">
                   <EMolaIcon className="h-full w-auto object-contain" />
@@ -200,11 +197,10 @@ function RouteComponent() {
                 type="button"
                 disabled={isProcessing}
                 onClick={() => handleMethodChange("mpesa")}
-                className={`group flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all duration-200 focus:outline-none ${
-                  method === "mpesa"
+                className={`group flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all duration-200 focus:outline-none ${method === "mpesa"
                     ? "border-[#E60000] bg-[#E60000]/5 shadow-sm ring-1 ring-[#E60000]/20 scale-[1.02]"
                     : "border-[#e7e9e5] bg-white hover:bg-[#E60000]/5 hover:border-[#E60000]/40 active:scale-[0.98] disabled:opacity-50"
-                }`}
+                  }`}
               >
                 <div className="h-9 w-20 flex items-center justify-center">
                   <MPesaIcon className="h-full w-auto object-contain" />
@@ -227,26 +223,24 @@ function RouteComponent() {
             <div>
               <label
                 htmlFor="phone"
-                className="block text-xs font-semibold text-[#404944] mb-2 transition-colors flex items-center justify-between"
+                className="block text-xs font-semibold text-[#404944] mb-2 transition-colors items-center justify-between"
               >
                 <div className="flex items-center gap-x-1">
                   <span>Número de Telemóvel</span>
                   <span className="relative inline-flex items-center h-4 w-16 overflow-hidden align-middle">
                     <span
-                      className={`absolute left-0 transition-all duration-500 ease-in-out ${
-                        method === "emola"
+                      className={`absolute left-0 transition-all duration-500 ease-in-out ${method === "emola"
                           ? "opacity-100 translate-y-0 visible"
                           : "opacity-0 -translate-y-1 invisible pointer-events-none"
-                      }`}
+                        }`}
                     >
                       Movitel
                     </span>
                     <span
-                      className={`absolute left-0 transition-all duration-500 ease-in-out ${
-                        method === "mpesa"
+                      className={`absolute left-0 transition-all duration-500 ease-in-out ${method === "mpesa"
                           ? "opacity-100 translate-y-0 visible"
                           : "opacity-0 translate-y-1 invisible pointer-events-none"
-                      }`}
+                        }`}
                     >
                       Vodacom
                     </span>
@@ -256,11 +250,10 @@ function RouteComponent() {
                 {/* Texto Curto Sem Menção à Operadora */}
                 <span
                   key={`text-${shakeKey}`}
-                  className={`text-[10px] font-bold transition-all duration-300 ${
-                    showError
+                  className={`text-[10px] font-bold transition-all duration-300 ${showError
                       ? "opacity-100 translate-x-0 shake-text font-extrabold"
                       : "opacity-0 translate-x-2 pointer-events-none text-[#707974]"
-                  } ${method === "emola" ? "text-[#F37227]" : "text-[#E60000]"}`}
+                    } ${method === "emola" ? "text-[#F37227]" : "text-[#E60000]"}`}
                 >
                   {errorMessage}
                 </span>
@@ -268,15 +261,14 @@ function RouteComponent() {
 
               {/* Contornos mapeados */}
               <div
-                className={`relative flex items-center rounded-lg border-2 transition-all duration-200 overflow-hidden focus-within:border-2 focus-within:bg-white ${
-                  method === "emola"
+                className={`relative flex items-center rounded-lg border-2 transition-all duration-200 overflow-hidden focus-within:border-2 focus-within:bg-white ${method === "emola"
                     ? showError
                       ? "border-[#F37227] bg-[#F37227]/5 focus-within:border-[#F37227]"
                       : "border-[#e7e9e5] bg-[#f2f4f1] focus-within:border-[#F37227]/70"
                     : showError
                       ? "border-[#E60000] bg-[#E60000]/5 focus-within:border-[#E60000]"
                       : "border-[#e7e9e5] bg-[#f2f4f1] focus-within:border-[#E60000]/70"
-                }`}
+                  }`}
               >
                 <div className="pl-4 pr-3 flex items-center pointer-events-none border-r border-[#e7e9e5]/80 h-full py-3.5 bg-[#eceeeb]/50 select-none">
                   <span className='font-["JetBrains_Mono"] font-medium text-sm text-[#707974]'>
@@ -289,20 +281,18 @@ function RouteComponent() {
                     <div className="absolute inset-0 pl-3 flex items-center pointer-events-none overflow-hidden select-none">
                       <span className="relative w-full h-full flex items-center">
                         <span
-                          className={`absolute left-0 font-["JetBrains_Mono"] text-base text-[#707974]/40 tracking-wider transition-all duration-500 ease-in-out ${
-                            method === "emola"
+                          className={`absolute left-0 font-["JetBrains_Mono"] text-base text-[#707974]/40 tracking-wider transition-all duration-500 ease-in-out ${method === "emola"
                               ? "opacity-100 translate-y-0 visible"
                               : "opacity-0 -translate-y-2 invisible"
-                          }`}
+                            }`}
                         >
                           87XXXXXXX
                         </span>
                         <span
-                          className={`absolute left-0 font-["JetBrains_Mono"] text-base text-[#707974]/40 tracking-wider transition-all duration-500 ease-in-out ${
-                            method === "mpesa"
+                          className={`absolute left-0 font-["JetBrains_Mono"] text-base text-[#707974]/40 tracking-wider transition-all duration-500 ease-in-out ${method === "mpesa"
                               ? "opacity-100 translate-y-0 visible"
                               : "opacity-0 translate-y-2 invisible"
-                          }`}
+                            }`}
                         >
                           84XXXXXXX
                         </span>
@@ -323,13 +313,12 @@ function RouteComponent() {
                 </div>
 
                 <div
-                  className={`pr-4 transition-colors ${
-                    phoneNumber.length === 9 && !showError
+                  className={`pr-4 transition-colors ${phoneNumber.length === 9 && !showError
                       ? "text-[#10B981]"
                       : method === "emola"
                         ? "text-[#F37227]"
                         : "text-[#E60000]"
-                  }`}
+                    }`}
                 >
                   <Phone className="h-5 w-5" />
                 </div>
@@ -338,9 +327,8 @@ function RouteComponent() {
               {/* Ponto (dot) Dinâmico */}
               <p className="mt-2 text-[11px] text-[#707974] flex items-center gap-1.5 select-none">
                 <span
-                  className={`w-1.5 h-1.5 rounded-full shrink-0 inline-block transition-colors duration-300 ${
-                    method === "emola" ? "bg-[#F37227]" : "bg-[#E60000]"
-                  }`}
+                  className={`w-1.5 h-1.5 rounded-full shrink-0 inline-block transition-colors duration-300 ${method === "emola" ? "bg-[#F37227]" : "bg-[#E60000]"
+                    }`}
                 />
                 Enviaremos um Push USSD interativo para o seu telemóvel.
               </p>
@@ -372,11 +360,10 @@ function RouteComponent() {
             <button
               onClick={handlePayment}
               disabled={isProcessing}
-              className={`w-full text-white py-3.5 rounded-xl font-["Montserrat"] font-bold text-xs flex items-center justify-center gap-2 transition-all duration-200 shadow-md active:scale-[0.98] ${
-                isProcessing
+              className={`w-full text-white py-3.5 rounded-xl font-["Montserrat"] font-bold text-xs flex items-center justify-center gap-2 transition-all duration-200 shadow-md active:scale-[0.98] ${isProcessing
                   ? "bg-[#10B981]/70 cursor-not-allowed shadow-none"
                   : "bg-[#10B981] hover:bg-[#10B981]/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#10B981]/30"
-              }`}
+                }`}
             >
               {isProcessing ? (
                 <>
