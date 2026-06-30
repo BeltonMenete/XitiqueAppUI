@@ -8,7 +8,6 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { FormError } from "#/components/FormError";
-import { AuthSidebar } from "#/components/AuthSidebar";
 
 export const Route = createFileRoute("/organization/_auth/step-3")({
   component: StepThree,
@@ -35,8 +34,6 @@ function StepThree() {
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
-      {/*  Painel Esquerdo Centralizado e Reutilizável */}
-      <AuthSidebar />
 
       {/* Painel Direito - Seleção de Planos */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50/50 h-full overflow-y-auto">
@@ -69,11 +66,10 @@ function StepThree() {
             {/* Plano Inicial */}
             <div
               onClick={() => setSelectedPlan("inicial")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-                selectedPlan === "inicial"
-                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-              }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "inicial"
+                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+                }`}
             >
               <div className="flex justify-between items-start">
                 <div>
@@ -107,11 +103,10 @@ function StepThree() {
             {/* Plano Pro */}
             <div
               onClick={() => setSelectedPlan("pro")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-                selectedPlan === "pro"
-                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-              }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "pro"
+                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+                }`}
             >
               <div className="absolute -top-2.5 right-4 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
                 Mais Popular
@@ -156,11 +151,10 @@ function StepThree() {
             {/* Plano Enterprise */}
             <div
               onClick={() => setSelectedPlan("enterprise")}
-              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-                selectedPlan === "enterprise"
-                  ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-                  : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-              }`}
+              className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${selectedPlan === "enterprise"
+                ? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+                : "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+                }`}
             >
               <div className="flex justify-between items-start">
                 <div>

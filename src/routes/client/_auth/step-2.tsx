@@ -97,10 +97,6 @@ function StepTwoRegistration() {
         }
       `}</style>
 
-      {/* Painel Esquerdo Visual Modular Reutilizado */}
-      <ClientSidebar />
-
-      {/* Painel Direito - Formulário de Registro (Sem scroll desnecessário) */}
       <div className="w-full lg:w-1/2 flex flex-col justify-between p-4 sm:p-8 bg-gray-50/50 h-full overflow-y-auto relative">
         {/* Cabeçalho Utilitário Superior */}
         <div className="flex justify-between items-center w-full max-w-md mx-auto pt-1">
@@ -171,11 +167,10 @@ function StepTwoRegistration() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className={`w-full pl-11 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm text-gray-900 ${
-                    errors.fullName
-                      ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
-                      : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
-                  }`}
+                  className={`w-full pl-11 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm text-gray-900 ${errors.fullName
+                    ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
+                    : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    }`}
                   placeholder="Ex: Albino Manuel"
                 />
               </div>
@@ -207,11 +202,10 @@ function StepTwoRegistration() {
                   maxLength={13}
                   value={biNumber}
                   onChange={(e) => handleBiChange(e.target.value)}
-                  className={`w-full pl-14 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all font-mono text-sm tracking-wider text-gray-900 ${
-                    errors.biNumber
-                      ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
-                      : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
-                  }`}
+                  className={`w-full pl-14 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all font-mono text-sm tracking-wider text-gray-900 ${errors.biNumber
+                    ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
+                    : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    }`}
                   placeholder="120101234567M"
                 />
               </div>
@@ -231,13 +225,12 @@ function StepTwoRegistration() {
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <label
-                  className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${
-                    gender === "M"
-                      ? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold"
-                      : errors.gender
-                        ? "border-red-300 bg-white text-gray-600 hover:bg-gray-50"
-                        : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
+                  className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${gender === "M"
+                    ? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold"
+                    : errors.gender
+                      ? "border-red-300 bg-white text-gray-600 hover:bg-gray-50"
+                      : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+                    }`}
                 >
                   <input
                     type="radio"
@@ -250,13 +243,12 @@ function StepTwoRegistration() {
                   Masculino
                 </label>
                 <label
-                  className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${
-                    gender === "F"
-                      ? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold"
-                      : errors.gender
-                        ? "border-red-300 bg-white text-gray-600 hover:bg-gray-50"
-                        : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
+                  className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${gender === "F"
+                    ? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold"
+                    : errors.gender
+                      ? "border-red-300 bg-white text-gray-600 hover:bg-gray-50"
+                      : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+                    }`}
                 >
                   <input
                     type="radio"

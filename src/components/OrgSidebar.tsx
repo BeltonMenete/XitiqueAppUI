@@ -8,7 +8,7 @@ interface AuthSidebarProps {
   securityMessage?: string;
 }
 
-export function AuthSidebar({ securityMessage }: AuthSidebarProps) {
+export function OrgSidebar({ securityMessage }: AuthSidebarProps) {
   return (
     <div className="hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-8 xl:p-12 flex-col justify-between h-full relative overflow-hidden">
       {/* Círculo decorativo de fundo */}

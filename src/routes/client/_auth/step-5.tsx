@@ -1,4 +1,3 @@
-// /routes/client/_auth/step-5.tsx
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
@@ -13,7 +12,6 @@ import {
   PhoneCall,
 } from "lucide-react";
 import { APP_NAME } from "#/lib/constants";
-import { ClientSidebar } from "#/components/ClientSidebar";
 
 export const Route = createFileRoute("/client/_auth/step-5")({
   component: StepFiveSuccess,
@@ -36,15 +34,12 @@ function StepFiveSuccess() {
 
   const handleProceed = () => {
     // Redireciona o utilizador para o ecrã principal de progresso/dashboard
-    navigate({ to: "/client/dashboard" });
+    //    navigate({ to: "/client/dashboard" });
   };
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10 font-sans">
-      {/* Painel Esquerdo Visual Modular Reutilizado */}
-      <ClientSidebar />
 
-      {/* Painel Direito - Estrutura Limpa e Foco na Celebração */}
       <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-10 bg-slate-50 h-full overflow-y-auto relative">
         {/* Cabeçalho Utilitário Superior */}
         <div className="flex justify-between items-center w-full max-w-md mx-auto">
@@ -88,9 +83,8 @@ function StepFiveSuccess() {
               />
             </div>
             <div
-              className={`absolute inset-0 border-2 border-emerald-500/20 rounded-full scale-125 opacity-0 transition-all duration-1000 ${
-                animateRing ? "scale-150 opacity-100 animate-ping" : ""
-              }`}
+              className={`absolute inset-0 border-2 border-emerald-500/20 rounded-full scale-125 opacity-0 transition-all duration-1000 ${animateRing ? "scale-150 opacity-100 animate-ping" : ""
+                }`}
             />
           </div>
 
@@ -99,7 +93,7 @@ function StepFiveSuccess() {
             Registo Concluído com Sucesso!
           </h1>
 
-          {/* Texto Motivacional Humanizado */}
+          {/* Texto Motivational Humanizado */}
           <p className="text-xs text-gray-500 leading-relaxed max-w-sm mb-6 font-body">
             Parabéns,{" "}
             <span className="font-bold text-emerald-800">
@@ -127,7 +121,7 @@ function StepFiveSuccess() {
               </div>
             </div>
 
-            <div className="h-[1px] bg-slate-100 w-full" />
+            <div className="h-px bg-slate-100 w-full" />
 
             {/* ALERTA: Atribuição do Cartão */}
             <div className="flex items-start gap-3 w-full bg-amber-50/50 p-3 rounded-lg border border-amber-100/30">
@@ -162,7 +156,7 @@ function StepFiveSuccess() {
               </div>
             </div>
 
-            <div className="h-[1px] bg-slate-100 w-full" />
+            <div className="h-px bg-slate-100 w-full" />
 
             <div className="flex items-center gap-2 text-[10px] text-gray-400 font-medium px-0.5">
               <Info size={14} className="text-blue-500 shrink-0" />

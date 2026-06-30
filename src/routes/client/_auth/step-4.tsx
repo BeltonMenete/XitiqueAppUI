@@ -46,7 +46,7 @@ function StepFourReview() {
     try {
       console.log("Registo finalizado:", mockData);
       // Avança para o ecrã final de sucesso (Passo 5)
-      navigate({ to: "/client/step-5" });
+      navigate({ to: "/clients/step-5" });
     } catch (error) {
       console.error("Erro ao finalizar:", error);
     } finally {
@@ -56,10 +56,6 @@ function StepFourReview() {
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10 font-sans">
-      {/* Painel Esquerdo Visual Modular */}
-      <ClientSidebar />
-
-      {/* Painel Direito - Layout Limpo e Sem Ruído */}
       <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-10 bg-slate-50 h-full overflow-y-auto relative">
         {/* Cabeçalho Superior Minimalista */}
         <div className="flex justify-between items-center w-full max-w-md mx-auto">
@@ -239,7 +235,7 @@ function StepFourReview() {
 
               <button
                 type="button"
-                onClick={() => navigate({ to: "/client/step-3" })}
+                onClick={() => navigate({ to: "/clients/step-3" })}
                 className="w-full py-2 text-xs font-semibold text-gray-500 hover:text-emerald-700 flex items-center justify-center gap-1 group transition-colors"
               >
                 <ArrowLeft

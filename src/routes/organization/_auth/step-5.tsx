@@ -11,8 +11,6 @@ import {
 
 import { MPesaIcon } from "@/components/icons/MPesaIcon";
 import { EMolaIcon } from "@/components/icons/EMolaIcon";
-// Importação do painel unificado
-import { AuthSidebar } from "#/components/AuthSidebar";
 
 export const Route = createFileRoute("/organization/_auth/step-5")({
   component: StepFive,
@@ -40,10 +38,6 @@ function StepFive() {
 
   return (
     <div className="h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
-      {/* 🔄 Painel Esquerdo Centralizado e Reutilizável com mensagem customizada para fundos */}
-      <AuthSidebar securityMessage="Fundos protegidos localmente" />
-
-      {/* PAINEL DIREITO: Seleção de Pagamento */}
       <div className="w-full lg:w-1/2 p-6 sm:p-12 bg-gray-50/50 flex flex-col justify-center overflow-y-auto">
         <div className="max-w-xl mx-auto w-full space-y-8">
           {/* Stepper */}
@@ -97,11 +91,10 @@ function StepFive() {
               <button
                 key={m.id}
                 onClick={() => setSelectedMethod(m.id as PaymentMethod)}
-                className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${
-                  selectedMethod === m.id
-                    ? "border-emerald-600 bg-emerald-50"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
+                className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${selectedMethod === m.id
+                  ? "border-emerald-600 bg-emerald-50"
+                  : "border-gray-200 hover:border-gray-300"
+                  }`}
               >
                 <m.icon className="h-8 w-8" />
                 <div>

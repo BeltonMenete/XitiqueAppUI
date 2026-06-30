@@ -8,7 +8,6 @@ import {
   BadgeCheck,
   Pencil,
 } from "lucide-react";
-import { AuthSidebar } from "#/components/AuthSidebar";
 
 export const Route = createFileRoute("/organization/_auth/step-4")({
   component: StepFour,
@@ -53,9 +52,6 @@ function StepFour() {
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10">
-      {/*  Painel Esquerdo Centralizado e Reutilizável */}
-      <AuthSidebar />
-
       {/* Painel Direito - Confirmação de Dados */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 bg-gray-50/50 h-full overflow-y-auto">
         <div className="w-full max-w-md my-auto py-2 transition-all duration-500 ease-out animate-in fade-in slide-in-from-bottom-4">

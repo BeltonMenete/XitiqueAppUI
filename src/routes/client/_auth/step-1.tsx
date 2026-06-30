@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { FormError } from "#/components/FormError";
 import { APP_NAME } from "#/lib/constants";
-import { ClientSidebar } from "#/components/ClientSidebar";
 
 export const Route = createFileRoute("/client/_auth/step-1")({
   component: StepOneRegistration,
@@ -111,8 +110,6 @@ function StepOneRegistration() {
         }
       `}</style>
 
-      {/* Painel Esquerdo Visual Modular Reutilizado */}
-      <ClientSidebar />
 
       {/* Painel Direito - Estrutura ultra-compacta anti-scroll baseada no Step 2 */}
       <div className="w-full lg:w-1/2 flex flex-col justify-between p-4 sm:p-8 bg-gray-50/50 h-full overflow-y-auto relative">
@@ -189,11 +186,10 @@ function StepOneRegistration() {
                   maxLength={11} // Comporta "8X XXX XXXX" incluindo os espaços gerados pela máscara
                   value={phone}
                   onChange={(e) => handlePhoneChange(e.target.value)}
-                  className={`w-full pl-16 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all font-mono text-sm tracking-wide text-gray-900 ${
-                    errors.phone
-                      ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
-                      : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
-                  }`}
+                  className={`w-full pl-16 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all font-mono text-sm tracking-wide text-gray-900 ${errors.phone
+                    ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
+                    : "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
+                    }`}
                   placeholder="8X XXX XXXX"
                 />
               </div>

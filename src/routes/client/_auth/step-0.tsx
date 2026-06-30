@@ -12,7 +12,6 @@ import {
   Landmark,
 } from "lucide-react";
 import { APP_NAME } from "#/lib/constants";
-import { ClientSidebar } from "#/components/ClientSidebar";
 
 // Importação do ficheiro dedicado com os dados geográficos oficiais de Moçambique
 import { PROVINCIAS_MZ } from "#/data/mozambique";
@@ -114,10 +113,6 @@ function StepZeroLocation() {
 
   return (
     <div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10 font-sans">
-      {/* Painel Esquerdo Visual Modular */}
-      <ClientSidebar />
-
-      {/* Painel Direito - Layout Limpo, Tonal e Sem Ruído Visual */}
       <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-10 bg-slate-50 h-full overflow-y-auto relative">
         {/* Cabeçalho Utilitário Superior */}
         <div className="flex justify-between items-center w-full max-w-md mx-auto">
@@ -218,19 +213,17 @@ function StepZeroLocation() {
                         <div
                           key={org.id}
                           onClick={() => setSelectedOrgId(org.id)}
-                          className={`p-3 rounded-xl cursor-pointer transition-all flex flex-col gap-0.5 border ${
-                            isSelected
-                              ? "bg-emerald-900 text-white border-transparent shadow-sm"
-                              : "bg-white text-gray-900 border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-emerald-600/20"
-                          }`}
+                          className={`p-3 rounded-xl cursor-pointer transition-all flex flex-col gap-0.5 border ${isSelected
+                            ? "bg-emerald-900 text-white border-transparent shadow-sm"
+                            : "bg-white text-gray-900 border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-emerald-600/20"
+                            }`}
                         >
                           <span className="text-xs font-bold tracking-tight">
                             {org.name}
                           </span>
                           <span
-                            className={`text-[10px] ${
-                              isSelected ? "text-emerald-200" : "text-gray-400"
-                            }`}
+                            className={`text-[10px] ${isSelected ? "text-emerald-200" : "text-gray-400"
+                              }`}
                           >
                             Gestor:{" "}
                             <strong

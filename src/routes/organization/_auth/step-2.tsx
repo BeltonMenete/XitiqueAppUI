@@ -10,9 +10,6 @@ import {
   EyeOff,
 } from "lucide-react";
 import { FormError } from "#/components/FormError";
-// Importação do novo componente reutilizável
-import { AuthSidebar } from "#/components/AuthSidebar";
-
 export const Route = createFileRoute("/organization/_auth/step-2")({
   component: StepTwo,
 });
@@ -82,9 +79,6 @@ function StepTwo() {
           display: inline-block;
         }
       `}</style>
-
-      {/* Painel Esquerdo Centralizado e Reutilizável */}
-      <AuthSidebar />
 
       {/* Painel Direito - Container do Formulário */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-gray-50/50 h-full overflow-x-hidden overflow-y-auto">

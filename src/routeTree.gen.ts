@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrganizationAuthRouteImport } from './routes/organization/_auth'
+import { Route as ClientAuthRouteImport } from './routes/client/_auth'
 import { Route as AuthTermsRouteImport } from './routes/_auth/terms'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthResetRouteImport } from './routes/_auth/reset'
@@ -34,6 +36,16 @@ import { Route as OrganizationAuthPaymentsBankRouteImport } from './routes/organ
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganizationAuthRoute = OrganizationAuthRouteImport.update({
+  id: '/organization/_auth',
+  path: '/organization',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientAuthRoute = ClientAuthRouteImport.update({
+  id: '/client/_auth',
+  path: '/client',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthTermsRoute = AuthTermsRouteImport.update({
@@ -62,83 +74,83 @@ const AuthForgotRoute = AuthForgotRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrganizationAuthStep5Route = OrganizationAuthStep5RouteImport.update({
-  id: '/organization/_auth/step-5',
-  path: '/organization/step-5',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-5',
+  path: '/step-5',
+  getParentRoute: () => OrganizationAuthRoute,
 } as any)
 const OrganizationAuthStep4Route = OrganizationAuthStep4RouteImport.update({
-  id: '/organization/_auth/step-4',
-  path: '/organization/step-4',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-4',
+  path: '/step-4',
+  getParentRoute: () => OrganizationAuthRoute,
 } as any)
 const OrganizationAuthStep3Route = OrganizationAuthStep3RouteImport.update({
-  id: '/organization/_auth/step-3',
-  path: '/organization/step-3',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-3',
+  path: '/step-3',
+  getParentRoute: () => OrganizationAuthRoute,
 } as any)
 const OrganizationAuthStep2Route = OrganizationAuthStep2RouteImport.update({
-  id: '/organization/_auth/step-2',
-  path: '/organization/step-2',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-2',
+  path: '/step-2',
+  getParentRoute: () => OrganizationAuthRoute,
 } as any)
 const OrganizationAuthStep1Route = OrganizationAuthStep1RouteImport.update({
-  id: '/organization/_auth/step-1',
-  path: '/organization/step-1',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-1',
+  path: '/step-1',
+  getParentRoute: () => OrganizationAuthRoute,
 } as any)
 const ClientAuthStep5Route = ClientAuthStep5RouteImport.update({
-  id: '/client/_auth/step-5',
-  path: '/client/step-5',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-5',
+  path: '/step-5',
+  getParentRoute: () => ClientAuthRoute,
 } as any)
 const ClientAuthStep4Route = ClientAuthStep4RouteImport.update({
-  id: '/client/_auth/step-4',
-  path: '/client/step-4',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-4',
+  path: '/step-4',
+  getParentRoute: () => ClientAuthRoute,
 } as any)
 const ClientAuthStep3Route = ClientAuthStep3RouteImport.update({
-  id: '/client/_auth/step-3',
-  path: '/client/step-3',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-3',
+  path: '/step-3',
+  getParentRoute: () => ClientAuthRoute,
 } as any)
 const ClientAuthStep2Route = ClientAuthStep2RouteImport.update({
-  id: '/client/_auth/step-2',
-  path: '/client/step-2',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-2',
+  path: '/step-2',
+  getParentRoute: () => ClientAuthRoute,
 } as any)
 const ClientAuthStep1Route = ClientAuthStep1RouteImport.update({
-  id: '/client/_auth/step-1',
-  path: '/client/step-1',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-1',
+  path: '/step-1',
+  getParentRoute: () => ClientAuthRoute,
 } as any)
 const ClientAuthStep0Route = ClientAuthStep0RouteImport.update({
-  id: '/client/_auth/step-0',
-  path: '/client/step-0',
-  getParentRoute: () => rootRouteImport,
+  id: '/step-0',
+  path: '/step-0',
+  getParentRoute: () => ClientAuthRoute,
 } as any)
 const OrganizationAuthPaymentsTransferBankRoute =
   OrganizationAuthPaymentsTransferBankRouteImport.update({
-    id: '/organization/_auth/payments/transfer-bank',
-    path: '/organization/payments/transfer-bank',
-    getParentRoute: () => rootRouteImport,
+    id: '/payments/transfer-bank',
+    path: '/payments/transfer-bank',
+    getParentRoute: () => OrganizationAuthRoute,
   } as any)
 const OrganizationAuthPaymentsSuccessRoute =
   OrganizationAuthPaymentsSuccessRouteImport.update({
-    id: '/organization/_auth/payments/success',
-    path: '/organization/payments/success',
-    getParentRoute: () => rootRouteImport,
+    id: '/payments/success',
+    path: '/payments/success',
+    getParentRoute: () => OrganizationAuthRoute,
   } as any)
 const OrganizationAuthPaymentsMobileRoute =
   OrganizationAuthPaymentsMobileRouteImport.update({
-    id: '/organization/_auth/payments/mobile',
-    path: '/organization/payments/mobile',
-    getParentRoute: () => rootRouteImport,
+    id: '/payments/mobile',
+    path: '/payments/mobile',
+    getParentRoute: () => OrganizationAuthRoute,
   } as any)
 const OrganizationAuthPaymentsBankRoute =
   OrganizationAuthPaymentsBankRouteImport.update({
-    id: '/organization/_auth/payments/bank',
-    path: '/organization/payments/bank',
-    getParentRoute: () => rootRouteImport,
+    id: '/payments/bank',
+    path: '/payments/bank',
+    getParentRoute: () => OrganizationAuthRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -148,6 +160,8 @@ export interface FileRoutesByFullPath {
   '/reset': typeof AuthResetRoute
   '/signup': typeof AuthSignupRoute
   '/terms': typeof AuthTermsRoute
+  '/client': typeof ClientAuthRouteWithChildren
+  '/organization': typeof OrganizationAuthRouteWithChildren
   '/client/step-0': typeof ClientAuthStep0Route
   '/client/step-1': typeof ClientAuthStep1Route
   '/client/step-2': typeof ClientAuthStep2Route
@@ -171,6 +185,8 @@ export interface FileRoutesByTo {
   '/reset': typeof AuthResetRoute
   '/signup': typeof AuthSignupRoute
   '/terms': typeof AuthTermsRoute
+  '/client': typeof ClientAuthRouteWithChildren
+  '/organization': typeof OrganizationAuthRouteWithChildren
   '/client/step-0': typeof ClientAuthStep0Route
   '/client/step-1': typeof ClientAuthStep1Route
   '/client/step-2': typeof ClientAuthStep2Route
@@ -195,6 +211,8 @@ export interface FileRoutesById {
   '/_auth/reset': typeof AuthResetRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/_auth/terms': typeof AuthTermsRoute
+  '/client/_auth': typeof ClientAuthRouteWithChildren
+  '/organization/_auth': typeof OrganizationAuthRouteWithChildren
   '/client/_auth/step-0': typeof ClientAuthStep0Route
   '/client/_auth/step-1': typeof ClientAuthStep1Route
   '/client/_auth/step-2': typeof ClientAuthStep2Route
@@ -220,6 +238,8 @@ export interface FileRouteTypes {
     | '/reset'
     | '/signup'
     | '/terms'
+    | '/client'
+    | '/organization'
     | '/client/step-0'
     | '/client/step-1'
     | '/client/step-2'
@@ -243,6 +263,8 @@ export interface FileRouteTypes {
     | '/reset'
     | '/signup'
     | '/terms'
+    | '/client'
+    | '/organization'
     | '/client/step-0'
     | '/client/step-1'
     | '/client/step-2'
@@ -266,6 +288,8 @@ export interface FileRouteTypes {
     | '/_auth/reset'
     | '/_auth/signup'
     | '/_auth/terms'
+    | '/client/_auth'
+    | '/organization/_auth'
     | '/client/_auth/step-0'
     | '/client/_auth/step-1'
     | '/client/_auth/step-2'
@@ -290,21 +314,8 @@ export interface RootRouteChildren {
   AuthResetRoute: typeof AuthResetRoute
   AuthSignupRoute: typeof AuthSignupRoute
   AuthTermsRoute: typeof AuthTermsRoute
-  ClientAuthStep0Route: typeof ClientAuthStep0Route
-  ClientAuthStep1Route: typeof ClientAuthStep1Route
-  ClientAuthStep2Route: typeof ClientAuthStep2Route
-  ClientAuthStep3Route: typeof ClientAuthStep3Route
-  ClientAuthStep4Route: typeof ClientAuthStep4Route
-  ClientAuthStep5Route: typeof ClientAuthStep5Route
-  OrganizationAuthStep1Route: typeof OrganizationAuthStep1Route
-  OrganizationAuthStep2Route: typeof OrganizationAuthStep2Route
-  OrganizationAuthStep3Route: typeof OrganizationAuthStep3Route
-  OrganizationAuthStep4Route: typeof OrganizationAuthStep4Route
-  OrganizationAuthStep5Route: typeof OrganizationAuthStep5Route
-  OrganizationAuthPaymentsBankRoute: typeof OrganizationAuthPaymentsBankRoute
-  OrganizationAuthPaymentsMobileRoute: typeof OrganizationAuthPaymentsMobileRoute
-  OrganizationAuthPaymentsSuccessRoute: typeof OrganizationAuthPaymentsSuccessRoute
-  OrganizationAuthPaymentsTransferBankRoute: typeof OrganizationAuthPaymentsTransferBankRoute
+  ClientAuthRoute: typeof ClientAuthRouteWithChildren
+  OrganizationAuthRoute: typeof OrganizationAuthRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -314,6 +325,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organization/_auth': {
+      id: '/organization/_auth'
+      path: '/organization'
+      fullPath: '/organization'
+      preLoaderRoute: typeof OrganizationAuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/_auth': {
+      id: '/client/_auth'
+      path: '/client'
+      fullPath: '/client'
+      preLoaderRoute: typeof ClientAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/terms': {
@@ -353,125 +378,147 @@ declare module '@tanstack/react-router' {
     }
     '/organization/_auth/step-5': {
       id: '/organization/_auth/step-5'
-      path: '/organization/step-5'
+      path: '/step-5'
       fullPath: '/organization/step-5'
       preLoaderRoute: typeof OrganizationAuthStep5RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
     '/organization/_auth/step-4': {
       id: '/organization/_auth/step-4'
-      path: '/organization/step-4'
+      path: '/step-4'
       fullPath: '/organization/step-4'
       preLoaderRoute: typeof OrganizationAuthStep4RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
     '/organization/_auth/step-3': {
       id: '/organization/_auth/step-3'
-      path: '/organization/step-3'
+      path: '/step-3'
       fullPath: '/organization/step-3'
       preLoaderRoute: typeof OrganizationAuthStep3RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
     '/organization/_auth/step-2': {
       id: '/organization/_auth/step-2'
-      path: '/organization/step-2'
+      path: '/step-2'
       fullPath: '/organization/step-2'
       preLoaderRoute: typeof OrganizationAuthStep2RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
     '/organization/_auth/step-1': {
       id: '/organization/_auth/step-1'
-      path: '/organization/step-1'
+      path: '/step-1'
       fullPath: '/organization/step-1'
       preLoaderRoute: typeof OrganizationAuthStep1RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
     '/client/_auth/step-5': {
       id: '/client/_auth/step-5'
-      path: '/client/step-5'
+      path: '/step-5'
       fullPath: '/client/step-5'
       preLoaderRoute: typeof ClientAuthStep5RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ClientAuthRoute
     }
     '/client/_auth/step-4': {
       id: '/client/_auth/step-4'
-      path: '/client/step-4'
+      path: '/step-4'
       fullPath: '/client/step-4'
       preLoaderRoute: typeof ClientAuthStep4RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ClientAuthRoute
     }
     '/client/_auth/step-3': {
       id: '/client/_auth/step-3'
-      path: '/client/step-3'
+      path: '/step-3'
       fullPath: '/client/step-3'
       preLoaderRoute: typeof ClientAuthStep3RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ClientAuthRoute
     }
     '/client/_auth/step-2': {
       id: '/client/_auth/step-2'
-      path: '/client/step-2'
+      path: '/step-2'
       fullPath: '/client/step-2'
       preLoaderRoute: typeof ClientAuthStep2RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ClientAuthRoute
     }
     '/client/_auth/step-1': {
       id: '/client/_auth/step-1'
-      path: '/client/step-1'
+      path: '/step-1'
       fullPath: '/client/step-1'
       preLoaderRoute: typeof ClientAuthStep1RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ClientAuthRoute
     }
     '/client/_auth/step-0': {
       id: '/client/_auth/step-0'
-      path: '/client/step-0'
+      path: '/step-0'
       fullPath: '/client/step-0'
       preLoaderRoute: typeof ClientAuthStep0RouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ClientAuthRoute
     }
     '/organization/_auth/payments/transfer-bank': {
       id: '/organization/_auth/payments/transfer-bank'
-      path: '/organization/payments/transfer-bank'
+      path: '/payments/transfer-bank'
       fullPath: '/organization/payments/transfer-bank'
       preLoaderRoute: typeof OrganizationAuthPaymentsTransferBankRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
     '/organization/_auth/payments/success': {
       id: '/organization/_auth/payments/success'
-      path: '/organization/payments/success'
+      path: '/payments/success'
       fullPath: '/organization/payments/success'
       preLoaderRoute: typeof OrganizationAuthPaymentsSuccessRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
     '/organization/_auth/payments/mobile': {
       id: '/organization/_auth/payments/mobile'
-      path: '/organization/payments/mobile'
+      path: '/payments/mobile'
       fullPath: '/organization/payments/mobile'
       preLoaderRoute: typeof OrganizationAuthPaymentsMobileRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
     '/organization/_auth/payments/bank': {
       id: '/organization/_auth/payments/bank'
-      path: '/organization/payments/bank'
+      path: '/payments/bank'
       fullPath: '/organization/payments/bank'
       preLoaderRoute: typeof OrganizationAuthPaymentsBankRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof OrganizationAuthRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AuthForgotRoute: AuthForgotRoute,
-  AuthLoginRoute: AuthLoginRoute,
-  AuthResetRoute: AuthResetRoute,
-  AuthSignupRoute: AuthSignupRoute,
-  AuthTermsRoute: AuthTermsRoute,
+interface ClientAuthRouteChildren {
+  ClientAuthStep0Route: typeof ClientAuthStep0Route
+  ClientAuthStep1Route: typeof ClientAuthStep1Route
+  ClientAuthStep2Route: typeof ClientAuthStep2Route
+  ClientAuthStep3Route: typeof ClientAuthStep3Route
+  ClientAuthStep4Route: typeof ClientAuthStep4Route
+  ClientAuthStep5Route: typeof ClientAuthStep5Route
+}
+
+const ClientAuthRouteChildren: ClientAuthRouteChildren = {
   ClientAuthStep0Route: ClientAuthStep0Route,
   ClientAuthStep1Route: ClientAuthStep1Route,
   ClientAuthStep2Route: ClientAuthStep2Route,
   ClientAuthStep3Route: ClientAuthStep3Route,
   ClientAuthStep4Route: ClientAuthStep4Route,
   ClientAuthStep5Route: ClientAuthStep5Route,
+}
+
+const ClientAuthRouteWithChildren = ClientAuthRoute._addFileChildren(
+  ClientAuthRouteChildren,
+)
+
+interface OrganizationAuthRouteChildren {
+  OrganizationAuthStep1Route: typeof OrganizationAuthStep1Route
+  OrganizationAuthStep2Route: typeof OrganizationAuthStep2Route
+  OrganizationAuthStep3Route: typeof OrganizationAuthStep3Route
+  OrganizationAuthStep4Route: typeof OrganizationAuthStep4Route
+  OrganizationAuthStep5Route: typeof OrganizationAuthStep5Route
+  OrganizationAuthPaymentsBankRoute: typeof OrganizationAuthPaymentsBankRoute
+  OrganizationAuthPaymentsMobileRoute: typeof OrganizationAuthPaymentsMobileRoute
+  OrganizationAuthPaymentsSuccessRoute: typeof OrganizationAuthPaymentsSuccessRoute
+  OrganizationAuthPaymentsTransferBankRoute: typeof OrganizationAuthPaymentsTransferBankRoute
+}
+
+const OrganizationAuthRouteChildren: OrganizationAuthRouteChildren = {
   OrganizationAuthStep1Route: OrganizationAuthStep1Route,
   OrganizationAuthStep2Route: OrganizationAuthStep2Route,
   OrganizationAuthStep3Route: OrganizationAuthStep3Route,
@@ -482,6 +529,20 @@ const rootRouteChildren: RootRouteChildren = {
   OrganizationAuthPaymentsSuccessRoute: OrganizationAuthPaymentsSuccessRoute,
   OrganizationAuthPaymentsTransferBankRoute:
     OrganizationAuthPaymentsTransferBankRoute,
+}
+
+const OrganizationAuthRouteWithChildren =
+  OrganizationAuthRoute._addFileChildren(OrganizationAuthRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AuthForgotRoute: AuthForgotRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthResetRoute: AuthResetRoute,
+  AuthSignupRoute: AuthSignupRoute,
+  AuthTermsRoute: AuthTermsRoute,
+  ClientAuthRoute: ClientAuthRouteWithChildren,
+  OrganizationAuthRoute: OrganizationAuthRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
