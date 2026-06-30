@@ -1,19 +1,65 @@
-// #/components/ClientSidebar.tsx
+import { ShieldCheck, Users } from "lucide-react";
 
-export function ClientSidebar() {
+interface ClientSidebarProps {
+  /**
+   * Texto opcional para customizar a mensagem de segurança inferior.
+   * Se não for passado, usa o texto padrão.
+   */
+  securityMessage?: string;
+}
+
+export function ClientSidebar({ securityMessage }: ClientSidebarProps) {
   return (
-    <section className="hidden md:flex md:w-3/5 relative items-center justify-center overflow-hidden bg-emerald-950">
-      {/* Imagem de Fundo (URL extraída diretamente do code.html) */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://lh3.googleusercontent.com/aida/AP1WRLsWiNGlOVTgJw_h33qylhC3Fbboven9zAUumIyd6dvGcpGjzoxakshZKonWzy0lftUH9DX3u0ZI8byTk9OhLxC6t9V43JZtnO4IknVn9Sjcoinbaoz7vh8NTvM5ZmH90nXAtRM7qbarfjIugMcT59uJ6zik7C07enVAKVyCUInVhISXn2gqta8LPG72nwIJBQXxvsz4BfdpjN8arlDXTuAhmsJYPB5_4YeiTDmG_5eD4y1JnMXEMam0ZJ-o')",
-        }}
-      />
+    <div className="hidden lg:flex lg:w-1/2 bg-emerald-900 text-white p-8 xl:p-12 flex-col justify-between h-full relative overflow-hidden">
+      {/* Círculo decorativo de fundo */}
+      <div className="absolute -right-16 -top-16 w-64 h-64 bg-emerald-800/20 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Gradiente de Mascaramento do code.html */}
-      <div className="absolute inset-0 bg-linear-to-tr from-black/40 via-transparent to-transparent z-10" />
-    </section>
+      {/* Topo com Logotipo e Nome do App alinhados */}
+      <div className="flex items-center gap-3 relative z-10 select-none">
+        <img
+          src="/Xitique-logo-transparent-compressed.svg"
+          alt="Xitique Logo"
+          className="w-9 h-9 object-contain"
+        />
+        <span className="text-xl font-bold tracking-wide text-white">
+          Xitique
+        </span>
+      </div>
+
+      {/* Mensagem Principal Centralizada */}
+      <div className="space-y-4 my-auto relative z-10">
+        <h1 className="text-3xl xl:text-4xl font-bold leading-tight text-white">
+          Crie a sua conta e junte-se ao seu Xitique.
+        </h1>
+        <p className="text-emerald-100 text-sm xl:text-base leading-relaxed max-w-md opacity-90">
+          Entre na sua organização, acompanhe as suas contribuições e
+          participe com confiança numa comunidade financeira mais
+          transparente.
+        </p>
+      </div>
+
+      {/* Badges Inferiores Estáticas (Sem efeitos de hover) */}
+      <div className="grid grid-cols-2 gap-3 mt-auto relative z-10">
+        <div className="border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 cursor-default">
+          <ShieldCheck className="text-emerald-400 mb-1.5 h-5 w-5" />
+          <p className="font-bold text-xs tracking-wider text-white">
+            ACESSO SEGURO
+          </p>
+          <p className="text-emerald-300 text-xs mt-0.5">
+            {securityMessage || "Dados protegidos"}
+          </p>
+        </div>
+
+        <div className="border border-emerald-700/60 bg-emerald-950/20 rounded-xl p-3.5 cursor-default">
+          <Users className="text-emerald-400 mb-1.5 h-5 w-5" />
+          <p className="font-bold text-xs tracking-wider text-white">
+            COMUNIDADE
+          </p>
+          <p className="text-emerald-300 text-xs mt-0.5">
+            Junte-se à sua organização
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

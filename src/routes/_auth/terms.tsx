@@ -3,6 +3,7 @@ import { ArrowLeft, FileText, ShieldAlert, CheckCircle2 } from "lucide-react";
 import { APP_NAME } from "#/lib/constants";
 // Caminho atualizado para a pasta lib/terms.json
 import termsData from "#/data/terms.json";
+import { AuthImagePanel } from "#/components/AuthImagePanel";
 
 export const Route = createFileRoute("/_auth/terms")({
   component: TermsAndConditions,
@@ -20,14 +21,7 @@ function TermsAndConditions() {
     <div className="login-bg min-h-screen flex items-center justify-center p-4 overflow-hidden">
       <div className="relative w-full max-w-4xl">
         {/* Imagem Lateral (Desktop) */}
-        <div className="hidden lg:block absolute inset-y-0 -left-6 w-3/5 rounded-2xl overflow-hidden opacity-100 translate-x-0">
-          <img
-            loading="lazy"
-            src="/xitique-left-panel.avif"
-            alt="Promo"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <AuthImagePanel />
 
         {/* Card de Conteúdo dos Termos */}
         <div className="relative lg:ml-auto lg:w-1/2 bg-white rounded-2xl shadow-xl p-6 lg:p-10 min-h-125 flex flex-col justify-between transition-all duration-500 ease-in-out">

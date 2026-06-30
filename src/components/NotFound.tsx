@@ -53,9 +53,9 @@ const DecorativeGrid = () => (
 //
 const DecorativeBlurs = () => (
     <>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] sm:w-[480px] sm:h-[480px] md:w-[640px] md:h-[640px] bg-[#80bea6]/20 rounded-full blur-[90px] sm:blur-[130px] animate-pulse pointer-events-none z-0" />
-        <div className="absolute top-[-12%] right-[-8%] w-[260px] h-[260px] sm:w-[420px] sm:h-[420px] bg-[#80bea6]/14 rounded-full blur-[90px] pointer-events-none z-0" />
-        <div className="absolute bottom-[-12%] left-[-8%] w-[260px] h-[260px] sm:w-[420px] sm:h-[420px] bg-[#80bea6]/14 rounded-full blur-[90px] pointer-events-none z-0" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-80 sm:w-120 sm:h-120 md:w-160 md:h-160 bg-[#80bea6]/20 rounded-full blur-[90px] sm:blur-[130px] animate-pulse pointer-events-none z-0" />
+        <div className="absolute top-[-12%] right-[-8%] w-65 h-65 sm:w-105 sm:h-105 bg-[#80bea6]/14 rounded-full blur-[90px] pointer-events-none z-0" />
+        <div className="absolute bottom-[-12%] left-[-8%] w-65 h-65 sm:w-105 sm:h-105 bg-[#80bea6]/14 rounded-full blur-[90px] pointer-events-none z-0" />
     </>
 );
 
@@ -68,7 +68,7 @@ const FloatingCards = () => (
     <div className="hidden lg:block pointer-events-none select-none absolute inset-0 z-10">
         {/* Cartão Shield — canto superior esquerdo, junto à margem */}
         <div
-            className="absolute top-[12%] left-[4%] xl:left-[8%] 2xl:left-[14%] bg-gradient-to-br from-[#80bea6] to-[#5fa088] rounded-2xl p-3 xl:p-3.5 shadow-[0_8px_24px_-4px_rgba(95,160,136,0.55)] border border-white/40 animate-[float_2.2s_ease-in-out_infinite]"
+            className="absolute top-[12%] left-[4%] xl:left-[8%] 2xl:left-[14%] bg-linear-to-br from-[#80bea6] to-[#5fa088] rounded-2xl p-3 xl:p-3.5 shadow-[0_8px_24px_-4px_rgba(95,160,136,0.55)] border border-white/40 animate-[float_2.2s_ease-in-out_infinite]"
             style={{ '--rot': '10deg' } as React.CSSProperties}
         >
             <div className="text-white drop-shadow-sm"><IconShield /></div>
@@ -76,7 +76,7 @@ const FloatingCards = () => (
 
         {/* Cartão Home — canto superior direito, junto à margem */}
         <div
-            className="absolute top-[16%] right-[4%] xl:right-[8%] 2xl:right-[14%] bg-gradient-to-br from-[#80bea6] to-[#5fa088] rounded-2xl p-3 xl:p-3.5 shadow-[0_8px_24px_-4px_rgba(95,160,136,0.55)] border border-white/40 animate-[float_2.6s_ease-in-out_infinite] [animation-delay:0.3s]"
+            className="absolute top-[16%] right-[4%] xl:right-[8%] 2xl:right-[14%] bg-linear-to-br from-[#80bea6] to-[#5fa088] rounded-2xl p-3 xl:p-3.5 shadow-[0_8px_24px_-4px_rgba(95,160,136,0.55)] border border-white/40 animate-[float_2.6s_ease-in-out_infinite] [animation-delay:0.3s]"
             style={{ '--rot': '-8deg' } as React.CSSProperties}
         >
             <div className="text-white drop-shadow-sm"><IconHome /></div>
@@ -84,7 +84,7 @@ const FloatingCards = () => (
 
         {/* Cartão Message — canto inferior esquerdo, abaixo da coluna de texto */}
         <div
-            className="absolute bottom-[14%] left-[5%] xl:left-[10%] 2xl:left-[16%] bg-gradient-to-br from-[#80bea6] to-[#5fa088] rounded-2xl p-3 xl:p-3.5 shadow-[0_8px_24px_-4px_rgba(95,160,136,0.55)] border border-white/40 animate-[float_2.4s_ease-in-out_infinite] [animation-delay:0.6s]"
+            className="absolute bottom-[14%] left-[5%] xl:left-[10%] 2xl:left-[16%] bg-linear-to-br from-[#80bea6] to-[#5fa088] rounded-2xl p-3 xl:p-3.5 shadow-[0_8px_24px_-4px_rgba(95,160,136,0.55)] border border-white/40 animate-[float_2.4s_ease-in-out_infinite] [animation-delay:0.6s]"
             style={{ '--rot': '7deg' } as React.CSSProperties}
         >
             <div className="text-white drop-shadow-sm"><IconMessage /></div>
@@ -92,7 +92,7 @@ const FloatingCards = () => (
 
         {/* Cartão Compass — canto inferior direito, abaixo da coluna de texto */}
         <div
-            className="absolute bottom-[18%] right-[5%] xl:right-[10%] 2xl:right-[16%] bg-gradient-to-br from-[#80bea6] to-[#5fa088] rounded-2xl p-3 xl:p-3.5 shadow-[0_8px_24px_-4px_rgba(95,160,136,0.55)] border border-white/40 animate-[float_2.8s_ease-in-out_infinite] [animation-delay:0.9s]"
+            className="absolute bottom-[18%] right-[5%] xl:right-[10%] 2xl:right-[16%] bg-linear-to-br from-[#80bea6] to-[#5fa088] rounded-2xl p-3 xl:p-3.5 shadow-[0_8px_24px_-4px_rgba(95,160,136,0.55)] border border-white/40 animate-[float_2.8s_ease-in-out_infinite] [animation-delay:0.9s]"
             style={{ '--rot': '-10deg' } as React.CSSProperties}
         >
             <div className="text-white drop-shadow-sm"><IconCompass /></div>
@@ -152,7 +152,7 @@ export default function NotFound() {
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 bg-[#80bea6]/25 rounded-full blur-md transition-transform duration-700 group-hover:scale-110" />
 
                         {/* O Texto 404 em si */}
-                        <h1 className="text-[100px] sm:text-[150px] md:text-[200px] lg:text-[240px] font-black leading-none relative tracking-tighter selection:bg-white/0 bg-gradient-to-b from-[#6cab92] via-[#5a9d83] to-[#3c5048] bg-clip-text text-transparent drop-shadow-[0_6px_18px_rgba(60,80,72,0.25)]">
+                        <h1 className="text-[100px] sm:text-[150px] md:text-[200px] lg:text-[240px] font-black leading-none relative tracking-tighter selection:bg-white/0 bg-linear-to-b from-[#6cab92] via-[#5a9d83] to-[#3c5048] bg-clip-text text-transparent drop-shadow-[0_6px_18px_rgba(60,80,72,0.25)]">
                             404
                         </h1>
                     </div>
