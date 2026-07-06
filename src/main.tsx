@@ -1,11 +1,15 @@
-import ReactDOM from 'react-dom/client';
-import 'ldrs/react/Ring2.css';
-import { RouterProvider } from '@tanstack/react-router';
-import { getRouter } from '#/router';
-import '#/styles.css';
+import ReactDOM from "react-dom/client";
+import "ldrs/react/Ring2.css";
+import { RouterProvider } from "@tanstack/react-router";
+import { getRouter } from "#/router";
+import "#/styles.css";
 
 const router = getRouter();
-const rootElement = document.getElementById('app')!;
+const rootElement = document.getElementById('app');
+
+if (!rootElement) {
+	throw new Error('Root element #app was not found.');
+}
 
 if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);

@@ -1,12 +1,11 @@
 export function FormField({
 	label,
 	icon: Icon,
-	type = 'text',
+	type = "text",
 	value,
 	onChange,
 	toggleIcon,
 	onToggle,
-	delay = 0.1,
 }: {
 	label: string;
 	icon: React.ComponentType<{ size: number; className: string }>;
@@ -15,25 +14,30 @@ export function FormField({
 	onChange: (val: string) => void;
 	toggleIcon?: React.ReactNode;
 	onToggle?: () => void;
-	delay?: number;
 }) {
 	return (
-		<div className='space-y-1.5'>
-			<label className='block text-sm font-medium text-gray-700'>{label}</label>
-			<div className='relative'>
-				<Icon className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-400' size={20} />
+		<div className="space-y-1.5">
+			<label htmlFor={label} className="block text-sm font-medium text-gray-700">
+				{label}
+			</label>
+			<div className="relative">
+				<Icon
+					className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+					size={20}
+				/>
 				<input
+					id={label}
 					type={type}
 					value={value}
-					onChange={(e) => onChange(e.target.value)}
-					className='w-full pl-11 pr-12 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-(--color-mint-leaf-500) transition-all'
+					onChange={(event) => onChange(event.target.value)}
+					className="w-full pl-11 pr-12 py-3.5 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-(--color-mint-leaf-500) transition-all"
 					required
 				/>
 				{toggleIcon && (
 					<button
-						type='button'
+						type="button"
 						onClick={onToggle}
-						className='absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700'
+						className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
 					>
 						{toggleIcon}
 					</button>

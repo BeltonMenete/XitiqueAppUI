@@ -21,7 +21,6 @@
     "@tanstack/react-router": "latest",
     "@tanstack/react-router-devtools": "latest",
     "@tanstack/router-plugin": "^1.168.18",
-    "hover.css": "^2.3.2",
     "ldrs": "^1.1.9",
     "lucide-react": "^1.21.0",
     "pnpm": "^11.9.0",
