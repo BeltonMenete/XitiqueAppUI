@@ -183,6 +183,7 @@ function StepFour() {
 						</button>
 
 						<button
+							type="button"
 							onClick={() => navigate({ to: "/organization/step-3" })}
 							className="group/back w-full border border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm text-gray-600 font-bold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 text-sm active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
 						>

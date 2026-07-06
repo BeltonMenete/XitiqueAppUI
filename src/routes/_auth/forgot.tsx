@@ -173,10 +173,11 @@ function ForgotPassword() {
 											setMethod("email");
 											setErrors({});
 										}}
-										className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 active:scale-[0.99] cursor-pointer focus:outline-none ${method === "email"
+										className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 active:scale-[0.99] cursor-pointer focus:outline-none ${
+											method === "email"
 												? "bg-white text-gray-900 shadow-sm font-semibold"
 												: "text-gray-500 hover:text-gray-900 hover:bg-gray-200/40"
-											}`}
+										}`}
 									>
 										<Mail size={14} /> E-mail
 									</button>
@@ -186,10 +187,11 @@ function ForgotPassword() {
 											setMethod("phone");
 											setErrors({});
 										}}
-										className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 active:scale-[0.99] cursor-pointer focus:outline-none ${method === "phone"
+										className={`flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 active:scale-[0.99] cursor-pointer focus:outline-none ${
+											method === "phone"
 												? "bg-white text-gray-900 shadow-sm font-semibold"
 												: "text-gray-500 hover:text-gray-900 hover:bg-gray-200/40"
-											}`}
+										}`}
 									>
 										<Phone size={14} /> Telefone / SMS
 									</button>

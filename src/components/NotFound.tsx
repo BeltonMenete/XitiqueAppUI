@@ -15,7 +15,10 @@ const IconShield = () => (
 		strokeWidth="2.25"
 		strokeLinecap="round"
 		strokeLinejoin="round"
+		aria-label="Shield icon"
+		role="img"
 	>
+		<title>Shield icon</title>
 		<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
 	</svg>
 );
@@ -31,7 +34,10 @@ const IconHome = () => (
 		strokeWidth="2.25"
 		strokeLinecap="round"
 		strokeLinejoin="round"
+		aria-label="Home icon"
+		role="img"
 	>
+		<title>Home icon</title>
 		<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
 		<polyline points="9 22 9 12 15 12 15 22" />
 	</svg>
@@ -48,7 +54,10 @@ const IconMessage = () => (
 		strokeWidth="2.25"
 		strokeLinecap="round"
 		strokeLinejoin="round"
+		aria-label="Message icon"
+		role="img"
 	>
+		<title>Message icon</title>
 		<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
 	</svg>
 );
@@ -64,7 +73,10 @@ const IconCompass = () => (
 		strokeWidth="2.25"
 		strokeLinecap="round"
 		strokeLinejoin="round"
+		aria-label="Compass icon"
+		role="img"
 	>
+		<title>Compass icon</title>
 		<circle cx="12" cy="12" r="10" />
 		<polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
 	</svg>
@@ -226,6 +238,7 @@ export default function NotFound() {
 			<footer className="relative z-20 pb-8 sm:pb-12 pt-2 transition-all duration-700 delay-100">
 				<div className="flex justify-center px-6">
 					<button
+						type="button"
 						onClick={handleHomePage}
 						className="group inline-flex items-center gap-3 px-8 py-4 bg-[#191c1b] rounded-xl border border-[#191c1b] shadow-lg shadow-black/10 transition-all duration-300 hover:bg-[#5fa088] hover:border-[#5fa088] hover:shadow-xl hover:shadow-[#80bea6]/30 active:scale-[0.98] cursor-pointer w-full sm:w-auto justify-center"
 					>

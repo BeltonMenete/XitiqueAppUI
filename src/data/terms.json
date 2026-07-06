@@ -1,20 +1,20 @@
 [
-  {
-    "id": "seguranca",
-    "title": "1. Proteção e Segurança",
-    "icon": "ShieldAlert",
-    "description": "O Xitique Digital assegura a encriptação total dos seus dados de poupança. É da responsabilidade do utilizador salvaguardar as suas credenciais de acesso e códigos OTP."
-  },
-  {
-    "id": "responsabilidade",
-    "title": "2. Gestão de Grupos (Organizadores)",
-    "icon": "FileText",
-    "description": "Ao criar uma Organização, o utilizador assume a inteira responsabilidade pela coordenação, registo e validação de depósitos efetuados por terceiros no grupo."
-  },
-  {
-    "id": "levantamentos",
-    "title": "3. Ciclos de Poupança e Ticantes",
-    "icon": "CheckCircle2",
-    "description": "As regras de periodicidade, metas diárias e prazos de levantamento estipulados no início de cada ciclo digital são finais e devem ser cumpridas conforme as políticas da plataforma."
-  }
+	{
+		"id": "seguranca",
+		"title": "1. Proteção e Segurança",
+		"icon": "ShieldAlert",
+		"description": "O Xitique Digital assegura a encriptação total dos seus dados de poupança. É da responsabilidade do utilizador salvaguardar as suas credenciais de acesso e códigos OTP."
+	},
+	{
+		"id": "responsabilidade",
+		"title": "2. Gestão de Grupos (Organizadores)",
+		"icon": "FileText",
+		"description": "Ao criar uma Organização, o utilizador assume a inteira responsabilidade pela coordenação, registo e validação de depósitos efetuados por terceiros no grupo."
+	},
+	{
+		"id": "levantamentos",
+		"title": "3. Ciclos de Poupança e Ticantes",
+		"icon": "CheckCircle2",
+		"description": "As regras de periodicidade, metas diárias e prazos de levantamento estipulados no início de cada ciclo digital são finais e devem ser cumpridas conforme as políticas da plataforma."
+	}
 ]

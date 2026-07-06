@@ -1,5 +1,6 @@
-export const APP_NAME = 'XITIQUE';
-export const APP_TAGLINE = 'Poupança digital, gestão simples e confiança para todos.';
+export const APP_NAME = "XITIQUE";
+export const APP_TAGLINE =
+  "Poupança digital, gestão simples e confiança para todos.";
 export const LOGIN_SUBMIT_DELAY = 1500;
 
 export const ANIMATION_DURATION = {
@@ -10,9 +11,9 @@ export const ANIMATION_DURATION = {
 } as const;
 
 export const UI_SIZES = {
-  CARD_RADIUS: 'rounded-2xl',
-  PANEL_RADIUS: 'rounded-3xl',
-  INPUT_HEIGHT: 'py-3.5',
+  CARD_RADIUS: "rounded-2xl",
+  PANEL_RADIUS: "rounded-3xl",
+  INPUT_HEIGHT: "py-3.5",
 } as const;
 
 export const FEATURE_FLAGS = {

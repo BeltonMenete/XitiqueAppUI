@@ -49,7 +49,8 @@ function ResetPassword() {
 
 		if (!token) {
 			setErrors({
-				password: "Sessão de redefinição inválida ou expirada. Volte a solicitar o código.",
+				password:
+					"Sessão de redefinição inválida ou expirada. Volte a solicitar o código.",
 			});
 			setIsShaking(true);
 			setTimeout(() => setIsShaking(false), 400);
@@ -73,7 +74,8 @@ function ResetPassword() {
 		} catch {
 			setIsLoading(false);
 			setErrors({
-				password: "Ocorreu um erro ao atualizar a palavra-passe. Tente novamente.",
+				password:
+					"Ocorreu um erro ao atualizar a palavra-passe. Tente novamente.",
 			});
 			setIsShaking(true);
 			setTimeout(() => setIsShaking(false), 400);
@@ -158,8 +160,8 @@ function ResetPassword() {
 											Definir nova palavra-passe
 										</h1>
 										<p className="text-gray-500 text-[11px]">
-											Escolha uma palavra-passe forte, com letras
-											maiúsculas, números e caracteres especiais.
+											Escolha uma palavra-passe forte, com letras maiúsculas,
+											números e caracteres especiais.
 										</p>
 									</div>
 
@@ -198,10 +200,11 @@ function ResetPassword() {
 										<div className="h-4 flex items-center pl-1 mt-1">
 											{/* Shake aplicado cirurgicamente apenas no texto de erro */}
 											<div
-												className={`text-[11px] transition-opacity duration-150 ${errors.password
-													? "opacity-100"
-													: "opacity-0 invisible"
-													} ${isShaking && errors.password ? "animate-shake-error" : ""}`}
+												className={`text-[11px] transition-opacity duration-150 ${
+													errors.password
+														? "opacity-100"
+														: "opacity-0 invisible"
+												} ${isShaking && errors.password ? "animate-shake-error" : ""}`}
 											>
 												<FormError message={errors.password || ""} />
 											</div>
@@ -222,10 +225,11 @@ function ResetPassword() {
 										<div className="h-4 flex items-center pl-1 mt-1">
 											{/* Shake aplicado cirurgicamente apenas no texto de erro */}
 											<div
-												className={`text-[11px] transition-opacity duration-150 ${errors.confirmPassword
-													? "opacity-100"
-													: "opacity-0 invisible"
-													} ${isShaking && errors.confirmPassword ? "animate-shake-error" : ""}`}
+												className={`text-[11px] transition-opacity duration-150 ${
+													errors.confirmPassword
+														? "opacity-100"
+														: "opacity-0 invisible"
+												} ${isShaking && errors.confirmPassword ? "animate-shake-error" : ""}`}
 											>
 												<FormError message={errors.confirmPassword || ""} />
 											</div>

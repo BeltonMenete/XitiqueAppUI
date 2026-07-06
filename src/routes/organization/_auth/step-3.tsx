@@ -63,13 +63,13 @@ function StepThree() {
 
 					<div className="space-y-3 mb-4">
 						{/* Plano Inicial */}
-						<div
+						<button
+							type="button"
 							onClick={() => setSelectedPlan("inicial")}
-							className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-								selectedPlan === "inicial"
-									? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-									: "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-							}`}
+							className={`relative w-full p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] text-left ${selectedPlan === "inicial"
+								? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+								: "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+								}`}
 						>
 							<div className="flex justify-between items-start">
 								<div>
@@ -98,16 +98,16 @@ function StepThree() {
 									Permite apenas <strong>1 colector</strong>
 								</span>
 							</div>
-						</div>
+						</button>
 
 						{/* Plano Pro */}
-						<div
+						<button
+							type="button"
 							onClick={() => setSelectedPlan("pro")}
-							className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-								selectedPlan === "pro"
-									? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-									: "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-							}`}
+							className={`relative w-full p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] text-left ${selectedPlan === "pro"
+								? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+								: "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+								}`}
 						>
 							<div className="absolute -top-2.5 right-4 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
 								Mais Popular
@@ -147,16 +147,16 @@ function StepThree() {
 									<span>SMS Ilimitados & Suporte Prioritário</span>
 								</div>
 							</div>
-						</div>
+						</button>
 
 						{/* Plano Enterprise */}
-						<div
+						<button
+							type="button"
 							onClick={() => setSelectedPlan("enterprise")}
-							className={`relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] ${
-								selectedPlan === "enterprise"
-									? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
-									: "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
-							}`}
+							className={`relative w-full p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer select-none active:scale-[0.99] text-left ${selectedPlan === "enterprise"
+								? "border-emerald-500 bg-emerald-50/40 shadow-md shadow-emerald-700/5 ring-1 ring-emerald-500/20"
+								: "border-gray-200 bg-white hover:border-emerald-200 hover:bg-gray-50/50"
+								}`}
 						>
 							<div className="flex justify-between items-start">
 								<div>
@@ -180,7 +180,7 @@ function StepThree() {
 								/>
 								<span>Colectores e clientes ilimitados</span>
 							</div>
-						</div>
+						</button>
 					</div>
 
 					{/* Slot de Erro estático anti-CLS */}
@@ -212,6 +212,6 @@ function StepThree() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 }
