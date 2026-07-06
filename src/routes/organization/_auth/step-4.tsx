@@ -193,12 +193,13 @@ function StepFour() {
 
 					<p className="text-center text-xs text-gray-400 mt-5 select-none">
 						Precisa de ajuda?{" "}
-						<a
-							href="#"
+						<button
+							type="button"
 							className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline focus:outline-none focus:underline transition-colors duration-200"
+							onClick={() => navigate({ to: "/organization/step-3" })}
 						>
 							Contactar Suporte
-						</a>
+						</button>
 					</p>
 				</div>
 			</div>
