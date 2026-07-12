@@ -24,10 +24,6 @@ const ResetPasswordSchema = v.object({
 			"A palavra-passe deve conter pelo menos uma letra maiúscula.",
 		),
 		v.regex(/[0-9]/, "A palavra-passe deve conter pelo menos um número."),
-		v.regex(
-			/[!@#$%^&*(),.?":{}|<>]/,
-			"A palavra-passe deve conter pelo menos um carácter especial.",
-		),
 	),
 	confirmPassword: v.string("Confirme a palavra-passe."),
 });

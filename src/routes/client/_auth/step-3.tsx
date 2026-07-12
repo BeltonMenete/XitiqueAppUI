@@ -11,8 +11,6 @@ import {
 	TrendingUp,
 } from "lucide-react";
 import { type FormEvent, useMemo, useState } from "react";
-import { ClientSidebar } from "#/components/ClientSidebar";
-import { FormError } from "#/components/FormError";
 import { APP_NAME } from "#/lib/constants";
 
 export const Route = createFileRoute("/client/_auth/step-3")({
@@ -107,7 +105,7 @@ function StepThreeCommitment() {
 			totalEstimated,
 			managerCommission,
 		});
-		navigate({ to: "/clients/step-4" });
+		navigate({ to: "/client/step-4" });
 	};
 
 	return (
@@ -194,11 +192,10 @@ function StepThreeCommitment() {
 								{/* Validação de Erro com Efeito de Transição da Rota Referenciada */}
 								<span
 									key={`text-${shakeKey}`}
-									className={`text-[10px] font-bold transition-all duration-300 ${
-										showError
-											? "opacity-100 translate-x-0 shake-text font-extrabold text-red-500"
-											: "opacity-0 translate-x-2 pointer-events-none text-gray-400"
-									}`}
+									className={`text-[10px] font-bold transition-all duration-300 ${showError
+										? "opacity-100 translate-x-0 shake-text font-extrabold text-red-500"
+										: "opacity-0 translate-x-2 pointer-events-none text-gray-400"
+										}`}
 								>
 									{errorMessage}
 								</span>
@@ -206,11 +203,10 @@ function StepThreeCommitment() {
 
 							{/* Input Wrapper com Contornos Dinâmicos com base em Estados */}
 							<div
-								className={`relative flex items-center rounded-xl border-2 transition-all duration-200 overflow-hidden focus-within:border-2 focus-within:bg-white ${
-									showError
-										? "border-red-500 bg-red-50/30 focus-within:border-red-500"
-										: "border-gray-300 bg-white focus-within:border-emerald-500"
-								}`}
+								className={`relative flex items-center rounded-xl border-2 transition-all duration-200 overflow-hidden focus-within:border-2 focus-within:bg-white ${showError
+									? "border-red-500 bg-red-50/30 focus-within:border-red-500"
+									: "border-gray-300 bg-white focus-within:border-emerald-500"
+									}`}
 							>
 								<span className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 font-bold text-sm tracking-wide select-none">
 									MZN
@@ -288,7 +284,7 @@ function StepThreeCommitment() {
 						<div className="mt-4 flex flex-col sm:flex-row gap-2 pt-1">
 							<button
 								type="button"
-								onClick={() => navigate({ to: "/clients/step-2" })}
+								onClick={() => navigate({ to: "/client/step-2" })}
 								className="flex-1 px-4 py-3 border-2 border-emerald-600 text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-colors flex items-center justify-center gap-1.5 active:scale-[0.98] text-xs focus:outline-none"
 							>
 								<ArrowLeft size={14} />

@@ -14,7 +14,6 @@ import {
 	UserCheck,
 } from "lucide-react";
 import { type FormEvent, useState } from "react";
-import { ClientSidebar } from "#/components/ClientSidebar";
 import { APP_NAME } from "#/lib/constants";
 
 export const Route = createFileRoute("/client/_auth/step-4")({
@@ -46,7 +45,7 @@ function StepFourReview() {
 		try {
 			console.log("Registo finalizado:", mockData);
 			// Avança para o ecrã final de sucesso (Passo 5)
-			navigate({ to: "/clients/step-5" });
+			navigate({ to: "/client/step-5" });
 		} catch (error) {
 			console.error("Erro ao finalizar:", error);
 		} finally {
@@ -56,23 +55,20 @@ function StepFourReview() {
 
 	return (
 		<div className="h-screen max-h-screen w-screen flex overflow-hidden bg-white selection:bg-emerald-900/10 font-sans">
-			<div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-10 bg-slate-50 h-full overflow-y-auto relative">
-				{/* Cabeçalho Superior Minimalista */}
-				<div className="flex justify-between items-center w-full max-w-md mx-auto">
+			<div className="w-full lg:w-1/2 flex flex-col justify-between p-4 sm:p-8 bg-gray-50/50 h-full overflow-y-auto relative">
+				{/* Cabeçalho Utilitário Superior */}
+				<div className="flex justify-between items-center w-full max-w-md mx-auto pt-1">
 					<div className="flex items-center gap-2 select-none">
 						<img
 							alt="Xitique Logo"
-							className="w-7 h-7 object-contain"
+							className="w-8 h-8 object-contain"
 							src="/xitique-logo.svg"
 						/>
-						<span className="text-base font-bold text-gray-950 tracking-tight">
+						<span className="text-lg font-bold text-gray-900 tracking-tight">
 							{APP_NAME}
 						</span>
 					</div>
 					<div className="flex items-center gap-3">
-						<span className="text-[10px] font-bold text-emerald-700 tracking-wider uppercase bg-emerald-50 px-2 py-0.5 rounded-md select-none">
-							Passo 4 de 5
-						</span>
 						<button
 							type="button"
 							className="text-gray-400 hover:text-emerald-700 transition-colors"
@@ -89,9 +85,25 @@ function StepFourReview() {
 				</div>
 
 				{/* Bloco Central - Foco Total na Revisão Limpa */}
-				<div className="w-full max-w-md mx-auto my-auto py-6 animate-in fade-in slide-in-from-bottom-3 duration-500">
-					<header className="mb-6 select-none">
-						<h1 className="text-xl font-bold text-gray-900 mb-1.5 tracking-tight">
+				<div className="w-full max-w-md mx-auto my-auto py-2 transition-all ease-out animate-in fade-in slide-in-from-bottom-3 duration-500">
+					{/* Indicador de Etapas (Stepper) */}
+					<div className="flex items-center justify-between mb-1 select-none">
+						<span className="text-[11px] font-extrabold text-emerald-700 tracking-wider">
+							PASSO 4 DE 5
+						</span>
+						<span className="text-[11px] text-gray-400 font-medium">
+							Revisão Final
+						</span>
+					</div>
+					<div className="w-full bg-gray-200 rounded-full h-1 mb-4 overflow-hidden">
+						<div
+							className="bg-emerald-500 h-1 rounded-full transition-all duration-500 ease-out shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+							style={{ width: "80%" }}
+						/>
+					</div>
+
+					<header className="mb-4 select-none">
+						<h1 className="text-xl font-bold text-gray-900 mb-1 tracking-tight">
 							Confirme os seus dados
 						</h1>
 						<p className="text-xs text-gray-500 leading-relaxed">
@@ -235,7 +247,7 @@ function StepFourReview() {
 
 							<button
 								type="button"
-								onClick={() => navigate({ to: "/clients/step-3" })}
+								onClick={() => navigate({ to: "/client/step-3" })}
 								className="w-full py-2 text-xs font-semibold text-gray-500 hover:text-emerald-700 flex items-center justify-center gap-1 group transition-colors"
 							>
 								<ArrowLeft
@@ -248,23 +260,22 @@ function StepFourReview() {
 					</form>
 				</div>
 
-				{/* Rodapé de Segurança Compacto */}
-				<div className="pt-4 border-t border-gray-200/50 text-center w-full max-w-sm mx-auto select-none space-y-3">
-					<p className="text-[9px] text-gray-400 leading-relaxed">
-						Ao concluir, confirma a veracidade dos dados e aceita os termos de
-						segurança do Xitique Digital. Os seus fundos são protegidos por
-						encriptação ponta-a-ponta.
-					</p>
-					<div className="flex justify-center gap-5 text-gray-400">
-						<div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider">
-							<Landmark size={12} className="text-emerald-600" />
+				{/* Rodapé de Segurança Integrado */}
+				<div className="pt-2 border-t border-gray-200/60 text-center w-full max-w-sm mx-auto">
+					<div className="flex justify-center gap-x-6 gap-y-1 mb-2">
+						<div className="flex items-center gap-1 text-[9px] font-bold text-gray-400 uppercase tracking-wider">
+							<ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
 							Ambiente Seguro
 						</div>
-						<div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider">
-							<ShieldCheck size={12} className="text-emerald-600" />
-							Dados Protegidos
+						<div className="flex items-center gap-1 text-[9px] font-bold text-gray-400 uppercase tracking-wider">
+							<Landmark className="h-3.5 w-3.5 text-emerald-500" />
+							Banco Registrado
 						</div>
 					</div>
+					<p className="text-[8px] text-gray-400 tracking-widest uppercase">
+						© {new Date().getFullYear()} XITIQUE DIGITAL. TODOS OS DIREITOS
+						RESERVADOS.
+					</p>
 				</div>
 			</div>
 		</div>
