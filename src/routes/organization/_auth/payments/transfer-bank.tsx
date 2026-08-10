@@ -5,7 +5,6 @@ import {
 	CheckCircle2,
 	Copy,
 	Info,
-	Landmark,
 	Lock,
 	Send,
 	Shield,
@@ -201,11 +200,10 @@ function RouteComponent() {
 								Anexar Comprovativo Bancário
 							</label>
 							<div
-								className={`border-2 border-dashed rounded-xl p-5 flex flex-col items-center justify-center bg-white transition-all duration-200 group cursor-pointer ${
-									selectedFile
+								className={`border-2 border-dashed rounded-xl p-5 flex flex-col items-center justify-center bg-white transition-all duration-200 group cursor-pointer ${selectedFile
 										? "border-[#10B981] bg-[#10B981]/5"
 										: "border-[#bfc9c3] hover:border-[#404944] hover:bg-[#eceeeb]/30"
-								}`}
+									}`}
 							>
 								<input
 									accept="image/*,application/pdf"
@@ -219,9 +217,8 @@ function RouteComponent() {
 									className="flex flex-col items-center cursor-pointer w-full text-center select-none"
 								>
 									<UploadCloud
-										className={`h-7 w-7 mb-1.5 transition-transform duration-200 group-hover:scale-105 ${
-											selectedFile ? "text-[#10B981]" : "text-gray-400"
-										}`}
+										className={`h-7 w-7 mb-1.5 transition-transform duration-200 group-hover:scale-105 ${selectedFile ? "text-[#10B981]" : "text-gray-400"
+											}`}
 									/>
 									{selectedFile ? (
 										<div className="space-y-0.5">

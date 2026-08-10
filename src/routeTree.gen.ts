@@ -12,6 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OrganizationAuthRouteImport } from './routes/organization/_auth'
+import { Route as DashboardSaversRouteImport } from './routes/dashboard/savers'
+import { Route as DashboardOverviewRouteImport } from './routes/dashboard/overview'
+import { Route as DashboardCollectorsRouteImport } from './routes/dashboard/collectors'
 import { Route as ClientAuthRouteImport } from './routes/client/_auth'
 import { Route as AuthTermsRouteImport } from './routes/_auth/terms'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
@@ -23,6 +26,7 @@ import { Route as OrganizationAuthStep4RouteImport } from './routes/organization
 import { Route as OrganizationAuthStep3RouteImport } from './routes/organization/_auth/step-3'
 import { Route as OrganizationAuthStep2RouteImport } from './routes/organization/_auth/step-2'
 import { Route as OrganizationAuthStep1RouteImport } from './routes/organization/_auth/step-1'
+import { Route as DashboardSaversIdRouteImport } from './routes/dashboard/savers.$id'
 import { Route as ClientAuthStep5RouteImport } from './routes/client/_auth/step-5'
 import { Route as ClientAuthStep4RouteImport } from './routes/client/_auth/step-4'
 import { Route as ClientAuthStep3RouteImport } from './routes/client/_auth/step-3'
@@ -48,6 +52,21 @@ const OrganizationAuthRoute = OrganizationAuthRouteImport.update({
   id: '/organization/_auth',
   path: '/organization',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardSaversRoute = DashboardSaversRouteImport.update({
+  id: '/savers',
+  path: '/savers',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardOverviewRoute = DashboardOverviewRouteImport.update({
+  id: '/overview',
+  path: '/overview',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCollectorsRoute = DashboardCollectorsRouteImport.update({
+  id: '/collectors',
+  path: '/collectors',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const ClientAuthRoute = ClientAuthRouteImport.update({
   id: '/client/_auth',
@@ -103,6 +122,11 @@ const OrganizationAuthStep1Route = OrganizationAuthStep1RouteImport.update({
   id: '/step-1',
   path: '/step-1',
   getParentRoute: () => OrganizationAuthRoute,
+} as any)
+const DashboardSaversIdRoute = DashboardSaversIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardSaversRoute,
 } as any)
 const ClientAuthStep5Route = ClientAuthStep5RouteImport.update({
   id: '/step-5',
@@ -161,13 +185,16 @@ const OrganizationAuthPaymentsBankRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
   '/reset': typeof AuthResetRoute
   '/signup': typeof AuthSignupRoute
   '/terms': typeof AuthTermsRoute
   '/client': typeof ClientAuthRouteWithChildren
+  '/dashboard/collectors': typeof DashboardCollectorsRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/savers': typeof DashboardSaversRouteWithChildren
   '/organization': typeof OrganizationAuthRouteWithChildren
   '/client/step-0': typeof ClientAuthStep0Route
   '/client/step-1': typeof ClientAuthStep1Route
@@ -175,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/client/step-3': typeof ClientAuthStep3Route
   '/client/step-4': typeof ClientAuthStep4Route
   '/client/step-5': typeof ClientAuthStep5Route
+  '/dashboard/savers/$id': typeof DashboardSaversIdRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
   '/organization/step-2': typeof OrganizationAuthStep2Route
   '/organization/step-3': typeof OrganizationAuthStep3Route
@@ -187,13 +215,16 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
   '/reset': typeof AuthResetRoute
   '/signup': typeof AuthSignupRoute
   '/terms': typeof AuthTermsRoute
   '/client': typeof ClientAuthRouteWithChildren
+  '/dashboard/collectors': typeof DashboardCollectorsRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/savers': typeof DashboardSaversRouteWithChildren
   '/organization': typeof OrganizationAuthRouteWithChildren
   '/client/step-0': typeof ClientAuthStep0Route
   '/client/step-1': typeof ClientAuthStep1Route
@@ -201,6 +232,7 @@ export interface FileRoutesByTo {
   '/client/step-3': typeof ClientAuthStep3Route
   '/client/step-4': typeof ClientAuthStep4Route
   '/client/step-5': typeof ClientAuthStep5Route
+  '/dashboard/savers/$id': typeof DashboardSaversIdRoute
   '/organization/step-1': typeof OrganizationAuthStep1Route
   '/organization/step-2': typeof OrganizationAuthStep2Route
   '/organization/step-3': typeof OrganizationAuthStep3Route
@@ -214,13 +246,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/_auth/forgot': typeof AuthForgotRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/reset': typeof AuthResetRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/_auth/terms': typeof AuthTermsRoute
   '/client/_auth': typeof ClientAuthRouteWithChildren
+  '/dashboard/collectors': typeof DashboardCollectorsRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/savers': typeof DashboardSaversRouteWithChildren
   '/organization/_auth': typeof OrganizationAuthRouteWithChildren
   '/client/_auth/step-0': typeof ClientAuthStep0Route
   '/client/_auth/step-1': typeof ClientAuthStep1Route
@@ -228,6 +263,7 @@ export interface FileRoutesById {
   '/client/_auth/step-3': typeof ClientAuthStep3Route
   '/client/_auth/step-4': typeof ClientAuthStep4Route
   '/client/_auth/step-5': typeof ClientAuthStep5Route
+  '/dashboard/savers/$id': typeof DashboardSaversIdRoute
   '/organization/_auth/step-1': typeof OrganizationAuthStep1Route
   '/organization/_auth/step-2': typeof OrganizationAuthStep2Route
   '/organization/_auth/step-3': typeof OrganizationAuthStep3Route
@@ -249,6 +285,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms'
     | '/client'
+    | '/dashboard/collectors'
+    | '/dashboard/overview'
+    | '/dashboard/savers'
     | '/organization'
     | '/client/step-0'
     | '/client/step-1'
@@ -256,6 +295,7 @@ export interface FileRouteTypes {
     | '/client/step-3'
     | '/client/step-4'
     | '/client/step-5'
+    | '/dashboard/savers/$id'
     | '/organization/step-1'
     | '/organization/step-2'
     | '/organization/step-3'
@@ -275,6 +315,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms'
     | '/client'
+    | '/dashboard/collectors'
+    | '/dashboard/overview'
+    | '/dashboard/savers'
     | '/organization'
     | '/client/step-0'
     | '/client/step-1'
@@ -282,6 +325,7 @@ export interface FileRouteTypes {
     | '/client/step-3'
     | '/client/step-4'
     | '/client/step-5'
+    | '/dashboard/savers/$id'
     | '/organization/step-1'
     | '/organization/step-2'
     | '/organization/step-3'
@@ -301,6 +345,9 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/_auth/terms'
     | '/client/_auth'
+    | '/dashboard/collectors'
+    | '/dashboard/overview'
+    | '/dashboard/savers'
     | '/organization/_auth'
     | '/client/_auth/step-0'
     | '/client/_auth/step-1'
@@ -308,6 +355,7 @@ export interface FileRouteTypes {
     | '/client/_auth/step-3'
     | '/client/_auth/step-4'
     | '/client/_auth/step-5'
+    | '/dashboard/savers/$id'
     | '/organization/_auth/step-1'
     | '/organization/_auth/step-2'
     | '/organization/_auth/step-3'
@@ -321,7 +369,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRouteRoute: typeof DashboardRouteRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   AuthForgotRoute: typeof AuthForgotRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetRoute: typeof AuthResetRoute
@@ -353,6 +401,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/organization'
       preLoaderRoute: typeof OrganizationAuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/savers': {
+      id: '/dashboard/savers'
+      path: '/savers'
+      fullPath: '/dashboard/savers'
+      preLoaderRoute: typeof DashboardSaversRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/overview': {
+      id: '/dashboard/overview'
+      path: '/overview'
+      fullPath: '/dashboard/overview'
+      preLoaderRoute: typeof DashboardOverviewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/collectors': {
+      id: '/dashboard/collectors'
+      path: '/collectors'
+      fullPath: '/dashboard/collectors'
+      preLoaderRoute: typeof DashboardCollectorsRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/client/_auth': {
       id: '/client/_auth'
@@ -431,6 +500,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationAuthStep1RouteImport
       parentRoute: typeof OrganizationAuthRoute
     }
+    '/dashboard/savers/$id': {
+      id: '/dashboard/savers/$id'
+      path: '/$id'
+      fullPath: '/dashboard/savers/$id'
+      preLoaderRoute: typeof DashboardSaversIdRouteImport
+      parentRoute: typeof DashboardSaversRoute
+    }
     '/client/_auth/step-5': {
       id: '/client/_auth/step-5'
       path: '/step-5'
@@ -504,6 +580,34 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DashboardSaversRouteChildren {
+  DashboardSaversIdRoute: typeof DashboardSaversIdRoute
+}
+
+const DashboardSaversRouteChildren: DashboardSaversRouteChildren = {
+  DashboardSaversIdRoute: DashboardSaversIdRoute,
+}
+
+const DashboardSaversRouteWithChildren = DashboardSaversRoute._addFileChildren(
+  DashboardSaversRouteChildren,
+)
+
+interface DashboardRouteRouteChildren {
+  DashboardCollectorsRoute: typeof DashboardCollectorsRoute
+  DashboardOverviewRoute: typeof DashboardOverviewRoute
+  DashboardSaversRoute: typeof DashboardSaversRouteWithChildren
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardCollectorsRoute: DashboardCollectorsRoute,
+  DashboardOverviewRoute: DashboardOverviewRoute,
+  DashboardSaversRoute: DashboardSaversRouteWithChildren,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
 interface ClientAuthRouteChildren {
   ClientAuthStep0Route: typeof ClientAuthStep0Route
   ClientAuthStep1Route: typeof ClientAuthStep1Route
@@ -556,7 +660,7 @@ const OrganizationAuthRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRouteRoute: DashboardRouteRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   AuthForgotRoute: AuthForgotRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthResetRoute: AuthResetRoute,

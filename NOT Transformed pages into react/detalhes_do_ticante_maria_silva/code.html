@@ -1,0 +1,420 @@
+<!DOCTYPE html><html class="light" lang="pt-MZ"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .xitique-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+        .stamp-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .stamp-effect::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 4px 4px;
+            pointer-events: none;
+        }
+        .active-tab-indicator {
+            view-transition-name: active-tab;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#565e74",
+                        "surface-light-gray": "#F1F5F9",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-container-high": "#e7e9e5",
+                        "on-primary-container": "#80bea6",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#bfc9c3",
+                        "on-tertiary": "#ffffff",
+                        "status-info": "#3B82F6",
+                        "surface-container-highest": "#e1e3e0",
+                        "surface-variant": "#e1e3e0",
+                        "on-tertiary-container": "#ea9e93",
+                        "surface-dim": "#d8dbd7",
+                        "on-tertiary-fixed-variant": "#6e372f",
+                        "accent-gold": "#F59E0B",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#404944",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#5c647a",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#6b342d",
+                        "surface-container-low": "#f2f4f1",
+                        "status-success": "#10B981",
+                        "background": "#f8faf6",
+                        "surface-container": "#eceeeb",
+                        "surface-tint": "#2b6954",
+                        "surface": "#f8faf6",
+                        "tertiary-fixed": "#ffdad5",
+                        "tertiary-fixed-dim": "#ffb4a9",
+                        "primary": "#003527",
+                        "inverse-primary": "#95d3ba",
+                        "accent-orange": "#EA580C",
+                        "tertiary": "#4f1f19",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "outline": "#707974",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "status-warning": "#FBBF24",
+                        "inverse-on-surface": "#eff1ee",
+                        "on-tertiary-fixed": "#380d08",
+                        "inverse-surface": "#2e312f",
+                        "on-primary-fixed": "#002117",
+                        "status-error": "#EF4444",
+                        "surface-off-white": "#F8FAFC",
+                        "primary-fixed": "#b0f0d6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8faf6",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "secondary-container": "#dae2fd",
+                        "on-background": "#191c1b",
+                        "on-surface": "#191c1b",
+                        "primary-fixed-dim": "#95d3ba",
+                        "primary-container": "#064e3b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "xs": "4px",
+                        "base": "4px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "gutter": "16px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "display-hero": ["Montserrat"],
+                        "data-mono": ["JetBrains Mono"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "body-md": ["Inter"],
+                        "label-status": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "headline-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-hero": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-status": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-lg py-sm max-w-container-max mx-auto bg-surface-bright shadow-sm">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md font-bold text-primary">Xitique Manager</span>
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-md py-xs border border-outline-variant">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-64" placeholder="Pesquisar cliente..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-xs px-sm py-xs bg-surface-container rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="font-label-status text-label-status text-on-surface-variant">Seletor de Organização</span>
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</button>
+<div class="flex gap-sm">
+<span class="material-symbols-outlined p-xs rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors cursor-pointer">notifications</span>
+<span class="material-symbols-outlined p-xs rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors cursor-pointer">settings</span>
+</div>
+<img alt="User Profile Avatar" class="w-10 h-10 rounded-full border-2 border-primary-fixed" data-alt="A professional headshot of a female financial administrator in Mozambique. She is wearing a modern blazer with subtle African print accents. The background is a brightly lit, minimalist office space with soft daylight. The image has a clean, high-key light-mode aesthetic with rich colors and professional focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrNxRnmDbmvFxwQhF3X90cANO2LKAARs_dNWZf7BDIOVjBznKRmNS52PU5nQFkpmcVYgwZuPUIWF01UFysEe_cvMEoWhV6P_hBCaEaBbbjeAknmGbKsYe1swhV3s-EfMDS7JQW75Wv6GffSzZk3PyTblIo0TgXv2L4ucfKAl0edBoRSYdmsmRiYsF4I0bkvb2F8kWVEXptUh52Q0icNBESU-zszJiNbj5vu6mJk3uJz0srhfKj58qUHGA1kgtbZqhYPjjmwdZDqLOq">
+</div>
+</header>
+<div class="max-w-container-max mx-auto flex min-h-[calc(100vh-64px)]">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col w-64 p-md space-y-sm bg-surface-container border-r border-outline-variant">
+<div class="flex items-center gap-sm mb-lg">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<h2 class="font-headline-md text-label-status text-primary font-bold">Xitique MZ</h2>
+<p class="text-xs text-on-surface-variant">Painel de Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-xs">
+<a class="flex items-center gap-sm px-md py-sm text-secondary hover:bg-surface-container-high rounded-lg transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-status text-label-status">Painel</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-status text-label-status">Gestão</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-secondary hover:bg-surface-container-high rounded-lg transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-status text-label-status">Finanças</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-secondary hover:bg-surface-container-high rounded-lg transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-status text-label-status">Relatórios</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-secondary hover:bg-surface-container-high rounded-lg transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-status text-label-status">Definições</span>
+</a>
+</nav>
+<button class="w-full py-md bg-primary text-white rounded-xl font-bold flex items-center justify-center gap-sm shadow-lg hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">add_circle</span>
+                Nova Recolha
+            </button>
+<div class="pt-lg border-t border-outline-variant space-y-xs">
+<a class="flex items-center gap-sm px-md py-sm text-secondary hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-status text-label-status">Suporte</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-secondary hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-status text-label-status">Sair</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 p-lg overflow-y-auto">
+<!-- Breadcrumbs & Actions -->
+<div class="flex justify-between items-center mb-lg">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined">arrow_back</span>
+<span class="font-label-status text-label-status">Gestão / Clientes / Maria Silva</span>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-xs border border-primary text-primary rounded-lg font-bold text-label-status hover:bg-primary-fixed transition-colors">
+                        Imprimir Cartão
+                    </button>
+<button class="px-md py-xs bg-status-info text-white rounded-lg font-bold text-label-status shadow-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">share</span> WhatsApp
+                    </button>
+</div>
+</div>
+<!-- Client Header Card -->
+<div class="bg-surface-bright rounded-xl shadow-sm p-lg border-l-4 border-status-success mb-lg">
+<div class="flex flex-col md:flex-row gap-lg items-start md:items-center">
+<div class="relative">
+<img alt="Maria Silva Profile" class="w-24 h-24 rounded-2xl object-cover border-4 border-surface-container" data-alt="Detailed portrait of a smiling Mozambican market woman named Maria Silva. She wears a vibrant orange and teal Capulana headwrap. The photography style is sharp with high contrast, natural outdoor lighting, and a soft blurred background of a local market scene, conveying community trust and financial success." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVxRsgbKKO_bF-74rREMMYaVkU_VhML_1bVHEyUQv_yyAxxTTvuqD4d5rO6D70qJ559AS1ErdLQ4b1fHYpPCBQqEC3ckUS9TIfIL-Wixt4svteElAJCHBDs2BbnKwRKlh3iu8Jk4r3oxJmrPUkK_RLvN-Jm2qRjFP9SD1J2BH-Z_sQ16RGlcxplvXt_c9qIPiML2CmQKQ8-kgwt_F5QquZHwNlgNFinJ6e0zsyd5Q03yMMMONhQGyuvdFBuI67IN59G6kCzgoGrAWm">
+<span class="absolute -bottom-2 -right-2 bg-status-success text-white px-xs rounded-lg text-[10px] font-bold uppercase tracking-wider border-2 border-surface-bright">Ativo</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<h1 class="font-headline-md text-headline-md text-primary">Detalhes do Ticante - Maria Silva</h1>
+<span class="bg-surface-container text-on-surface-variant px-sm py-xs rounded-full text-xs font-bold font-data-mono">ID: MZ-09442</span>
+</div>
+<div class="flex flex-wrap gap-md">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-outline text-[20px]">location_on</span>
+<span class="text-body-sm text-on-surface-variant">Mercado Central, Maputo</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-outline text-[20px]">phone</span>
+<span class="text-body-sm text-on-surface-variant">+258 84 123 4567</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-md w-full md:w-auto">
+<div class="bg-surface-off-white p-sm rounded-lg border border-outline-variant text-center min-w-[100px]">
+<p class="text-[10px] uppercase font-bold text-outline tracking-wider mb-xs">Taxa/Dia</p>
+<p class="font-data-mono text-primary font-bold">500 <span class="text-[10px]">MZN</span></p>
+</div>
+<div class="bg-primary-container/10 p-sm rounded-lg border border-primary-container text-center min-w-[100px]">
+<p class="text-[10px] uppercase font-bold text-on-primary-container tracking-wider mb-xs">Poupado</p>
+<p class="font-data-mono text-status-success font-bold">9.000 <span class="text-[10px]">MZN</span></p>
+</div>
+<div class="bg-error-container p-sm rounded-lg border border-status-error text-center min-w-[100px]">
+<p class="text-[10px] uppercase font-bold text-on-error-container tracking-wider mb-xs">Dívida</p>
+<p class="font-data-mono text-status-error font-bold">2.200 <span class="text-[10px]">MZN</span></p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tab Navigation -->
+<div class="flex border-b border-outline-variant mb-lg overflow-x-auto whitespace-nowrap">
+<button class="px-lg py-md text-primary font-bold border-b-2 border-primary active-tab-indicator flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+                    Cartão Digital
+                </button>
+<button class="px-lg py-md text-on-surface-variant hover:text-primary transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+                    Extrato
+                </button>
+<button class="px-lg py-md text-on-surface-variant hover:text-primary transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+                    Empréstimos
+                </button>
+<button class="px-lg py-md text-on-surface-variant hover:text-primary transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">history</span>
+                    Histórico
+                </button>
+</div>
+<!-- Dashboard Content -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Main Grid Section -->
+<div class="lg:col-span-8">
+<div class="bg-surface-bright rounded-xl shadow-sm p-lg border border-outline-variant">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-headline-md text-body-lg text-primary flex items-center gap-sm">
+                                Ciclo Atual: Outubro 2023 
+                                <span class="bg-surface-container-high text-on-surface-variant px-sm py-1 rounded-lg text-xs font-bold">DIA 18/30</span>
+</h3>
+<div class="flex items-center gap-md text-xs">
+<div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-status-info"></span> Pago</div>
+<div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-surface-container-highest"></span> Aberto</div>
+<div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-accent-orange"></span> Comissão</div>
+<div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-status-success"></span> Confirmado</div>
+</div>
+</div>
+<div class="xitique-grid">
+<!-- Generation logic for the 30-day grid -->
+<script>
+                                for(let i=1; i<=30; i++) {
+                                    let stateClass = "bg-surface-container-highest border-outline-variant text-outline";
+                                    let label = i;
+                                    let icon = "";
+                                    
+                                    if(i <= 14) {
+                                        stateClass = "bg-status-info/10 border-status-info text-status-info stamp-effect";
+                                        icon = "close"; // The 'X'
+                                    } else if(i === 15) {
+                                        stateClass = "bg-accent-orange/10 border-accent-orange text-accent-orange";
+                                        icon = "copyright"; // The 'C'
+                                    } else if(i === 16 || i === 17) {
+                                        stateClass = "bg-status-success/10 border-status-success text-status-success";
+                                        icon = "check"; // The 'P'
+                                    } else if(i === 18) {
+                                        stateClass = "bg-surface-bright border-2 border-primary ring-2 ring-primary/20 text-primary animate-pulse";
+                                    }
+
+                                    document.write(`
+                                        <div class="aspect-square flex flex-col items-center justify-center rounded-lg border-2 transition-all cursor-pointer hover:scale-105 ${stateClass}">
+                                            <span class="text-[10px] font-bold mb-xs">${label}</span>
+                                            <span class="material-symbols-outlined text-[20px] font-bold">${icon}</span>
+                                        </div>
+                                    `);
+                                }
+                            </script>
+</div>
+<div class="mt-lg p-md bg-surface-container-low rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-status-info flex items-center justify-center text-white text-xs border-2 border-surface-bright">X</div>
+<div class="w-8 h-8 rounded-full bg-status-success flex items-center justify-center text-white text-xs border-2 border-surface-bright">P</div>
+<div class="w-8 h-8 rounded-full bg-accent-orange flex items-center justify-center text-white text-xs border-2 border-surface-bright">C</div>
+</div>
+<p class="text-body-sm text-on-surface-variant italic">Legenda: Pago, Confirmado, Comissão do Coletor.</p>
+</div>
+<span class="font-data-mono text-sm text-primary font-bold">Total Ciclo: 15.000 MZN</span>
+</div>
+</div>
+</div>
+<!-- Sidebar Actions -->
+<div class="lg:col-span-4 space-y-md">
+<div class="bg-surface-bright rounded-xl shadow-sm p-lg border border-outline-variant">
+<h4 class="font-headline-md text-label-status text-primary mb-md uppercase tracking-widest">Ações Rápidas</h4>
+<div class="space-y-sm">
+<button class="w-full flex items-center justify-between p-md bg-surface-container-low hover:bg-surface-container-high rounded-xl transition-all group">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary group-hover:rotate-12 transition-transform">task_alt</span>
+<span class="font-label-status text-label-status">Fechar Ciclo</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-md bg-surface-container-low hover:bg-surface-container-high rounded-xl transition-all group">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform">forward_10</span>
+<span class="font-label-status text-label-status">Transportar Dias</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-md bg-primary/10 hover:bg-primary/20 rounded-xl transition-all group">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">add_card</span>
+<span class="font-label-status text-label-status text-primary font-bold">Novo Empréstimo</span>
+</div>
+<span class="material-symbols-outlined text-primary">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Statistics / Trends -->
+<div class="bg-surface-bright rounded-xl shadow-sm p-lg border border-outline-variant">
+<h4 class="font-headline-md text-label-status text-primary mb-md uppercase tracking-widest">Desempenho</h4>
+<div class="space-y-md">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Meta do Mês</span>
+<span class="font-bold text-primary">60%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-status-success h-full w-[60%] rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center gap-md p-sm bg-status-warning/10 rounded-lg border border-status-warning/20">
+<span class="material-symbols-outlined text-status-warning">warning</span>
+<p class="text-xs text-on-surface-variant font-medium">Maria tem 4 dias em atraso. Enviar lembrete via SMS?</p>
+</div>
+</div>
+</div>
+<!-- Monthly Stamp -->
+<div class="relative overflow-hidden bg-primary p-lg rounded-xl text-white shadow-lg">
+<div class="absolute -right-4 -top-4 opacity-20">
+<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="text-[10px] uppercase font-bold tracking-[0.2em] mb-xs opacity-80">Sync Status</p>
+<h5 class="font-headline-md text-headline-md mb-xs">Dados Sincronizados</h5>
+<p class="text-xs opacity-70 mb-md">Última atualização: Hoje, 14:32</p>
+<div class="flex items-center gap-sm">
+<span class="bg-white/20 px-sm py-1 rounded text-[10px] font-bold">OFFLINE READY</span>
+<span class="bg-status-success px-sm py-1 rounded text-[10px] font-bold">SECURE</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- WhatsApp Support FAB -->
+<button class="fixed bottom-lg right-lg w-14 h-14 bg-status-success text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 z-[100]">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">forum</span>
+<span class="absolute -top-1 -right-1 w-5 h-5 bg-status-error border-2 border-white rounded-full flex items-center justify-center text-[10px] font-bold">1</span>
+</button>
+<script>
+    document.querySelectorAll('.xitique-grid div').forEach(slot => {
+        slot.addEventListener('click', function() {
+            this.classList.toggle('scale-110');
+            setTimeout(() => this.classList.toggle('scale-110'), 200);
+        });
+    });
+</script>
+</body></html>

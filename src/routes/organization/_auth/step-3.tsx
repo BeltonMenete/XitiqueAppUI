@@ -3,8 +3,6 @@ import {
 	ArrowLeft,
 	ArrowRight,
 	CheckCircle2,
-	Landmark,
-	Shield,
 } from "lucide-react";
 import { type SyntheticEvent, useState } from "react";
 import { FormError } from "#/components/FormError";
@@ -195,6 +193,7 @@ function StepThree() {
 					{/* Botões de Ação */}
 					<div className="flex flex-col space-y-2.5">
 						<button
+							type="button"
 							onClick={handleSubmit}
 							className="group/btn w-full bg-emerald-600 hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-700/10 text-white font-bold py-3.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 active:scale-[0.98] text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
 						>
@@ -203,6 +202,7 @@ function StepThree() {
 						</button>
 
 						<button
+							type="button"
 							onClick={() => navigate({ to: "/organization/step-2" })}
 							className="group/back w-full border border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400 hover:shadow-sm text-gray-600 font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 text-sm active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
 						>

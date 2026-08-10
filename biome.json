@@ -12,7 +12,12 @@
 			"**/.vscode/**/*",
 			"**/index.html",
 			"**/vite.config.ts",
-			"!**/src/styles.css"
+			"!**/src/styles.css",
+			"!**/routeTree.gen.ts",
+			"!**/src/routes/_auth",
+			"!**/src/routes/client/_auth",
+			"!**/src/routes/organization/_auth",
+			"!**/src/routes/organization/payments"
 		]
 	},
 	"formatter": {

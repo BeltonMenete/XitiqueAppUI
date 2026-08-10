@@ -1,0 +1,297 @@
+<!DOCTYPE html><html lang="pt-MZ" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Gestão de Cobradores - Xitique Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffdad5",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#4f1f19",
+                        "surface-off-white": "#F8FAFC",
+                        "status-success": "#10B981",
+                        "outline": "#707974",
+                        "inverse-primary": "#95d3ba",
+                        "on-tertiary-fixed-variant": "#6e372f",
+                        "accent-gold": "#F59E0B",
+                        "on-primary-fixed": "#002117",
+                        "surface-variant": "#e1e3e0",
+                        "surface": "#f8faf6",
+                        "inverse-surface": "#2e312f",
+                        "on-secondary-fixed": "#131b2e",
+                        "status-error": "#EF4444",
+                        "accent-orange": "#EA580C",
+                        "primary-fixed-dim": "#95d3ba",
+                        "surface-container-high": "#e7e9e5",
+                        "surface-container": "#eceeeb",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#5c647a",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-background": "#191c1b",
+                        "surface-container-low": "#f2f4f1",
+                        "surface-light-gray": "#F1F5F9",
+                        "on-tertiary-fixed": "#380d08",
+                        "inverse-on-surface": "#eff1ee",
+                        "secondary-fixed": "#dae2fd",
+                        "on-primary-container": "#80bea6",
+                        "secondary": "#565e74",
+                        "on-surface": "#191c1b",
+                        "background": "#f8faf6",
+                        "status-warning": "#FBBF24",
+                        "primary": "#003527",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "surface-dim": "#d8dbd7",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8faf6",
+                        "on-tertiary-container": "#ea9e93",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "surface-tint": "#2b6954",
+                        "tertiary-container": "#6b342d",
+                        "primary-fixed": "#b0f0d6",
+                        "tertiary-fixed-dim": "#ffb4a9",
+                        "on-surface-variant": "#404944",
+                        "primary-container": "#064e3b",
+                        "surface-container-highest": "#e1e3e0",
+                        "on-error": "#ffffff",
+                        "status-info": "#3B82F6",
+                        "outline-variant": "#bfc9c3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "display-hero": ["Montserrat"],
+                        "body-sm": ["Inter"],
+                        "data-mono": ["JetBrains Mono"],
+                        "headline-lg": ["Montserrat"],
+                        "label-status": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-hero": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "label-status": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-off-white text-on-surface font-body-md h-screen flex overflow-hidden selection:bg-primary selection:text-white">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col p-md z-50 overflow-y-auto bg-surface-container dark:bg-surface-dim border-r border-outline-variant dark:border-outline docked-left h-screen w-64 hidden md:flex">
+<div class="mb-xl">
+<h1 class="text-headline-md font-headline-md font-extrabold text-primary dark:text-primary-fixed-dim">Xitique Manager</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Painel Administrativo</p>
+</div>
+<ul class="flex-1 space-y-sm">
+<li class="">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-highest rounded-lg transition-all hover:bg-surface-variant dark:hover:bg-on-surface-variant font-body-md text-body-md" href="#"><span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Painel</a>
+</li>
+<li class="">
+<a class="flex items-center gap-md bg-primary-container text-on-primary-container rounded-lg px-md py-sm font-bold shadow-sm translate-x-1 transition-transform duration-200 font-body-md text-body-md" href="#"><span class="material-symbols-outlined" data-icon="group" data-weight="fill" style="font-variation-settings: &quot;FILL&quot; 1;">group</span> Gestão</a>
+</li>
+<li class="">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-highest rounded-lg transition-all hover:bg-surface-variant dark:hover:bg-on-surface-variant font-body-md text-body-md" href="#"><span class="material-symbols-outlined" data-icon="payments">payments</span> Finanças</a>
+</li>
+<li class="">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-highest rounded-lg transition-all hover:bg-surface-variant dark:hover:bg-on-surface-variant font-body-md text-body-md" href="#"><span class="material-symbols-outlined" data-icon="analytics">analytics</span> Relatórios</a>
+</li>
+<li class="">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-highest rounded-lg transition-all hover:bg-surface-variant dark:hover:bg-on-surface-variant font-body-md text-body-md" href="#"><span class="material-symbols-outlined" data-icon="settings">settings</span> Definições</a>
+</li>
+</ul>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<button class="w-full flex items-center justify-center gap-sm bg-primary text-on-primary rounded-lg py-sm px-md font-body-md text-body-md hover:bg-on-primary-fixed-variant transition-colors mb-sm shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="support_agent">support_agent</span>
+                Suporte
+            </button>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-highest rounded-lg transition-all hover:bg-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Sair
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full ml-0 md:ml-64 relative">
+<header class="flex justify-between items-center w-full px-lg h-16 sticky top-0 z-40 bg-surface dark:bg-inverse-surface border-b border-surface-container-low shadow-sm md:hidden">
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant p-sm rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Xitique Manager</span>
+</div>
+<div class="flex items-center gap-sm text-primary dark:text-primary-fixed-dim">
+<button class="p-xs rounded-full hover:bg-surface-container-high transition-colors duration-200"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-xs rounded-full hover:bg-surface-container-high transition-colors duration-200"><span class="material-symbols-outlined" data-icon="help">help</span></button>
+<button class="p-xs rounded-full hover:bg-surface-container-high transition-colors duration-200"><span class="material-symbols-outlined" data-icon="account_circle">account_circle</span></button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-md scroll-smooth">
+<div class="max-w-container-max mx-auto">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-sm mb-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Gestão de Cobradores</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Gestão da equipa de cobrança no terreno.</p>
+</div>
+<button class="bg-primary text-on-primary hover:bg-on-primary-fixed-variant transition-colors py-sm px-md rounded-lg shadow-sm flex items-center justify-center gap-sm font-body-sm text-body-sm font-semibold active:scale-95 duration-100">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                        + Novo Cobrador
+                    </button>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-sm mb-md">
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-surface-container-low flex flex-col justify-between">
+<div class="flex items-center justify-between mb-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cobradores Ativos</span>
+<div class="bg-primary-container text-on-primary-container p-xs rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]" data-icon="group">group</span>
+</div>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">13</div>
+<div class="flex items-center gap-xs mt-xs text-status-success font-body-sm text-[12px]">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+<span class="">Total de 15 registados</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-surface-container-low flex flex-col justify-between relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+<div class="flex items-center justify-between mb-xs relative z-10">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Volume Mensal</span>
+<div class="bg-surface-variant text-on-surface-variant p-xs rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]" data-icon="payments">payments</span>
+</div>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface relative z-10 flex items-baseline gap-xs">
+                            845.000 <span class="font-body-md text-body-md text-on-surface-variant">MZN</span>
+</div>
+<div class="flex items-center gap-xs mt-xs text-status-success font-body-sm text-[12px] relative z-10">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+<span class="">Em dia</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-surface-container-low border-l-4 border-l-status-error flex flex-col justify-between">
+<div class="flex items-center justify-between mb-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Diferença Total</span>
+<div class="bg-error-container text-on-error-container p-xs rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span>
+</div>
+</div>
+<div class="font-headline-lg text-headline-lg text-status-error flex items-baseline gap-xs">
+                            -4.800 <span class="font-body-md text-body-md text-status-error/70">MZN</span>
+</div>
+<div class="flex items-center gap-xs mt-xs text-status-error font-body-sm text-[12px]">
+<span class="material-symbols-outlined text-[14px]" data-icon="info">info</span>
+<span class="">Faltas reportadas</span>
+</div>
+</div>
+</div>
+<!-- Filters & Search -->
+<div class="bg-surface-container-lowest p-sm rounded-t-xl border border-surface-container-low border-b-0 flex flex-col md:flex-row items-center justify-between gap-sm shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]" data-icon="search">search</span>
+<input class="w-full pl-8 pr-sm py-1.5 rounded-lg border-outline-variant bg-surface-off-white text-on-surface font-body-sm text-body-sm focus:ring-primary focus:border-primary transition-shadow" placeholder="Pesquisar cobrador..." type="text">
+</div>
+<div class="flex items-center gap-sm w-full md:w-auto">
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden md:inline-block">Estado:</span>
+<select class="w-full md:w-auto py-1.5 pl-sm pr-8 rounded-lg border-outline-variant bg-surface-off-white text-on-surface font-body-sm text-body-sm focus:ring-primary focus:border-primary cursor-pointer">
+<option>Todos</option>
+<option>Ativo</option>
+<option>Inativo</option>
+<option>Suspenso</option>
+</select>
+</div>
+</div>
+<!-- Data Table -->
+<div class="overflow-x-auto bg-surface-container-lowest border border-surface-container-low rounded-b-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="bg-surface-light-gray border-b border-surface-container-low">
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">FOTO</th>
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">NOME</th>
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">TELEFONE</th>
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold text-right">CLIENTES</th>
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold text-right">VOLUME MENSAL</th>
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold text-right">ARRECADADO HOJE</th>
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold text-right">DIFERENÇA</th>
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold text-center">ESTADO</th>
+<th class="py-2 px-sm font-label-status text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold text-right">AÇÕES</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low font-body-sm text-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-light-gray/50 transition-colors group"><td class="py-1.5 px-sm"><div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span></div></td><td class="py-1.5 px-sm font-medium text-on-surface">João Silva</td><td class="py-1.5 px-sm font-data-mono text-[13px] text-on-surface-variant">+258 84 123 4567</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">47</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">125.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">5.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px] text-status-error font-medium">-350 MZN</td><td class="py-1.5 px-sm text-center"><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-status-success/10 text-status-success font-label-status text-[10px]">Ativo</span></td><td class="py-1.5 px-sm text-right"><button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span></button></td></tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-light-gray/50 transition-colors group"><td class="py-1.5 px-sm"><div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span></div></td><td class="py-1.5 px-sm font-medium text-on-surface">Maria Chissano</td><td class="py-1.5 px-sm font-data-mono text-[13px] text-on-surface-variant">+258 82 987 6543</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">62</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">210.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">8.500 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px] text-status-success font-medium">0 MZN</td><td class="py-1.5 px-sm text-center"><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-status-success/10 text-status-success font-label-status text-[10px]">Ativo</span></td><td class="py-1.5 px-sm text-right"><button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span></button></td></tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-light-gray/50 transition-colors group opacity-70"><td class="py-1.5 px-sm"><div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[18px]" data-icon="person_off">person_off</span></div></td><td class="py-1.5 px-sm font-medium text-on-surface line-through decoration-outline-variant">Carlos Machel</td><td class="py-1.5 px-sm font-data-mono text-[13px] text-on-surface-variant line-through decoration-outline-variant">+258 87 555 1212</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">0</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">0 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">0 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px] text-status-warning font-medium">-1.950 MZN</td><td class="py-1.5 px-sm text-center"><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-surface-variant text-on-surface-variant font-label-status text-[10px]">Inativo</span></td><td class="py-1.5 px-sm text-right"><button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span></button></td></tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-light-gray/50 transition-colors group"><td class="py-1.5 px-sm"><div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span></div></td><td class="py-1.5 px-sm font-medium text-on-surface">Geraldo Mucavele</td><td class="py-1.5 px-sm font-data-mono text-[13px] text-on-surface-variant">+258 84 999 8877</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">85</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">290.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">12.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px] text-status-success font-medium">0 MZN</td><td class="py-1.5 px-sm text-center"><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-status-success/10 text-status-success font-label-status text-[10px]">Ativo</span></td><td class="py-1.5 px-sm text-right"><button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span></button></td></tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-light-gray/50 transition-colors group"><td class="py-1.5 px-sm"><div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span></div></td><td class="py-1.5 px-sm font-medium text-on-surface">Ana Vilanculos</td><td class="py-1.5 px-sm font-data-mono text-[13px] text-on-surface-variant">+258 82 111 2233</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">34</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">95.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">3.200 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px] text-status-error font-medium">-1.200 MZN</td><td class="py-1.5 px-sm text-center"><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-status-success/10 text-status-success font-label-status text-[10px]">Ativo</span></td><td class="py-1.5 px-sm text-right"><button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span></button></td></tr>
+<!-- Row 6 -->
+<tr class="hover:bg-surface-light-gray/50 transition-colors group"><td class="py-1.5 px-sm"><div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span></div></td><td class="py-1.5 px-sm font-medium text-on-surface">Bento Sitoe</td><td class="py-1.5 px-sm font-data-mono text-[13px] text-on-surface-variant">+258 87 444 5566</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">55</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">180.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">7.800 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px] text-status-success font-medium">0 MZN</td><td class="py-1.5 px-sm text-center"><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-status-success/10 text-status-success font-label-status text-[10px]">Ativo</span></td><td class="py-1.5 px-sm text-right"><button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span></button></td></tr>
+<!-- Row 7 -->
+<tr class="hover:bg-surface-light-gray/50 transition-colors group"><td class="py-1.5 px-sm"><div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span></div></td><td class="py-1.5 px-sm font-medium text-on-surface">Eduarda Langa</td><td class="py-1.5 px-sm font-data-mono text-[13px] text-on-surface-variant">+258 84 777 8899</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">41</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">135.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">4.500 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px] text-status-warning font-medium">-250 MZN</td><td class="py-1.5 px-sm text-center"><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-status-warning/10 text-status-warning font-label-status text-[10px]">Suspenso</span></td><td class="py-1.5 px-sm text-right"><button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span></button></td></tr>
+<!-- Row 8 -->
+<tr class="hover:bg-surface-light-gray/50 transition-colors group"><td class="py-1.5 px-sm"><div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-surface-variant"><span class="material-symbols-outlined text-[18px]" data-icon="person">person</span></div></td><td class="py-1.5 px-sm font-medium text-on-surface">Filipe Tembe</td><td class="py-1.5 px-sm font-data-mono text-[13px] text-on-surface-variant">+258 82 333 4455</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">29</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">80.000 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px]">2.100 MZN</td><td class="py-1.5 px-sm text-right font-data-mono text-[13px] text-status-success font-medium">0 MZN</td><td class="py-1.5 px-sm text-center"><span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-status-success/10 text-status-success font-label-status text-[10px]">Ativo</span></td><td class="py-1.5 px-sm text-right"><button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span></button></td></tr>
+</tbody>
+</table>
+</div>
+<!-- Footer / Pagination -->
+<div class="flex flex-col md:flex-row items-center justify-between mt-sm gap-sm">
+<p class="font-body-sm text-[13px] text-on-surface-variant">A mostrar 8 de 15</p>
+<div class="flex items-center gap-1">
+<button class="p-1 text-on-surface-variant hover:bg-surface-container-highest rounded-lg transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-7 h-7 flex items-center justify-center rounded-lg bg-primary text-on-primary font-body-sm text-[13px] font-semibold shadow-sm">1</button>
+<button class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-surface-container-highest text-on-surface font-body-sm text-[13px] transition-colors">2</button>
+<button class="p-1 text-on-surface-variant hover:bg-surface-container-highest rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

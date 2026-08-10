@@ -1,0 +1,433 @@
+<!DOCTYPE html><html class="light" lang="pt-MZ"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Xitique Manager - Registar Cobrador</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Montserrat:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#6b342d",
+                      "outline": "#707974",
+                      "surface-container-low": "#f2f4f1",
+                      "inverse-surface": "#2e312f",
+                      "error-container": "#ffdad6",
+                      "outline-variant": "#bfc9c3",
+                      "inverse-on-surface": "#eff1ee",
+                      "on-error": "#ffffff",
+                      "tertiary": "#4f1f19",
+                      "inverse-primary": "#95d3ba",
+                      "on-secondary-fixed": "#131b2e",
+                      "surface": "#f8faf6",
+                      "status-warning": "#FBBF24",
+                      "on-secondary-container": "#5c647a",
+                      "secondary-fixed": "#dae2fd",
+                      "primary-container": "#064e3b",
+                      "surface-variant": "#e1e3e0",
+                      "on-primary": "#ffffff",
+                      "status-error": "#EF4444",
+                      "on-background": "#191c1b",
+                      "surface-tint": "#2b6954",
+                      "on-tertiary-fixed-variant": "#6e372f",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "on-primary-fixed": "#002117",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "status-success": "#10B981",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#b0f0d6",
+                      "error": "#ba1a1a",
+                      "accent-gold": "#F59E0B",
+                      "background": "#f8faf6",
+                      "primary-fixed-dim": "#95d3ba",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#ffdad5",
+                      "on-tertiary-fixed": "#380d08",
+                      "on-primary-fixed-variant": "#0b513d",
+                      "surface-bright": "#f8faf6",
+                      "accent-orange": "#EA580C",
+                      "surface-container": "#eceeeb",
+                      "secondary": "#565e74",
+                      "surface-dim": "#d8dbd7",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed-dim": "#ffb4a9",
+                      "on-primary-container": "#80bea6",
+                      "surface-container-highest": "#e1e3e0",
+                      "surface-light-gray": "#F1F5F9",
+                      "status-info": "#3B82F6",
+                      "secondary-container": "#dae2fd",
+                      "on-tertiary-container": "#ea9e93",
+                      "surface-off-white": "#F8FAFC",
+                      "primary": "#003527",
+                      "surface-container-high": "#e7e9e5",
+                      "on-surface": "#191c1b",
+                      "on-surface-variant": "#404944",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "gutter": "16px",
+                      "lg": "24px",
+                      "container-max": "1280px",
+                      "base": "4px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Montserrat"
+                      ],
+                      "headline-lg": [
+                              "Montserrat"
+                      ],
+                      "display-hero": [
+                              "Montserrat"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "label-status": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Montserrat"
+                      ],
+                      "data-mono": [
+                              "JetBrains Mono"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-hero": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-status": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md h-screen w-screen overflow-hidden relative">
+<!-- Background Context: Simulated 'Gestão de Cobradores' table -->
+<div class="absolute inset-0 z-0 bg-surface flex flex-col pt-16 px-lg pb-lg gap-lg overflow-y-auto">
+<!-- TopNavBar (Simulated Context) -->
+<header class="flex justify-between items-center w-full px-lg h-16 fixed top-0 left-0 z-10 bg-surface shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-bold text-primary font-display">Xitique Manager</span>
+</div>
+<div class="flex items-center gap-md text-primary">
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-high transition-colors duration-200 p-sm rounded-full">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-high transition-colors duration-200 p-sm rounded-full">help</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-surface-container-high transition-colors duration-200 p-sm rounded-full">account_circle</span>
+</div>
+</header>
+<div class="flex justify-between items-center mt-lg">
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-display">Gestão de Cobradores</h1>
+<button class="bg-primary text-on-primary px-md py-sm rounded-lg flex items-center gap-sm font-label-status text-label-status shadow-sm" style="background-color: rgb(6, 78, 59);">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            Registar Cobrador
+        </button>
+</div>
+<!-- Stats Cards -->
+<div class="grid grid-cols-4 gap-md">
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-container-highest shadow-sm">
+<div class="flex items-center gap-sm mb-sm text-on-surface-variant">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-sm text-body-sm">Total de Cobradores</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">45</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-container-highest shadow-sm">
+<div class="flex items-center gap-sm mb-sm text-status-success">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="font-body-sm text-body-sm">Cobradores Ativos</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">42</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-container-highest shadow-sm">
+<div class="flex items-center gap-sm mb-sm text-status-warning">
+<span class="material-symbols-outlined">warning</span>
+<span class="font-body-sm text-body-sm">Inativos</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">3</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-container-highest shadow-sm">
+<div class="flex items-center gap-sm mb-sm text-primary">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-sm text-body-sm">Total Arrecadado (Hoje)</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">54.200 MT</div>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-container-highest shadow-sm flex-1 flex flex-col overflow-hidden">
+<div class="p-md border-b border-surface-container-highest flex justify-between items-center gap-md">
+<div class="relative w-96">
+<div class="absolute inset-y-0 left-0 pl-sm flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline-variant text-lg">search</span>
+</div>
+<input class="block w-full pl-xl pr-sm py-sm bg-surface border border-outline-variant rounded-lg focus:ring-1 focus:ring-primary focus:border-primary font-body-sm text-body-sm text-on-surface placeholder:text-outline-variant transition-colors outline-none" placeholder="Pesquisar cobrador..." type="text">
+</div>
+<div class="flex gap-sm">
+<button class="px-sm py-sm rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container-low flex items-center gap-xs font-label-status text-label-status">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                    Filtrar
+                </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-status text-label-status uppercase border-b border-surface-container-highest">
+<tr>
+<th class="p-md font-semibold">Nome</th>
+<th class="p-md font-semibold">Telefone</th>
+<th class="p-md font-semibold">Status</th>
+<th class="p-md font-semibold text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-highest font-body-sm text-body-sm text-on-surface">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">JS</div>
+                            João Silva
+                        </td>
+<td class="p-md font-data-mono text-data-mono">+258 84 123 4567</td>
+<td class="p-md">
+<span class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-xs font-medium bg-green-100 text-green-800">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                Ativo
+                            </span>
+</td>
+<td class="p-md text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold">MC</div>
+                            Maria Cossa
+                        </td>
+<td class="p-md font-data-mono text-data-mono">+258 82 987 6543</td>
+<td class="p-md">
+<span class="inline-flex items-center gap-1.5 py-1 px-2 rounded-full text-xs font-medium bg-red-100 text-red-800">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                Inativo
+                            </span>
+</td>
+<td class="p-md text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Modal Backdrop -->
+<div class="absolute inset-0 z-40 bg-on-secondary-fixed/40 backdrop-blur-sm flex items-center justify-center p-md">
+<!-- Modal Container -->
+<div aria-labelledby="modal-title" aria-modal="true" class="bg-surface-container-lowest rounded-xl shadow-lg w-full max-w-md overflow-hidden flex flex-col relative" role="dialog">
+<!-- Modal Header -->
+<div class="px-lg py-md border-b border-surface-container-highest flex justify-between items-center bg-surface-off-white">
+<h2 class="font-headline-md text-headline-md text-on-surface font-display" id="modal-title" style="opacity: 0;">Registar Cobrador</h2>
+<button aria-label="Fechar" class="text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Body (Form) -->
+<div class="p-lg overflow-y-auto max-h-[716px]">
+<form class="space-y-md" id="collectorForm">
+<!-- Photo Upload -->
+<div class="flex flex-col items-center justify-center mb-md">
+<div class="w-24 h-24 rounded-full bg-surface-container-highest flex items-center justify-center border-2 border-dashed border-outline-variant cursor-pointer hover:border-primary transition-colors relative overflow-hidden group">
+<span class="material-symbols-outlined text-outline text-3xl group-hover:text-primary transition-colors">add_a_photo</span>
+<!-- Placeholder for actual image if uploaded -->
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-sm">Adicionar Foto</span>
+</div>
+<!-- Name Input -->
+<div>
+<label class="block font-body-sm text-body-sm text-on-surface-variant mb-xs" for="nome">Nome completo <span class="text-status-error">*</span></label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-sm flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline-variant text-lg">person</span>
+</div>
+<input class="block w-full pl-xl pr-sm py-sm bg-surface border border-outline-variant rounded-lg focus:ring-1 focus:ring-primary focus:border-primary font-body-md text-body-md text-on-surface placeholder:text-outline-variant transition-colors outline-none" id="nome" name="nome" placeholder="Ex: João Silva" required="" type="text">
+</div>
+</div>
+<!-- Phone Input -->
+<div>
+<label class="block font-body-sm text-body-sm text-on-surface-variant mb-xs" for="telefone">Telefone <span class="text-status-error">*</span></label>
+<div class="flex border border-outline-variant rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-colors bg-surface">
+<div class="bg-surface-container-low px-sm py-sm flex items-center border-r border-outline-variant">
+<span class="font-data-mono text-data-mono text-on-surface-variant">+258</span>
+</div>
+<div class="relative flex-1">
+<div class="absolute inset-y-0 left-0 pl-sm flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline-variant text-lg">call</span>
+</div>
+<input class="block w-full pl-xl pr-sm py-sm bg-transparent border-none focus:ring-0 font-data-mono text-data-mono text-on-surface placeholder:text-outline-variant outline-none" id="telefone" name="telefone" placeholder="8X XXX XXXX" required="" type="tel">
+</div>
+</div>
+</div>
+<!-- Email Input (Optional) -->
+<div>
+<label class="block font-body-sm text-body-sm text-on-surface-variant mb-xs" for="email">Email <span class="text-outline-variant">(Opcional)</span></label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-sm flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline-variant text-lg">mail</span>
+</div>
+<input class="block w-full pl-xl pr-sm py-sm bg-surface border border-outline-variant rounded-lg focus:ring-1 focus:ring-primary focus:border-primary font-body-md text-body-md text-on-surface placeholder:text-outline-variant transition-colors outline-none" id="email" name="email" placeholder="exemplo@email.com" type="email">
+</div>
+</div>
+<!-- Observations -->
+<div>
+<label class="block font-body-sm text-body-sm text-on-surface-variant mb-xs" for="observacoes">Observações <span class="text-outline-variant">(Opcional)</span></label>
+<textarea class="block w-full px-sm py-sm bg-surface border border-outline-variant rounded-lg focus:ring-1 focus:ring-primary focus:border-primary font-body-md text-body-md text-on-surface placeholder:text-outline-variant transition-colors outline-none resize-none" id="observacoes" name="observacoes" placeholder="Trabalha região X..." rows="2"></textarea>
+</div>
+<!-- Status Toggle -->
+<div class="flex items-center justify-between pt-sm border-t border-surface-container-highest">
+<div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Status do Cobrador</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Define se o cobrador pode aceder à App</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value="">
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+<span class="ml-3 font-label-status text-label-status text-on-surface peer-checked:text-primary-container">Ativo</span>
+</label>
+</div>
+</form>
+</div>
+<!-- Modal Footer (Actions) -->
+<div class="px-lg py-md border-t border-surface-container-highest bg-surface-off-white flex justify-end gap-sm">
+<button class="px-md py-sm rounded-lg font-label-status text-label-status font-medium text-primary border border-outline-variant hover:bg-surface-container-high transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" type="button">
+                    Cancelar
+                </button>
+<button class="px-md py-sm rounded-lg font-label-status text-label-status font-medium text-on-primary bg-primary hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 flex items-center gap-xs shadow-sm" onclick="showToast()" type="button" style="background-color: #064e3b;">
+<span class="material-symbols-outlined text-sm">save</span>
+                    Salvar
+                </button>
+</div>
+</div>
+</div>
+<!-- Toast Notification (Simulated Success State) -->
+<div class="fixed bottom-lg right-lg bg-surface-container-lowest border-l-4 border-status-success shadow-lg rounded-lg p-md transform translate-y-full opacity-0 transition-all duration-300 z-50 flex items-start gap-md max-w-sm" id="toast">
+<span class="material-symbols-outlined text-status-success fill mt-xs">check_circle</span>
+<div>
+<h4 class="font-body-md text-body-md font-medium text-on-surface">Cobrador criado com sucesso</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Um SMS foi enviado para o telefone com o PIN de acesso: <span class="font-data-mono text-data-mono font-bold text-on-surface">1234</span>.</p>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface ml-auto mt-xs focus:outline-none" onclick="hideToast()">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<script>
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-full', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                hideToast();
+            }, 5000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('translate-y-full', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }
+    </script>
+
+
+</body></html>

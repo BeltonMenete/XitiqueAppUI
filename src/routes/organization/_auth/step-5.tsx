@@ -88,13 +88,13 @@ function StepFive() {
 							},
 						].map((m) => (
 							<button
+								type="button"
 								key={m.id}
 								onClick={() => setSelectedMethod(m.id as PaymentMethod)}
-								className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${
-									selectedMethod === m.id
-										? "border-emerald-600 bg-emerald-50"
-										: "border-gray-200 hover:border-gray-300"
-								}`}
+								className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${selectedMethod === m.id
+									? "border-emerald-600 bg-emerald-50"
+									: "border-gray-200 hover:border-gray-300"
+									}`}
 							>
 								<m.icon className="h-8 w-8" />
 								<div>
@@ -108,6 +108,7 @@ function StepFive() {
 					{/* Ações */}
 					<div className="space-y-4">
 						<button
+							type="button"
 							onClick={handleConfirmPayment}
 							disabled={!selectedMethod || isProcessing}
 							className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
@@ -120,6 +121,7 @@ function StepFive() {
 						</button>
 
 						<button
+							type="button"
 							onClick={() => navigate({ to: "/organization/step-4" })}
 							className="w-full text-gray-500 text-sm font-semibold flex items-center justify-center gap-2 hover:text-gray-800 focus:outline-none"
 						>

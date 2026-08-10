@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="pt"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Fechar Ciclo - Xitique Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "accent-gold": "#F59E0B",
+                        "tertiary-container": "#6b342d",
+                        "surface-container": "#eceeeb",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191c1b",
+                        "status-info": "#3B82F6",
+                        "primary": "#003527",
+                        "surface-container-low": "#f2f4f1",
+                        "inverse-surface": "#2e312f",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e1e3e0",
+                        "status-warning": "#FBBF24",
+                        "secondary": "#565e74",
+                        "tertiary": "#4f1f19",
+                        "secondary-fixed": "#dae2fd",
+                        "primary-fixed": "#b0f0d6",
+                        "outline-variant": "#bfc9c3",
+                        "tertiary-fixed": "#ffdad5",
+                        "on-surface-variant": "#404944",
+                        "primary-container": "#064e3b",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e1e3e0",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "status-success": "#10B981",
+                        "secondary-container": "#dae2fd",
+                        "on-surface": "#191c1b",
+                        "surface-bright": "#f8faf6",
+                        "on-primary-fixed": "#002117",
+                        "primary-fixed-dim": "#95d3ba",
+                        "surface-dim": "#d8dbd7",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#95d3ba",
+                        "surface-off-white": "#F8FAFC",
+                        "surface-container-high": "#e7e9e5",
+                        "on-secondary-fixed": "#131b2e",
+                        "inverse-on-surface": "#eff1ee",
+                        "on-tertiary-container": "#ea9e93",
+                        "background": "#f8faf6",
+                        "surface-tint": "#2b6954",
+                        "on-tertiary-fixed-variant": "#6e372f",
+                        "on-tertiary-fixed": "#380d08",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#80bea6",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#5c647a",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "status-error": "#EF4444",
+                        "surface-light-gray": "#F1F5F9",
+                        "accent-orange": "#EA580C",
+                        "surface": "#f8faf6",
+                        "outline": "#707974",
+                        "tertiary-fixed-dim": "#ffb4a9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "base": "4px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "label-status": ["Inter"],
+                        "headline-md": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "display-hero": ["Montserrat"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["JetBrains Mono"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-status": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display-hero": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .backdrop-blur-custom { backdrop-filter: blur(8px); }
+    </style>
+</head>
+<body class="bg-background min-h-screen relative font-body-md text-on-surface">
+<!-- Background Map/Screen Context -->
+<div class="fixed inset-0 z-0">
+<img alt="Client Details Screen Context" class="w-full h-full object-cover opacity-30" data-alt="A softly blurred image representing a financial dashboard screen. It shows tables of data, subtle charts, and a clean, modern interface in a light theme. The focus is soft, providing context for an overlaying modal. The overall tone is professional, organized, and data-driven, fitting a high-end fintech application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2lsAgGSsBWUHz5qYBHhlvroF1i4wmqu1C_JHR_LW2kLci4Xu6OH8hDgLelXs0SMZk3J8T4NuseL4Bv2EzcxT3x23x_QgM5jFiEQw-I9XRWU7tsdRXyHu7eDdBc7XADdUI_j3uizWQ1ZW3NprLh2vYMF3nfOcAyYTrhBIVXdFQgE23SagA8aRUYHGwRA2FJmdErTFeIj3IOS57gip1VKR5qA-FuBifnQhqBIfLRmHpNRvLVVqIFRCkgPwZWgya7rMQ9SaSUdBKuP61">
+</div>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-md sm:p-lg bg-on-background/40 backdrop-blur-custom">
+<!-- Modal Container -->
+<div class="bg-surface w-full max-w-3xl rounded-xl shadow-2xl flex flex-col max-h-[921px] overflow-hidden">
+<!-- Modal Header -->
+<div class="px-lg py-md border-b border-surface-variant flex items-start justify-between bg-surface sticky top-0 z-10">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-headline-md font-headline-md">calendar_month</span>
+</div>
+<div>
+<h2 class="text-headline-md font-headline-md text-primary m-0 leading-tight">Fechar Ciclo - Maio 2026</h2>
+<p class="text-body-sm font-body-sm text-secondary mt-xs">Cliente: Maria Silva | +258 84 123 4567</p>
+</div>
+</div>
+<button aria-label="Close Modal" class="text-secondary hover:text-error transition-colors p-sm rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-headline-md font-headline-md">close</span>
+</button>
+</div>
+<!-- Modal Content (Scrollable) -->
+<div class="p-lg overflow-y-auto flex-1 flex flex-col gap-lg bg-surface-off-white">
+<!-- Debt Warning Banner -->
+<div class="bg-error-container text-on-error-container rounded-lg p-md flex items-start gap-sm border border-error/20">
+<span class="material-symbols-outlined shrink-0 mt-xs text-[20px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<h4 class="font-body-md font-semibold m-0">Atenção: Cliente possui Dívida</h4>
+<p class="font-body-sm text-on-error-container/80 mt-base">Dívida pendente de ciclos anteriores: <span class="font-data-mono font-bold text-error">2.200 MZN</span></p>
+</div>
+</div>
+<!-- Cycle Summary Card -->
+<div class="bg-[#F5F5F5] rounded-lg p-md border border-surface-variant">
+<h3 class="text-body-md font-semibold text-on-surface mb-md">Resumo do Ciclo Atual</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Column 1 -->
+<div class="flex flex-col gap-sm">
+<div>
+<span class="text-body-sm text-secondary block">Taxa Diária</span>
+<span class="font-data-mono text-body-md font-bold text-primary">500 MZN</span>
+</div>
+<div>
+<span class="text-body-sm text-secondary block mb-xs">Dias Pagos</span>
+<div class="flex items-center gap-sm">
+<span class="font-data-mono text-body-md font-bold text-on-surface">18/30</span>
+<div class="h-2 flex-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-status-warning" style="width: 60%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2 -->
+<div class="flex flex-col gap-sm md:border-l md:border-surface-variant md:pl-md">
+<div>
+<span class="text-body-sm text-secondary block">Total Poupado</span>
+<span class="font-data-mono text-body-md font-bold text-status-success">9.000 MZN</span>
+</div>
+<div>
+<span class="text-body-sm text-secondary block">Comissão Xitique</span>
+<span class="font-data-mono text-body-md font-bold text-on-surface">-500 MZN</span>
+</div>
+</div>
+<!-- Column 3 -->
+<div class="flex flex-col gap-sm md:border-l md:border-surface-variant md:pl-md">
+<div>
+<span class="text-body-sm text-secondary block">Dias em Falta</span>
+<span class="font-data-mono text-body-md font-bold text-status-error flex items-center gap-xs">
+                                    12 dias
+                                    <span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</span>
+</div>
+<div>
+<span class="text-body-sm text-secondary block">Valor Pendente</span>
+<span class="font-data-mono text-body-md font-bold text-status-error">6.000 MZN</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Decision Section -->
+<div>
+<h3 class="text-body-md font-semibold text-on-surface mb-md">Ação de Fechamento (Incompleto)</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Option A: Fine -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="close_action" type="radio" value="fine">
+<div class="h-full bg-surface border-2 border-surface-variant rounded-lg p-md transition-all hover:border-status-warning hover:bg-status-warning/5 peer-checked:border-status-warning peer-checked:bg-status-warning/10 peer-checked:shadow-sm flex flex-col">
+<div class="flex items-start gap-md mb-sm">
+<div class="w-10 h-10 rounded-full bg-status-warning/20 text-status-warning flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<h4 class="font-headline-md text-body-md font-bold text-on-surface leading-tight">Aplicar Multa de 1 Dia</h4>
+<p class="text-body-sm text-secondary mt-xs">Cliente perde 500 MZN do valor poupado por não completar o ciclo.</p>
+</div>
+</div>
+<div class="mt-auto pt-sm border-t border-surface-variant/50">
+<p class="text-body-sm text-secondary mb-xs">Cálculo Final:</p>
+<p class="font-data-mono text-body-sm text-on-surface font-medium">9.000 - 500 (Comissão) - 500 (Multa) = <span class="font-bold text-primary">8.000 MZN</span></p>
+</div>
+<!-- Selected Indicator -->
+<div class="absolute top-md right-md opacity-0 peer-checked:opacity-100 text-status-warning transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</label>
+<!-- Option B: Transport -->
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="close_action" type="radio" value="transport">
+<div class="h-full bg-surface border-2 border-surface-variant rounded-lg p-md transition-all hover:border-status-info hover:bg-status-info/5 peer-checked:border-status-info peer-checked:bg-status-info/10 peer-checked:shadow-sm flex flex-col">
+<div class="flex items-start gap-md mb-sm">
+<div class="w-10 h-10 rounded-full bg-status-info/20 text-status-info flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">sync</span>
+</div>
+<div>
+<h4 class="font-headline-md text-body-md font-bold text-on-surface leading-tight">Transportar 18 Dias para Junho</h4>
+<p class="text-body-sm text-secondary mt-xs">Cliente mantém crédito. Ciclo atual é encerrado sem multa ou resgate.</p>
+</div>
+</div>
+<div class="mt-auto pt-sm border-t border-surface-variant/50">
+<p class="text-body-sm text-secondary mb-xs">Impacto:</p>
+<p class="font-data-mono text-body-sm text-on-surface font-medium">Junho inicia com <span class="font-bold text-status-info">18 dias</span> pré-pagos.</p>
+</div>
+<!-- Selected Indicator -->
+<div class="absolute top-md right-md opacity-0 peer-checked:opacity-100 text-status-info transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</label>
+</div>
+</div>
+<!-- Simulator (Conditional - assumes Option B is checked by default for display) -->
+<div class="bg-secondary-fixed/30 border border-secondary-fixed-dim rounded-lg p-md" id="simulator-section">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-status-info">insights</span>
+<h4 class="text-body-md font-semibold text-on-surface m-0">Simulação Junho 2026</h4>
+</div>
+<div class="flex flex-col sm:flex-row gap-lg">
+<div class="flex-1">
+<span class="text-body-sm text-secondary block mb-xs">Progresso Inicial</span>
+<div class="flex items-center gap-sm">
+<span class="font-data-mono text-body-md font-bold text-on-surface">18/30</span>
+<div class="h-2 flex-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-status-info" style="width: 60%"></div>
+</div>
+</div>
+</div>
+<div class="flex-1 sm:border-l sm:border-secondary-fixed-dim sm:pl-md">
+<span class="text-body-sm text-secondary block mb-xs">Falta para Completar Junho</span>
+<span class="font-data-mono text-body-md font-bold text-status-error">12 dias (6.000 MZN)</span>
+</div>
+</div>
+</div>
+<!-- Observations -->
+<div>
+<label class="block text-body-sm font-medium text-on-surface mb-xs" for="observations">Observações do Fechamento</label>
+<textarea class="w-full rounded-lg border-surface-variant bg-surface text-on-surface focus:ring-primary focus:border-primary text-body-md font-body-md resize-none" id="observations" placeholder="Adicione notas adicionais sobre a decisão..." rows="3"></textarea>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-lg py-md border-t border-surface-variant bg-surface flex flex-col sm:flex-row items-center justify-end gap-md sticky bottom-0 z-10">
+<button class="w-full sm:w-auto px-lg py-sm rounded-lg font-body-md font-medium text-secondary hover:bg-surface-container-high transition-colors">
+                    Cancelar
+                </button>
+<!-- Button style changes based on selection. Currently styled for Transport (Green) -->
+<button class="w-full sm:w-auto px-lg py-sm rounded-lg font-body-md font-bold text-on-primary bg-status-success hover:bg-status-success/90 transition-colors shadow-sm flex items-center justify-center gap-sm" id="confirm-btn">
+<span class="material-symbols-outlined text-[20px]">check</span>
+                    Confirmar Fechamento
+                </button>
+</div>
+</div>
+</div>
+<!-- Script for interactive demonstration (changing button color based on selection) -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const radios = document.querySelectorAll('input[name="close_action"]');
+            const confirmBtn = document.getElementById('confirm-btn');
+            const simulatorSection = document.getElementById('simulator-section');
+
+            radios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === 'fine') {
+                        confirmBtn.className = "w-full sm:w-auto px-lg py-sm rounded-lg font-body-md font-bold text-white bg-accent-orange hover:bg-accent-orange/90 transition-colors shadow-sm flex items-center justify-center gap-sm";
+                        simulatorSection.style.display = 'none';
+                    } else {
+                        confirmBtn.className = "w-full sm:w-auto px-lg py-sm rounded-lg font-body-md font-bold text-on-primary bg-status-success hover:bg-status-success/90 transition-colors shadow-sm flex items-center justify-center gap-sm";
+                        simulatorSection.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>

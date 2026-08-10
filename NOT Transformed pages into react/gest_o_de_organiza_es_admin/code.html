@@ -1,0 +1,463 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Xitique Manager - Gestão de Organizações</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#707974",
+                        "status-success": "#10B981",
+                        "secondary": "#565e74",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "inverse-on-surface": "#eff1ee",
+                        "status-error": "#EF4444",
+                        "primary-fixed-dim": "#95d3ba",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb4a9",
+                        "surface": "#f8faf6",
+                        "surface-light-gray": "#F1F5F9",
+                        "surface-bright": "#f8faf6",
+                        "on-primary-fixed": "#002117",
+                        "status-info": "#3B82F6",
+                        "on-surface": "#191c1b",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#4f1f19",
+                        "surface-container-highest": "#e1e3e0",
+                        "on-secondary-container": "#5c647a",
+                        "on-primary-container": "#80bea6",
+                        "on-error": "#ffffff",
+                        "on-background": "#191c1b",
+                        "surface-container": "#eceeeb",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-container-low": "#f2f4f1",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-error-container": "#93000a",
+                        "accent-gold": "#F59E0B",
+                        "inverse-primary": "#95d3ba",
+                        "surface-container-high": "#e7e9e5",
+                        "tertiary-container": "#6b342d",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#380d08",
+                        "background": "#f8faf6",
+                        "on-tertiary-container": "#ea9e93",
+                        "surface-variant": "#e1e3e0",
+                        "primary-container": "#064e3b",
+                        "surface-dim": "#d8dbd7",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#b0f0d6",
+                        "outline-variant": "#bfc9c3",
+                        "surface-tint": "#2b6954",
+                        "inverse-surface": "#2e312f",
+                        "status-warning": "#FBBF24",
+                        "primary": "#003527",
+                        "surface-off-white": "#F8FAFC",
+                        "secondary-container": "#dae2fd",
+                        "secondary-fixed": "#dae2fd",
+                        "on-surface-variant": "#404944",
+                        "accent-orange": "#EA580C",
+                        "on-tertiary-fixed-variant": "#6e372f",
+                        "tertiary-fixed": "#ffdad5",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "gutter": "16px",
+                        "base": "4px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "display-hero": ["Montserrat"],
+                        "headline-lg": ["Montserrat"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "label-status": ["Inter"],
+                        "headline-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display-hero": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-status": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .modal-backdrop {
+            background: rgba(0, 33, 23, 0.4);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen flex overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 border-r border-outline-variant dark:border-outline bg-surface-container dark:bg-surface-container-low docked full-height left-0 w-64 z-50">
+<div class="p-lg flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline-md font-bold">X</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-black text-on-surface">Xitique Manager</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Admin Console</p>
+</div>
+</div>
+<div class="px-md mt-sm mb-lg">
+<button class="w-full bg-primary text-on-primary py-sm px-md rounded-lg flex items-center justify-center gap-sm hover:bg-primary-container hover:text-on-primary-container transition-colors font-label-status">
+<span class="material-symbols-outlined icon-fill">add</span>
+                New Collection
+            </button>
+</div>
+<ul class="flex-1 px-md space-y-xs overflow-y-auto">
+<li class="">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-dim transition-all text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary dark:text-primary-fixed-dim font-bold bg-surface-container-highest translate-x-1 transition-transform text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined icon-fill">group</span>
+                    Management
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-dim transition-all text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined">payments</span>
+                    Finance
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-dim transition-all text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                    Reports
+                </a>
+</li>
+<li class="">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-dim transition-all text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<div class="p-md mt-auto border-t border-outline-variant">
+<ul class="space-y-xs">
+<li class="">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-dim transition-all text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+                        Support
+                    </a>
+</li>
+<li class="">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-dim transition-all text-body-sm font-body-sm" href="#">
+<span class="material-symbols-outlined">logout</span>
+                        Sign Out
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col md:ml-64 w-full h-full relative bg-surface-off-white">
+<!-- TopNavBar (Mobile context usually, but keeping for structural completeness based on JSON) -->
+<header class="md:hidden flex justify-between items-center w-full px-lg h-16 sticky top-0 z-40 bg-surface dark:bg-inverse-surface shadow-sm dark:shadow-none docked full-width top-0">
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed-dim">Xitique Manager</span>
+</div>
+<div class="flex items-center gap-md text-primary dark:text-primary-fixed-dim">
+<button class=""><span class="material-symbols-outlined">notifications</span></button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+<img alt="System Administrator Profile" class="w-full h-full object-cover" data-alt="Close up portrait of a confident male system administrator in a brightly lit modern office setting, wearing professional attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ0b_E_WIl5Z7d_jM3I0exMU7SjU8GpiFlsYzLD6-wgiLve3RKfefnXnXSdf2Pg_C9P5tjDB9LrKGzzSsXNbNvPLq62V7Ce_El_Xpc6t8YFnNXKCGcDj3HJuCHxHXiCE7owPqm7rgoYesEPrh4dHlLlsWNVzKYd8lY9YdyoMu9VTIsLf6V3GkS8QbQtF6kiUSUjdQ4KUe1cpi_5-nnOl0WiX8zDoHlbkOTZHJ2y5qheONBAIN-ydfnBJHHLTwYK_uXv7BljWAd1gVC">
+</div>
+</div>
+</header>
+<!-- Page Header & Actions -->
+<div class="px-lg py-md border-b border-surface-container">
+<div class="max-w-[1280px] mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-md">
+<div>
+<h2 class="text-headline-lg font-headline-lg text-primary mb-xs">Gestão de Organizações</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Manage and monitor all tenant organizations across the platform.</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="px-md py-sm bg-surface-container rounded-lg text-on-surface hover:bg-surface-container-highest transition-colors flex items-center gap-xs font-label-status">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export CSV
+                    </button>
+<button class="px-md py-sm bg-primary text-on-primary rounded-lg hover:bg-primary-container transition-colors flex items-center gap-xs font-label-status shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Add Organization
+                    </button>
+</div>
+</div>
+</div>
+<!-- Toolbar: Search & Filter -->
+<div class="px-lg py-md bg-surface-bright border-b border-surface-container sticky top-0 sm:top-16 md:top-0 z-30">
+<div class="max-w-[1280px] mx-auto flex flex-col md:flex-row gap-md items-center">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-off-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-body-sm font-body-sm" placeholder="Search organizations by name, owner or phone..." type="text">
+</div>
+<div class="flex items-center gap-sm w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+<button class="whitespace-nowrap px-sm py-xs rounded-full border border-primary bg-primary text-on-primary font-label-status">All (124)</button>
+<button class="whitespace-nowrap px-sm py-xs rounded-full border border-outline-variant text-on-surface-variant hover:bg-surface-container font-label-status">Active (108)</button>
+<button class="whitespace-nowrap px-sm py-xs rounded-full border border-outline-variant text-on-surface-variant hover:bg-surface-container font-label-status">Trial (12)</button>
+<button class="whitespace-nowrap px-sm py-xs rounded-full border border-outline-variant text-on-surface-variant hover:bg-surface-container font-label-status">Suspended (3)</button>
+<button class="whitespace-nowrap px-sm py-xs rounded-full border border-outline-variant text-on-surface-variant hover:bg-surface-container font-label-status">Canceled (1)</button>
+</div>
+<div class="ml-auto flex items-center gap-sm">
+<select class="bg-surface-off-white border border-outline-variant rounded-lg py-2 pl-3 pr-8 text-body-sm font-body-sm focus:ring-primary focus:border-primary">
+<option>Sort by: Newest</option>
+<option>Sort by: Volume (High to Low)</option>
+<option>Sort by: Name (A-Z)</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Data Table Area -->
+<div class="flex-1 overflow-auto p-lg pb-xl">
+<div class="max-w-[1280px] mx-auto bg-surface-container-lowest rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-surface-container overflow-hidden">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead class="bg-surface-light-gray border-b border-surface-container">
+<tr>
+<th class="py-sm px-md text-label-status font-label-status text-on-surface-variant uppercase tracking-wider font-semibold">Organization</th>
+<th class="py-sm px-md text-label-status font-label-status text-on-surface-variant uppercase tracking-wider font-semibold">Owner &amp; Contact</th>
+<th class="py-sm px-md text-label-status font-label-status text-on-surface-variant uppercase tracking-wider font-semibold text-right">Metrics (Cli/Col)</th>
+<th class="py-sm px-md text-label-status font-label-status text-on-surface-variant uppercase tracking-wider font-semibold text-right">Mo. Volume</th>
+<th class="py-sm px-md text-label-status font-label-status text-on-surface-variant uppercase tracking-wider font-semibold">Plan</th>
+<th class="py-sm px-md text-label-status font-label-status text-on-surface-variant uppercase tracking-wider font-semibold">Status</th>
+<th class="py-sm px-md text-label-status font-label-status text-on-surface-variant uppercase tracking-wider font-semibold">Created</th>
+<th class="py-sm px-md text-label-status font-label-status text-on-surface-variant uppercase tracking-wider font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container text-body-sm font-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-off-white transition-colors group">
+<td class="py-sm px-md">
+<div class="font-semibold text-primary">Mercado Central Assc.</div>
+<div class="text-on-surface-variant text-[12px]">ID: ORG-1042</div>
+</td>
+<td class="py-sm px-md">
+<div class="font-medium text-on-surface">João Silva</div>
+<div class="text-on-surface-variant text-[12px] font-data-mono">+258 84 123 4567</div>
+</td>
+<td class="py-sm px-md text-right">
+<span class="font-data-mono font-medium">450</span> <span class="text-outline">/</span> <span class="font-data-mono font-medium">12</span>
+</td>
+<td class="py-sm px-md text-right font-data-mono font-semibold text-on-surface">
+                                1.2M <span class="text-xs text-on-surface-variant font-body-sm font-normal">MZN</span>
+</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-status text-[10px]">
+<span class="material-symbols-outlined text-[12px]">star</span> PRO
+                                </span>
+</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-status-success/10 text-status-success font-label-status border border-status-success/20">
+                                    Active
+                                </span>
+</td>
+<td class="py-sm px-md text-on-surface-variant text-[13px]">
+                                12 Oct 2023
+                            </td>
+<td class="py-sm px-md text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container" title="View Details">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-status-error rounded hover:bg-error-container" onclick="document.getElementById('suspend-modal').classList.remove('hidden')" title="Suspend">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-off-white transition-colors group">
+<td class="py-sm px-md">
+<div class="font-semibold text-primary">Baixa Traders</div>
+<div class="text-on-surface-variant text-[12px]">ID: ORG-1089</div>
+</td>
+<td class="py-sm px-md">
+<div class="font-medium text-on-surface">Maria M.</div>
+<div class="text-on-surface-variant text-[12px] font-data-mono">+258 82 987 6543</div>
+</td>
+<td class="py-sm px-md text-right">
+<span class="font-data-mono font-medium">85</span> <span class="text-outline">/</span> <span class="font-data-mono font-medium">3</span>
+</td>
+<td class="py-sm px-md text-right font-data-mono font-semibold text-on-surface">
+                                250k <span class="text-xs text-on-surface-variant font-body-sm font-normal">MZN</span>
+</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-surface-container-high text-on-surface font-label-status text-[10px]">
+                                    BASIC
+                                </span>
+</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-status-warning/10 text-accent-gold font-label-status border border-status-warning/20">
+                                    Trial
+                                </span>
+</td>
+<td class="py-sm px-md text-on-surface-variant text-[13px]">
+                                05 Nov 2023
+                            </td>
+<td class="py-sm px-md text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container" title="View Details">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-status-error rounded hover:bg-error-container" onclick="document.getElementById('suspend-modal').classList.remove('hidden')" title="Suspend">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 (Suspended Example) -->
+<tr class="hover:bg-surface-off-white transition-colors group bg-error-container/20">
+<td class="py-sm px-md border-l-4 border-status-error">
+<div class="font-semibold text-on-surface">Zimpeto Auto Group</div>
+<div class="text-on-surface-variant text-[12px]">ID: ORG-0992</div>
+</td>
+<td class="py-sm px-md">
+<div class="font-medium text-on-surface">Carlos A.</div>
+<div class="text-on-surface-variant text-[12px] font-data-mono">+258 87 555 1122</div>
+</td>
+<td class="py-sm px-md text-right opacity-60">
+<span class="font-data-mono font-medium">210</span> <span class="text-outline">/</span> <span class="font-data-mono font-medium">8</span>
+</td>
+<td class="py-sm px-md text-right font-data-mono font-semibold text-on-surface opacity-60">
+                                -- <span class="text-xs text-on-surface-variant font-body-sm font-normal">MZN</span>
+</td>
+<td class="py-sm px-md opacity-60">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-status text-[10px]">
+<span class="material-symbols-outlined text-[12px]">star</span> PRO
+                                </span>
+</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-status-error text-on-error font-label-status">
+                                    Suspended
+                                </span>
+</td>
+<td class="py-sm px-md text-on-surface-variant text-[13px] opacity-60">
+                                14 Aug 2023
+                            </td>
+<td class="py-sm px-md text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1 text-primary hover:text-primary-container rounded hover:bg-surface-container font-label-status text-xs underline" title="Reactivate">
+                                        Reactivate
+                                    </button>
+</div>
+</td>
+</tr>
+<!-- More rows would go here in production -->
+</tbody>
+</table>
+<!-- Pagination Footer -->
+<div class="px-md py-sm border-t border-surface-container flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<div class="">Showing 1 to 10 of 124 entries</div>
+<div class="flex items-center gap-xs">
+<button class="p-1 rounded hover:bg-surface-container disabled:opacity-50"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-medium flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container font-medium flex items-center justify-center">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container font-medium flex items-center justify-center">3</button>
+<span class="px-1">...</span>
+<button class="p-1 rounded hover:bg-surface-container"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Modal: Suspend Organization (Hidden by default, shown for example) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-md modal-backdrop" id="suspend-modal">
+<div class="bg-surface-container-lowest rounded-xl shadow-lg w-full max-w-md overflow-hidden animate-[scale-in_0.2s_ease-out]">
+<!-- Header -->
+<div class="bg-error-container px-lg py-md flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-status-error flex items-center justify-center text-on-error shrink-0">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-error-container">Suspender Organização</h3>
+<p class="text-body-sm font-body-sm text-on-error-container opacity-90">Mercado Central Assc.</p>
+</div>
+<button class="ml-auto text-on-error-container hover:bg-error/10 p-1 rounded-full" onclick="document.getElementById('suspend-modal').classList.add('hidden')" title="Fechar">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Body -->
+<div class="p-lg">
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-md">A suspensão desta organização revogará imediatamente o acesso de todos os seus proprietários, gestores e cobradores. As cobranças ativas em curso serão congeladas.</p>
+<div class="space-y-md">
+<div>
+<label class="block text-body-sm font-body-sm font-medium text-on-surface mb-xs" for="suspend-reason">Motivo da Suspensão <span class="text-status-error">*</span></label>
+<select class="w-full bg-surface-off-white border border-outline-variant rounded-lg p-2 text-body-sm focus:ring-primary focus:border-primary" id="suspend-reason"><option disabled="" selected="" value="">Selecione um motivo...</option><option value="billing">Falta de Pagamento de Taxas da Plataforma</option><option value="tos">Violação dos Termos de Serviço</option><option value="fraud">Suspeita de Atividade Fraudulenta</option><option value="request">Solicitação do Proprietário</option><option value="other">Outro</option></select>
+</div>
+<div>
+<label class="block text-body-sm font-body-sm font-medium text-on-surface mb-xs" for="suspend-details">Detalhes Adicionais</label>
+<textarea class="w-full bg-surface-off-white border border-outline-variant rounded-lg p-2 text-body-sm focus:ring-primary focus:border-primary placeholder-outline-variant" id="suspend-details" placeholder="Provide more context for the auditor logs..." rows="3"></textarea>
+</div>
+<div class="flex items-start gap-sm pt-xs">
+<div class="flex items-center h-5">
+<input checked="" class="w-4 h-4 text-primary bg-surface-off-white border-outline-variant rounded focus:ring-primary focus:ring-2" id="notify-email" type="checkbox">
+</div>
+<div class="text-sm">
+<label class="font-medium text-on-surface text-body-sm font-body-sm" for="notify-email">Enviar notificação por e-mail</label>
+<p class="text-on-surface-variant text-[12px]">Será enviado um e-mail automático ao proprietário detalhando a suspensão e o contacto de suporte.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="px-lg py-md bg-surface-light-gray border-t border-surface-container flex justify-end gap-sm">
+<button class="px-md py-sm rounded-lg border border-outline-variant text-on-surface font-label-status hover:bg-surface-container transition-colors" onclick="document.getElementById('suspend-modal').classList.add('hidden')">Cancelar</button>
+<button class="px-md py-sm rounded-lg bg-status-error text-on-error font-label-status shadow-sm hover:bg-error transition-colors flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]">block</span> Confirmar Suspensão</button>
+</div>
+</div>
+</div>
+
+
+
+
+</body></html>

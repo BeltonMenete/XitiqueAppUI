@@ -1,5 +1,5 @@
 // /routes/client/_auth/step-2.tsx
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -8,7 +8,6 @@ import {
 	User,
 } from "lucide-react";
 import { type FormEvent, useState } from "react";
-import { ClientSidebar } from "#/components/ClientSidebar";
 import { FormError } from "#/components/FormError";
 import { APP_NAME } from "#/lib/constants";
 
@@ -167,11 +166,10 @@ function StepTwoRegistration() {
 									type="text"
 									value={fullName}
 									onChange={(e) => setFullName(e.target.value)}
-									className={`w-full pl-11 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm text-gray-900 ${
-										errors.fullName
+									className={`w-full pl-11 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all text-sm text-gray-900 ${errors.fullName
 											? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
 											: "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
-									}`}
+										}`}
 									placeholder="Ex: Albino Manuel"
 								/>
 							</div>
@@ -203,11 +201,10 @@ function StepTwoRegistration() {
 									maxLength={13}
 									value={biNumber}
 									onChange={(e) => handleBiChange(e.target.value)}
-									className={`w-full pl-14 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all font-mono text-sm tracking-wider text-gray-900 ${
-										errors.biNumber
+									className={`w-full pl-14 pr-4 py-2.5 bg-white border rounded-xl focus:outline-none focus:ring-2 transition-all font-mono text-sm tracking-wider text-gray-900 ${errors.biNumber
 											? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
 											: "border-gray-300 focus:border-emerald-500 focus:ring-emerald-500/20"
-									}`}
+										}`}
 									placeholder="120101234567M"
 								/>
 							</div>
@@ -227,13 +224,12 @@ function StepTwoRegistration() {
 							</label>
 							<div className="grid grid-cols-2 gap-3">
 								<label
-									className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${
-										gender === "M"
+									className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${gender === "M"
 											? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold"
 											: errors.gender
 												? "border-red-300 bg-white text-gray-600 hover:bg-gray-50"
 												: "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
-									}`}
+										}`}
 								>
 									<input
 										type="radio"
@@ -246,13 +242,12 @@ function StepTwoRegistration() {
 									Masculino
 								</label>
 								<label
-									className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${
-										gender === "F"
+									className={`flex items-center justify-center p-2.5 border rounded-xl cursor-pointer text-xs font-medium transition-all select-none ${gender === "F"
 											? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold"
 											: errors.gender
 												? "border-red-300 bg-white text-gray-600 hover:bg-gray-50"
 												: "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
-									}`}
+										}`}
 								>
 									<input
 										type="radio"
