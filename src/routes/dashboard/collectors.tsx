@@ -7,7 +7,9 @@ import {
   Wallet,
   Edit,
   Eye,
-  UserPlus
+  CirclePlus,
+  MapPin,
+  MoreVertical
 } from 'lucide-react';
 import { DashboardLayout } from '#/components/layout/DashboardLayout';
 import { Sidebar } from '#/components/layout/Sidebar';
@@ -17,6 +19,9 @@ import { Button } from '#/components/ui/Button';
 import { KPICard } from '#/components/ui/KPICard';
 import { Card, CardContent } from '#/components/ui/Card';
 import { ActiveBadge, InactiveBadge, PendingBadge } from '#/components/ui/StatusBadge';
+import { RegisterCollectorModal } from '#/components/business/RegisterCollectorModal';
+import { QuickTransferModal } from '#/components/business/QuickTransferModal';
+import { ExpandableRowContent } from '#/components/ui/ExpandableRow';
 import { cn } from '#/lib/design-system';
 
 export const Route = createFileRoute('/dashboard/collectors')({
@@ -34,13 +39,29 @@ interface Collector {
   avatar?: string;
 }
 
+interface CollectorData {
+  name: string;
+  phone: string;
+  email?: string;
+  observations?: string;
+  isActive: boolean;
+}
+
 function CollectorsManagement() {
   const [_searchTerm, _setSearchTerm] = useState('');
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+  const [selectedCollector, setSelectedCollector] = useState<Collector | null>(null);
+
+  const handleRegisterCollector = (data: CollectorData) => {
+    console.log('Registering collector:', data);
+    // TODO: Integrate with API
+  };
 
   const sidebarItems = [
     { label: 'Painel', icon: TrendingUp, href: '/dashboard/overview' },
     { label: 'Gestão', icon: Users, href: '/dashboard/savers' },
-    { label: 'Cobradores', icon: Users, href: '/dashboard/collectors', isActive: true },
+    { label: 'Cobradores', icon: CirclePlus, href: '/dashboard/collectors', isActive: true },
     { label: 'Financeiro', icon: Wallet, href: '/dashboard/financial' },
     { label: 'Relatórios', icon: TrendingUp, href: '/dashboard/reports' },
   ];
@@ -202,7 +223,7 @@ function CollectorsManagement() {
             className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
             title="Atribuir Clientes"
           >
-            <UserPlus size={16} />
+            <CirclePlus size={16} />
           </button>
           <button
             type="button"
@@ -223,6 +244,77 @@ function CollectorsManagement() {
     },
   ];
 
+  const renderExpandedRow = (row: Collector) => (
+    <ExpandableRowContent
+      title={`Desempenho de ${row.name}`}
+      onViewFullDetails={() => console.log('Navigate to full details:', row.id)}
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <TrendingUp size={14} />
+            <span>Volume Mensal</span>
+          </div>
+          <p className="text-lg font-bold text-slate-900">{row.monthlyVolume.toLocaleString()} MZN</p>
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <Users size={14} />
+            <span>Clientes Activos</span>
+          </div>
+          <p className="text-lg font-bold text-slate-900">{row.clients} Ticantes</p>
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <Wallet size={14} />
+            <span>Diferença</span>
+          </div>
+          <p className={cn("text-lg font-bold", row.difference > 0 ? "text-emerald-600" : row.difference < 0 ? "text-red-600" : "text-slate-900")}>
+            {row.difference > 0 ? '+' : ''}{row.difference.toLocaleString()} MZN
+          </p>
+        </div>
+      </div>
+
+      <div className="pt-4 border-t border-slate-200">
+        <h5 className="text-xs font-semibold text-slate-500 uppercase mb-3">Acções Rápidas</h5>
+        <div className="flex flex-wrap gap-2">
+          <Button size="sm" variant="outline" leftIcon={<MapPin size={14} />}>
+            Ver Localização
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            leftIcon={<CirclePlus size={14} />}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedCollector(row);
+              setIsTransferModalOpen(true);
+            }}
+          >
+            Transferir Clientes
+          </Button>
+          <Button size="sm" variant="outline" leftIcon={<MoreVertical size={14} />}>
+            Mais Opções
+          </Button>
+        </div>
+      </div>
+
+      <div className="pt-4 border-t border-slate-200">
+        <h5 className="text-xs font-semibold text-slate-500 uppercase mb-3">Informação de Contacto</h5>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="text-slate-500">Telefone:</span>
+            <span className="ml-2 font-medium text-slate-900">{row.phone}</span>
+          </div>
+          <div>
+            <span className="text-slate-500">Estado:</span>
+            <span className="ml-2 font-medium text-slate-900 capitalize">{row.status}</span>
+          </div>
+        </div>
+      </div>
+    </ExpandableRowContent>
+  );
+
   return (
     <DashboardLayout>
       <Sidebar items={sidebarItems} />
@@ -232,7 +324,7 @@ function CollectorsManagement() {
           title="Gestão de Cobradores"
           description="Gerencie sua equipe de campo e acompanhe o desempenho"
           rightContent={
-            <Button size="sm" leftIcon={<Plus size={16} />}>
+            <Button size="sm" leftIcon={<Plus size={16} />} onClick={() => setIsRegisterModalOpen(true)}>
               Novo Cobrador
             </Button>
           }
@@ -256,11 +348,35 @@ function CollectorsManagement() {
                 searchPlaceholder="Buscar por nome ou telefone..."
                 onRowClick={(row) => console.log('View collector:', row)}
                 emptyMessage="Nenhum cobrador encontrado"
+                expandable={true}
+                renderExpandedRow={renderExpandedRow}
+                onRowExpand={(row) => console.log('Row expanded:', row.id)}
               />
             </CardContent>
           </Card>
         </main>
       </div>
+
+      <RegisterCollectorModal
+        isOpen={isRegisterModalOpen}
+        onClose={() => setIsRegisterModalOpen(false)}
+        onSubmit={handleRegisterCollector}
+      />
+
+      <QuickTransferModal
+        isOpen={isTransferModalOpen}
+        onClose={() => {
+          setIsTransferModalOpen(false);
+          setSelectedCollector(null);
+        }}
+        onSubmit={(data) => console.log('Transfer:', data)}
+        collectorName={selectedCollector?.name}
+        availableCollectors={mockCollectors.filter(c => c.id !== selectedCollector?.id).map(c => ({
+          id: c.id,
+          name: c.name,
+          currentClients: c.clients,
+        }))}
+      />
     </DashboardLayout>
   );
 }

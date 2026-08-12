@@ -36,6 +36,7 @@ export function Button({
     secondary: "bg-slate-100 text-slate-700 hover:bg-slate-200 focus:ring-slate-500",
     danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500",
     ghost: "bg-transparent text-slate-600 hover:bg-slate-100 focus:ring-slate-500",
+    outline: "border border-slate-300 text-slate-700 hover:bg-slate-50 focus:ring-slate-500",
   };
 
   return (

@@ -43,6 +43,25 @@ function OrganizationDashboard() {
       color: 'text-emerald-600 bg-emerald-50 border-emerald-100',
       isDebt: false,
       trend: { value: '12.5%', isPositive: true },
+      clickable: true,
+      expandedContent: (
+        <div className="space-y-3">
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Meta Mensal</span>
+            <span className="font-semibold text-slate-900">500.000 MZN</span>
+          </div>
+          <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div className="h-full bg-emerald-500 rounded-full" style={{ width: '90%' }} />
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Progresso</span>
+            <span className="font-semibold text-emerald-600">90%</span>
+          </div>
+          <Button size="sm" variant="outline" className="w-full mt-2">
+            Ver Relatório Detalhado
+          </Button>
+        </div>
+      ),
     },
     {
       title: 'Comissão Mês',
@@ -51,6 +70,25 @@ function OrganizationDashboard() {
       icon: Star,
       color: 'text-amber-600 bg-amber-50 border-amber-100',
       isDebt: false,
+      clickable: true,
+      expandedContent: (
+        <div className="space-y-3">
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Meta de Comissão</span>
+            <span className="font-semibold text-slate-900">50.000 MZN</span>
+          </div>
+          <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div className="h-full bg-amber-500 rounded-full" style={{ width: '90%' }} />
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Progresso</span>
+            <span className="font-semibold text-amber-600">90%</span>
+          </div>
+          <Button size="sm" variant="outline" className="w-full mt-2">
+            Ver Detalhes de Comissão
+          </Button>
+        </div>
+      ),
     },
     {
       title: 'Emprestado',
@@ -59,6 +97,26 @@ function OrganizationDashboard() {
       icon: Handshake,
       color: 'text-slate-600 bg-slate-50 border-slate-100',
       isDebt: false,
+      clickable: true,
+      expandedContent: (
+        <div className="space-y-3">
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Total Solicitado</span>
+            <span className="font-semibold text-slate-900">85.000 MZN</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Em Atraso</span>
+            <span className="font-semibold text-red-600">2 empréstimos</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Taxa de Aprovação</span>
+            <span className="font-semibold text-emerald-600">94%</span>
+          </div>
+          <Button size="sm" variant="outline" className="w-full mt-2">
+            Gerir Empréstimos
+          </Button>
+        </div>
+      ),
     },
     {
       title: 'Diferença Caixa',
@@ -67,6 +125,25 @@ function OrganizationDashboard() {
       icon: AlertCircle,
       color: 'text-red-600 bg-red-50 border-red-100',
       isDebt: true,
+      clickable: true,
+      expandedContent: (
+        <div className="space-y-3">
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Última Reconciliação</span>
+            <span className="font-semibold text-slate-900">Há 3 dias</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">Itens Pendentes</span>
+            <span className="font-semibold text-amber-600">5 transações</span>
+          </div>
+          <div className="p-2 bg-amber-50 rounded-lg border border-amber-200">
+            <p className="text-xs text-amber-800">Reconciliação recomendada</p>
+          </div>
+          <Button size="sm" variant="outline" className="w-full mt-2">
+            Iniciar Reconciliação
+          </Button>
+        </div>
+      ),
     },
   ];
 

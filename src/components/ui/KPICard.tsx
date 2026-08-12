@@ -1,4 +1,6 @@
 import type { LucideIcon } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Card, CardContent } from "./Card";
 import { cn } from "#/lib/design-system";
 
@@ -14,6 +16,8 @@ interface KPICardProps {
     isPositive: boolean;
   };
   className?: string;
+  clickable?: boolean;
+  expandedContent?: React.ReactNode;
 }
 
 export function KPICard({
@@ -25,15 +29,39 @@ export function KPICard({
   isDebt = false,
   trend,
   className = "",
+  clickable = false,
+  expandedContent,
 }: KPICardProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleClick = () => {
+    if (clickable) {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card
+      className={cn(
+        "overflow-hidden",
+        clickable && "hover:shadow-md transition-shadow cursor-pointer",
+        className
+      )}
+      onClick={handleClick}
+    >
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-              {title}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                {title}
+              </p>
+              {clickable && (
+                <span className="text-slate-400">
+                  {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </span>
+              )}
+            </div>
             <h3 className="text-2xl font-bold text-slate-900 mb-1">{value}</h3>
             {subtext && (
               <p className="text-xs text-slate-400">{subtext}</p>
@@ -62,6 +90,11 @@ export function KPICard({
             <Icon className="w-6 h-6" />
           </div>
         </div>
+        {isExpanded && expandedContent && (
+          <div className="mt-4 pt-4 border-t border-slate-200 animate-in fade-in slide-in-from-top-2 duration-200">
+            {expandedContent}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

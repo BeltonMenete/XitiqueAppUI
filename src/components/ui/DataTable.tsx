@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronUp, ChevronDown, MoreHorizontal } from "lucide-react";
 import { cn } from "#/lib/design-system";
+import { ExpandableRow } from "./ExpandableRow";
 
 interface Column<T> {
   key: string;
@@ -19,6 +20,9 @@ interface DataTableProps<T> {
   emptyMessage?: string;
   className?: string;
   rowKey?: keyof T;
+  expandable?: boolean;
+  renderExpandedRow?: (row: T) => React.ReactNode;
+  onRowExpand?: (row: T) => void;
 }
 
 export function DataTable<T>({
@@ -31,10 +35,14 @@ export function DataTable<T>({
   emptyMessage = "Nenhum dado encontrado",
   className = "",
   rowKey = 'id' as keyof T,
+  expandable = false,
+  renderExpandedRow,
+  onRowExpand,
 }: DataTableProps<T>) {
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [searchTerm, setSearchTerm] = useState("");
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
   const handleSort = (key: string) => {
     if (sortColumn === key) {
@@ -43,6 +51,22 @@ export function DataTable<T>({
       setSortColumn(key);
       setSortDirection("asc");
     }
+  };
+
+  const handleRowExpand = (row: T) => {
+    const rowId = String(row[rowKey]);
+    const newExpandedRows = new Set(expandedRows);
+    if (newExpandedRows.has(rowId)) {
+      newExpandedRows.delete(rowId);
+    } else {
+      newExpandedRows.add(rowId);
+    }
+    setExpandedRows(newExpandedRows);
+    onRowExpand?.(row);
+  };
+
+  const isRowExpanded = (row: T) => {
+    return expandedRows.has(String(row[rowKey]));
   };
 
   const filteredData = data.filter((row) => {
@@ -114,7 +138,7 @@ export function DataTable<T>({
                 </th>
               ))}
               <th className="px-4 py-3 text-right">
-                <MoreHorizontal className="w-4 h-4 text-slate-400" />
+                {expandable ? <span className="sr-only">Expandir</span> : <MoreHorizontal className="w-4 h-4 text-slate-400" />}
               </th>
             </tr>
           </thead>
@@ -126,34 +150,57 @@ export function DataTable<T>({
                 </td>
               </tr>
             ) : (
-              sortedData.map((row) => (
-                <tr
-                  key={String(row[rowKey])}
-                  className={cn(
-                    "hover:bg-slate-50 transition-colors",
-                    onRowClick && "cursor-pointer"
-                  )}
-                  onClick={() => onRowClick?.(row)}
-                >
-                  {columns.map((col) => (
-                    <td key={col.key} className="px-4 py-3 text-sm text-slate-700">
-                      {col.render ? col.render(row[col.key as keyof T], row) : String(row[col.key as keyof T])}
-                    </td>
-                  ))}
-                  <td className="px-4 py-3 text-right">
-                    <button
-                      type="button"
-                      className="p-1 rounded hover:bg-slate-100 transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRowClick?.(row);
-                      }}
+              sortedData.map((row) => {
+                const rowId = String(row[rowKey]);
+                const expanded = isRowExpanded(row);
+
+                if (expandable) {
+                  return (
+                    <ExpandableRow
+                      key={rowId}
+                      isExpanded={expanded}
+                      onToggle={() => handleRowExpand(row)}
+                      showExpandButton={true}
+                      expandedContent={renderExpandedRow?.(row)}
                     >
-                      <MoreHorizontal className="w-4 h-4 text-slate-400" />
-                    </button>
-                  </td>
-                </tr>
-              ))
+                      {columns.map((col) => (
+                        <td key={col.key} className="px-4 py-3 text-sm text-slate-700">
+                          {col.render ? col.render(row[col.key as keyof T], row) : String(row[col.key as keyof T])}
+                        </td>
+                      ))}
+                    </ExpandableRow>
+                  );
+                }
+
+                return (
+                  <tr
+                    key={rowId}
+                    className={cn(
+                      "hover:bg-slate-50 transition-colors",
+                      onRowClick && "cursor-pointer"
+                    )}
+                    onClick={() => onRowClick?.(row)}
+                  >
+                    {columns.map((col) => (
+                      <td key={col.key} className="px-4 py-3 text-sm text-slate-700">
+                        {col.render ? col.render(row[col.key as keyof T], row) : String(row[col.key as keyof T])}
+                      </td>
+                    ))}
+                    <td className="px-4 py-3 text-right">
+                      <button
+                        type="button"
+                        className="p-1 rounded hover:bg-slate-100 transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRowClick?.(row);
+                        }}
+                      >
+                        <MoreHorizontal className="w-4 h-4 text-slate-400" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
@@ -163,6 +210,7 @@ export function DataTable<T>({
         <div className="px-4 py-3 border-t border-slate-200 bg-slate-50">
           <p className="text-xs text-slate-500">
             Mostrando {sortedData.length} de {data.length} registos
+            {expandable && expandedRows.size > 0 && ` (${expandedRows.size} expandido${expandedRows.size > 1 ? 's' : ''})`}
           </p>
         </div>
       )}

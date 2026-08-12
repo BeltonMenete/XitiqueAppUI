@@ -9,7 +9,7 @@ export const colors = {
     dark: '#334155', // slate-700
     darker: '#1e293b', // slate-800
   },
-  
+
   // Secondary (Emerald - accent)
   secondary: {
     DEFAULT: '#059669', // emerald-600
@@ -17,7 +17,7 @@ export const colors = {
     dark: '#047857', // emerald-700
     darker: '#065f46', // emerald-800
   },
-  
+
   // Backgrounds
   background: {
     primary: '#f8fafc', // slate-50
@@ -25,7 +25,7 @@ export const colors = {
     tertiary: '#e2e8f0', // slate-200
     white: '#ffffff',
   },
-  
+
   // Status Colors
   status: {
     success: '#10b981', // emerald-500
@@ -33,7 +33,7 @@ export const colors = {
     error: '#ef4444', // red-500
     info: '#3b82f6', // blue-500
   },
-  
+
   // Text Colors
   text: {
     primary: '#0f172a', // slate-900
@@ -41,7 +41,7 @@ export const colors = {
     tertiary: '#94a3b8', // slate-400
     inverse: '#ffffff',
   },
-  
+
   // Border Colors
   border: {
     DEFAULT: '#e2e8f0', // slate-200
@@ -56,26 +56,26 @@ export const typography = {
     body: 'Inter, sans-serif',
     mono: 'JetBrains Mono, monospace',
   },
-  
+
   sizes: {
     // Display sizes
     displayHero: '40px',
     displayLarge: '32px',
     displayMedium: '24px',
-    
+
     // Body sizes
     bodyLarge: '18px',
     bodyMedium: '16px',
     bodySmall: '14px',
-    
+
     // Label sizes
     labelMedium: '12px',
     labelSmall: '10px',
-    
+
     // Data sizes
     data: '14px',
   },
-  
+
   weights: {
     light: '300',
     normal: '400',
@@ -84,7 +84,7 @@ export const typography = {
     bold: '700',
     extrabold: '800',
   },
-  
+
   lineHeights: {
     tight: '1.2',
     normal: '1.5',
@@ -101,7 +101,7 @@ export const spacing = {
   xl: '32px',
   '2xl': '48px',
   '3xl': '64px',
-  
+
   // Functional spacing
   section: '24px',
   card: '20px',
@@ -146,35 +146,36 @@ export const tailwindClasses = {
   bgSecondary: 'bg-slate-100',
   bgTertiary: 'bg-slate-200',
   bgWhite: 'bg-white',
-  
+
   // Text colors
   textPrimary: 'text-slate-900',
   textSecondary: 'text-slate-600',
   textTertiary: 'text-slate-400',
-  
+
   // Border colors
   border: 'border-slate-200',
   borderLight: 'border-slate-100',
-  
+
   // Status colors
   success: 'text-emerald-500 bg-emerald-50 border-emerald-200',
   warning: 'text-amber-500 bg-amber-50 border-amber-200',
   error: 'text-red-500 bg-red-50 border-red-200',
   info: 'text-blue-500 bg-blue-50 border-blue-200',
-  
+
   // Button variants
   buttonPrimary: 'bg-emerald-600 text-white hover:bg-emerald-700',
   buttonSecondary: 'bg-slate-100 text-slate-700 hover:bg-slate-200',
   buttonDanger: 'bg-red-500 text-white hover:bg-red-600',
   buttonGhost: 'bg-transparent text-slate-600 hover:bg-slate-100',
-  
+  buttonOutline: 'border border-slate-300 text-slate-700 hover:bg-slate-50',
+
   // Card styles
   card: 'bg-white border border-slate-200 rounded-lg shadow-sm',
   cardInteractive: 'bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow',
-  
+
   // Input styles
   input: 'bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500',
-  
+
   // Typography
   display: 'font-display font-bold',
   heading: 'font-display font-semibold',
@@ -210,7 +211,7 @@ export function getStatusColor(status: StatusType): string {
 }
 
 // Button variant types
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline';
 
 export function getButtonVariant(variant: ButtonVariant): string {
   switch (variant) {
@@ -222,6 +223,8 @@ export function getButtonVariant(variant: ButtonVariant): string {
       return tailwindClasses.buttonDanger;
     case 'ghost':
       return tailwindClasses.buttonGhost;
+    case 'outline':
+      return tailwindClasses.buttonOutline;
     default:
       return tailwindClasses.buttonPrimary;
   }

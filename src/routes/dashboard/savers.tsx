@@ -8,7 +8,11 @@ import {
   ChevronDown,
   TrendingUp,
   AlertCircle,
-  Wallet
+  Wallet,
+  DollarSign,
+  Phone,
+  Calendar,
+  MoreVertical
 } from 'lucide-react';
 import { DashboardLayout } from '#/components/layout/DashboardLayout';
 import { Sidebar } from '#/components/layout/Sidebar';
@@ -18,9 +22,12 @@ import { Button } from '#/components/ui/Button';
 import { KPICard } from '#/components/ui/KPICard';
 import { Card, CardContent } from '#/components/ui/Card';
 import { DebtBadge, ActiveBadge, InactiveBadge } from '#/components/ui/StatusBadge';
+import { ExpandableRowContent } from '#/components/ui/ExpandableRow';
 import { cn } from '#/lib/design-system';
 import { useSavers } from '#/features/savers';
 import { RegisterSaverModal } from '#/components/business/RegisterSaverModal';
+import { QuickDepositModal } from '#/components/business/QuickDepositModal';
+import { QuickLoanModal } from '#/components/business/QuickLoanModal';
 import type { Saver } from '#/features/savers/types';
 
 export const Route = createFileRoute('/dashboard/savers')({
@@ -118,6 +125,9 @@ function SaversManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('Maio 2024');
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
+  const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
+  const [selectedSaver, setSelectedSaver] = useState<Saver | null>(null);
 
   const { data: saversData } = useSavers({ page: 1, pageSize: 20 });
   const savers = saversData?.data || mockSavers;
@@ -222,16 +232,6 @@ function SaversManagement() {
     {
       key: 'status',
       header: 'ESTADO',
-      render: (value: unknown) => {
-        const status = String(value);
-        if (status === 'active') return <ActiveBadge />;
-        if (status === 'in_debt') return <DebtBadge />;
-        return <InactiveBadge />;
-      },
-    },
-    {
-      key: 'status',
-      header: 'ESTADO',
       render: (_: unknown, row: Saver) => {
         if (row.status === 'active') return <ActiveBadge />;
         if (row.status === 'in_debt') return <DebtBadge />;
@@ -240,6 +240,86 @@ function SaversManagement() {
       },
     },
   ];
+
+  const renderExpandedRow = (row: Saver) => (
+    <ExpandableRowContent
+      title={`Detalhes de ${row.name}`}
+      onViewFullDetails={() => console.log('Navigate to full details:', row.id)}
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <DollarSign size={14} />
+            <span>Total Poupança</span>
+          </div>
+          <p className="text-lg font-bold text-slate-900">{row.totalSaved.toLocaleString()} MZN</p>
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <AlertCircle size={14} />
+            <span>Dívida Atual</span>
+          </div>
+          <p className={cn("text-lg font-bold", row.currentDebt > 0 ? "text-red-600" : "text-slate-900")}>
+            {row.currentDebt.toLocaleString()} MZN
+          </p>
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <Calendar size={14} />
+            <span>Dias no Ciclo</span>
+          </div>
+          <p className="text-lg font-bold text-slate-900">{row.daysInCycle} dias</p>
+        </div>
+      </div>
+
+      <div className="pt-4 border-t border-slate-200">
+        <h5 className="text-xs font-semibold text-slate-500 uppercase mb-3">Acções Rápidas</h5>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            leftIcon={<DollarSign size={14} />}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedSaver(row);
+              setIsDepositModalOpen(true);
+            }}
+          >
+            Registar Depósito
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            leftIcon={<Phone size={14} />}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedSaver(row);
+              setIsLoanModalOpen(true);
+            }}
+          >
+            Solicitar Empréstimo
+          </Button>
+          <Button size="sm" variant="outline" leftIcon={<MoreVertical size={14} />}>
+            Mais Opções
+          </Button>
+        </div>
+      </div>
+
+      <div className="pt-4 border-t border-slate-200">
+        <h5 className="text-xs font-semibold text-slate-500 uppercase mb-3">Informação de Contacto</h5>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="text-slate-500">Organização:</span>
+            <span className="ml-2 font-medium text-slate-900">{row.organization?.name || 'N/A'}</span>
+          </div>
+          <div>
+            <span className="text-slate-500">Data de Registo:</span>
+            <span className="ml-2 font-medium text-slate-900">{row.registrationDate}</span>
+          </div>
+        </div>
+      </div>
+    </ExpandableRowContent>
+  );
 
   return (
     <DashboardLayout>
@@ -315,6 +395,9 @@ function SaversManagement() {
                     searchPlaceholder="Pesquisar por nome ou número de cartão..."
                     onRowClick={(row) => console.log('View saver:', row)}
                     emptyMessage="Nenhum ticante encontrado"
+                    expandable={true}
+                    renderExpandedRow={renderExpandedRow}
+                    onRowExpand={(row) => console.log('Row expanded:', row.id)}
                   />
                 </CardContent>
               </Card>
@@ -384,6 +467,28 @@ function SaversManagement() {
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
         onSubmit={(data) => console.log('Register saver:', data)}
+      />
+
+      <QuickDepositModal
+        isOpen={isDepositModalOpen}
+        onClose={() => {
+          setIsDepositModalOpen(false);
+          setSelectedSaver(null);
+        }}
+        onSubmit={(data) => console.log('Deposit:', data)}
+        saverName={selectedSaver?.name}
+        lastAmount={selectedSaver?.dailyAmount}
+      />
+
+      <QuickLoanModal
+        isOpen={isLoanModalOpen}
+        onClose={() => {
+          setIsLoanModalOpen(false);
+          setSelectedSaver(null);
+        }}
+        onSubmit={(data) => console.log('Loan:', data)}
+        saverName={selectedSaver?.name}
+        maxLoanAmount={selectedSaver?.totalSaved ? selectedSaver.totalSaved * 2 : 50000}
       />
     </DashboardLayout>
   );
