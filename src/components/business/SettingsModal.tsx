@@ -1,8 +1,8 @@
 import {
 	Building2,
-	Extension,
-	NotificationsActive,
-	Rule,
+	Layers,
+	BellRing,
+	Ruler,
 	Trash2,
 	Upload,
 } from "lucide-react";
@@ -153,7 +153,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 		{
 			id: "rules",
 			label: "Regras Operacionais",
-			icon: <Rule size={18} />,
+			icon: <Ruler size={18} />,
 			content: (
 				<div className="space-y-6">
 					<Card>
@@ -258,7 +258,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 		{
 			id: "modules",
 			label: "Módulos Activos",
-			icon: <Extension size={18} />,
+			icon: <Layers size={18} />,
 			content: (
 				<div className="space-y-4">
 					{[
@@ -327,7 +327,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 		{
 			id: "notifications",
 			label: "Notificações",
-			icon: <NotificationsActive size={18} />,
+			icon: <BellRing size={18} />,
 			content: (
 				<div className="space-y-4">
 					<Card>
@@ -385,7 +385,8 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 		},
 	];
 
-	const _handleSave = () => {
+	const handleSave = () => {
+		// Save logic would go here
 		onSave(formData);
 		onClose();
 	};

@@ -101,7 +101,6 @@ export function SaverMasterDetail({
 	return (
 		<SplitView
 			masterWidth="400px"
-			detailWidth="auto"
 			collapsible={true}
 			defaultCollapsed={false}
 			masterContent={

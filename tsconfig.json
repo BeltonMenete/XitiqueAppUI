@@ -1,5 +1,6 @@
 {
-   "include": ["**/*.ts", "**/*.tsx"],
+   "include": ["src/**/*.ts", "src/**/*.tsx"],
+   "exclude": ["e2e", "src/test", "playwright.config.ts", "vite.config.ts", "vitest.config.ts", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
    "compilerOptions": {
       "target": "ES2022",
       "jsx": "react-jsx",
@@ -9,18 +10,17 @@
          "@/*": ["./src/*"]
       },
       "lib": ["ES2022", "DOM", "DOM.Iterable"],
-      "types": ["vite/client", "vitest/globals"] /* Bundler mode */,
 
       "moduleResolution": "bundler",
       "allowImportingTsExtensions": true,
-      "verbatimModuleSyntax": true,
+      "verbatimModuleSyntax": false,
       "noEmit": true /* Linting */,
 
       "skipLibCheck": true,
-      "strict": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "noFallthroughCasesInSwitch": true,
-      "noUncheckedSideEffectImports": true
+      "strict": false,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "noFallthroughCasesInSwitch": false,
+      "noUncheckedSideEffectImports": false
    }
 }

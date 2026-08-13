@@ -6,7 +6,6 @@ interface SplitViewProps {
 	masterContent: React.ReactNode;
 	detailContent: React.ReactNode;
 	masterWidth?: string;
-	detailWidth?: string;
 	collapsible?: boolean;
 	defaultCollapsed?: boolean;
 	className?: string;
@@ -16,7 +15,6 @@ export function SplitView({
 	masterContent,
 	detailContent,
 	masterWidth = "400px",
-	detailWidth = "auto",
 	collapsible = true,
 	defaultCollapsed = false,
 	className,
@@ -71,7 +69,6 @@ interface MasterItemProps {
 }
 
 export function MasterItem({
-	id,
 	title,
 	subtitle,
 	icon,

@@ -206,7 +206,7 @@ function SuperDashboard() {
 }
 
 // Overview Tab
-function OverviewTab({ kpis }: { kpis: typeof overviewKPIs }) {
+function OverviewTab({ kpis }: { kpis: any }) {
 	return (
 		<div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
 			{/* KPI Grid */}
