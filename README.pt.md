@@ -20,6 +20,10 @@ pnpm install
 pnpm dev
 pnpm build
 pnpm test
+pnpm test:watch
+pnpm test:e2e
+pnpm test:e2e:ui
+pnpm test:e2e:debug
 pnpm check
 ```
 
@@ -73,7 +77,52 @@ src/
 - Tailwind CSS
 - Valibot
 - Vitest
+- Playwright
 - Biome
+
+## Testes
+
+O projeto inclui testes unitários/integração e testes end-to-end:
+
+### Testes Unitários/Integração (Vitest)
+
+```bash
+# Executar todos os testes uma vez
+pnpm test
+
+# Executar testes em modo watch (desenvolvimento)
+pnpm test:watch
+```
+
+Os testes estão localizados em `src/components/**/*.test.tsx` e utilizam:
+- Vitest como executor de testes
+- React Testing Library para testes de componentes
+- @testing-library/jest-dom para matchers personalizados
+
+### Testes End-to-End (Playwright)
+
+```bash
+# Executar testes E2E
+pnpm test:e2e
+
+# Executar testes E2E com interface do Playwright
+pnpm test:e2e:ui
+
+# Depurar testes E2E
+pnpm test:e2e:debug
+```
+
+Os testes E2E estão localizados em `e2e/*.spec.ts` e testam:
+- Navegação no dashboard
+- Fluxos de gestão de poupadores
+- Fluxos de gestão de cobradores
+
+### CI/CD
+
+Os testes são executados automaticamente no branch `main` via GitHub Actions. O workflow:
+- Executa testes unitários com Vitest
+- Executa testes E2E com Playwright
+- Carrega relatórios do Playwright como artefactos
 
 ## Nota
 
