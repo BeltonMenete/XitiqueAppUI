@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	AlertCircle,
 	ArrowLeft,
@@ -18,18 +18,34 @@ import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
+import { Breadcrumbs } from "#/components/ui/Breadcrumbs";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
 import { DebtBadge } from "#/components/ui/StatusBadge";
+import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
+import { ProgressCircle } from "#/components/ui/ProgressCircle";
 import { cn } from "#/lib/design-system";
+import {
+	useSaver,
+	useSaverDeposits,
+	useSaverLoans,
+	useSaverHistory,
+} from "#/features/savers";
 
 export const Route = createFileRoute("/dashboard/savers/$id")({
 	component: SaverDetails,
 });
 
 function SaverDetails() {
+	const { id } = Route.useParams();
+	const navigate = useNavigate();
 	const [activeTab, setActiveTab] = useState<
 		"card" | "statement" | "loans" | "history"
 	>("card");
+
+	const { data: saver, isLoading: saverLoading } = useSaver(id);
+	const { data: deposits, isLoading: depositsLoading } = useSaverDeposits(id);
+	const { data: loans, isLoading: loansLoading } = useSaverLoans(id);
+	const { data: history, isLoading: historyLoading } = useSaverHistory(id);
 
 	const sidebarItems = [
 		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
@@ -57,6 +73,8 @@ function SaverDetails() {
 		organization: "Xitique Central",
 	};
 
+	const displaySaver = saver || mockSaver;
+
 	const generateDays = () => {
 		const days = [];
 		for (let i = 1; i <= 30; i++) {
@@ -80,6 +98,12 @@ function SaverDetails() {
 			<div className="flex-1 flex flex-col h-full overflow-hidden">
 				<Header
 					title="Detalhes do Ticante"
+					breadcrumbs={[
+						{ label: "Dashboard", href: "/dashboard/overview" },
+						{ label: "Gestão", href: "/dashboard/savers" },
+						{ label: "Ticantes", href: "/dashboard/savers" },
+						{ label: displaySaver.name },
+					]}
 					rightContent={
 						<div className="flex items-center gap-2">
 							<Button
@@ -97,80 +121,79 @@ function SaverDetails() {
 				/>
 
 				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
-					{/* Breadcrumb */}
-					<div className="flex items-center gap-2 text-sm text-slate-400">
-						<ArrowLeft
-							size={16}
-							className="cursor-pointer hover:text-slate-600"
-						/>
-						<span>Gestão / Ticantes / {mockSaver.name}</span>
-					</div>
-
 					{/* Saver Profile Card */}
-					<Card className="border-l-4 border-l-emerald-500">
-						<CardContent className="p-6">
-							<div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-								<div className="relative">
-									<div className="w-24 h-24 rounded-2xl bg-slate-200 flex items-center justify-center border-4 border-slate-100">
-										<span className="text-3xl font-bold text-slate-400">
-											MS
+					{saverLoading ? (
+						<Card>
+							<CardContent className="p-6">
+								<LoadingSkeleton variant="card" />
+							</CardContent>
+						</Card>
+					) : (
+						<Card className="border-l-4 border-l-emerald-500">
+							<CardContent className="p-6">
+								<div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+									<div className="relative">
+										<div className="w-24 h-24 rounded-2xl bg-slate-200 flex items-center justify-center border-4 border-slate-100">
+											<span className="text-3xl font-bold text-slate-400">
+												MS
+											</span>
+										</div>
+										<span className="absolute -bottom-2 -right-2 bg-emerald-500 text-white px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border-2 border-white">
+											Ativo
 										</span>
 									</div>
-									<span className="absolute -bottom-2 -right-2 bg-emerald-500 text-white px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border-2 border-white">
-										Ativo
-									</span>
-								</div>
 
-								<div className="flex-1">
-									<div className="flex items-center gap-3 mb-2">
-										<h1 className="text-2xl font-bold text-slate-900">
-											{mockSaver.name}
-										</h1>
-										<span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-mono font-semibold">
-											ID: {mockSaver.id}
-										</span>
-									</div>
-									<div className="flex flex-wrap gap-4 text-sm text-slate-500">
-										<div className="flex items-center gap-2">
-											<MapPin size={16} />
-											<span>{mockSaver.location}</span>
+									<div className="flex-1">
+										<div className="flex items-center gap-3 mb-2">
+											<h1 className="text-2xl font-bold text-slate-900">
+												{mockSaver.name}
+											</h1>
+											<span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-mono font-semibold">
+												ID: {mockSaver.id}
+											</span>
 										</div>
-										<div className="flex items-center gap-2">
-											<Phone size={16} />
-											<span>{mockSaver.phone}</span>
+										<div className="flex flex-wrap gap-4 text-sm text-slate-500">
+											<div className="flex items-center gap-2">
+												<MapPin size={16} />
+												<span>{mockSaver.location}</span>
+											</div>
+											<div className="flex items-center gap-2">
+												<Phone size={16} />
+												<span>{mockSaver.phone}</span>
+											</div>
 										</div>
 									</div>
-								</div>
 
-								<div className="grid grid-cols-3 gap-4 w-full md:w-auto">
-									<div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-center min-w-[100px]">
-										<p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">
-											Taxa/Dia
-										</p>
-										<p className="font-mono text-slate-900 font-bold">
-											{mockSaver.dailyRate}
-										</p>
-									</div>
-									<div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-center min-w-[100px]">
-										<p className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider mb-1">
-											Poupado
-										</p>
-										<p className="font-mono text-emerald-600 font-bold">
-											{mockSaver.totalSaved}
-										</p>
-									</div>
-									<div className="bg-red-50 p-3 rounded-lg border border-red-200 text-center min-w-[100px]">
-										<p className="text-[10px] uppercase font-bold text-red-600 tracking-wider mb-1">
-											Dívida
-										</p>
-										<p className="font-mono text-red-600 font-bold">
-											{mockSaver.debt}
-										</p>
+									<div className="grid grid-cols-3 gap-4 w-full md:w-auto">
+										<div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-center min-w-[100px]">
+											<p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">
+												Taxa/Dia
+											</p>
+											<p className="font-mono text-slate-900 font-bold">
+												{mockSaver.dailyRate}
+											</p>
+										</div>
+										<div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-center min-w-[100px]">
+											<p className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider mb-1">
+												Poupado
+											</p>
+											<p className="font-mono text-emerald-600 font-bold">
+												{mockSaver.totalSaved}
+											</p>
+										</div>
+										<div className="bg-red-50 p-3 rounded-lg border border-red-200 text-center min-w-[100px]">
+											<p className="text-[10px] uppercase font-bold text-red-600 tracking-wider mb-1">
+												Dívida
+											</p>
+											<p className="font-mono text-red-600 font-bold">
+												{mockSaver.debt}
+											</p>
+										</div>
 									</div>
 								</div>
-							</div>
-						</CardContent>
-					</Card>
+							</CardContent>
+						</Card>
+					)}
 
 					{/* Tab Navigation */}
 					<div className="flex border-b border-slate-200 overflow-x-auto whitespace-nowrap">
@@ -215,7 +238,7 @@ function SaverDetails() {
 										<div
 											key={day.day}
 											className={cn(
-												"aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-all",
+												"aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-all hover:scale-105",
 												day.status === "paid" && "bg-emerald-500 text-white",
 												day.status === "partial" && "bg-amber-500 text-white",
 												day.status === "unpaid" &&
@@ -255,7 +278,18 @@ function SaverDetails() {
 											</span>
 										</div>
 									</div>
-									<span className="font-mono">Total: {days.length} dias</span>
+									<div className="flex items-center gap-4">
+										<span className="font-mono">Total: {days.length} dias</span>
+										<ProgressCircle
+											value={
+												(days.filter((d) => d.status === "paid").length /
+													days.length) *
+												100
+											}
+											size="sm"
+											label={`${Math.round((days.filter((d) => d.status === "paid").length / days.length) * 100)}%`}
+										/>
+									</div>
 								</div>
 							</CardContent>
 						</Card>

@@ -1,5 +1,6 @@
 import { Bell, Search } from "lucide-react";
 import type { ReactNode } from "react";
+import { Breadcrumbs } from "#/components/ui";
 import { cn } from "#/lib/design-system";
 
 interface HeaderProps {
@@ -11,6 +12,8 @@ interface HeaderProps {
 	searchValue?: string;
 	onSearchChange?: (value: string) => void;
 	searchPlaceholder?: string;
+	breadcrumbs?: Array<{ label: string; href?: string; icon?: React.ReactNode }>;
+	actions?: ReactNode;
 }
 
 export function Header({
@@ -22,6 +25,8 @@ export function Header({
 	searchValue = "",
 	onSearchChange,
 	searchPlaceholder = "Pesquisar...",
+	breadcrumbs,
+	actions,
 }: HeaderProps) {
 	return (
 		<header
@@ -30,7 +35,8 @@ export function Header({
 				className,
 			)}
 		>
-			<div>
+			<div className="flex-1">
+				{breadcrumbs && <Breadcrumbs items={breadcrumbs} className="mb-1" />}
 				<h1 className="text-sm font-bold text-slate-950 tracking-tight">
 					{title}
 				</h1>
@@ -42,8 +48,10 @@ export function Header({
 			</div>
 
 			<div className="flex items-center gap-4">
+				{actions}
+
 				{showSearch && (
-					<div className="relative w-48 sm:w-64 group">
+					<div className="relative w-48 sm:w-64 group hidden md:block">
 						<Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
 						<input
 							type="text"
@@ -57,10 +65,11 @@ export function Header({
 
 				<button
 					type="button"
-					className="p-2 text-slate-400 hover:text-slate-600 bg-slate-50 rounded-lg border border-slate-100 relative transition-all"
+					className="p-2 text-slate-400 hover:text-slate-600 bg-slate-50 rounded-lg border border-slate-100 relative transition-all hover:shadow-sm"
+					aria-label="Notificações"
 				>
 					<Bell size={16} />
-					<span className="absolute top-1.5 right-1.5 h-2 w-2 bg-emerald-500 rounded-full ring-2 ring-white"></span>
+					<span className="absolute top-1.5 right-1.5 h-2 w-2 bg-emerald-500 rounded-full ring-2 ring-white animate-pulse"></span>
 				</button>
 
 				{rightContent}

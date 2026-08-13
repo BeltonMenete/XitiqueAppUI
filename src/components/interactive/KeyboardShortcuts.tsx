@@ -82,20 +82,20 @@ export function KeyboardShortcutsModal({
 		>
 			{/* Backdrop */}
 			<div
-				className="absolute inset-0 bg-background-secondary/80 backdrop-blur-sm"
+				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm"
 				onClick={onClose}
 			/>
 
 			{/* Modal */}
 			<div className="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden animate-in scale-in duration-200">
 				{/* Header */}
-				<div className="flex items-center justify-between px-6 py-4 border-b border-border">
-					<h2 className="text-lg font-semibold text-text-primary">
+				<div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+					<h2 className="text-lg font-semibold text-slate-900">
 						Atalhos de Teclado
 					</h2>
 					<button
 						onClick={onClose}
-						className="p-2 hover:bg-background-secondary rounded-lg transition-colors text-text-secondary hover:text-text-primary"
+						className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
 					>
 						<span className="sr-only">Fechar</span>
 						<svg
@@ -119,40 +119,40 @@ export function KeyboardShortcutsModal({
 					{Object.entries(groupedShortcuts).map(
 						([category, categoryShortcuts]) => (
 							<div key={category} className="mb-6">
-								<h3 className="text-sm font-semibold text-text-primary mb-3">
+								<h3 className="text-sm font-semibold text-slate-900 mb-3">
 									{categories[category as keyof typeof categories] || category}
 								</h3>
 								<div className="space-y-2">
 									{categoryShortcuts.map((shortcut, index) => (
 										<div
 											key={index}
-											className="flex items-center justify-between p-3 bg-background-secondary rounded-lg"
+											className="flex items-center justify-between p-3 bg-slate-100 rounded-lg"
 										>
-											<span className="text-sm text-text-primary">
+											<span className="text-sm text-slate-900">
 												{shortcut.description}
 											</span>
 											<div className="flex items-center gap-1">
 												{shortcut.ctrl && (
-													<kbd className="px-2 py-1 bg-white border border-border rounded text-xs font-mono">
+													<kbd className="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono">
 														Ctrl
 													</kbd>
 												)}
 												{shortcut.shift && (
-													<kbd className="px-2 py-1 bg-white border border-border rounded text-xs font-mono">
+													<kbd className="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono">
 														Shift
 													</kbd>
 												)}
 												{shortcut.alt && (
-													<kbd className="px-2 py-1 bg-white border border-border rounded text-xs font-mono">
+													<kbd className="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono">
 														Alt
 													</kbd>
 												)}
 												{shortcut.meta && (
-													<kbd className="px-2 py-1 bg-white border border-border rounded text-xs font-mono">
+													<kbd className="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono">
 														⌘
 													</kbd>
 												)}
-												<kbd className="px-2 py-1 bg-white border border-border rounded text-xs font-mono font-bold">
+												<kbd className="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-mono font-bold">
 													{shortcut.key.toUpperCase()}
 												</kbd>
 											</div>
@@ -165,10 +165,10 @@ export function KeyboardShortcutsModal({
 				</div>
 
 				{/* Footer */}
-				<div className="px-6 py-4 border-t border-border bg-background-primary">
-					<p className="text-xs text-text-tertiary">
+				<div className="px-6 py-4 border-t border-slate-200 bg-slate-50">
+					<p className="text-xs text-slate-400">
 						Pressione{" "}
-						<kbd className="px-1.5 py-0.5 bg-white border border-border rounded text-[10px] font-mono">
+						<kbd className="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-mono">
 							?
 						</kbd>{" "}
 						para abrir este painel

@@ -105,58 +105,58 @@ export function NotificationCenter({
 	const getIcon = (type: Notification["type"]) => {
 		switch (type) {
 			case "success":
-				return <CheckCircle size={18} className="text-status-success" />;
+				return <CheckCircle size={18} className="text-emerald-500" />;
 			case "warning":
-				return <AlertTriangle size={18} className="text-status-warning" />;
+				return <AlertTriangle size={18} className="text-amber-500" />;
 			case "error":
-				return <X size={18} className="text-status-error" />;
+				return <X size={18} className="text-red-500" />;
 			case "info":
-				return <Info size={18} className="text-status-info" />;
+				return <Info size={18} className="text-blue-500" />;
 			default:
-				return <Bell size={18} className="text-text-secondary" />;
+				return <Bell size={18} className="text-slate-600" />;
 		}
 	};
 
 	const getBgColor = (type: Notification["type"]) => {
 		switch (type) {
 			case "success":
-				return "bg-status-success/10 border-status-success/20";
+				return "bg-emerald-500/10 border-emerald-500/20";
 			case "warning":
-				return "bg-status-warning/10 border-status-warning/20";
+				return "bg-amber-500/10 border-amber-500/20";
 			case "error":
-				return "bg-status-error/10 border-status-error/20";
+				return "bg-red-500/10 border-red-500/20";
 			case "info":
-				return "bg-status-info/10 border-status-info/20";
+				return "bg-blue-500/10 border-blue-500/20";
 			default:
-				return "bg-background-secondary border-border";
+				return "bg-slate-100 border-slate-200";
 		}
 	};
 
 	return (
 		<div
 			className={cn(
-				"fixed top-0 right-0 h-full w-full sm:w-96 bg-white border-l border-border shadow-2xl z-50 transform transition-transform duration-300",
+				"fixed top-0 right-0 h-full w-full sm:w-96 bg-white border-l border-slate-200 shadow-2xl z-50 transform transition-transform duration-300",
 				isOpen ? "translate-x-0" : "translate-x-full",
 			)}
 		>
 			{/* Header */}
-			<div className="flex items-center justify-between px-4 py-3 border-b border-border bg-background-primary">
+			<div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-slate-50">
 				<div className="flex items-center gap-3">
 					<div className="relative">
-						<Bell size={20} className="text-text-primary" />
+						<Bell size={20} className="text-slate-900" />
 						{unreadCount > 0 && (
 							<span className="absolute -top-1 -right-1 w-5 h-5 bg-status-error text-white text-xs font-bold rounded-full flex items-center justify-center">
 								{unreadCount}
 							</span>
 						)}
 					</div>
-					<h2 className="font-semibold text-text-primary">Notificações</h2>
+					<h2 className="font-semibold text-slate-900">Notificações</h2>
 				</div>
 				<div className="flex items-center gap-2">
 					<button
 						type="button"
 						onClick={markAllAsRead}
-						className="text-xs text-text-secondary hover:text-text-primary font-medium px-2 py-1 rounded hover:bg-background-secondary transition-colors"
+						className="text-xs text-slate-600 hover:text-slate-900 font-medium px-2 py-1 rounded hover:bg-slate-100 transition-colors"
 						disabled={unreadCount === 0}
 					>
 						Marcar todas como lidas
@@ -164,7 +164,7 @@ export function NotificationCenter({
 					<button
 						type="button"
 						onClick={onClose}
-						className="p-1 hover:bg-background-secondary rounded-lg transition-colors text-text-secondary hover:text-text-primary"
+						className="p-1 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
 					>
 						<X size={18} />
 					</button>
@@ -175,8 +175,8 @@ export function NotificationCenter({
 			<div className="flex-1 overflow-y-auto">
 				{notifications.length === 0 ? (
 					<div className="flex flex-col items-center justify-center h-full p-8 text-center">
-						<Bell size={48} className="text-text-tertiary mb-4" />
-						<p className="text-text-secondary text-sm">Sem notificações</p>
+						<Bell size={48} className="text-slate-400 mb-4" />
+						<p className="text-slate-600 text-sm">Sem notificações</p>
 					</div>
 				) : (
 					<div className="divide-y divide-border">
@@ -185,8 +185,8 @@ export function NotificationCenter({
 								type="button"
 								key={notification.id}
 								className={cn(
-									"w-full p-4 hover:bg-background-secondary transition-colors cursor-pointer text-left",
-									!notification.read && "bg-background-secondary/50",
+									"w-full p-4 hover:bg-slate-100 transition-colors cursor-pointer text-left",
+									!notification.read && "bg-slate-100/50",
 								)}
 								onClick={() => markAsRead(notification.id)}
 							>
@@ -205,8 +205,8 @@ export function NotificationCenter({
 												className={cn(
 													"font-semibold text-sm",
 													notification.read
-														? "text-text-secondary"
-														: "text-text-primary",
+														? "text-slate-600"
+														: "text-slate-900",
 												)}
 											>
 												{notification.title}
@@ -217,7 +217,7 @@ export function NotificationCenter({
 													e.stopPropagation();
 													dismissNotification(notification.id);
 												}}
-												className="p-1 hover:bg-background-tertiary rounded-lg transition-colors text-text-tertiary hover:text-status-error"
+												className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-400 hover:text-red-500"
 											>
 												<Trash2 size={14} />
 											</button>
@@ -225,15 +225,13 @@ export function NotificationCenter({
 										<p
 											className={cn(
 												"text-sm mt-1",
-												notification.read
-													? "text-text-tertiary"
-													: "text-text-secondary",
+												notification.read ? "text-slate-400" : "text-slate-600",
 											)}
 										>
 											{notification.message}
 										</p>
 										<div className="flex items-center justify-between mt-2">
-											<span className="text-xs text-text-tertiary">
+											<span className="text-xs text-slate-400">
 												{notification.time}
 											</span>
 											{notification.action && (
@@ -243,7 +241,7 @@ export function NotificationCenter({
 														e.stopPropagation();
 														notification.action?.onClick();
 													}}
-													className="text-xs text-secondary font-medium hover:text-primary transition-colors"
+													className="text-xs text-emerald-600 font-medium hover:text-primary transition-colors"
 												>
 													{notification.action.label}
 												</button>
@@ -258,11 +256,11 @@ export function NotificationCenter({
 			</div>
 
 			{/* Footer */}
-			<div className="p-4 border-t border-border bg-background-primary">
+			<div className="p-4 border-t border-slate-200 bg-slate-50">
 				<button
 					type="button"
 					onClick={clearAll}
-					className="w-full text-sm text-text-secondary hover:text-status-error font-medium py-2 rounded-lg hover:bg-background-secondary transition-colors"
+					className="w-full text-sm text-slate-600 hover:text-red-500 font-medium py-2 rounded-lg hover:bg-slate-100 transition-colors"
 					disabled={notifications.length === 0}
 				>
 					Limpar Todas
@@ -286,7 +284,7 @@ export function NotificationBell({
 		<button
 			type="button"
 			onClick={onClick}
-			className="relative p-2 hover:bg-background-secondary rounded-lg transition-colors text-text-secondary hover:text-text-primary"
+			className="relative p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
 		>
 			<Bell size={20} />
 			{unreadCount > 0 && (

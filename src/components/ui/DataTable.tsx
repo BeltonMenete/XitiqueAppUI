@@ -30,6 +30,8 @@ interface DataTableProps<T> {
 	selectable?: boolean;
 	bulkActions?: React.ReactNode;
 	onSelectionChange?: (selectedIds: Set<string>) => void;
+	striped?: boolean;
+	hoverable?: boolean;
 }
 
 export function DataTable<T>({
@@ -48,6 +50,8 @@ export function DataTable<T>({
 	selectable = false,
 	bulkActions,
 	onSelectionChange,
+	striped = false,
+	hoverable = true,
 }: DataTableProps<T>) {
 	const [sortColumn, setSortColumn] = useState<string | null>(null);
 	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
@@ -164,25 +168,25 @@ export function DataTable<T>({
 	return (
 		<div
 			className={cn(
-				"bg-white border border-border rounded-lg overflow-hidden",
+				"bg-white border border-slate-200 rounded-lg overflow-hidden",
 				className,
 			)}
 		>
 			{searchable && (
-				<div className="p-4 border-b border-border">
+				<div className="p-4 border-b border-slate-200">
 					<input
 						type="text"
 						placeholder={searchPlaceholder}
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
-						className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
+						className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
 					/>
 				</div>
 			)}
 
 			{bulkActions && selectedRows.size > 0 && (
-				<div className="p-3 bg-secondary/5 border-b border-border flex items-center gap-3">
-					<span className="text-sm font-medium text-text-primary">
+				<div className="p-3 bg-secondary/5 border-b border-slate-200 flex items-center gap-3">
+					<span className="text-sm font-medium text-slate-900">
 						{selectedRows.size} seleccionado(s)
 					</span>
 					{bulkActions}
@@ -191,7 +195,7 @@ export function DataTable<T>({
 
 			<div className="overflow-x-auto">
 				<table className="w-full">
-					<thead className="bg-background-secondary border-b border-border">
+					<thead className="bg-slate-100 border-b border-slate-200">
 						<tr>
 							{selectable && (
 								<th className="px-4 py-3 text-left">
@@ -200,7 +204,7 @@ export function DataTable<T>({
 										checked={allSelected}
 										ref={(el) => el && (el.indeterminate = someSelected)}
 										onChange={(e) => handleSelectAll(e.target.checked)}
-										className="w-4 h-4 rounded border-border text-secondary focus:ring-secondary/20"
+										className="w-4 h-4 rounded border-slate-200 text-emerald-600 focus:ring-emerald-600/20"
 									/>
 								</th>
 							)}
@@ -208,16 +212,16 @@ export function DataTable<T>({
 								<th
 									key={col.key}
 									className={cn(
-										"px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider",
+										"px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider",
 										col.sortable &&
-											"cursor-pointer hover:bg-background-tertiary transition-colors",
+											"cursor-pointer hover:bg-slate-200 transition-colors",
 									)}
 									onClick={() => col.sortable && handleSort(col.key)}
 								>
 									<div className="flex items-center gap-1">
 										{col.header}
 										{col.editable && (
-											<Edit2 size={12} className="text-text-tertiary" />
+											<Edit2 size={12} className="text-slate-400" />
 										)}
 										{col.sortable &&
 											sortColumn === col.key &&
@@ -233,7 +237,7 @@ export function DataTable<T>({
 								{expandable ? (
 									<span className="sr-only">Expandir</span>
 								) : (
-									<MoreHorizontal className="w-4 h-4 text-text-tertiary" />
+									<MoreHorizontal className="w-4 h-4 text-slate-400" />
 								)}
 							</th>
 						</tr>
@@ -243,7 +247,7 @@ export function DataTable<T>({
 							<tr>
 								<td
 									colSpan={columns.length + (selectable ? 1 : 0) + 1}
-									className="px-4 py-8 text-center text-sm text-text-tertiary"
+									className="px-4 py-8 text-center text-sm text-slate-400"
 								>
 									{emptyMessage}
 								</td>
@@ -271,7 +275,7 @@ export function DataTable<T>({
 														onChange={(e) =>
 															handleRowSelect(rowId, e.target.checked)
 														}
-														className="w-4 h-4 rounded border-border text-secondary focus:ring-secondary/20"
+														className="w-4 h-4 rounded border-slate-200 text-emerald-600 focus:ring-emerald-600/20"
 													/>
 												</td>
 											)}
@@ -290,7 +294,7 @@ export function DataTable<T>({
 															/>
 														) : col.editable ? (
 															<div
-																className="group relative cursor-pointer hover:bg-background-secondary -mx-2 px-2 py-1 rounded transition-colors"
+																className="group relative cursor-pointer hover:bg-slate-100 -mx-2 px-2 py-1 rounded transition-colors"
 																onClick={() => handleCellEdit(rowId, col.key)}
 															>
 																{col.render
@@ -298,7 +302,7 @@ export function DataTable<T>({
 																	: value}
 																<Edit2
 																	size={12}
-																	className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-text-tertiary"
+																	className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-slate-400"
 																/>
 															</div>
 														) : col.render ? (
@@ -317,7 +321,11 @@ export function DataTable<T>({
 									<tr
 										key={rowId}
 										className={cn(
-											"hover:bg-background-secondary transition-colors",
+											hoverable && "hover:bg-slate-100 transition-colors",
+											striped &&
+												(sortedData.indexOf(row) % 2 === 0
+													? "bg-white"
+													: "bg-slate-50"),
 											onRowClick && "cursor-pointer",
 											selected && "bg-secondary/5",
 										)}
@@ -331,7 +339,7 @@ export function DataTable<T>({
 													onChange={(e) =>
 														handleRowSelect(rowId, e.target.checked)
 													}
-													className="w-4 h-4 rounded border-border text-secondary focus:ring-secondary/20"
+													className="w-4 h-4 rounded border-slate-200 text-emerald-600 focus:ring-emerald-600/20"
 												/>
 											</td>
 										)}
@@ -350,7 +358,7 @@ export function DataTable<T>({
 														/>
 													) : col.editable ? (
 														<div
-															className="group relative cursor-pointer hover:bg-background-secondary -mx-2 px-2 py-1 rounded transition-colors"
+															className="group relative cursor-pointer hover:bg-slate-100 -mx-2 px-2 py-1 rounded transition-colors"
 															onClick={() => handleCellEdit(rowId, col.key)}
 														>
 															{col.render
@@ -358,7 +366,7 @@ export function DataTable<T>({
 																: value}
 															<Edit2
 																size={12}
-																className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-text-tertiary"
+																className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-slate-400"
 															/>
 														</div>
 													) : col.render ? (
@@ -372,13 +380,13 @@ export function DataTable<T>({
 										<td className="px-4 py-3 text-right">
 											<button
 												type="button"
-												className="p-1 rounded hover:bg-background-tertiary transition-colors"
+												className="p-1 rounded hover:bg-slate-200 transition-colors"
 												onClick={(e) => {
 													e.stopPropagation();
 													onRowClick?.(row);
 												}}
 											>
-												<MoreHorizontal className="w-4 h-4 text-text-tertiary" />
+												<MoreHorizontal className="w-4 h-4 text-slate-400" />
 											</button>
 										</td>
 									</tr>
@@ -390,8 +398,8 @@ export function DataTable<T>({
 			</div>
 
 			{sortedData.length > 0 && (
-				<div className="px-4 py-3 border-t border-border bg-background-secondary">
-					<p className="text-xs text-text-secondary">
+				<div className="px-4 py-3 border-t border-slate-200 bg-slate-100">
+					<p className="text-xs text-slate-600">
 						Mostrando {sortedData.length} de {data.length} registos
 						{selectable &&
 							selectedRows.size > 0 &&

@@ -98,31 +98,31 @@ export function InlineEditor({
 					onBlur={handleBlur}
 					maxLength={maxLength}
 					className={cn(
-						"flex-1 px-3 py-1.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all",
+						"flex-1 px-3 py-1.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 transition-all",
 						error
-							? "border-status-error focus:ring-status-error/20 focus:border-status-error"
-							: "border-border",
+							? "border-status-error focus:ring-red-500/20 focus:border-red-500"
+							: "border-slate-200",
 					)}
 					placeholder={placeholder}
 				/>
 				<div className="flex items-center gap-1">
 					<button
 						onClick={handleSave}
-						className="p-1.5 hover:bg-status-success/10 text-status-success rounded-lg transition-colors"
+						className="p-1.5 hover:bg-emerald-500/10 text-emerald-500 rounded-lg transition-colors"
 						title="Save (Enter)"
 					>
 						<Check size={16} />
 					</button>
 					<button
 						onClick={handleCancel}
-						className="p-1.5 hover:bg-status-error/10 text-status-error rounded-lg transition-colors"
+						className="p-1.5 hover:bg-red-500/10 text-red-500 rounded-lg transition-colors"
 						title="Cancel (Esc)"
 					>
 						<X size={16} />
 					</button>
 				</div>
 				{error && (
-					<span className="text-xs text-status-error whitespace-nowrap">
+					<span className="text-xs text-red-500 whitespace-nowrap">
 						{error}
 					</span>
 				)}
@@ -135,10 +135,8 @@ export function InlineEditor({
 			onClick={handleStartEdit}
 			className={cn(
 				"group relative inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all cursor-pointer",
-				disabled
-					? "cursor-not-allowed opacity-50"
-					: "hover:bg-background-secondary",
-				!value && "text-text-tertiary italic",
+				disabled ? "cursor-not-allowed opacity-50" : "hover:bg-slate-100",
+				!value && "text-slate-400 italic",
 				className,
 			)}
 		>
@@ -146,7 +144,7 @@ export function InlineEditor({
 			{showEditIcon && !disabled && (
 				<Edit2
 					size={14}
-					className="text-text-tertiary opacity-0 group-hover:opacity-100 transition-opacity"
+					className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity"
 				/>
 			)}
 		</div>
@@ -226,21 +224,21 @@ export function InlineTextArea({
 					onBlur={handleSave}
 					maxLength={maxLength}
 					rows={rows}
-					className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all resize-none"
+					className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 transition-all resize-none"
 					placeholder={placeholder}
 				/>
-				<div className="flex items-center justify-end gap-2 text-xs text-text-tertiary">
+				<div className="flex items-center justify-end gap-2 text-xs text-slate-400">
 					<span>Ctrl+Enter to save, Esc to cancel</span>
 					<div className="flex items-center gap-1">
 						<button
 							onClick={handleCancel}
-							className="p-1.5 hover:bg-status-error/10 text-status-error rounded-lg transition-colors"
+							className="p-1.5 hover:bg-red-500/10 text-red-500 rounded-lg transition-colors"
 						>
 							<X size={14} />
 						</button>
 						<button
 							onClick={handleSave}
-							className="p-1.5 hover:bg-status-success/10 text-status-success rounded-lg transition-colors"
+							className="p-1.5 hover:bg-emerald-500/10 text-emerald-500 rounded-lg transition-colors"
 						>
 							<Check size={14} />
 						</button>
@@ -255,10 +253,8 @@ export function InlineTextArea({
 			onClick={handleStartEdit}
 			className={cn(
 				"group relative inline-block px-3 py-2 rounded-lg transition-all cursor-pointer",
-				disabled
-					? "cursor-not-allowed opacity-50"
-					: "hover:bg-background-secondary",
-				!value && "text-text-tertiary italic",
+				disabled ? "cursor-not-allowed opacity-50" : "hover:bg-slate-100",
+				!value && "text-slate-400 italic",
 				className,
 			)}
 		>
@@ -266,7 +262,7 @@ export function InlineTextArea({
 			{showEditIcon && !disabled && (
 				<Edit2
 					size={14}
-					className="absolute top-2 right-2 text-text-tertiary opacity-0 group-hover:opacity-100 transition-opacity"
+					className="absolute top-2 right-2 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity"
 				/>
 			)}
 		</div>

@@ -9,6 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	loadingText?: string;
 	leftIcon?: ReactNode;
 	rightIcon?: ReactNode;
+	ariaLabel?: string;
 }
 
 export function Button({
@@ -21,6 +22,7 @@ export function Button({
 	leftIcon,
 	rightIcon,
 	disabled,
+	ariaLabel,
 	...props
 }: ButtonProps) {
 	const baseClasses =
@@ -53,6 +55,9 @@ export function Button({
 				className,
 			)}
 			disabled={disabled || isLoading}
+			aria-label={
+				ariaLabel || (typeof children === "string" ? children : undefined)
+			}
 			{...props}
 		>
 			{isLoading ? (

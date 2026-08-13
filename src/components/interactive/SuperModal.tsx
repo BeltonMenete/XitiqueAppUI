@@ -60,7 +60,7 @@ export function SuperModal({
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
 			{/* Backdrop */}
 			<div
-				className="absolute inset-0 bg-background-secondary/80 backdrop-blur-sm animate-in fade-in duration-200"
+				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-in fade-in duration-200"
 				onClick={onClose}
 			/>
 
@@ -72,13 +72,13 @@ export function SuperModal({
 				)}
 			>
 				{/* Header */}
-				<div className="flex items-center justify-between px-6 py-4 border-b border-border">
+				<div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
 					<div className="flex-1">
-						<h2 className="text-lg font-semibold text-text-primary font-display">
+						<h2 className="text-lg font-semibold text-slate-900 font-display">
 							{title}
 						</h2>
 						{showProgress && (
-							<p className="text-sm text-text-secondary mt-1">
+							<p className="text-sm text-slate-600 mt-1">
 								Passo {currentStep} de {totalSteps}
 							</p>
 						)}
@@ -86,7 +86,7 @@ export function SuperModal({
 					{!hideCloseButton && (
 						<button
 							onClick={onClose}
-							className="p-2 hover:bg-background-secondary rounded-lg transition-colors text-text-secondary hover:text-text-primary"
+							className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
 						>
 							<X size={20} />
 						</button>
@@ -95,8 +95,8 @@ export function SuperModal({
 
 				{/* Progress Bar */}
 				{showProgress && (
-					<div className="px-6 py-2 bg-background-primary">
-						<div className="w-full bg-background-tertiary rounded-full h-1.5 overflow-hidden">
+					<div className="px-6 py-2 bg-slate-50">
+						<div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
 							<div
 								className="bg-secondary h-1.5 rounded-full transition-all duration-300"
 								style={{ width: `${(currentStep / totalSteps) * 100}%` }}
@@ -110,7 +110,7 @@ export function SuperModal({
 
 				{/* Footer */}
 				{(onPrevious || onNext) && (
-					<div className="flex items-center justify-between px-6 py-4 border-t border-border bg-background-primary">
+					<div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-slate-50">
 						{onPrevious && (
 							<button
 								onClick={onPrevious}
@@ -118,8 +118,8 @@ export function SuperModal({
 								className={cn(
 									"flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",
 									currentStep === 1
-										? "text-text-tertiary cursor-not-allowed"
-										: "text-text-secondary hover:bg-background-secondary hover:text-text-primary",
+										? "text-slate-400 cursor-not-allowed"
+										: "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
 								)}
 							>
 								<ChevronLeft size={18} />
@@ -134,7 +134,7 @@ export function SuperModal({
 								className={cn(
 									"flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",
 									currentStep === totalSteps
-										? "text-text-tertiary cursor-not-allowed"
+										? "text-slate-400 cursor-not-allowed"
 										: "bg-secondary text-white hover:bg-secondary-dark",
 								)}
 							>
@@ -176,7 +176,7 @@ export function SuperModalWithTabs({
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
 			{/* Backdrop */}
 			<div
-				className="absolute inset-0 bg-background-secondary/80 backdrop-blur-sm animate-in fade-in duration-200"
+				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-in fade-in duration-200"
 				onClick={onClose}
 			/>
 
@@ -188,20 +188,20 @@ export function SuperModalWithTabs({
 				)}
 			>
 				{/* Header */}
-				<div className="flex items-center justify-between px-6 py-4 border-b border-border">
-					<h2 className="text-lg font-semibold text-text-primary font-display">
+				<div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+					<h2 className="text-lg font-semibold text-slate-900 font-display">
 						{title}
 					</h2>
 					<button
 						onClick={onClose}
-						className="p-2 hover:bg-background-secondary rounded-lg transition-colors text-text-secondary hover:text-text-primary"
+						className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
 					>
 						<X size={20} />
 					</button>
 				</div>
 
 				{/* Tabs */}
-				<div className="flex border-b border-border bg-background-primary">
+				<div className="flex border-b border-slate-200 bg-slate-50">
 					{tabs.map((tab) => (
 						<button
 							key={tab.id}
@@ -209,8 +209,8 @@ export function SuperModalWithTabs({
 							className={cn(
 								"flex items-center gap-2 px-6 py-3 font-medium transition-colors border-b-2",
 								activeTab === tab.id
-									? "border-secondary text-secondary bg-white"
-									: "border-transparent text-text-secondary hover:text-text-primary hover:bg-background-secondary",
+									? "border-secondary text-emerald-600 bg-white"
+									: "border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100",
 							)}
 						>
 							{tab.icon}

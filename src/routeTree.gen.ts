@@ -17,10 +17,13 @@ import { Route as AuthResetRouteImport } from './routes/_auth/reset'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthTermsRouteImport } from './routes/_auth/terms'
 import { Route as ClientAuthRouteImport } from './routes/client/_auth'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardCollectorsRouteImport } from './routes/dashboard/collectors'
+import { Route as DashboardFinancialRouteImport } from './routes/dashboard/financial'
 import { Route as DashboardOverviewRouteImport } from './routes/dashboard/overview'
 import { Route as DashboardReportsRouteImport } from './routes/dashboard/reports'
 import { Route as DashboardSaversRouteImport } from './routes/dashboard/savers'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as OrganizationAuthRouteImport } from './routes/organization/_auth'
 import { Route as ClientAuthStep0RouteImport } from './routes/client/_auth/step-0'
 import { Route as ClientAuthStep1RouteImport } from './routes/client/_auth/step-1'
@@ -80,9 +83,19 @@ const ClientAuthRoute = ClientAuthRouteImport.update({
   path: '/client',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardCollectorsRoute = DashboardCollectorsRouteImport.update({
   id: '/collectors',
   path: '/collectors',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardFinancialRoute = DashboardFinancialRouteImport.update({
+  id: '/financial',
+  path: '/financial',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardOverviewRoute = DashboardOverviewRouteImport.update({
@@ -98,6 +111,11 @@ const DashboardReportsRoute = DashboardReportsRouteImport.update({
 const DashboardSaversRoute = DashboardSaversRouteImport.update({
   id: '/savers',
   path: '/savers',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const OrganizationAuthRoute = OrganizationAuthRouteImport.update({
@@ -205,10 +223,13 @@ export interface FileRoutesByFullPath {
   '/terms': typeof AuthTermsRoute
   '/client': typeof ClientAuthRouteWithChildren
   '/dashboard/collectors': typeof DashboardCollectorsRouteWithChildren
+  '/dashboard/financial': typeof DashboardFinancialRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/savers': typeof DashboardSaversRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/organization': typeof OrganizationAuthRouteWithChildren
+  '/dashboard/': typeof DashboardIndexRoute
   '/client/step-0': typeof ClientAuthStep0Route
   '/client/step-1': typeof ClientAuthStep1Route
   '/client/step-2': typeof ClientAuthStep2Route
@@ -229,7 +250,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/forgot': typeof AuthForgotRoute
   '/login': typeof AuthLoginRoute
   '/reset': typeof AuthResetRoute
@@ -237,10 +257,13 @@ export interface FileRoutesByTo {
   '/terms': typeof AuthTermsRoute
   '/client': typeof ClientAuthRouteWithChildren
   '/dashboard/collectors': typeof DashboardCollectorsRouteWithChildren
+  '/dashboard/financial': typeof DashboardFinancialRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/savers': typeof DashboardSaversRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/organization': typeof OrganizationAuthRouteWithChildren
+  '/dashboard': typeof DashboardIndexRoute
   '/client/step-0': typeof ClientAuthStep0Route
   '/client/step-1': typeof ClientAuthStep1Route
   '/client/step-2': typeof ClientAuthStep2Route
@@ -270,10 +293,13 @@ export interface FileRoutesById {
   '/_auth/terms': typeof AuthTermsRoute
   '/client/_auth': typeof ClientAuthRouteWithChildren
   '/dashboard/collectors': typeof DashboardCollectorsRouteWithChildren
+  '/dashboard/financial': typeof DashboardFinancialRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/dashboard/reports': typeof DashboardReportsRoute
   '/dashboard/savers': typeof DashboardSaversRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/organization/_auth': typeof OrganizationAuthRouteWithChildren
+  '/dashboard/': typeof DashboardIndexRoute
   '/client/_auth/step-0': typeof ClientAuthStep0Route
   '/client/_auth/step-1': typeof ClientAuthStep1Route
   '/client/_auth/step-2': typeof ClientAuthStep2Route
@@ -304,10 +330,13 @@ export interface FileRouteTypes {
     | '/terms'
     | '/client'
     | '/dashboard/collectors'
+    | '/dashboard/financial'
     | '/dashboard/overview'
     | '/dashboard/reports'
     | '/dashboard/savers'
+    | '/dashboard/settings'
     | '/organization'
+    | '/dashboard/'
     | '/client/step-0'
     | '/client/step-1'
     | '/client/step-2'
@@ -328,7 +357,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard'
     | '/forgot'
     | '/login'
     | '/reset'
@@ -336,10 +364,13 @@ export interface FileRouteTypes {
     | '/terms'
     | '/client'
     | '/dashboard/collectors'
+    | '/dashboard/financial'
     | '/dashboard/overview'
     | '/dashboard/reports'
     | '/dashboard/savers'
+    | '/dashboard/settings'
     | '/organization'
+    | '/dashboard'
     | '/client/step-0'
     | '/client/step-1'
     | '/client/step-2'
@@ -368,10 +399,13 @@ export interface FileRouteTypes {
     | '/_auth/terms'
     | '/client/_auth'
     | '/dashboard/collectors'
+    | '/dashboard/financial'
     | '/dashboard/overview'
     | '/dashboard/reports'
     | '/dashboard/savers'
+    | '/dashboard/settings'
     | '/organization/_auth'
+    | '/dashboard/'
     | '/client/_auth/step-0'
     | '/client/_auth/step-1'
     | '/client/_auth/step-2'
@@ -461,11 +495,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/collectors': {
       id: '/dashboard/collectors'
       path: '/collectors'
       fullPath: '/dashboard/collectors'
       preLoaderRoute: typeof DashboardCollectorsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/financial': {
+      id: '/dashboard/financial'
+      path: '/financial'
+      fullPath: '/dashboard/financial'
+      preLoaderRoute: typeof DashboardFinancialRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/overview': {
@@ -487,6 +535,13 @@ declare module '@tanstack/react-router' {
       path: '/savers'
       fullPath: '/dashboard/savers'
       preLoaderRoute: typeof DashboardSaversRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/organization/_auth': {
@@ -643,16 +698,22 @@ const DashboardSaversRouteWithChildren = DashboardSaversRoute._addFileChildren(
 
 interface DashboardRouteRouteChildren {
   DashboardCollectorsRoute: typeof DashboardCollectorsRouteWithChildren
+  DashboardFinancialRoute: typeof DashboardFinancialRoute
   DashboardOverviewRoute: typeof DashboardOverviewRoute
   DashboardReportsRoute: typeof DashboardReportsRoute
   DashboardSaversRoute: typeof DashboardSaversRouteWithChildren
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardCollectorsRoute: DashboardCollectorsRouteWithChildren,
+  DashboardFinancialRoute: DashboardFinancialRoute,
   DashboardOverviewRoute: DashboardOverviewRoute,
   DashboardReportsRoute: DashboardReportsRoute,
   DashboardSaversRoute: DashboardSaversRouteWithChildren,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

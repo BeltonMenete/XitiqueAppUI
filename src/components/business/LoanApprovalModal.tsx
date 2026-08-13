@@ -133,11 +133,11 @@ export function LoanApprovalModal({
 	const getRiskColor = (level: string) => {
 		switch (level) {
 			case "high":
-				return "text-status-error bg-status-error/10 border-status-error/20";
+				return "text-red-500 bg-red-500/10 border-red-500/20";
 			case "medium":
-				return "text-status-warning bg-status-warning/10 border-status-warning/20";
+				return "text-amber-500 bg-amber-500/10 border-amber-500/20";
 			default:
-				return "text-status-success bg-status-success/10 border-status-success/20";
+				return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
 		}
 	};
 
@@ -153,26 +153,26 @@ export function LoanApprovalModal({
 				<Card>
 					<CardContent className="p-4">
 						<div className="flex items-start gap-4">
-							<div className="w-12 h-12 rounded-lg bg-background-tertiary flex items-center justify-center text-text-secondary font-bold">
+							<div className="w-12 h-12 rounded-lg bg-slate-200 flex items-center justify-center text-slate-600 font-bold">
 								{String(loanRequest.clientName).charAt(0)}
 							</div>
 							<div className="flex-1">
-								<h3 className="font-semibold text-text-primary">
+								<h3 className="font-semibold text-slate-900">
 									{loanRequest.clientName}
 								</h3>
-								<p className="text-sm text-text-secondary font-mono">
+								<p className="text-sm text-slate-600 font-mono">
 									{loanRequest.cardNumber}
 								</p>
 								<div className="flex items-center gap-4 mt-2 text-sm">
 									<div className="flex items-center gap-1">
-										<DollarSign size={14} className="text-text-tertiary" />
-										<span className="text-text-secondary">
+										<DollarSign size={14} className="text-slate-400" />
+										<span className="text-slate-600">
 											{loanRequest.totalSaved.toLocaleString()} MZN poupado
 										</span>
 									</div>
 									<div className="flex items-center gap-1">
-										<Calendar size={14} className="text-text-tertiary" />
-										<span className="text-text-secondary">
+										<Calendar size={14} className="text-slate-400" />
+										<span className="text-slate-600">
 											{loanRequest.daysInCycle}/30 dias
 										</span>
 									</div>
@@ -198,50 +198,48 @@ export function LoanApprovalModal({
 				{/* Loan Request Details */}
 				<Card>
 					<CardContent className="p-4">
-						<h4 className="font-semibold text-text-primary text-sm mb-3">
+						<h4 className="font-semibold text-slate-900 text-sm mb-3">
 							Detalhes do Pedido
 						</h4>
 						<div className="grid grid-cols-2 gap-4">
 							<div>
-								<p className="text-xs text-text-secondary mb-1">
-									Valor Solicitado
-								</p>
-								<p className="text-lg font-bold text-text-primary">
+								<p className="text-xs text-slate-600 mb-1">Valor Solicitado</p>
+								<p className="text-lg font-bold text-slate-900">
 									{loanRequest.requestedAmount.toLocaleString()} MZN
 								</p>
 							</div>
 							<div>
-								<p className="text-xs text-text-secondary mb-1">
+								<p className="text-xs text-slate-600 mb-1">
 									Valor Máximo Disponível
 								</p>
-								<p className="text-lg font-bold text-secondary">
+								<p className="text-lg font-bold text-emerald-600">
 									{maxLoanAmount.toLocaleString()} MZN
 								</p>
 							</div>
 							<div>
-								<p className="text-xs text-text-secondary mb-1">
+								<p className="text-xs text-slate-600 mb-1">
 									Progresso do Ciclo
 								</p>
 								<div className="flex items-center gap-2">
-									<div className="flex-1 h-2 bg-background-tertiary rounded-full overflow-hidden">
+									<div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
 										<div
 											className="h-full bg-secondary"
 											style={{ width: `${loanRequest.cycleProgress}%` }}
 										/>
 									</div>
-									<span className="text-sm font-medium text-text-primary">
+									<span className="text-sm font-medium text-slate-900">
 										{loanRequest.cycleProgress}%
 									</span>
 								</div>
 							</div>
 							<div>
-								<p className="text-xs text-text-secondary mb-1">Dívida Atual</p>
+								<p className="text-xs text-slate-600 mb-1">Dívida Atual</p>
 								<p
 									className={cn(
 										"text-lg font-bold",
 										loanRequest.currentDebt > 0
-											? "text-status-error"
-											: "text-text-primary",
+											? "text-red-500"
+											: "text-slate-900",
 									)}
 								>
 									{loanRequest.currentDebt.toLocaleString()} MZN
@@ -254,13 +252,13 @@ export function LoanApprovalModal({
 				{/* Loan Calculator */}
 				<Card>
 					<CardContent className="p-4">
-						<h4 className="font-semibold text-text-primary text-sm mb-4 flex items-center gap-2">
+						<h4 className="font-semibold text-slate-900 text-sm mb-4 flex items-center gap-2">
 							<TrendingUp size={16} />
 							Calculadora de Empréstimo
 						</h4>
 						<div className="space-y-4">
 							<div>
-								<label className="block text-xs font-semibold text-text-secondary mb-2">
+								<label className="block text-xs font-semibold text-slate-600 mb-2">
 									Valor a Aprovar (MZN)
 								</label>
 								<input
@@ -270,14 +268,14 @@ export function LoanApprovalModal({
 									max={maxLoanAmount}
 									min={1000}
 									className={cn(
-										"w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20",
+										"w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20",
 										errors.approvedAmount
-											? "border-status-error focus:border-status-error"
-											: "border-border focus:border-secondary",
+											? "border-status-error focus:border-red-500"
+											: "border-slate-200 focus:border-emerald-600",
 									)}
 								/>
 								{errors.approvedAmount && (
-									<p className="text-xs text-status-error mt-1">
+									<p className="text-xs text-red-500 mt-1">
 										{errors.approvedAmount}
 									</p>
 								)}
@@ -285,7 +283,7 @@ export function LoanApprovalModal({
 
 							<div className="grid grid-cols-2 gap-4">
 								<div>
-									<label className="block text-xs font-semibold text-text-secondary mb-2">
+									<label className="block text-xs font-semibold text-slate-600 mb-2">
 										Taxa de Juro (%)
 									</label>
 									<input
@@ -296,11 +294,11 @@ export function LoanApprovalModal({
 										}
 										min={5}
 										max={20}
-										className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
+										className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
 									/>
 								</div>
 								<div>
-									<label className="block text-xs font-semibold text-text-secondary mb-2">
+									<label className="block text-xs font-semibold text-slate-600 mb-2">
 										Período de Pagamento (meses)
 									</label>
 									<input
@@ -309,34 +307,32 @@ export function LoanApprovalModal({
 										onChange={(e) => handlePeriodChange(Number(e.target.value))}
 										min={1}
 										max={12}
-										className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
+										className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
 									/>
 								</div>
 							</div>
 
 							{/* Calculation Results */}
-							<div className="p-4 bg-background-secondary rounded-lg space-y-2">
+							<div className="p-4 bg-slate-100 rounded-lg space-y-2">
 								<div className="flex items-center justify-between">
-									<span className="text-sm text-text-secondary">
+									<span className="text-sm text-slate-600">
 										Total a Repagar
 									</span>
-									<span className="text-lg font-bold text-text-primary">
+									<span className="text-lg font-bold text-slate-900">
 										{formData.totalToRepay.toLocaleString()} MZN
 									</span>
 								</div>
 								<div className="flex items-center justify-between">
-									<span className="text-sm text-text-secondary">
+									<span className="text-sm text-slate-600">
 										Pagamento Mensal
 									</span>
-									<span className="text-lg font-bold text-secondary">
+									<span className="text-lg font-bold text-emerald-600">
 										{formData.monthlyPayment.toLocaleString()} MZN
 									</span>
 								</div>
 								<div className="flex items-center justify-between">
-									<span className="text-sm text-text-secondary">
-										Juros Totais
-									</span>
-									<span className="text-sm font-medium text-text-primary">
+									<span className="text-sm text-slate-600">Juros Totais</span>
+									<span className="text-sm font-medium text-slate-900">
 										{(
 											formData.totalToRepay - formData.approvedAmount
 										).toLocaleString()}{" "}
@@ -350,16 +346,16 @@ export function LoanApprovalModal({
 
 				{/* Risk Warning */}
 				{riskLevel === "high" && (
-					<div className="p-4 bg-status-error/10 border border-status-error/20 rounded-lg flex items-start gap-3">
+					<div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-start gap-3">
 						<AlertTriangle
 							size={20}
-							className="text-status-error flex-shrink-0 mt-0.5"
+							className="text-red-500 flex-shrink-0 mt-0.5"
 						/>
 						<div>
-							<h4 className="font-semibold text-status-error text-sm">
+							<h4 className="font-semibold text-red-500 text-sm">
 								Aviso de Risco
 							</h4>
-							<p className="text-sm text-status-error mt-1">
+							<p className="text-sm text-red-500 mt-1">
 								Este cliente possui dívida activa. Recomenda-se uma avaliação
 								cuidadosa antes de aprovar o empréstimo.
 							</p>
@@ -368,7 +364,7 @@ export function LoanApprovalModal({
 				)}
 
 				{/* Actions */}
-				<div className="flex items-center gap-3 pt-4 border-t border-border">
+				<div className="flex items-center gap-3 pt-4 border-t border-slate-200">
 					{showRejectForm ? (
 						<>
 							<input
@@ -379,8 +375,8 @@ export function LoanApprovalModal({
 								className={cn(
 									"flex-1 px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2",
 									errors.rejectReason
-										? "border-status-error focus:border-status-error"
-										: "border-border focus:border-secondary",
+										? "border-status-error focus:border-red-500"
+										: "border-slate-200 focus:border-emerald-600",
 								)}
 							/>
 							<Button

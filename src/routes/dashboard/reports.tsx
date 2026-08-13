@@ -21,6 +21,7 @@ import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
 import { MiniReportCard } from "#/components/ui/MiniReportCard";
 import { TimeRangeSelector } from "#/components/ui/TimeRangeSelector";
+import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/reports")({
@@ -95,6 +96,10 @@ function ReportsDashboard() {
 				<Header
 					title="Relatórios"
 					description="Análise detalhada de desempenho e métricas"
+					breadcrumbs={[
+						{ label: "Dashboard", href: "/dashboard/overview" },
+						{ label: "Relatórios" },
+					]}
 					rightContent={
 						<div className="flex items-center gap-2">
 							<TimeRangeSelector value={timeRange} onChange={setTimeRange} />
@@ -179,15 +184,31 @@ function ReportsDashboard() {
 								</div>
 							</CardHeader>
 							<CardContent>
-								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100">
-									<div className="text-center">
-										<LineChart
-											size={48}
-											className="text-slate-300 mx-auto mb-2"
-										/>
-										<p className="text-sm text-slate-400">
-											Gráfico interativo de evolução
-										</p>
+								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
+									<div className="w-full space-y-3">
+										{[
+											{ label: "Jan", value: 320 },
+											{ label: "Fev", value: 380 },
+											{ label: "Mar", value: 350 },
+											{ label: "Abr", value: 420 },
+											{ label: "Mai", value: 450 },
+											{ label: "Jun", value: 480 },
+										].map((item) => (
+											<div key={item.label} className="flex items-center gap-3">
+												<span className="text-xs text-slate-500 w-8">
+													{item.label}
+												</span>
+												<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
+													<div
+														className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-600"
+														style={{ width: `${(item.value / 500) * 100}%` }}
+													/>
+												</div>
+												<span className="text-xs font-semibold text-slate-700 w-12">
+													{item.value}k
+												</span>
+											</div>
+										))}
 									</div>
 								</div>
 							</CardContent>
@@ -207,15 +228,32 @@ function ReportsDashboard() {
 								</Button>
 							</CardHeader>
 							<CardContent>
-								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100">
-									<div className="text-center">
-										<PieChart
-											size={48}
-											className="text-slate-300 mx-auto mb-2"
-										/>
-										<p className="text-sm text-slate-400">
-											Gráfico de distribuição
-										</p>
+								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
+									<div className="w-full space-y-3">
+										{[
+											{ label: "Colectas", value: 60, color: "bg-emerald-500" },
+											{
+												label: "Empréstimos",
+												value: 25,
+												color: "bg-amber-500",
+											},
+											{ label: "Outros", value: 15, color: "bg-slate-400" },
+										].map((item) => (
+											<div key={item.label} className="flex items-center gap-3">
+												<span className="text-xs text-slate-500 w-20">
+													{item.label}
+												</span>
+												<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
+													<div
+														className={`h-full ${item.color} rounded-full transition-all duration-300`}
+														style={{ width: `${item.value}%` }}
+													/>
+												</div>
+												<span className="text-xs font-semibold text-slate-700 w-8">
+													{item.value}%
+												</span>
+											</div>
+										))}
 									</div>
 								</div>
 							</CardContent>

@@ -34,7 +34,7 @@ interface QuickAction {
 export function QuickActionsModal({
 	isOpen,
 	onClose,
-	saverId,
+	saverId: _saverId,
 	saverName,
 }: QuickActionsModalProps) {
 	const [searchTerm, setSearchTerm] = useState("");
@@ -166,7 +166,7 @@ export function QuickActionsModal({
 			{/* Search */}
 			<div className="relative mb-4">
 				<Search
-					className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary"
+					className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
 					size={18}
 				/>
 				<input
@@ -174,7 +174,7 @@ export function QuickActionsModal({
 					placeholder="Pesquisar ação..."
 					value={searchTerm}
 					onChange={(e) => setSearchTerm(e.target.value)}
-					className="w-full pl-10 pr-4 py-2.5 bg-background-secondary border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
+					className="w-full pl-10 pr-4 py-2.5 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
 				/>
 			</div>
 
@@ -188,7 +188,7 @@ export function QuickActionsModal({
 							"flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap",
 							selectedCategory === category.id
 								? "bg-secondary text-white"
-								: "bg-background-secondary text-text-secondary hover:bg-background-tertiary",
+								: "bg-slate-100 text-slate-600 hover:bg-slate-200",
 						)}
 					>
 						{category.icon}
@@ -209,34 +209,31 @@ export function QuickActionsModal({
 						className={cn(
 							"group flex items-start gap-3 p-4 rounded-lg border transition-all text-left hover:border-secondary hover:bg-secondary/5",
 							selectedCategory === "all" || selectedCategory === action.category
-								? "border-border"
-								: "border-border",
+								? "border-slate-200"
+								: "border-slate-200",
 						)}
 					>
 						<div
 							className={cn(
 								"w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0",
 								action.category === "deposit" &&
-									"bg-secondary/10 text-secondary",
-								action.category === "loan" &&
-									"bg-status-warning/10 text-status-warning",
-								action.category === "info" &&
-									"bg-status-info/10 text-status-info",
-								action.category === "admin" &&
-									"bg-background-tertiary text-text-secondary",
+									"bg-emerald-600/10 text-emerald-600",
+								action.category === "loan" && "bg-amber-500/10 text-amber-500",
+								action.category === "info" && "bg-blue-500/10 text-blue-500",
+								action.category === "admin" && "bg-slate-200 text-slate-600",
 							)}
 						>
 							{action.icon}
 						</div>
 						<div className="flex-1 min-w-0">
-							<h4 className="font-semibold text-text-primary text-sm group-hover:text-secondary transition-colors">
+							<h4 className="font-semibold text-slate-900 text-sm group-hover:text-emerald-600 transition-colors">
 								{action.label}
 							</h4>
-							<p className="text-xs text-text-secondary mt-0.5">
+							<p className="text-xs text-slate-600 mt-0.5">
 								{action.description}
 							</p>
 							{action.shortcut && (
-								<span className="inline-block mt-2 px-2 py-0.5 bg-background-tertiary text-text-tertiary text-[10px] font-mono rounded">
+								<span className="inline-block mt-2 px-2 py-0.5 bg-slate-200 text-slate-400 text-[10px] font-mono rounded">
 									{action.shortcut}
 								</span>
 							)}
@@ -246,8 +243,8 @@ export function QuickActionsModal({
 			</div>
 
 			{/* Recent Actions */}
-			<div className="mt-6 pt-4 border-t border-border">
-				<h4 className="text-sm font-semibold text-text-primary mb-3">
+			<div className="mt-6 pt-4 border-t border-slate-200">
+				<h4 className="text-sm font-semibold text-slate-900 mb-3">
 					Ações Recentes
 				</h4>
 				<div className="space-y-2">
@@ -258,25 +255,24 @@ export function QuickActionsModal({
 					].map((item, index) => (
 						<div
 							key={index}
-							className="flex items-center justify-between p-2 bg-background-secondary rounded-lg"
+							className="flex items-center justify-between p-2 bg-slate-100 rounded-lg"
 						>
-							<span className="text-sm text-text-primary">{item.action}</span>
-							<span className="text-xs text-text-tertiary">{item.time}</span>
+							<span className="text-sm text-slate-900">{item.action}</span>
+							<span className="text-xs text-slate-400">{item.time}</span>
 						</div>
 					))}
 				</div>
 			</div>
 
 			{/* Keyboard Shortcuts Hint */}
-			<div className="mt-4 p-3 bg-background-secondary rounded-lg">
-				<p className="text-xs text-text-tertiary mb-2">
-					<span className="font-semibold text-text-secondary">Dica:</span>{" "}
-					Pressione{" "}
-					<kbd className="px-1.5 py-0.5 bg-white border border-border rounded text-[10px] font-mono">
+			<div className="mt-4 p-3 bg-slate-100 rounded-lg">
+				<p className="text-xs text-slate-400 mb-2">
+					<span className="font-semibold text-slate-600">Dica:</span> Pressione{" "}
+					<kbd className="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-mono">
 						Ctrl
 					</kbd>{" "}
 					+{" "}
-					<kbd className="px-1.5 py-0.5 bg-white border border-border rounded text-[10px] font-mono">
+					<kbd className="px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-mono">
 						K
 					</kbd>{" "}
 					para abrir as ações rápidas de qualquer lugar

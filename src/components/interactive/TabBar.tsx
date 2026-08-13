@@ -33,23 +33,22 @@ export function TabBar({
 
 	const variantClasses = {
 		default: {
-			active: "bg-white text-secondary border-secondary shadow-sm",
+			active: "bg-white text-emerald-600 border-secondary shadow-sm",
 			inactive:
-				"text-text-secondary hover:text-text-primary hover:bg-background-secondary border-transparent",
+				"text-text-emerald-600 hover:text-slate-900 hover:bg-slate-100 border-transparent",
 			container:
-				"bg-background-secondary border border-border p-1 rounded-lg inline-flex gap-1",
+				"bg-slate-100 border border-slate-200 p-1 rounded-lg inline-flex gap-1",
 		},
 		pills: {
 			active: "bg-secondary text-white",
-			inactive:
-				"text-text-secondary hover:text-text-primary hover:bg-background-secondary",
+			inactive: "text-text-emerald-600 hover:text-slate-900 hover:bg-slate-100",
 			container: "inline-flex gap-2",
 		},
 		underline: {
-			active: "text-secondary border-b-2 border-secondary",
+			active: "text-emerald-600 border-b-2 border-secondary",
 			inactive:
-				"text-text-secondary hover:text-text-primary border-b-2 border-transparent",
-			container: "border-b border-border flex gap-6",
+				"text-text-emerald-600 hover:text-slate-900 border-b-2 border-transparent",
+			container: "border-b border-slate-200 flex gap-6",
 		},
 	};
 
@@ -78,7 +77,7 @@ export function TabBar({
 								"px-1.5 py-0.5 rounded-full text-xs font-bold",
 								activeTab === tab.id
 									? "bg-white/20 text-white"
-									: "bg-status-error text-white",
+									: "bg-red-500 text-white",
 							)}
 						>
 							{tab.badge}

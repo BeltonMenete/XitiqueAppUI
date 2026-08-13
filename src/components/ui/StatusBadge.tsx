@@ -60,9 +60,29 @@ export function ActiveBadge({ children = "Activo" }: { children?: ReactNode }) {
 }
 
 export function InactiveBadge({
-	children = "Inactivo",
+	children = "Inativo",
 }: {
 	children?: ReactNode;
 }) {
 	return <StatusBadge status="inactive">{children}</StatusBadge>;
+}
+
+export function SuccessBadge({
+	children = "Sucesso",
+}: {
+	children?: ReactNode;
+}) {
+	return <StatusBadge status="success">{children}</StatusBadge>;
+}
+
+export function WarningBadge({ children = "Aviso" }: { children?: ReactNode }) {
+	return <StatusBadge status="warning">{children}</StatusBadge>;
+}
+
+export function ErrorBadge({ children = "Erro" }: { children?: ReactNode }) {
+	return <StatusBadge status="error">{children}</StatusBadge>;
+}
+
+export function InfoBadge({ children = "Info" }: { children?: ReactNode }) {
+	return <StatusBadge status="info">{children}</StatusBadge>;
 }

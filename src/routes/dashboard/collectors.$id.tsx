@@ -24,40 +24,17 @@ import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
 import { KPICard } from "#/components/ui/KPICard";
+import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { cn } from "#/lib/design-system";
+import {
+	useCollector,
+	useCollectorClients,
+	useCollectionRecords,
+} from "#/features/collectors";
 
 export const Route = createFileRoute("/dashboard/collectors/$id")({
 	component: CollectorDetails,
 });
-
-interface Collector {
-	id: string;
-	name: string;
-	phone: string;
-	email: string;
-	joinDate: string;
-	location: string;
-	status: "active" | "inactive" | "suspended";
-	plan: "basic" | "pro" | "enterprise";
-	clientCount: number;
-	lastLogin: string;
-	avatar?: string;
-}
-
-const mockCollector: Collector = {
-	id: "1",
-	name: "João Silva",
-	phone: "+258 84 123 4567",
-	email: "joao@xitique.com",
-	joinDate: "15/05/2024",
-	location: "Maputo, KaMpfumo",
-	status: "active",
-	plan: "pro",
-	clientCount: 47,
-	lastLogin: "há 2h",
-	avatar:
-		"https://lh3.googleusercontent.com/aida-public/AB6AXuAHhdGP7ISm5de7Q2y429HW-ZNfxVEgiCVNQWHhzNOy7qWROmFBCiOfNeH1Q99OB7XyYzuuw5wW6LWvbekwXf0_ADKP6eUWKZ8H8uxK4KdTNykHn_hn9kjEYGyPg3zU-voK4EBB61bbCoTnkbOXaEV5ZF_mq3uceGZn40T7zHzDH-_Ls934Zy8I-SKZvj0REE9rDxY-ZzrX_a9uO_ZtVN8GXdTY4-Cm7PT-cmC93i1wa7p2dXZ3OvZrxDnCAKfFRoxf6tJSb5rA50rB",
-};
 
 const mockActivities = [
 	{
@@ -99,7 +76,12 @@ const mockActivities = [
 ];
 
 function CollectorDetails() {
+	const { id } = Route.useParams();
 	const [activeTab, setActiveTab] = useState("overview");
+
+	const { data: collector, isLoading: collectorLoading } = useCollector(id);
+	const { data: clients, isLoading: clientsLoading } = useCollectorClients(id);
+	const { data: records, isLoading: recordsLoading } = useCollectionRecords(id);
 	const [showDropdown, setShowDropdown] = useState(false);
 
 	const tabs = [
@@ -130,141 +112,144 @@ function CollectorDetails() {
 			<div className="flex h-full">
 				<Sidebar items={sidebarItems} />
 				<div className="flex-1 flex flex-col overflow-hidden">
-					<Header title="Detalhes do Cobrador" />
+					<Header
+						title="Detalhes do Cobrador"
+						breadcrumbs={[
+							{ label: "Dashboard", href: "/dashboard/overview" },
+							{ label: "Gestão", href: "/dashboard/savers" },
+							{ label: "Cobradores", href: "/dashboard/collectors" },
+							{ label: collector?.name || "Cobrador" },
+						]}
+					/>
 					<div className="flex-1 overflow-y-auto p-6 space-y-6">
-						{/* Breadcrumb */}
-						<nav className="flex items-center gap-2 text-sm text-slate-500">
-							<span className="hover:text-emerald-600 cursor-pointer transition-colors">
-								Painel
-							</span>
-							<span className="text-slate-400">/</span>
-							<span className="hover:text-emerald-600 cursor-pointer transition-colors">
-								Cobradores
-							</span>
-							<span className="text-slate-400">/</span>
-							<span className="text-emerald-600 font-bold">João Silva</span>
-						</nav>
-
 						{/* Header Section */}
-						<Card>
-							<CardContent className="p-6">
-								<div className="flex flex-col lg:flex-row justify-between items-start gap-6">
-									<div className="flex gap-6 items-start">
-										<div className="relative">
-											<img
-												src={mockCollector.avatar}
-												alt={mockCollector.name}
-												className="w-16 h-16 rounded-xl object-cover shadow-sm"
-											/>
-											<span className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full" />
+						{collectorLoading ? (
+							<Card>
+								<CardContent className="p-6">
+									<LoadingSkeleton variant="card" />
+								</CardContent>
+							</Card>
+						) : (
+							<Card>
+								<CardContent className="p-6">
+									<div className="flex flex-col lg:flex-row justify-between items-start gap-6">
+										<div className="flex gap-6 items-start">
+											<div className="relative">
+												<img
+													src={collector?.avatar || "/placeholder-avatar.png"}
+													alt={collector?.name || "Cobrador"}
+													className="w-16 h-16 rounded-xl object-cover shadow-sm"
+												/>
+												<span className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full" />
+											</div>
+											<div className="space-y-2">
+												<div className="flex items-center gap-4">
+													<h2 className="text-2xl font-bold text-slate-900">
+														{collector?.name || "Cobrador"}
+													</h2>
+													<span className="px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-full text-xs font-semibold uppercase tracking-wider">
+														Ativo
+													</span>
+												</div>
+												<div className="flex flex-wrap gap-6 text-sm text-slate-500">
+													<div className="flex items-center gap-2">
+														<Phone size={16} />
+														<span>{collector?.phone || "-"}</span>
+													</div>
+													<div className="flex items-center gap-2">
+														<Mail size={16} />
+														<span>{collector?.email || "-"}</span>
+													</div>
+													<div className="flex items-center gap-2">
+														<MapPin size={16} />
+														<span>
+															{collector?.district && collector?.province
+																? `${collector.district}, ${collector.province}`
+																: "-"}
+														</span>
+													</div>
+												</div>
+												<div className="flex gap-2 pt-1">
+													<span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">
+														Plano Pro
+													</span>
+													<span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">
+														{collector?.clients || 0} clientes
+													</span>
+													<span className="px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-full text-xs font-semibold flex items-center gap-1">
+														<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+														Último login: Recentemente
+													</span>
+												</div>
+											</div>
 										</div>
-										<div className="space-y-2">
-											<div className="flex items-center gap-4">
-												<h2 className="text-2xl font-bold text-slate-900">
-													{mockCollector.name}
-												</h2>
-												<span className="px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-full text-xs font-semibold uppercase tracking-wider">
-													Ativo
-												</span>
-											</div>
-											<div className="flex flex-wrap gap-6 text-sm text-slate-500">
-												<div className="flex items-center gap-2">
-													<Phone size={16} />
-													<span>{mockCollector.phone}</span>
-												</div>
-												<div className="flex items-center gap-2">
-													<Mail size={16} />
-													<span>{mockCollector.email}</span>
-												</div>
-												<div className="flex items-center gap-2">
-													<Calendar size={16} />
-													<span>Membro desde {mockCollector.joinDate}</span>
-												</div>
-												<div className="flex items-center gap-2">
-													<MapPin size={16} />
-													<span>{mockCollector.location}</span>
-												</div>
-											</div>
-											<div className="flex gap-2 pt-1">
-												<span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">
-													Plano Pro
-												</span>
-												<span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">
-													{mockCollector.clientCount} clientes
-												</span>
-												<span className="px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-full text-xs font-semibold flex items-center gap-1">
-													<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-													Último login: {mockCollector.lastLogin}
-												</span>
-											</div>
-										</div>
-									</div>
-									<div className="flex flex-wrap gap-2">
-										<Button
-											size="sm"
-											variant="outline"
-											leftIcon={<Edit size={16} />}
-										>
-											Editar
-										</Button>
-										<Button
-											size="sm"
-											variant="outline"
-											leftIcon={<ArrowLeftRight size={16} />}
-										>
-											Transferir Clientes
-										</Button>
-										<Button
-											size="sm"
-											variant="outline"
-											leftIcon={<Printer size={16} />}
-										>
-											Imprimir Relatório
-										</Button>
-										<div className="relative">
+										<div className="flex flex-wrap gap-2">
 											<Button
 												size="sm"
 												variant="outline"
-												leftIcon={<MoreVertical size={16} />}
-												onClick={() => setShowDropdown(!showDropdown)}
+												leftIcon={<Edit size={16} />}
 											>
-												<span className="sr-only">Mais opções</span>
+												Editar
 											</Button>
-											{showDropdown && (
-												<div className="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200 shadow-xl rounded-lg z-20">
-													<div className="p-2 space-y-1">
-														<button
-															type="button"
-															className="flex items-center gap-2 p-2 hover:bg-slate-50 rounded transition-colors text-sm w-full text-left"
-														>
-															<RefreshCw size={16} /> Reset PIN
-														</button>
-														<button
-															type="button"
-															className="flex items-center gap-2 p-2 hover:bg-slate-50 rounded transition-colors text-sm w-full text-left"
-														>
-															<MapPin size={16} /> Ver Localização
-														</button>
-														<button
-															type="button"
-															className="flex items-center gap-2 p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors text-sm w-full text-left"
-														>
-															<PauseCircle size={16} /> Suspender
-														</button>
-														<button
-															type="button"
-															className="flex items-center gap-2 p-2 hover:bg-red-50 text-red-600 rounded transition-colors text-sm w-full text-left border-t border-slate-200 mt-1"
-														>
-															<Delete size={16} /> Deletar
-														</button>
+											<Button
+												size="sm"
+												variant="outline"
+												leftIcon={<ArrowLeftRight size={16} />}
+											>
+												Transferir Clientes
+											</Button>
+											<Button
+												size="sm"
+												variant="outline"
+												leftIcon={<Printer size={16} />}
+											>
+												Imprimir Relatório
+											</Button>
+											<div className="relative">
+												<Button
+													size="sm"
+													variant="outline"
+													leftIcon={<MoreVertical size={16} />}
+													onClick={() => setShowDropdown(!showDropdown)}
+												>
+													<span className="sr-only">Mais opções</span>
+												</Button>
+												{showDropdown && (
+													<div className="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200 shadow-xl rounded-lg z-20">
+														<div className="p-2 space-y-1">
+															<button
+																type="button"
+																className="flex items-center gap-2 p-2 hover:bg-slate-50 rounded transition-colors text-sm w-full text-left"
+															>
+																<RefreshCw size={16} /> Reset PIN
+															</button>
+															<button
+																type="button"
+																className="flex items-center gap-2 p-2 hover:bg-slate-50 rounded transition-colors text-sm w-full text-left"
+															>
+																<MapPin size={16} /> Ver Localização
+															</button>
+															<button
+																type="button"
+																className="flex items-center gap-2 p-2 hover:bg-amber-50 text-amber-600 rounded transition-colors text-sm w-full text-left"
+															>
+																<PauseCircle size={16} /> Suspender
+															</button>
+															<button
+																type="button"
+																className="flex items-center gap-2 p-2 hover:bg-red-50 text-red-600 rounded transition-colors text-sm w-full text-left border-t border-slate-200 mt-1"
+															>
+																<Delete size={16} /> Deletar
+															</button>
+														</div>
 													</div>
-												</div>
-											)}
+												)}
+											</div>
 										</div>
 									</div>
-								</div>
-							</CardContent>
-						</Card>
+								</CardContent>
+							</Card>
+						)}
 
 						{/* Tab Navigation */}
 						<nav className="flex items-center border-b border-slate-200 gap-6 px-2 overflow-x-auto">

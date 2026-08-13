@@ -31,7 +31,7 @@ export function ExpandableCard({
 
 	const variantClasses = {
 		default: "bg-white",
-		bordered: "bg-white border border-border",
+		bordered: "bg-white border border-slate-200",
 		elevated: "bg-white shadow-lg",
 	};
 
@@ -46,27 +46,27 @@ export function ExpandableCard({
 			{/* Header */}
 			<button
 				onClick={handleToggle}
-				className="w-full flex items-center justify-between px-4 py-3 hover:bg-background-secondary transition-colors text-left"
+				className="w-full flex items-center justify-between px-4 py-3 hover:bg-slate-100 transition-colors text-left"
 			>
 				<div className="flex-1">
-					<h3 className="font-semibold text-text-primary text-sm">{title}</h3>
+					<h3 className="font-semibold text-slate-900 text-sm">{title}</h3>
 					{subtitle && (
-						<p className="text-xs text-text-secondary mt-0.5">{subtitle}</p>
+						<p className="text-xs text-slate-600 mt-0.5">{subtitle}</p>
 					)}
 				</div>
 				<div className="flex items-center gap-2">
-					<span className="text-xs text-text-tertiary font-medium">
+					<span className="text-xs text-slate-400 font-medium">
 						{isExpanded ? "Ocultar" : "Mostrar"}
 					</span>
 					{isExpanded ? (
 						<ChevronDown
 							size={18}
-							className="text-text-secondary transition-transform"
+							className="text-slate-600 transition-transform"
 						/>
 					) : (
 						<ChevronRight
 							size={18}
-							className="text-text-secondary transition-transform"
+							className="text-slate-600 transition-transform"
 						/>
 					)}
 				</div>
@@ -79,7 +79,7 @@ export function ExpandableCard({
 					isExpanded ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0",
 				)}
 			>
-				<div className="px-4 py-3 border-t border-border">{children}</div>
+				<div className="px-4 py-3 border-t border-slate-200">{children}</div>
 			</div>
 		</div>
 	);
@@ -105,19 +105,19 @@ export function ExpandableSection({
 	const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
 	return (
-		<div className={cn("border-b border-border", className)}>
+		<div className={cn("border-b border-slate-200", className)}>
 			<button
 				onClick={() => setIsExpanded(!isExpanded)}
 				className={cn(
-					"w-full flex items-center justify-between py-3 px-4 hover:bg-background-secondary transition-colors",
+					"w-full flex items-center justify-between py-3 px-4 hover:bg-slate-100 transition-colors",
 					headerClassName,
 				)}
 			>
-				<span className="font-medium text-text-primary text-sm">{title}</span>
+				<span className="font-medium text-slate-900 text-sm">{title}</span>
 				{isExpanded ? (
-					<ChevronDown size={18} className="text-text-secondary" />
+					<ChevronDown size={18} className="text-slate-600" />
 				) : (
-					<ChevronRight size={18} className="text-text-secondary" />
+					<ChevronRight size={18} className="text-slate-600" />
 				)}
 			</button>
 			<div

@@ -54,17 +54,17 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 				<div className="space-y-6">
 					{/* Logo Upload */}
 					<div className="flex items-start gap-4">
-						<div className="w-24 h-24 rounded-lg bg-background-secondary border-2 border-dashed border-border flex items-center justify-center cursor-pointer hover:border-secondary transition-colors relative overflow-hidden group">
+						<div className="w-24 h-24 rounded-lg bg-slate-100 border-2 border-dashed border-slate-200 flex items-center justify-center cursor-pointer hover:border-secondary transition-colors relative overflow-hidden group">
 							<Upload
 								size={32}
-								className="text-text-tertiary group-hover:text-secondary transition-colors"
+								className="text-slate-400 group-hover:text-emerald-600 transition-colors"
 							/>
 						</div>
 						<div className="flex-1 space-y-2">
-							<h4 className="font-semibold text-text-primary">
+							<h4 className="font-semibold text-slate-900">
 								Logotipo da Organização
 							</h4>
-							<p className="text-sm text-text-secondary">
+							<p className="text-sm text-slate-600">
 								Recomendado: PNG ou JPG, máx 2MB. Proporção 1:1.
 							</p>
 							<div className="flex gap-2">
@@ -74,7 +74,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 								<Button
 									size="sm"
 									variant="ghost"
-									className="text-status-error hover:bg-status-error/10"
+									className="text-red-500 hover:bg-red-500/10"
 								>
 									<Trash2 size={16} className="mr-1" />
 									Remover
@@ -86,7 +86,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 					{/* Organization Info */}
 					<div className="space-y-4">
 						<div>
-							<label className="block text-sm font-semibold text-text-primary mb-2">
+							<label className="block text-sm font-semibold text-slate-900 mb-2">
 								Nome da Organização
 							</label>
 							<InlineEditor
@@ -100,7 +100,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 
 						<div className="grid grid-cols-2 gap-4">
 							<div>
-								<label className="block text-sm font-semibold text-text-primary mb-2">
+								<label className="block text-sm font-semibold text-slate-900 mb-2">
 									Província
 								</label>
 								<select
@@ -108,7 +108,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 									onChange={(e) =>
 										setFormData({ ...formData, province: e.target.value })
 									}
-									className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary bg-white"
+									className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 bg-white"
 								>
 									<option value="Maputo Cidade">Maputo Cidade</option>
 									<option value="Maputo Província">Maputo Província</option>
@@ -118,7 +118,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 							</div>
 
 							<div>
-								<label className="block text-sm font-semibold text-text-primary mb-2">
+								<label className="block text-sm font-semibold text-slate-900 mb-2">
 									Distrito
 								</label>
 								<select
@@ -126,7 +126,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 									onChange={(e) =>
 										setFormData({ ...formData, district: e.target.value })
 									}
-									className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary bg-white"
+									className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 bg-white"
 								>
 									<option value="Maputo">Maputo</option>
 									<option value="Matola">Matola</option>
@@ -136,7 +136,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 						</div>
 
 						<div>
-							<label className="block text-sm font-semibold text-text-primary mb-2">
+							<label className="block text-sm font-semibold text-slate-900 mb-2">
 								Telefone
 							</label>
 							<InlineEditor
@@ -158,12 +158,12 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 				<div className="space-y-6">
 					<Card>
 						<CardContent className="p-4">
-							<h4 className="font-semibold text-text-primary mb-4">
+							<h4 className="font-semibold text-slate-900 mb-4">
 								Comissões e Taxas
 							</h4>
 							<div className="space-y-4">
 								<div>
-									<label className="block text-sm font-medium text-text-secondary mb-2">
+									<label className="block text-sm font-medium text-slate-600 mb-2">
 										Taxa de Comissão Diária (%)
 									</label>
 									<InlineEditor
@@ -180,7 +180,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 								</div>
 
 								<div>
-									<label className="block text-sm font-medium text-text-secondary mb-2">
+									<label className="block text-sm font-medium text-slate-600 mb-2">
 										Taxa de Juro para Empréstimos (%)
 									</label>
 									<InlineEditor
@@ -197,7 +197,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 								</div>
 
 								<div>
-									<label className="block text-sm font-medium text-text-secondary mb-2">
+									<label className="block text-sm font-medium text-slate-600 mb-2">
 										Período de Carência (dias)
 									</label>
 									<InlineEditor
@@ -218,16 +218,16 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 
 					<Card>
 						<CardContent className="p-4">
-							<h4 className="font-semibold text-text-primary mb-4">
+							<h4 className="font-semibold text-slate-900 mb-4">
 								Regras de Ciclo
 							</h4>
 							<div className="space-y-3">
-								<div className="flex items-center justify-between p-3 bg-background-secondary rounded-lg">
+								<div className="flex items-center justify-between p-3 bg-slate-100 rounded-lg">
 									<div>
-										<p className="text-sm font-medium text-text-primary">
+										<p className="text-sm font-medium text-slate-900">
 											Transportar dias não pagos
 										</p>
-										<p className="text-xs text-text-tertiary">
+										<p className="text-xs text-slate-400">
 											Dias não pagos são transportados para o próximo ciclo
 										</p>
 									</div>
@@ -236,17 +236,17 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 									</div>
 								</div>
 
-								<div className="flex items-center justify-between p-3 bg-background-secondary rounded-lg">
+								<div className="flex items-center justify-between p-3 bg-slate-100 rounded-lg">
 									<div>
-										<p className="text-sm font-medium text-text-primary">
+										<p className="text-sm font-medium text-slate-900">
 											Multa por incumprimento
 										</p>
-										<p className="text-xs text-text-tertiary">
+										<p className="text-xs text-slate-400">
 											Aplicar multa de 1 dia por ciclo incompleto
 										</p>
 									</div>
-									<div className="w-12 h-6 bg-background-tertiary rounded-full relative cursor-pointer">
-										<div className="absolute left-1 top-1 w-4 h-4 bg-text-tertiary rounded-full" />
+									<div className="w-12 h-6 bg-slate-200 rounded-full relative cursor-pointer">
+										<div className="absolute left-1 top-1 w-4 h-4 bg-slate-400 rounded-full" />
 									</div>
 								</div>
 							</div>
@@ -299,21 +299,17 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 								"flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer",
 								module.active
 									? "border-secondary bg-secondary/5"
-									: "border-border bg-background-secondary hover:border-text-tertiary",
+									: "border-slate-200 bg-slate-100 hover:border-slate-400",
 							)}
 						>
 							<div>
-								<h4 className="font-semibold text-text-primary">
-									{module.name}
-								</h4>
-								<p className="text-sm text-text-secondary">
-									{module.description}
-								</p>
+								<h4 className="font-semibold text-slate-900">{module.name}</h4>
+								<p className="text-sm text-slate-600">{module.description}</p>
 							</div>
 							<div
 								className={cn(
 									"w-12 h-6 rounded-full relative transition-colors",
-									module.active ? "bg-secondary" : "bg-background-tertiary",
+									module.active ? "bg-secondary" : "bg-slate-200",
 								)}
 							>
 								<div
@@ -336,16 +332,16 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 				<div className="space-y-4">
 					<Card>
 						<CardContent className="p-4">
-							<h4 className="font-semibold text-text-primary mb-4">
+							<h4 className="font-semibold text-slate-900 mb-4">
 								Configurações de Notificação
 							</h4>
 							<div className="space-y-3">
-								<div className="flex items-center justify-between p-3 bg-background-secondary rounded-lg">
+								<div className="flex items-center justify-between p-3 bg-slate-100 rounded-lg">
 									<div>
-										<p className="text-sm font-medium text-text-primary">
+										<p className="text-sm font-medium text-slate-900">
 											Notificações de Pagamento
 										</p>
-										<p className="text-xs text-text-tertiary">
+										<p className="text-xs text-slate-400">
 											Receber alertas quando houver pagamentos
 										</p>
 									</div>
@@ -354,12 +350,12 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 									</div>
 								</div>
 
-								<div className="flex items-center justify-between p-3 bg-background-secondary rounded-lg">
+								<div className="flex items-center justify-between p-3 bg-slate-100 rounded-lg">
 									<div>
-										<p className="text-sm font-medium text-text-primary">
+										<p className="text-sm font-medium text-slate-900">
 											Alertas de Dívida
 										</p>
-										<p className="text-xs text-text-tertiary">
+										<p className="text-xs text-slate-400">
 											Notificar quando ticantes entram em dívida
 										</p>
 									</div>
@@ -368,17 +364,17 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 									</div>
 								</div>
 
-								<div className="flex items-center justify-between p-3 bg-background-secondary rounded-lg">
+								<div className="flex items-center justify-between p-3 bg-slate-100 rounded-lg">
 									<div>
-										<p className="text-sm font-medium text-text-primary">
+										<p className="text-sm font-medium text-slate-900">
 											Relatórios Diários
 										</p>
-										<p className="text-xs text-text-tertiary">
+										<p className="text-xs text-slate-400">
 											Resumo diário por email
 										</p>
 									</div>
-									<div className="w-12 h-6 bg-background-tertiary rounded-full relative cursor-pointer">
-										<div className="absolute left-1 top-1 w-4 h-4 bg-text-tertiary rounded-full" />
+									<div className="w-12 h-6 bg-slate-200 rounded-full relative cursor-pointer">
+										<div className="absolute left-1 top-1 w-4 h-4 bg-slate-400 rounded-full" />
 									</div>
 								</div>
 							</div>

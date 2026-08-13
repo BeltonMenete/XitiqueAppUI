@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
 	AlertCircle,
+	DollarSign,
 	Handshake,
 	Info,
 	Plus,
@@ -57,7 +58,7 @@ function OrganizationDashboard() {
 					</div>
 					<div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
 						<div
-							className="h-full bg-emerald-500 rounded-full"
+							className="h-full bg-emerald-500 rounded-full transition-all duration-500"
 							style={{ width: "90%" }}
 						/>
 					</div>
@@ -87,7 +88,7 @@ function OrganizationDashboard() {
 					</div>
 					<div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
 						<div
-							className="h-full bg-amber-500 rounded-full"
+							className="h-full bg-amber-500 rounded-full transition-all duration-500"
 							style={{ width: "90%" }}
 						/>
 					</div>
@@ -173,7 +174,7 @@ function OrganizationDashboard() {
 
 				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{/* Action Banner */}
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow duration-200">
 						<div>
 							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 								Painel de Organização
@@ -204,16 +205,41 @@ function OrganizationDashboard() {
 										<h3 className="text-sm font-semibold text-slate-900">
 											Evolução de Colectas
 										</h3>
-										<select className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white">
+										<select className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
 											<option>Últimos 6 meses</option>
 											<option>Último ano</option>
 										</select>
 									</div>
-									{/* Chart placeholder */}
-									<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100">
-										<p className="text-sm text-slate-400">
-											Gráfico de evolução de colectas
-										</p>
+									{/* Chart placeholder - CSS-only simple bar chart */}
+									<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
+										<div className="w-full space-y-3">
+											{[
+												{ label: "Jan", value: 75 },
+												{ label: "Fev", value: 82 },
+												{ label: "Mar", value: 68 },
+												{ label: "Abr", value: 90 },
+												{ label: "Mai", value: 85 },
+												{ label: "Jun", value: 92 },
+											].map((item) => (
+												<div
+													key={item.label}
+													className="flex items-center gap-3"
+												>
+													<span className="text-xs text-slate-500 w-8">
+														{item.label}
+													</span>
+													<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
+														<div
+															className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-600"
+															style={{ width: `${item.value}%` }}
+														/>
+													</div>
+													<span className="text-xs font-semibold text-slate-700 w-10">
+														{item.value}%
+													</span>
+												</div>
+											))}
+										</div>
 									</div>
 								</CardContent>
 							</Card>
@@ -229,48 +255,54 @@ function OrganizationDashboard() {
 									<div className="space-y-3">
 										{[
 											{
+												id: "1",
 												action: "Nova colecta",
 												user: "Maria Silva",
 												time: "Há 5 min",
 											},
 											{
+												id: "2",
 												action: "Empréstimo aprovado",
 												user: "João Machava",
 												time: "Há 15 min",
 											},
 											{
-												id: "1",
+												id: "3",
 												action: "Pagamento recebido",
 												user: "Alberto Chongo",
 												time: "Há 30 min",
 											},
 											{
-												id: "2",
+												id: "4",
 												action: "Membro registado",
 												user: "Sofia Macamo",
 												time: "Há 1 hora",
 											},
-										].map((activity) => (
-											<div
-												key={activity.id}
-												className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"
-											>
-												<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-													<Users size={16} className="text-emerald-600" />
+										].map((activity, index) => {
+											const icons = [Users, Wallet, DollarSign, Users];
+											const Icon = icons[index % icons.length];
+											return (
+												<div
+													key={activity.id}
+													className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+												>
+													<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+														<Icon size={16} className="text-emerald-600" />
+													</div>
+													<div className="flex-1">
+														<p className="text-xs font-medium text-slate-900">
+															{activity.action}
+														</p>
+														<p className="text-[10px] text-slate-400">
+															{activity.user}
+														</p>
+													</div>
+													<span className="text-[10px] text-slate-400">
+														{activity.time}
+													</span>
 												</div>
-												<div className="flex-1">
-													<p className="text-xs font-medium text-slate-900">
-														{activity.action}
-													</p>
-													<p className="text-[10px] text-slate-400">
-														{activity.user}
-													</p>
-												</div>
-												<span className="text-[10px] text-slate-400">
-													{activity.time}
-												</span>
-											</div>
-										))}
+											);
+										})}
 									</div>
 								</CardContent>
 							</Card>
@@ -284,19 +316,19 @@ function OrganizationDashboard() {
 										Estatísticas de Membros
 									</h3>
 									<div className="grid grid-cols-2 gap-4">
-										<div className="p-4 bg-slate-50 rounded-lg">
+										<div className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer border border-transparent hover:border-slate-200">
 											<p className="text-2xl font-bold text-slate-900">342</p>
 											<p className="text-xs text-slate-400">Total de Membros</p>
 										</div>
-										<div className="p-4 bg-emerald-50 rounded-lg">
+										<div className="p-4 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors cursor-pointer border border-transparent hover:border-emerald-200">
 											<p className="text-2xl font-bold text-emerald-600">318</p>
 											<p className="text-xs text-slate-400">Membros Activos</p>
 										</div>
-										<div className="p-4 bg-amber-50 rounded-lg">
+										<div className="p-4 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors cursor-pointer border border-transparent hover:border-amber-200">
 											<p className="text-2xl font-bold text-amber-600">18</p>
 											<p className="text-xs text-slate-400">Novos este mês</p>
 										</div>
-										<div className="p-4 bg-red-50 rounded-lg">
+										<div className="p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors cursor-pointer border border-transparent hover:border-red-200">
 											<p className="text-2xl font-bold text-red-600">6</p>
 											<p className="text-xs text-slate-400">Em Incumprimento</p>
 										</div>
@@ -315,23 +347,25 @@ function OrganizationDashboard() {
 									<div className="space-y-3">
 										{[
 											{
+												id: "1",
 												name: "João Machava",
 												amount: "15.000 MZN",
 												status: "approved",
 											},
 											{
+												id: "2",
 												name: "Maria Santos",
 												amount: "10.000 MZN",
 												status: "pending",
 											},
 											{
-												id: "1",
+												id: "3",
 												name: "Alberto Chongo",
 												amount: "20.000 MZN",
 												status: "approved",
 											},
 											{
-												id: "2",
+												id: "4",
 												name: "Sofia Macamo",
 												amount: "8.000 MZN",
 												status: "rejected",
@@ -339,7 +373,7 @@ function OrganizationDashboard() {
 										].map((loan) => (
 											<div
 												key={loan.id}
-												className="flex items-center justify-between p-3 bg-slate-50 rounded-lg"
+												className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
 											>
 												<div>
 													<p className="text-xs font-medium text-slate-900">
@@ -351,7 +385,7 @@ function OrganizationDashboard() {
 												</div>
 												<span
 													className={cn(
-														"text-[10px] px-2 py-1 rounded-full font-medium",
+														"text-[10px] px-2 py-1 rounded-full font-semibold",
 														loan.status === "approved"
 															? "bg-emerald-100 text-emerald-700"
 															: loan.status === "pending"

@@ -28,7 +28,7 @@ export function SplitView({
 			{/* Master Panel */}
 			<div
 				className={cn(
-					"flex-shrink-0 border-r border-border bg-background-primary transition-all duration-300 overflow-hidden",
+					"flex-shrink-0 border-r border-slate-200 bg-slate-50 transition-all duration-300 overflow-hidden",
 					isCollapsed ? "w-0" : masterWidth,
 				)}
 			>
@@ -45,14 +45,14 @@ export function SplitView({
 				<button
 					onClick={() => setIsCollapsed(!isCollapsed)}
 					className={cn(
-						"absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white border border-border rounded-r-lg shadow-lg transition-all duration-300",
+						"absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white border border-slate-200 rounded-r-lg shadow-lg transition-all duration-300",
 						isCollapsed ? "translate-x-0" : "-translate-x-full",
 					)}
 				>
 					{isCollapsed ? (
-						<PanelLeft size={18} className="text-text-secondary" />
+						<PanelLeft size={18} className="text-slate-600" />
 					) : (
-						<ChevronLeft size={18} className="text-text-secondary" />
+						<ChevronLeft size={18} className="text-slate-600" />
 					)}
 				</button>
 			)}
@@ -83,20 +83,18 @@ export function MasterItem({
 		<div
 			onClick={onClick}
 			className={cn(
-				"p-4 border-b border-border cursor-pointer transition-colors hover:bg-background-secondary",
-				isActive && "bg-background-secondary border-l-4 border-l-secondary",
+				"p-4 border-b border-slate-200 cursor-pointer transition-colors hover:bg-slate-100",
+				isActive && "bg-slate-100 border-l-4 border-l-secondary",
 			)}
 		>
 			<div className="flex items-start gap-3">
 				{icon && <div className="flex-shrink-0 mt-0.5">{icon}</div>}
 				<div className="flex-1 min-w-0">
-					<h4 className="font-medium text-text-primary text-sm truncate">
+					<h4 className="font-medium text-slate-900 text-sm truncate">
 						{title}
 					</h4>
 					{subtitle && (
-						<p className="text-xs text-text-secondary mt-0.5 truncate">
-							{subtitle}
-						</p>
+						<p className="text-xs text-slate-600 mt-0.5 truncate">{subtitle}</p>
 					)}
 				</div>
 			</div>

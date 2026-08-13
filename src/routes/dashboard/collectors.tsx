@@ -19,8 +19,11 @@ import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent } from "#/components/ui/Card";
 import { DataTable } from "#/components/ui/DataTable";
+import { EmptyState } from "#/components/ui/EmptyState";
 import { ExpandableRowContent } from "#/components/ui/ExpandableRow";
+import { FilterChips } from "#/components/ui/FilterChips";
 import { KPICard } from "#/components/ui/KPICard";
+import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import {
 	ActiveBadge,
 	InactiveBadge,
@@ -58,11 +61,23 @@ function CollectorsManagement() {
 	const [selectedCollector, setSelectedCollector] = useState<Collector | null>(
 		null,
 	);
+	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 
 	const handleRegisterCollector = (data: CollectorData) => {
 		console.log("Registering collector:", data);
 		// TODO: Integrate with API
 	};
+
+	const statusFilters = [
+		{ id: "active", label: "Activo" },
+		{ id: "suspended", label: "Suspenso" },
+		{ id: "inactive", label: "Inativo" },
+	];
+
+	const filteredCollectors = mockCollectors.filter((collector) => {
+		if (selectedStatuses.length === 0) return true;
+		return selectedStatuses.includes(collector.status);
+	});
 
 	const sidebarItems = [
 		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
@@ -372,6 +387,11 @@ function CollectorsManagement() {
 				<Header
 					title="Gestão de Cobradores"
 					description="Gerencie sua equipe de campo e acompanhe o desempenho"
+					breadcrumbs={[
+						{ label: "Dashboard", href: "/dashboard/overview" },
+						{ label: "Gestão", href: "/dashboard/savers" },
+						{ label: "Cobradores" },
+					]}
 					rightContent={
 						<Button
 							size="sm"
@@ -391,20 +411,60 @@ function CollectorsManagement() {
 						))}
 					</div>
 
+					{/* Action Banner with Filters */}
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
+						<div>
+							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
+								Filtros
+							</h2>
+							<p className="text-[11px] text-slate-400">
+								Filtrar cobradores por estado
+							</p>
+						</div>
+						<FilterChips
+							filters={statusFilters}
+							selected={selectedStatuses}
+							onToggle={(id) => {
+								setSelectedStatuses((prev) =>
+									prev.includes(id)
+										? prev.filter((s) => s !== id)
+										: [...prev, id],
+								);
+							}}
+							onRemove={(id) => {
+								setSelectedStatuses((prev) => prev.filter((s) => s !== id));
+							}}
+						/>
+					</div>
+
 					{/* Table */}
 					<Card>
 						<CardContent className="p-0">
-							<DataTable
-								data={mockCollectors}
-								columns={columns}
-								searchable={true}
-								searchPlaceholder="Buscar por nome ou telefone..."
-								onRowClick={(row) => console.log("View collector:", row)}
-								emptyMessage="Nenhum cobrador encontrado"
-								expandable={true}
-								renderExpandedRow={renderExpandedRow}
-								onRowExpand={(row) => console.log("Row expanded:", row.id)}
-							/>
+							{filteredCollectors.length === 0 ? (
+								<div className="p-8">
+									<EmptyState
+										icon={Users}
+										title="Nenhum cobrador encontrado"
+										description="Tente ajustar os filtros ou pesquisar com outros termos"
+										actionLabel="Limpar Filtros"
+										onAction={() => setSelectedStatuses([])}
+									/>
+								</div>
+							) : (
+								<DataTable
+									data={filteredCollectors}
+									columns={columns}
+									searchable={true}
+									searchPlaceholder="Buscar por nome ou telefone..."
+									onRowClick={(row) => console.log("View collector:", row)}
+									emptyMessage="Nenhum cobrador encontrado"
+									expandable={true}
+									renderExpandedRow={renderExpandedRow}
+									onRowExpand={(row) => console.log("Row expanded:", row.id)}
+									striped={true}
+									hoverable={true}
+								/>
+							)}
 						</CardContent>
 					</Card>
 				</main>

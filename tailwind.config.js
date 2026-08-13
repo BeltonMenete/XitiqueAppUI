@@ -23,6 +23,10 @@ module.exports = {
           secondary: '#f1f5f9', // slate-100
           tertiary: '#e2e8f0', // slate-200
           white: '#ffffff',
+          // Add aliases for v4 style classes
+          'background-primary': '#f8fafc',
+          'background-secondary': '#f1f5f9',
+          'background-tertiary': '#e2e8f0',
         },
         // Status Colors
         status: {
@@ -30,6 +34,11 @@ module.exports = {
           warning: '#f59e0b', // amber-500
           error: '#ef4444', // red-500
           info: '#3b82f6', // blue-500
+          // Add aliases for v4 style classes
+          'status-success': '#10b981',
+          'status-warning': '#f59e0b',
+          'status-error': '#ef4444',
+          'status-info': '#3b82f6',
         },
         // Text Colors
         text: {
@@ -37,12 +46,18 @@ module.exports = {
           secondary: '#475569', // slate-600
           tertiary: '#94a3b8', // slate-400
           inverse: '#ffffff',
+          // Add aliases for v4 style classes
+          'text-primary': '#0f172a',
+          'text-secondary': '#475569',
+          'text-tertiary': '#94a3b8',
         },
         // Border Colors
         border: {
           DEFAULT: '#e2e8f0', // slate-200
           light: '#f1f5f9', // slate-100
           dark: '#cbd5e1', // slate-300
+          // Add aliases for v4 style classes
+          'border-border': '#e2e8f0',
         },
       },
       fontFamily: {
@@ -83,4 +98,8 @@ module.exports = {
       },
     },
   },
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
 };

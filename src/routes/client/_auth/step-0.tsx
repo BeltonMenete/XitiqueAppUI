@@ -10,10 +10,11 @@ import {
 	ShieldCheck,
 	Users,
 } from "lucide-react";
-import { type FormEvent, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 // Importação do ficheiro dedicado com os dados geográficos oficiais de Moçambique
 import { PROVINCIAS_MZ } from "#/data/mozambique";
 import { APP_NAME } from "#/lib/constants";
+import { useOnboardingData } from "#/features/onboarding";
 
 export const Route = createFileRoute("/client/_auth/step-0")({
 	component: StepZeroLocation,
@@ -63,9 +64,18 @@ const MOCK_ORGANIZATIONS = [
 
 function StepZeroLocation() {
 	const navigate = useNavigate();
+	const { data, saveData, nextStep } = useOnboardingData("client");
 	const [selectedProvinceName, setSelectedProvinceName] = useState<string>("");
 	const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 	const [selectedOrgId, setSelectedOrgId] = useState<string>("");
+
+	// Load saved data on mount
+	useEffect(() => {
+		if (data.location) {
+			setSelectedProvinceName(data.location.province || "");
+			setSelectedDistrict(data.location.district || "");
+		}
+	}, [data]);
 
 	// Encontra o objeto da província selecionada para extrair os seus distritos
 	const availableDistricts = useMemo(() => {
@@ -100,13 +110,17 @@ function StepZeroLocation() {
 		e.preventDefault();
 		if (!selectedProvinceName || !selectedDistrict || !selectedOrgId) return;
 
-		console.log("Região e Organização definidas:", {
-			province: selectedProvinceName,
-			district: selectedDistrict,
+		// Save data
+		saveData({
+			location: {
+				province: selectedProvinceName,
+				district: selectedDistrict,
+			},
 			organizationId: selectedOrgId,
 		});
 
-		// Segue para o Passo 1 do registo
+		// Move to next step
+		nextStep();
 		navigate({ to: "/client/step-1" });
 	};
 

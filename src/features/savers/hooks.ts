@@ -28,7 +28,7 @@ export function useSavers(
 	return useQuery({
 		queryKey: SAVER_KEYS.list(params),
 		queryFn: () => saversApi.getAll(params),
-		staleTime: 5 * 60 * 1000, // 5 minutes
+		staleTime: 5 * 60 * 1000, // 5 minutos
 	});
 }
 
@@ -37,7 +37,7 @@ export function useSaver(id: string) {
 		queryKey: SAVER_KEYS.detail(id),
 		queryFn: () => saversApi.getById(id),
 		enabled: !!id,
-		staleTime: 2 * 60 * 1000, // 2 minutes
+		staleTime: 2 * 60 * 1000, // 2 minutos
 	});
 }
 
@@ -65,7 +65,7 @@ export function useSaverHistory(id: string) {
 		queryKey: SAVER_KEYS.history(id),
 		queryFn: () => saversApi.getHistory(id),
 		enabled: !!id,
-		staleTime: 10 * 60 * 1000, // 10 minutes
+		staleTime: 10 * 60 * 1000, // 10 minutos
 	});
 }
 

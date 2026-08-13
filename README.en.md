@@ -57,17 +57,93 @@ pnpm check
 - `/organization/_auth/payments/transfer-bank`
 - `/organization/_auth/payments/success`
 
+### Dashboard routes
+
+- `/dashboard/overview` — Main organization dashboard
+- `/dashboard/savers` — Savers management
+- `/dashboard/collectors` — Collectors management
+- `/dashboard/reports` — Reports and analytics
+- `/dashboard/` — Super dashboard with tabs
+
 ## Project structure
 
 ```text
 src/
   components/        # shared UI and form components
+    ui/              # reusable UI components (Button, Card, KPICard, etc.)
+    business/        # business logic components (modals, forms)
+    layout/          # layout components (Header, Sidebar, DashboardLayout)
+    interactive/     # interactive components (SplitView, TabBar, etc.)
   lib/               # constants and validation helpers
   routes/            # file-based TanStack Router pages
+  hooks/             # custom React hooks
   main.tsx           # app entry point
   router.tsx         # router setup
   styles.css         # global styles
 ```
+
+## UI Components
+
+The project includes a comprehensive set of reusable UI components:
+
+### Core Components
+- **Button** - Versatile button with variants (primary, secondary, danger, ghost, outline)
+- **Card** - Container component with header, content, and footer
+- **KPICard** - Key performance indicator cards with expandable content
+- **Modal** - Modal dialog component
+- **DataTable** - Data table with sorting, filtering, and expandable rows
+
+### Loading & Empty States
+- **LoadingSkeleton** - Skeleton loading states for cards, text, avatars, and tables
+- **EmptyState** - Empty state component with customizable messages and actions
+
+### Feedback Components
+- **StatusBadge** - Status badges (Active, Inactive, Pending, Debt, etc.)
+- **NotificationToast** - Toast notifications for success, error, warning, and info
+- **Badge** - Notification badge with dot or number variants
+
+### Navigation & Filtering
+- **Breadcrumbs** - Hierarchical navigation component
+- **FilterChips** - Filter chips for selecting and removing filters
+- **ProgressCircle** - Circular progress indicator
+
+### Interactive Components
+- **SplitView** - Split view component with master/detail panels
+- **TabBar** - Tab navigation component
+- **ExpandableCard** - Expandable card component
+- **InlineEditor** - Inline text editor
+
+### Layout Components
+- **DashboardLayout** - Main dashboard layout wrapper
+- **Header** - Page header with breadcrumbs, search, and actions
+- **Sidebar** - Navigation sidebar
+
+## Recent Improvements
+
+### Dashboard Enhancements
+- **Overview Page**: Added CSS-only chart placeholders, improved KPI cards with hover effects, better activity timeline
+- **Savers Page**: Integrated FilterChips for status filtering, loading states, EmptyState for no results, improved DataTable with striped/hoverable rows
+- **Collectors Page**: Consistent improvements matching Savers page
+- **Reports Page**: Added CSS-only bar and pie chart placeholders, improved visualizations
+- **Super Dashboard**: Added tab persistence using localStorage, improved navigation
+
+### Performance Optimizations
+- Added `React.memo` to KPICard to prevent unnecessary re-renders
+- Created ErrorBoundary component for error handling
+- Optimized imports and component structure
+
+### Accessibility Improvements
+- Added ARIA labels to buttons and interactive elements
+- Implemented keyboard navigation support
+- Added focus visible states
+- Created NotificationToast with aria-live regions
+- Implemented useKeyboardShortcuts hook for keyboard shortcuts
+
+### UX Enhancements
+- Added hover effects and transitions throughout
+- Improved loading states with skeleton screens
+- Better empty states with actionable messages
+- Consistent visual patterns across all pages
 
 ## Stack
 
@@ -116,6 +192,7 @@ E2E tests are located in `e2e/*.spec.ts` and test:
 - Dashboard navigation
 - Savers management flows
 - Collectors management flows
+- Page loading and content display
 
 ### CI/CD
 

@@ -12,7 +12,7 @@ import {
 	Users,
 	Wallet,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RegisterSaverModal } from "#/components/business/RegisterSaverModal";
 import { TabBar, TabPanel } from "#/components/interactive";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
@@ -28,8 +28,15 @@ export const Route = createFileRoute("/dashboard/")({
 });
 
 function SuperDashboard() {
-	const [activeTab, setActiveTab] = useState("overview");
+	const [activeTab, setActiveTab] = useState(() => {
+		const saved = localStorage.getItem("dashboard-active-tab");
+		return saved || "overview";
+	});
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+
+	useEffect(() => {
+		localStorage.setItem("dashboard-active-tab", activeTab);
+	}, [activeTab]);
 
 	const tabs = [
 		{
@@ -76,7 +83,7 @@ function SuperDashboard() {
 			value: "450.000 MZN",
 			subtext: "+12.5% vs mês anterior",
 			icon: Wallet,
-			color: "text-secondary bg-secondary/10 border-secondary/20",
+			color: "text-emerald-600 bg-emerald-600/10 border-emerald-600/20",
 			isDebt: false,
 		},
 		{
@@ -84,7 +91,7 @@ function SuperDashboard() {
 			value: "154",
 			subtext: "+2 este mês",
 			icon: Users,
-			color: "text-text-primary bg-background-secondary border-border",
+			color: "text-slate-900 bg-slate-100 border-slate-200",
 			isDebt: false,
 		},
 		{
@@ -92,8 +99,7 @@ function SuperDashboard() {
 			value: "8",
 			subtext: "85.000 MZN total",
 			icon: Wallet,
-			color:
-				"text-status-warning bg-status-warning/10 border-status-warning/20",
+			color: "text-amber-500 bg-amber-500/10 border-amber-500/20",
 			isDebt: true,
 		},
 		{
@@ -101,7 +107,7 @@ function SuperDashboard() {
 			value: "-2.300 MZN",
 			subtext: "Requer reconciliação",
 			icon: TrendingUp,
-			color: "text-status-error bg-status-error/10 border-status-error/20",
+			color: "text-red-500 bg-red-500/10 border-red-500/20",
 			isDebt: true,
 		},
 	];
@@ -114,17 +120,21 @@ function SuperDashboard() {
 				<Header
 					title="Xitique Dashboard"
 					description="Visão geral completa do sistema"
+					breadcrumbs={[
+						{ label: "Dashboard", href: "/dashboard/overview" },
+						{ label: "Super Dashboard" },
+					]}
 					rightContent={
 						<div className="flex items-center gap-3">
-							<div className="relative">
+							<div className="relative hidden md:block">
 								<Search
-									className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary"
+									className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
 									size={18}
 								/>
 								<input
 									type="text"
 									placeholder="Pesquisar global..."
-									className="pl-10 pr-4 py-2 bg-background-secondary border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary w-64"
+									className="pl-10 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 w-64"
 								/>
 							</div>
 							<Button
@@ -132,8 +142,9 @@ function SuperDashboard() {
 								variant="ghost"
 								className="relative"
 								leftIcon={<Bell size={18} />}
+								aria-label="Notificações"
 							>
-								<span className="absolute top-1 right-1 w-2 h-2 bg-status-error rounded-full" />
+								<span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
 							</Button>
 							<Button size="sm" leftIcon={<Plus size={18} />}>
 								Nova Ação
@@ -144,7 +155,7 @@ function SuperDashboard() {
 
 				<main className="flex-1 overflow-hidden flex flex-col">
 					{/* Tab Bar */}
-					<div className="border-b border-border bg-white px-6 py-3">
+					<div className="border-b border-slate-200 bg-white px-6 py-3">
 						<TabBar
 							tabs={tabs}
 							activeTab={activeTab}
@@ -210,11 +221,11 @@ function OverviewTab({ kpis }: { kpis: typeof overviewKPIs }) {
 				{/* Collection Evolution */}
 				<Card>
 					<CardContent className="p-6">
-						<h3 className="font-semibold text-text-primary mb-4">
+						<h3 className="font-semibold text-slate-900 mb-4">
 							Evolução da Arrecadação
 						</h3>
-						<div className="h-64 flex items-center justify-center bg-background-secondary rounded-lg">
-							<p className="text-text-tertiary text-sm">
+						<div className="h-64 flex items-center justify-center bg-slate-100 rounded-lg">
+							<p className="text-slate-400 text-sm">
 								Gráfico de evolução (a implementar)
 							</p>
 						</div>
@@ -224,23 +235,23 @@ function OverviewTab({ kpis }: { kpis: typeof overviewKPIs }) {
 				{/* Recent Activity */}
 				<Card>
 					<CardContent className="p-6">
-						<h3 className="font-semibold text-text-primary mb-4">
+						<h3 className="font-semibold text-slate-900 mb-4">
 							Actividade Recente
 						</h3>
 						<div className="space-y-3">
 							{[1, 2, 3, 4].map((i) => (
 								<div
 									key={i}
-									className="flex items-center gap-3 p-3 bg-background-secondary rounded-lg"
+									className="flex items-center gap-3 p-3 bg-slate-100 rounded-lg"
 								>
-									<div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
-										<Users size={16} className="text-secondary" />
+									<div className="w-8 h-8 bg-emerald-600/10 rounded-full flex items-center justify-center">
+										<Users size={16} className="text-emerald-600" />
 									</div>
 									<div className="flex-1">
-										<p className="text-sm font-medium text-text-primary">
+										<p className="text-sm font-medium text-slate-900">
 											Novo ticante registado
 										</p>
-										<p className="text-xs text-text-secondary">Há 2 horas</p>
+										<p className="text-xs text-text-emerald-600">Há 2 horas</p>
 									</div>
 								</div>
 							))}
@@ -301,7 +312,7 @@ function SaversTab({
 			value: String(mockSavers.length),
 			subtext: "Total registado",
 			icon: Users,
-			color: "text-text-primary bg-background-secondary border-border",
+			color: "text-slate-900 bg-slate-100 border-slate-200",
 			isDebt: false,
 		},
 		{
@@ -309,7 +320,7 @@ function SaversTab({
 			value: "450.000 MZN",
 			subtext: "+12.5% vs mês anterior",
 			icon: Wallet,
-			color: "text-secondary bg-secondary/10 border-secondary/20",
+			color: "text-emerald-600 bg-emerald-600/10 border-emerald-600/20",
 			isDebt: false,
 		},
 		{
@@ -317,8 +328,7 @@ function SaversTab({
 			value: "8.000 MZN",
 			subtext: "3 empréstimos activos",
 			icon: Wallet,
-			color:
-				"text-status-warning bg-status-warning/10 border-status-warning/20",
+			color: "text-amber-500 bg-amber-500/10 border-amber-500/20",
 			isDebt: false,
 		},
 		{
@@ -326,7 +336,7 @@ function SaversTab({
 			value: String(mockSavers.filter((s) => s.status === "in_debt").length),
 			subtext: "Ticantes em dívida",
 			icon: AlertCircle,
-			color: "text-status-error bg-status-error/10 border-status-error/20",
+			color: "text-red-500 bg-red-500/10 border-red-500/20",
 			isDebt: true,
 		},
 	];
@@ -334,12 +344,12 @@ function SaversTab({
 	return (
 		<div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
 			{/* Action Banner */}
-			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-border shadow-sm">
+			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
 				<div>
-					<h2 className="text-sm font-bold text-text-primary tracking-tight">
+					<h2 className="text-sm font-bold text-slate-900 tracking-tight">
 						Gestão de Ticantes
 					</h2>
-					<p className="text-[11px] text-text-secondary">
+					<p className="text-[11px] text-text-emerald-600">
 						Visão expandida e financeira dos membros
 					</p>
 				</div>
@@ -352,8 +362,8 @@ function SaversTab({
 								className={cn(
 									"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
 									selectedMonth === month
-										? "bg-background-tertiary text-text-primary"
-										: "bg-background-secondary text-text-secondary hover:bg-background-tertiary",
+										? "bg-slate-200 text-slate-900"
+										: "bg-slate-100 text-text-emerald-600 hover:bg-slate-200",
 								)}
 								onClick={() => setSelectedMonth(month)}
 							>
@@ -382,10 +392,10 @@ function SaversTab({
 			{/* Savers Table */}
 			<Card>
 				<CardContent className="p-0">
-					<div className="p-4 border-b border-border flex items-center gap-4">
+					<div className="p-4 border-b border-slate-200 flex items-center gap-4">
 						<div className="relative flex-1">
 							<Search
-								className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary"
+								className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
 								size={18}
 							/>
 							<input
@@ -393,30 +403,30 @@ function SaversTab({
 								placeholder="Pesquisar por nome ou número de cartão..."
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
-								className="pl-10 pr-4 py-2 bg-background-secondary border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary w-full"
+								className="pl-10 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 w-full"
 							/>
 						</div>
 					</div>
 					<div className="overflow-x-auto">
 						<table className="w-full text-left border-collapse">
-							<thead className="bg-background-secondary">
+							<thead className="bg-slate-100">
 								<tr>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Ticante
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Valor Diário
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Total Poupado
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Dívida
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Dias
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Estado
 									</th>
 								</tr>
@@ -425,24 +435,24 @@ function SaversTab({
 								{mockSavers.map((saver) => (
 									<tr
 										key={saver.id}
-										className="hover:bg-background-secondary transition-colors cursor-pointer"
+										className="hover:bg-slate-100 transition-colors cursor-pointer"
 									>
 										<td className="px-4 py-3">
 											<div className="flex flex-col">
 												<div className="flex items-center gap-1">
-													<span className="font-mono text-[11px] text-text-tertiary">
+													<span className="font-mono text-[11px] text-slate-400">
 														{saver.cardNumber}
 													</span>
 													<span
 														className={cn(
 															"w-1.5 h-1.5 rounded-full",
 															saver.status === "active"
-																? "bg-status-success"
-																: "bg-status-error",
+																? "bg-emerald-500"
+																: "bg-red-500",
 														)}
 													/>
 												</div>
-												<span className="font-bold text-sm text-text-primary">
+												<span className="font-bold text-sm text-slate-900">
 													{saver.name}
 												</span>
 											</div>
@@ -457,8 +467,8 @@ function SaversTab({
 											className={cn(
 												"px-4 py-3 text-sm",
 												saver.currentDebt > 0
-													? "text-status-error"
-													: "text-text-secondary",
+													? "text-red-500"
+													: "text-text-emerald-600",
 											)}
 										>
 											{saver.currentDebt.toLocaleString()} MZN
@@ -471,8 +481,8 @@ function SaversTab({
 												className={cn(
 													"inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold",
 													saver.status === "active"
-														? "bg-status-success/10 text-status-success"
-														: "bg-status-error/10 text-status-error",
+														? "bg-emerald-500/10 text-emerald-500"
+														: "bg-red-500/10 text-red-500",
 												)}
 											>
 												{saver.status === "active" ? "Ativo" : "Em Dívida"}
@@ -490,23 +500,23 @@ function SaversTab({
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 				<Card>
 					<CardContent className="p-5">
-						<h3 className="text-sm font-semibold text-text-primary mb-4">
+						<h3 className="text-sm font-semibold text-slate-900 mb-4">
 							Resumo Financeiro
 						</h3>
 						<div className="space-y-4">
-							<div className="p-4 bg-secondary/10 rounded-lg">
-								<p className="text-xs text-text-secondary mb-1">
+							<div className="p-4 bg-emerald-600/10 rounded-lg">
+								<p className="text-xs text-text-emerald-600 mb-1">
 									Colectado Este Mês
 								</p>
-								<p className="text-xl font-bold text-secondary">75.000 MZN</p>
-								<p className="text-[10px] text-secondary mt-1">
+								<p className="text-xl font-bold text-emerald-600">75.000 MZN</p>
+								<p className="text-[10px] text-emerald-600 mt-1">
 									+15% vs mês anterior
 								</p>
 							</div>
-							<div className="p-4 bg-status-error/10 rounded-lg">
-								<p className="text-xs text-text-secondary mb-1">Em Dívida</p>
-								<p className="text-xl font-bold text-status-error">2.300 MZN</p>
-								<p className="text-[10px] text-status-error mt-1">
+							<div className="p-4 bg-red-500/10 rounded-lg">
+								<p className="text-xs text-text-emerald-600 mb-1">Em Dívida</p>
+								<p className="text-xl font-bold text-red-500">2.300 MZN</p>
+								<p className="text-[10px] text-red-500 mt-1">
 									4 ticantes afectados
 								</p>
 							</div>
@@ -516,7 +526,7 @@ function SaversTab({
 
 				<Card>
 					<CardContent className="p-5">
-						<h3 className="text-sm font-semibold text-text-primary mb-4">
+						<h3 className="text-sm font-semibold text-slate-900 mb-4">
 							Actividade Recente
 						</h3>
 						<div className="space-y-3">
@@ -545,24 +555,24 @@ function SaversTab({
 							].map((activity) => (
 								<div
 									key={activity.id}
-									className="flex items-center gap-3 p-3 bg-background-secondary rounded-lg"
+									className="flex items-center gap-3 p-3 bg-slate-100 rounded-lg"
 								>
-									<div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
-										<Users size={16} className="text-secondary" />
+									<div className="w-8 h-8 rounded-full bg-emerald-600/10 flex items-center justify-center">
+										<Users size={16} className="text-emerald-600" />
 									</div>
 									<div className="flex-1">
-										<p className="text-xs font-medium text-text-primary">
+										<p className="text-xs font-medium text-slate-900">
 											{activity.action}
 										</p>
-										<p className="text-[10px] text-text-tertiary">
+										<p className="text-[10px] text-slate-400">
 											{activity.user}
 										</p>
 									</div>
 									<div className="text-right">
-										<p className="text-xs font-semibold text-text-primary">
+										<p className="text-xs font-semibold text-slate-900">
 											{activity.amount}
 										</p>
-										<p className="text-[10px] text-text-tertiary">
+										<p className="text-[10px] text-slate-400">
 											{activity.time}
 										</p>
 									</div>
@@ -574,29 +584,31 @@ function SaversTab({
 
 				<Card>
 					<CardContent className="p-5">
-						<h3 className="text-sm font-semibold text-text-primary mb-4">
+						<h3 className="text-sm font-semibold text-slate-900 mb-4">
 							Distribuição por Estado
 						</h3>
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-2">
-									<span className="w-3 h-3 rounded-full bg-status-success" />
-									<span className="text-sm text-text-secondary">Ativos</span>
+									<span className="w-3 h-3 rounded-full bg-emerald-500" />
+									<span className="text-sm text-text-emerald-600">Ativos</span>
 								</div>
-								<span className="text-sm font-medium text-text-primary">1</span>
+								<span className="text-sm font-medium text-slate-900">1</span>
 							</div>
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-2">
-									<span className="w-3 h-3 rounded-full bg-status-error" />
-									<span className="text-sm text-text-secondary">Em Dívida</span>
+									<span className="w-3 h-3 rounded-full bg-red-500" />
+									<span className="text-sm text-text-emerald-600">
+										Em Dívida
+									</span>
 								</div>
-								<span className="text-sm font-medium text-text-primary">2</span>
+								<span className="text-sm font-medium text-slate-900">2</span>
 							</div>
-							<div className="mt-4 p-4 bg-background-secondary rounded-lg">
-								<p className="text-xs text-text-secondary mb-2">
+							<div className="mt-4 p-4 bg-slate-100 rounded-lg">
+								<p className="text-xs text-text-emerald-600 mb-2">
 									Taxa de Assiduidade
 								</p>
-								<p className="text-xl font-bold text-text-primary">94.2%</p>
+								<p className="text-xl font-bold text-slate-900">94.2%</p>
 							</div>
 						</div>
 					</CardContent>
@@ -644,7 +656,7 @@ function CollectorsTab() {
 			value: String(mockCollectors.length),
 			subtext: "+2 este mês",
 			icon: UserCheck,
-			color: "text-text-primary bg-background-secondary border-border",
+			color: "text-slate-900 bg-slate-100 border-slate-200",
 			isDebt: false,
 		},
 		{
@@ -652,7 +664,7 @@ function CollectorsTab() {
 			value: String(mockCollectors.filter((c) => c.status === "active").length),
 			subtext: `de ${mockCollectors.length} total`,
 			icon: UserCheck,
-			color: "text-secondary bg-secondary/10 border-secondary/20",
+			color: "text-emerald-600 bg-emerald-600/10 border-emerald-600/20",
 			isDebt: false,
 		},
 		{
@@ -660,7 +672,7 @@ function CollectorsTab() {
 			value: "450.000 MZN",
 			subtext: "Total colectado",
 			icon: Wallet,
-			color: "text-status-info bg-status-info/10 border-status-info/20",
+			color: "text-blue-500 bg-blue-500/10 border-blue-500/20",
 			isDebt: false,
 		},
 		{
@@ -668,8 +680,7 @@ function CollectorsTab() {
 			value: "82%",
 			subtext: "Progresso mensal",
 			icon: TrendingUp,
-			color:
-				"text-status-warning bg-status-warning/10 border-status-warning/20",
+			color: "text-amber-500 bg-amber-500/10 border-amber-500/20",
 			isDebt: false,
 		},
 	];
@@ -677,7 +688,7 @@ function CollectorsTab() {
 	return (
 		<div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
 			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-semibold text-text-primary">
+				<h2 className="text-lg font-semibold text-slate-900">
 					Gestão de Cobradores
 				</h2>
 				<Button size="sm" leftIcon={<Plus size={18} />}>
@@ -695,39 +706,39 @@ function CollectorsTab() {
 			{/* Collectors Table */}
 			<Card>
 				<CardContent className="p-0">
-					<div className="p-4 border-b border-border flex items-center gap-4">
+					<div className="p-4 border-b border-slate-200 flex items-center gap-4">
 						<div className="relative flex-1">
 							<Search
-								className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary"
+								className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
 								size={18}
 							/>
 							<input
 								type="text"
 								placeholder="Buscar por nome ou telefone..."
-								className="pl-10 pr-4 py-2 bg-background-secondary border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary w-full"
+								className="pl-10 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 w-full"
 							/>
 						</div>
 					</div>
 					<div className="overflow-x-auto">
 						<table className="w-full text-left border-collapse">
-							<thead className="bg-background-secondary">
+							<thead className="bg-slate-100">
 								<tr>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Cobrador
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Clientes
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider text-right">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider text-right">
 										Volume Mensal
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider text-right">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider text-right">
 										Diferença
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
 										Estado
 									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wider text-center">
+									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider text-center">
 										Acções
 									</th>
 								</tr>
@@ -736,18 +747,18 @@ function CollectorsTab() {
 								{mockCollectors.map((collector) => (
 									<tr
 										key={collector.id}
-										className="hover:bg-background-secondary transition-colors"
+										className="hover:bg-slate-100 transition-colors"
 									>
 										<td className="px-4 py-3">
 											<div className="flex items-center gap-3">
-												<div className="w-10 h-10 rounded-full bg-background-tertiary flex items-center justify-center text-text-secondary font-semibold">
+												<div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-text-emerald-600 font-semibold">
 													{String(collector.name).charAt(0)}
 												</div>
 												<div>
-													<p className="font-bold text-sm text-text-primary">
+													<p className="font-bold text-sm text-slate-900">
 														{collector.name}
 													</p>
-													<p className="text-xs text-text-tertiary font-mono">
+													<p className="text-xs text-slate-400 font-mono">
 														{collector.phone}
 													</p>
 												</div>
@@ -755,16 +766,14 @@ function CollectorsTab() {
 										</td>
 										<td className="px-4 py-3">
 											<div className="flex items-center gap-1">
-												<span className="font-bold text-sm text-text-primary">
+												<span className="font-bold text-sm text-slate-900">
 													{collector.clients}
 												</span>
-												<span className="text-xs text-text-tertiary">
-													Ticantes
-												</span>
+												<span className="text-xs text-slate-400">Ticantes</span>
 											</div>
 										</td>
 										<td className="px-4 py-3 text-right">
-											<span className="font-mono text-sm font-bold text-text-primary">
+											<span className="font-mono text-sm font-bold text-slate-900">
 												{collector.monthlyVolume.toLocaleString()} MZN
 											</span>
 										</td>
@@ -773,10 +782,10 @@ function CollectorsTab() {
 												className={cn(
 													"font-mono text-sm",
 													collector.difference > 0
-														? "text-status-success"
+														? "text-emerald-500"
 														: collector.difference < 0
-															? "text-status-error"
-															: "text-text-secondary",
+															? "text-red-500"
+															: "text-text-emerald-600",
 												)}
 											>
 												{collector.difference > 0 ? "+" : ""}
@@ -788,8 +797,8 @@ function CollectorsTab() {
 												className={cn(
 													"inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold",
 													collector.status === "active"
-														? "bg-status-success/10 text-status-success"
-														: "bg-status-error/10 text-status-error",
+														? "bg-emerald-500/10 text-emerald-500"
+														: "bg-red-500/10 text-red-500",
 												)}
 											>
 												{collector.status === "active" ? "Ativo" : "Suspenso"}
@@ -797,7 +806,7 @@ function CollectorsTab() {
 										</td>
 										<td className="px-4 py-3 text-center">
 											<div className="flex justify-center gap-2">
-												<button className="p-1 text-text-tertiary hover:text-text-primary hover:bg-background-secondary rounded-lg transition-all">
+												<button className="p-1 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all">
 													<MoreVertical size={16} />
 												</button>
 											</div>
@@ -854,8 +863,7 @@ function LoansTab() {
 			value: "145.000 MZN",
 			subtext: "12 solicitações pendentes",
 			icon: Wallet,
-			color:
-				"text-status-warning bg-status-warning/10 border-status-warning/20",
+			color: "text-amber-500 bg-amber-500/10 border-amber-500/20",
 			isDebt: false,
 		},
 		{
@@ -863,7 +871,7 @@ function LoansTab() {
 			value: "850.500 MZN",
 			subtext: "45 empréstimos activos",
 			icon: AlertCircle,
-			color: "text-status-error bg-status-error/10 border-status-error/20",
+			color: "text-red-500 bg-red-500/10 border-red-500/20",
 			isDebt: true,
 		},
 		{
@@ -871,7 +879,7 @@ function LoansTab() {
 			value: "85.050 MZN",
 			subtext: "Baseado em 10% de juros",
 			icon: TrendingUp,
-			color: "text-secondary bg-secondary/10 border-secondary/20",
+			color: "text-emerald-600 bg-emerald-600/10 border-emerald-600/20",
 			isDebt: false,
 		},
 	];
@@ -879,7 +887,7 @@ function LoansTab() {
 	return (
 		<div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
 			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-semibold text-text-primary">
+				<h2 className="text-lg font-semibold text-slate-900">
 					Gestão de Empréstimos
 				</h2>
 				<Button size="sm" leftIcon={<Plus size={18} />}>
@@ -900,10 +908,10 @@ function LoansTab() {
 				<Card>
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between mb-4">
-							<h3 className="font-semibold text-text-primary text-sm">
+							<h3 className="font-semibold text-slate-900 text-sm">
 								Lista de Espera
 							</h3>
-							<span className="bg-status-warning/10 text-status-warning px-2 py-1 rounded-full text-xs font-semibold">
+							<span className="bg-amber-500/10 text-amber-500 px-2 py-1 rounded-full text-xs font-semibold">
 								{mockLoans.filter((l) => l.status === "pending").length}
 							</span>
 						</div>
@@ -913,32 +921,32 @@ function LoansTab() {
 								.map((loan) => (
 									<div
 										key={loan.id}
-										className="p-3 bg-background-secondary rounded-lg border border-border hover:border-status-warning transition-colors cursor-pointer"
+										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-status-warning transition-colors cursor-pointer"
 									>
 										<div className="flex items-center gap-2 mb-2">
-											<div className="w-8 h-8 rounded-full bg-background-tertiary flex items-center justify-center text-text-secondary font-bold text-xs">
+											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-text-emerald-600 font-bold text-xs">
 												{String(loan.client).charAt(0)}
 											</div>
 											<div>
-												<p className="font-medium text-sm text-text-primary">
+												<p className="font-medium text-sm text-slate-900">
 													{loan.client}
 												</p>
-												<p className="text-[10px] text-text-tertiary">
+												<p className="text-[10px] text-slate-400">
 													{loan.cardNumber}
 												</p>
 											</div>
 										</div>
 										<div className="flex items-center justify-between">
-											<span className="font-mono text-sm font-bold text-text-primary">
+											<span className="font-mono text-sm font-bold text-slate-900">
 												{loan.amount.toLocaleString()} MZN
 											</span>
-											<span className="text-xs text-text-tertiary">
+											<span className="text-xs text-slate-400">
 												{loan.daysSaved}/{loan.totalDays} dias
 											</span>
 										</div>
-										<div className="mt-2 h-2 bg-background-tertiary rounded-full overflow-hidden">
+										<div className="mt-2 h-2 bg-slate-200 rounded-full overflow-hidden">
 											<div
-												className="h-full bg-status-warning"
+												className="h-full bg-amber-500"
 												style={{ width: `${loan.progress}%` }}
 											/>
 										</div>
@@ -952,10 +960,10 @@ function LoansTab() {
 				<Card>
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between mb-4">
-							<h3 className="font-semibold text-text-primary text-sm">
+							<h3 className="font-semibold text-slate-900 text-sm">
 								Aprovados
 							</h3>
-							<span className="bg-status-success/10 text-status-success px-2 py-1 rounded-full text-xs font-semibold">
+							<span className="bg-emerald-500/10 text-emerald-500 px-2 py-1 rounded-full text-xs font-semibold">
 								{mockLoans.filter((l) => l.status === "approved").length}
 							</span>
 						</div>
@@ -965,32 +973,32 @@ function LoansTab() {
 								.map((loan) => (
 									<div
 										key={loan.id}
-										className="p-3 bg-background-secondary rounded-lg border border-border hover:border-status-success transition-colors cursor-pointer"
+										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-status-success transition-colors cursor-pointer"
 									>
 										<div className="flex items-center gap-2 mb-2">
-											<div className="w-8 h-8 rounded-full bg-background-tertiary flex items-center justify-center text-text-secondary font-bold text-xs">
+											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-text-emerald-600 font-bold text-xs">
 												{String(loan.client).charAt(0)}
 											</div>
 											<div>
-												<p className="font-medium text-sm text-text-primary">
+												<p className="font-medium text-sm text-slate-900">
 													{loan.client}
 												</p>
-												<p className="text-[10px] text-text-tertiary">
+												<p className="text-[10px] text-slate-400">
 													{loan.cardNumber}
 												</p>
 											</div>
 										</div>
 										<div className="flex items-center justify-between">
-											<span className="font-mono text-sm font-bold text-text-primary">
+											<span className="font-mono text-sm font-bold text-slate-900">
 												{loan.amount.toLocaleString()} MZN
 											</span>
-											<span className="text-xs text-text-tertiary">
+											<span className="text-xs text-slate-400">
 												{loan.daysSaved}/{loan.totalDays} dias
 											</span>
 										</div>
-										<div className="mt-2 h-2 bg-background-tertiary rounded-full overflow-hidden">
+										<div className="mt-2 h-2 bg-slate-200 rounded-full overflow-hidden">
 											<div
-												className="h-full bg-status-success"
+												className="h-full bg-emerald-500"
 												style={{ width: `${loan.progress}%` }}
 											/>
 										</div>
@@ -1004,10 +1012,8 @@ function LoansTab() {
 				<Card>
 					<CardContent className="p-4">
 						<div className="flex items-center justify-between mb-4">
-							<h3 className="font-semibold text-text-primary text-sm">
-								Activos
-							</h3>
-							<span className="bg-status-info/10 text-status-info px-2 py-1 rounded-full text-xs font-semibold">
+							<h3 className="font-semibold text-slate-900 text-sm">Activos</h3>
+							<span className="bg-blue-500/10 text-blue-500 px-2 py-1 rounded-full text-xs font-semibold">
 								{mockLoans.filter((l) => l.status === "active").length}
 							</span>
 						</div>
@@ -1017,32 +1023,32 @@ function LoansTab() {
 								.map((loan) => (
 									<div
 										key={loan.id}
-										className="p-3 bg-background-secondary rounded-lg border border-border hover:border-status-info transition-colors cursor-pointer"
+										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-status-info transition-colors cursor-pointer"
 									>
 										<div className="flex items-center gap-2 mb-2">
-											<div className="w-8 h-8 rounded-full bg-background-tertiary flex items-center justify-center text-text-secondary font-bold text-xs">
+											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-text-emerald-600 font-bold text-xs">
 												{String(loan.client).charAt(0)}
 											</div>
 											<div>
-												<p className="font-medium text-sm text-text-primary">
+												<p className="font-medium text-sm text-slate-900">
 													{loan.client}
 												</p>
-												<p className="text-[10px] text-text-tertiary">
+												<p className="text-[10px] text-slate-400">
 													{loan.cardNumber}
 												</p>
 											</div>
 										</div>
 										<div className="flex items-center justify-between">
-											<span className="font-mono text-sm font-bold text-text-primary">
+											<span className="font-mono text-sm font-bold text-slate-900">
 												{loan.amount.toLocaleString()} MZN
 											</span>
-											<span className="text-xs text-text-tertiary">
+											<span className="text-xs text-slate-400">
 												{loan.daysSaved}/{loan.totalDays} dias
 											</span>
 										</div>
-										<div className="mt-2 h-2 bg-background-tertiary rounded-full overflow-hidden">
+										<div className="mt-2 h-2 bg-slate-200 rounded-full overflow-hidden">
 											<div
-												className="h-full bg-status-info"
+												className="h-full bg-blue-500"
 												style={{ width: `${loan.progress}%` }}
 											/>
 										</div>
@@ -1060,12 +1066,12 @@ function LoansTab() {
 function FinanceTab() {
 	return (
 		<div className="animate-in fade-in slide-in-from-top-2 duration-300">
-			<h2 className="text-lg font-semibold text-text-primary mb-6">
+			<h2 className="text-lg font-semibold text-slate-900 mb-6">
 				Visão Financeira
 			</h2>
 			<Card>
 				<CardContent className="p-6">
-					<p className="text-text-tertiary text-sm">
+					<p className="text-slate-400 text-sm">
 						Métricas financeiras (a implementar)
 					</p>
 				</CardContent>
@@ -1078,12 +1084,10 @@ function FinanceTab() {
 function ReportsTab() {
 	return (
 		<div className="animate-in fade-in slide-in-from-top-2 duration-300">
-			<h2 className="text-lg font-semibold text-text-primary mb-6">
-				Relatórios
-			</h2>
+			<h2 className="text-lg font-semibold text-slate-900 mb-6">Relatórios</h2>
 			<Card>
 				<CardContent className="p-6">
-					<p className="text-text-tertiary text-sm">
+					<p className="text-slate-400 text-sm">
 						Relatórios disponíveis (a implementar)
 					</p>
 				</CardContent>

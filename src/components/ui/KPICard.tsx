@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { cn } from "#/lib/design-system";
 import { Card, CardContent } from "./Card";
 
@@ -18,9 +18,10 @@ interface KPICardProps {
 	className?: string;
 	clickable?: boolean;
 	expandedContent?: React.ReactNode;
+	variant?: "default" | "compact" | "expanded";
 }
 
-export function KPICard({
+export const KPICard = memo(function KPICard({
 	title,
 	value,
 	subtext,
@@ -31,6 +32,7 @@ export function KPICard({
 	className = "",
 	clickable = false,
 	expandedContent,
+	variant = "default",
 }: KPICardProps) {
 	const [isExpanded, setIsExpanded] = useState(false);
 
@@ -40,16 +42,25 @@ export function KPICard({
 		}
 	};
 
+	const variantStyles = {
+		default: { padding: "p-5", valueSize: "text-2xl", iconSize: "w-12 h-12" },
+		compact: { padding: "p-4", valueSize: "text-xl", iconSize: "w-10 h-10" },
+		expanded: { padding: "p-6", valueSize: "text-3xl", iconSize: "w-14 h-14" },
+	};
+
+	const styles = variantStyles[variant];
+
 	return (
 		<Card
 			className={cn(
 				"overflow-hidden",
-				clickable && "hover:shadow-md transition-shadow cursor-pointer",
+				clickable &&
+					"hover:shadow-md transition-all duration-200 cursor-pointer hover:-translate-y-0.5",
 				className,
 			)}
 			onClick={handleClick}
 		>
-			<CardContent className="p-5">
+			<CardContent className={styles.padding}>
 				<div className="flex items-start justify-between">
 					<div className="flex-1">
 						<div className="flex items-center gap-2">
@@ -57,7 +68,7 @@ export function KPICard({
 								{title}
 							</p>
 							{clickable && (
-								<span className="text-slate-400">
+								<span className="text-slate-400 transition-transform duration-200">
 									{isExpanded ? (
 										<ChevronUp size={14} />
 									) : (
@@ -66,7 +77,11 @@ export function KPICard({
 								</span>
 							)}
 						</div>
-						<h3 className="text-2xl font-bold text-slate-900 mb-1">{value}</h3>
+						<h3
+							className={cn("font-bold text-slate-900 mb-1", styles.valueSize)}
+						>
+							{value}
+						</h3>
 						{subtext && <p className="text-xs text-slate-400">{subtext}</p>}
 						{trend && (
 							<div className="flex items-center gap-1 mt-2">
@@ -85,7 +100,8 @@ export function KPICard({
 					</div>
 					<div
 						className={cn(
-							"w-12 h-12 rounded-lg flex items-center justify-center border",
+							"rounded-lg flex items-center justify-center border transition-all duration-200 hover:scale-105",
+							styles.iconSize,
 							color,
 							isDebt && "border-l-4 border-l-red-500",
 						)}
@@ -101,4 +117,4 @@ export function KPICard({
 			</CardContent>
 		</Card>
 	);
-}
+});

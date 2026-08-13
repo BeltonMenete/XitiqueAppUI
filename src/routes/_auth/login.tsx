@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Ring2 } from "ldrs/react";
 import { UserPlus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthPageShell } from "#/components/AuthPageShell";
 import { EmailInput } from "#/components/EmailInput";
 import { FormError } from "#/components/FormError";
 import { PasswordInput } from "#/components/PasswordInput";
+import { NotificationToast } from "#/components/ui/NotificationToast";
 import { LOGIN_SUBMIT_DELAY } from "#/lib/constants";
 import { validateLoginForm } from "#/lib/validation";
 
@@ -20,6 +21,19 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isShaking, setIsShaking] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  // Load remembered email on mount
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem("remembered_email");
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -38,6 +52,18 @@ function Login() {
       window.setTimeout(resolve, LOGIN_SUBMIT_DELAY),
     );
     setIsLoading(false);
+
+    // Show success toast
+    setToastMessage("Sessão iniciada com sucesso!");
+    setToastType("success");
+    setShowToast(true);
+
+    // Save remember me preference
+    if (rememberMe) {
+      localStorage.setItem("remembered_email", email);
+    } else {
+      localStorage.removeItem("remembered_email");
+    }
   };
 
   return (
@@ -101,7 +127,17 @@ function Login() {
           </div>
         </div>
 
-        <div className="flex justify-end pb-2">
+        <div className="flex justify-between items-center pb-2">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="rounded border-slate-300 text-(--color-mint-leaf-500) focus:ring-(--color-mint-leaf-500)"
+              aria-label="Lembrar-me"
+            />
+            <span className="text-xs text-slate-600">Lembrar-me</span>
+          </label>
           <Link
             to="/forgot"
             className="text-xs text-(--color-sky-blue-600) font-medium hover:text-(--color-sky-blue-700) hover:underline transition-colors"
@@ -132,6 +168,14 @@ function Login() {
           )}
         </button>
       </form>
+
+      {showToast && (
+        <NotificationToast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </AuthPageShell>
   );
 }

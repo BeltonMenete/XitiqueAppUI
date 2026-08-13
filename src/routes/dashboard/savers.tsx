@@ -23,8 +23,12 @@ import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent } from "#/components/ui/Card";
 import { DataTable } from "#/components/ui/DataTable";
+import { EmptyState } from "#/components/ui/EmptyState";
 import { ExpandableRowContent } from "#/components/ui/ExpandableRow";
+import { FilterChips } from "#/components/ui/FilterChips";
 import { KPICard } from "#/components/ui/KPICard";
+import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
+import { ProgressCircle } from "#/components/ui/ProgressCircle";
 import {
 	ActiveBadge,
 	DebtBadge,
@@ -132,12 +136,21 @@ function SaversManagement() {
 	const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 	const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
 	const [selectedSaver, setSelectedSaver] = useState<Saver | null>(null);
+	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 
-	const { data: saversData } = useSavers({ page: 1, pageSize: 20 });
+	const { data: saversData, isLoading } = useSavers({ page: 1, pageSize: 20 });
 	const savers = saversData?.data || mockSavers;
 
-	// Use savers in the component
-	console.log("Savers count:", savers.length);
+	const statusFilters = [
+		{ id: "active", label: "Activo" },
+		{ id: "in_debt", label: "Em Dívida" },
+		{ id: "inactive", label: "Inativo" },
+	];
+
+	const filteredSavers = savers.filter((saver) => {
+		if (selectedStatuses.length === 0) return true;
+		return selectedStatuses.includes(saver.status);
+	});
 
 	const sidebarItems = [
 		{ label: "Painel", icon: Users, href: "/dashboard/overview" },
@@ -282,14 +295,18 @@ function SaversManagement() {
 						{row.currentDebt.toLocaleString()} MZN
 					</p>
 				</div>
-				<div className="space-y-2">
-					<div className="flex items-center gap-2 text-xs text-slate-500">
-						<Calendar size={14} />
-						<span>Dias no Ciclo</span>
+				<div className="space-y-2 flex items-center gap-4">
+					<div>
+						<div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
+							<Calendar size={14} />
+							<span>Progresso do Ciclo</span>
+						</div>
+						<ProgressCircle
+							value={(row.daysInCycle / 30) * 100}
+							size="md"
+							label={`${row.daysInCycle}/30`}
+						/>
 					</div>
-					<p className="text-lg font-bold text-slate-900">
-						{row.daysInCycle} dias
-					</p>
 				</div>
 			</div>
 
@@ -365,6 +382,10 @@ function SaversManagement() {
 					searchValue={searchTerm}
 					onSearchChange={setSearchTerm}
 					searchPlaceholder="Pesquisar ticante..."
+					breadcrumbs={[
+						{ label: "Dashboard", href: "/dashboard/overview" },
+						{ label: "Gestão" },
+					]}
 					rightContent={
 						<Button
 							size="sm"
@@ -378,7 +399,7 @@ function SaversManagement() {
 
 				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{/* Action Banner */}
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
 						<div>
 							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 								Gestão de Ticantes
@@ -387,7 +408,7 @@ function SaversManagement() {
 								Visão expandida e financeira dos membros
 							</p>
 						</div>
-						<div className="flex items-center gap-3">
+						<div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
 							<div className="flex items-center gap-2">
 								{["Março 2024", "Abril 2024", "Maio 2024"].map((month) => (
 									<button
@@ -396,7 +417,7 @@ function SaversManagement() {
 										className={cn(
 											"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
 											selectedMonth === month
-												? "bg-slate-200 text-slate-700"
+												? "bg-emerald-600 text-white"
 												: "bg-slate-100 text-slate-500 hover:bg-slate-200",
 										)}
 										onClick={() => setSelectedMonth(month)}
@@ -406,20 +427,20 @@ function SaversManagement() {
 								))}
 							</div>
 							<div className="flex items-center gap-2">
-								<Button
-									size="sm"
-									variant="secondary"
-									leftIcon={<Filter size={16} />}
-								>
-									Filtros
-								</Button>
-								<Button
-									size="sm"
-									variant="secondary"
-									leftIcon={<ChevronDown size={16} />}
-								>
-									Vista Expandida
-								</Button>
+								<FilterChips
+									filters={statusFilters}
+									selected={selectedStatuses}
+									onToggle={(id) => {
+										setSelectedStatuses((prev) =>
+											prev.includes(id)
+												? prev.filter((s) => s !== id)
+												: [...prev, id],
+										);
+									}}
+									onRemove={(id) => {
+										setSelectedStatuses((prev) => prev.filter((s) => s !== id));
+									}}
+								/>
 							</div>
 						</div>
 					</div>
@@ -437,17 +458,37 @@ function SaversManagement() {
 						<div className="col-span-12">
 							<Card>
 								<CardContent className="p-0">
-									<DataTable
-										data={savers}
-										columns={columns}
-										searchable={true}
-										searchPlaceholder="Pesquisar por nome ou número de cartão..."
-										onRowClick={(row) => console.log("View saver:", row)}
-										emptyMessage="Nenhum ticante encontrado"
-										expandable={true}
-										renderExpandedRow={renderExpandedRow}
-										onRowExpand={(row) => console.log("Row expanded:", row.id)}
-									/>
+									{isLoading ? (
+										<div className="p-8">
+											<LoadingSkeleton variant="table" />
+										</div>
+									) : filteredSavers.length === 0 ? (
+										<div className="p-8">
+											<EmptyState
+												icon={Users}
+												title="Nenhum ticante encontrado"
+												description="Tente ajustar os filtros ou pesquisar com outros termos"
+												actionLabel="Limpar Filtros"
+												onAction={() => setSelectedStatuses([])}
+											/>
+										</div>
+									) : (
+										<DataTable
+											data={filteredSavers}
+											columns={columns}
+											searchable={true}
+											searchPlaceholder="Pesquisar por nome ou número de cartão..."
+											onRowClick={(row) => console.log("View saver:", row)}
+											emptyMessage="Nenhum ticante encontrado"
+											expandable={true}
+											renderExpandedRow={renderExpandedRow}
+											onRowExpand={(row) =>
+												console.log("Row expanded:", row.id)
+											}
+											striped={true}
+											hoverable={true}
+										/>
+									)}
 								</CardContent>
 							</Card>
 						</div>
