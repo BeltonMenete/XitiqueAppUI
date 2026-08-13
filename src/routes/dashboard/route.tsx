@@ -1,17 +1,17 @@
 // /routes/dashboard/route.tsx
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 
-export const Route = createFileRoute('/dashboard')({
-    component: DashboardRedirect,
+export const Route = createFileRoute("/dashboard")({
+	component: DashboardRedirect,
 });
 
 function DashboardRedirect() {
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
-    useEffect(() => {
-        navigate({ to: '/dashboard/overview' });
-    }, [navigate]);
+	useEffect(() => {
+		navigate({ to: "/dashboard/overview" });
+	}, [navigate]);
 
-    return null;
+	return null;
 }
