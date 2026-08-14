@@ -17,7 +17,8 @@ import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent } from "#/components/ui/Card";
-import { KPICard } from "#/components/ui/KPICard";
+import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
+import { SupportSection } from "#/components/ui/SupportSection";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/overview")({
@@ -45,10 +46,7 @@ function OrganizationDashboard() {
 			title: "Arrecadado Mês",
 			value: "450.000 MZN",
 			subtext: "+12.5% vs mês anterior",
-			icon: Wallet,
-			color: "text-emerald-600 bg-emerald-50 border-emerald-100",
-			isDebt: false,
-			trend: { value: "12.5%", isPositive: true },
+			borderColor: "success" as const,
 			clickable: true,
 			expandedContent: (
 				<div className="space-y-3">
@@ -76,9 +74,7 @@ function OrganizationDashboard() {
 			title: "Comissão Mês",
 			value: "45.000 MZN",
 			subtext: "No caminho da meta",
-			icon: Star,
-			color: "text-amber-600 bg-amber-50 border-amber-100",
-			isDebt: false,
+			borderColor: "warning" as const,
 			clickable: true,
 			expandedContent: (
 				<div className="space-y-3">
@@ -106,9 +102,7 @@ function OrganizationDashboard() {
 			title: "Emprestado",
 			value: "60.000 MZN",
 			subtext: "8 Empréstimos Activos",
-			icon: Handshake,
-			color: "text-slate-600 bg-slate-50 border-slate-100",
-			isDebt: false,
+			borderColor: "primary" as const,
 			clickable: true,
 			expandedContent: (
 				<div className="space-y-3">
@@ -134,9 +128,7 @@ function OrganizationDashboard() {
 			title: "Diferença Caixa",
 			value: "-2.300 MZN",
 			subtext: "Requer Reconciliação",
-			icon: AlertCircle,
-			color: "text-red-600 bg-red-50 border-red-100",
-			isDebt: true,
+			borderColor: "error" as const,
 			clickable: true,
 			expandedContent: (
 				<div className="space-y-3">
@@ -191,7 +183,7 @@ function OrganizationDashboard() {
 					{/* KPI Cards */}
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 						{kpiData.map((kpi) => (
-							<KPICard key={kpi.title} {...kpi} />
+							<PrototypeKPICard key={kpi.title} {...kpi} />
 						))}
 					</div>
 
@@ -205,7 +197,7 @@ function OrganizationDashboard() {
 										<h3 className="text-sm font-semibold text-slate-900">
 											Evolução de Colectas
 										</h3>
-										<select className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+										<select className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900">
 											<option>Últimos 6 meses</option>
 											<option>Último ano</option>
 										</select>
@@ -230,7 +222,7 @@ function OrganizationDashboard() {
 													</span>
 													<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
 														<div
-															className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-600"
+															className="h-full bg-slate-900 rounded-full transition-all duration-300 hover:bg-slate-800"
 															style={{ width: `${item.value}%` }}
 														/>
 													</div>
@@ -286,8 +278,8 @@ function OrganizationDashboard() {
 													key={activity.id}
 													className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
 												>
-													<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-														<Icon size={16} className="text-emerald-600" />
+													<div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+														<Icon size={16} className="text-slate-600" />
 													</div>
 													<div className="flex-1">
 														<p className="text-xs font-medium text-slate-900">
@@ -320,8 +312,8 @@ function OrganizationDashboard() {
 											<p className="text-2xl font-bold text-slate-900">342</p>
 											<p className="text-xs text-slate-400">Total de Membros</p>
 										</div>
-										<div className="p-4 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors cursor-pointer border border-transparent hover:border-emerald-200">
-											<p className="text-2xl font-bold text-emerald-600">318</p>
+										<div className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer border border-transparent hover:border-slate-200">
+											<p className="text-2xl font-bold text-slate-900">318</p>
 											<p className="text-xs text-slate-400">Membros Activos</p>
 										</div>
 										<div className="p-4 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors cursor-pointer border border-transparent hover:border-amber-200">
@@ -406,6 +398,9 @@ function OrganizationDashboard() {
 							</Card>
 						</div>
 					</div>
+
+					{/* Support Section */}
+					<SupportSection />
 				</main>
 			</div>
 		</DashboardLayout>

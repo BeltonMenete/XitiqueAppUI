@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { PaginationParams } from "#/features/savers/types";
+import type { PaginationParams, Saver } from "#/features/savers/types";
 import type {
 	CreateSaverInput,
 	PatchSaverInput,
@@ -8,6 +8,32 @@ import type {
 	UpdateSaverInput,
 } from "#/features/savers/validation";
 import { saversApi } from "./api";
+
+// Utility functions for alphanumeric IDs
+export function generateAlphanumericId(index: number): string {
+	const letter = String.fromCharCode(65 + Math.floor(index / 99)); // A, B, C, etc.
+	const number = (index % 99) + 1;
+	return `${letter}${number.toString().padStart(2, "0")}`;
+}
+
+export function generatePaymentDays(daysInCycle: number): Array<{ day: number; paid: boolean }> {
+	const days = [];
+	for (let i = 1; i <= 30; i++) {
+		days.push({
+			day: i,
+			paid: i <= daysInCycle && Math.random() > 0.3, // Mock logic: some days paid, some not
+		});
+	}
+	return days;
+}
+
+export function enrichSaversWithAlphanumericIds(savers: Saver[]): Saver[] {
+	return savers.map((saver, index) => ({
+		...saver,
+		alphanumericId: saver.alphanumericId || generateAlphanumericId(index),
+		paymentDays: saver.paymentDays || generatePaymentDays(saver.daysInCycle),
+	}));
+}
 
 // Query keys
 export const SAVER_KEYS = {

@@ -19,7 +19,9 @@ import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
-import { MiniReportCard } from "#/components/ui/MiniReportCard";
+import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
+import { PrototypeTable } from "#/components/ui/PrototypeTable";
+import { SupportSection } from "#/components/ui/SupportSection";
 import { TimeRangeSelector } from "#/components/ui/TimeRangeSelector";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { cn } from "#/lib/design-system";
@@ -57,34 +59,26 @@ function ReportsDashboard() {
 		{
 			title: "Receita Total",
 			value: "450.000 MZN",
-			trend: { value: "12.5%", isPositive: true },
-			sparklineData: [
-				120, 150, 180, 200, 220, 250, 280, 300, 320, 350, 380, 400,
-			],
-			color: "text-emerald-600 bg-emerald-50 border-emerald-100",
+			subtext: "+12.5% vs mês anterior",
+			borderColor: "success" as const,
 		},
 		{
 			title: "Crescimento de Membros",
 			value: "+34",
-			trend: { value: "8.2%", isPositive: true },
-			sparklineData: [10, 12, 15, 18, 20, 22, 25, 28, 30, 32, 33, 34],
-			color: "text-blue-600 bg-blue-50 border-blue-100",
+			subtext: "+8.2% vs mês anterior",
+			borderColor: "info" as const,
 		},
 		{
 			title: "Taxa de Retenção",
 			value: "94.2%",
-			trend: { value: "2.1%", isPositive: true },
-			sparklineData: [85, 87, 88, 89, 90, 91, 92, 93, 93, 94, 94, 94],
-			color: "text-purple-600 bg-purple-50 border-purple-100",
+			subtext: "+2.1% vs mês anterior",
+			borderColor: "primary" as const,
 		},
 		{
 			title: "Valor Médio por Membro",
 			value: "1.315 MZN",
-			trend: { value: "3.4%", isPositive: false },
-			sparklineData: [
-				1500, 1450, 1400, 1380, 1350, 1320, 1300, 1280, 1260, 1240, 1220, 1200,
-			],
-			color: "text-amber-600 bg-amber-50 border-amber-100",
+			subtext: "-3.4% vs mês anterior",
+			borderColor: "warning" as const,
 		},
 	];
 
@@ -125,7 +119,7 @@ function ReportsDashboard() {
 								className={cn(
 									"flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2",
 									activeTab === tab.id
-										? "border-emerald-600 text-emerald-600"
+										? "border-slate-900 text-slate-900"
 										: "border-transparent text-slate-500 hover:text-slate-700",
 								)}
 							>
@@ -155,7 +149,7 @@ function ReportsDashboard() {
 					{/* Report Cards */}
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 						{reportCards.map((card) => (
-							<MiniReportCard key={card.title} {...card} />
+							<PrototypeKPICard key={card.title} {...card} />
 						))}
 					</div>
 
@@ -200,7 +194,7 @@ function ReportsDashboard() {
 												</span>
 												<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
 													<div
-														className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-600"
+														className="h-full bg-slate-900 rounded-full transition-all duration-300 hover:bg-slate-800"
 														style={{ width: `${(item.value / 500) * 100}%` }}
 													/>
 												</div>
@@ -231,7 +225,7 @@ function ReportsDashboard() {
 								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
 									<div className="w-full space-y-3">
 										{[
-											{ label: "Colectas", value: 60, color: "bg-emerald-500" },
+											{ label: "Colectas", value: 60, color: "bg-slate-900" },
 											{
 												label: "Empréstimos",
 												value: 25,
@@ -271,74 +265,62 @@ function ReportsDashboard() {
 							</Button>
 						</CardHeader>
 						<CardContent>
-							<div className="overflow-x-auto">
-								<table className="w-full text-left">
-									<thead>
-										<tr className="border-b border-slate-200">
-											<th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase">
-												Período
-											</th>
-											<th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase">
-												Receita
-											</th>
-											<th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase">
-												Despesas
-											</th>
-											<th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase">
-												Lucro
-											</th>
-											<th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase">
-												Crescimento
-											</th>
-										</tr>
-									</thead>
-									<tbody className="divide-y divide-slate-100">
-										{[
-											{
-												period: "Jan 2024",
-												revenue: "380.000 MZN",
-												expenses: "120.000 MZN",
-												profit: "260.000 MZN",
-												growth: "+8.5%",
-											},
-											{
-												period: "Fev 2024",
-												revenue: "410.000 MZN",
-												expenses: "130.000 MZN",
-												profit: "280.000 MZN",
-												growth: "+7.9%",
-											},
-											{
-												period: "Mar 2024",
-												revenue: "450.000 MZN",
-												expenses: "140.000 MZN",
-												profit: "310.000 MZN",
-												growth: "+10.7%",
-											},
-										].map((row) => (
-											<tr key={row.period} className="hover:bg-slate-50">
-												<td className="px-4 py-3 text-sm text-slate-900">
-													{row.period}
-												</td>
-												<td className="px-4 py-3 text-sm text-slate-600">
-													{row.revenue}
-												</td>
-												<td className="px-4 py-3 text-sm text-slate-600">
-													{row.expenses}
-												</td>
-												<td className="px-4 py-3 text-sm font-medium text-emerald-600">
-													{row.profit}
-												</td>
-												<td className="px-4 py-3 text-sm text-emerald-600">
-													{row.growth}
-												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
+							<PrototypeTable
+								data={[
+									{
+										id: "1",
+										period: "Jan 2024",
+										revenue: "380.000 MZN",
+										expenses: "120.000 MZN",
+										profit: "260.000 MZN",
+										growth: "+8.5%",
+									},
+									{
+										id: "2",
+										period: "Fev 2024",
+										revenue: "410.000 MZN",
+										expenses: "130.000 MZN",
+										profit: "280.000 MZN",
+										growth: "+7.9%",
+									},
+									{
+										id: "3",
+										period: "Mar 2024",
+										revenue: "450.000 MZN",
+										expenses: "140.000 MZN",
+										profit: "310.000 MZN",
+										growth: "+10.7%",
+									},
+								]}
+								columns={[
+									{ key: "period", header: "Período" },
+									{ key: "revenue", header: "Receita" },
+									{ key: "expenses", header: "Despesas" },
+									{
+										key: "profit",
+										header: "Lucro",
+										render: (value) => (
+											<span className="text-sm font-medium text-emerald-600">
+												{value as string}
+											</span>
+										),
+									},
+									{
+										key: "growth",
+										header: "Crescimento",
+										render: (value) => (
+											<span className="text-sm text-emerald-600">
+												{value as string}
+											</span>
+										),
+									},
+								]}
+							/>
 						</CardContent>
 					</Card>
+
+					{/* Support Section */}
+					<SupportSection />
 				</main>
 			</div>
 		</DashboardLayout>

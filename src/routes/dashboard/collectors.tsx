@@ -4,9 +4,8 @@ import {
 	Edit,
 	Eye,
 	MapPin,
-	MoreVertical,
+	Phone,
 	Plus,
-	TrendingUp,
 	Users,
 	Wallet,
 } from "lucide-react";
@@ -17,13 +16,12 @@ import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
-import { Card, CardContent } from "#/components/ui/Card";
-import { DataTable } from "#/components/ui/DataTable";
 import { EmptyState } from "#/components/ui/EmptyState";
-import { ExpandableRowContent } from "#/components/ui/ExpandableRow";
 import { FilterChips } from "#/components/ui/FilterChips";
-import { KPICard } from "#/components/ui/KPICard";
-import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
+import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
+import { PrototypeTable } from "#/components/ui/PrototypeTable";
+import { SupportSection } from "#/components/ui/SupportSection";
+import { FAB } from "#/components/ui/FAB";
 import {
 	ActiveBadge,
 	InactiveBadge,
@@ -145,33 +143,25 @@ function CollectorsManagement() {
 			title: "Total de Cobradores",
 			value: String(mockCollectors.length),
 			subtext: "+2 este mês",
-			icon: Users,
-			color: "text-emerald-600 bg-emerald-50 border-emerald-100",
-			isDebt: false,
+			borderColor: "primary" as const,
 		},
 		{
 			title: "Cobradores Ativos",
 			value: String(mockCollectors.filter((c) => c.status === "active").length),
 			subtext: `de ${mockCollectors.length} total`,
-			icon: Users,
-			color: "text-emerald-600 bg-emerald-50 border-emerald-100",
-			isDebt: false,
+			borderColor: "success" as const,
 		},
 		{
 			title: "Arrecadado (Mês)",
 			value: "450.000 MZN",
 			subtext: "Total colectado",
-			icon: Wallet,
-			color: "text-blue-600 bg-blue-50 border-blue-100",
-			isDebt: false,
+			borderColor: "info" as const,
 		},
 		{
 			title: "Meta de Colecta",
 			value: "82%",
 			subtext: "Progresso mensal",
-			icon: TrendingUp,
-			color: "text-amber-600 bg-amber-50 border-amber-100",
-			isDebt: false,
+			borderColor: "warning" as const,
 		},
 	];
 
@@ -218,8 +208,9 @@ function CollectorsManagement() {
 		{
 			key: "monthlyVolume",
 			header: "VOLUME MENSAL",
+			className: "text-right",
 			render: (value: unknown) => (
-				<span className="font-mono text-sm font-bold text-slate-900 text-right block">
+				<span className="font-mono text-sm font-bold text-slate-900">
 					{Number(value).toLocaleString()} MZN
 				</span>
 			),
@@ -227,10 +218,11 @@ function CollectorsManagement() {
 		{
 			key: "difference",
 			header: "DIFERENÇA",
+			className: "text-right",
 			render: (value: unknown) => (
 				<span
 					className={cn(
-						"font-mono text-sm text-right block",
+						"font-mono text-sm",
 						Number(value) > 0
 							? "text-emerald-600"
 							: Number(value) < 0
@@ -256,6 +248,7 @@ function CollectorsManagement() {
 		{
 			key: "actions",
 			header: "ACÇÕES",
+			className: "text-center",
 			render: (_: unknown, _row: Collector) => (
 				<div className="flex justify-center gap-2">
 					<button
@@ -284,101 +277,6 @@ function CollectorsManagement() {
 		},
 	];
 
-	const renderExpandedRow = (row: Collector) => (
-		<ExpandableRowContent
-			title={`Desempenho de ${row.name}`}
-			onViewFullDetails={() => console.log("Navigate to full details:", row.id)}
-		>
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-				<div className="space-y-2">
-					<div className="flex items-center gap-2 text-xs text-slate-500">
-						<TrendingUp size={14} />
-						<span>Volume Mensal</span>
-					</div>
-					<p className="text-lg font-bold text-slate-900">
-						{row.monthlyVolume.toLocaleString()} MZN
-					</p>
-				</div>
-				<div className="space-y-2">
-					<div className="flex items-center gap-2 text-xs text-slate-500">
-						<Users size={14} />
-						<span>Clientes Activos</span>
-					</div>
-					<p className="text-lg font-bold text-slate-900">
-						{row.clients} Ticantes
-					</p>
-				</div>
-				<div className="space-y-2">
-					<div className="flex items-center gap-2 text-xs text-slate-500">
-						<Wallet size={14} />
-						<span>Diferença</span>
-					</div>
-					<p
-						className={cn(
-							"text-lg font-bold",
-							row.difference > 0
-								? "text-emerald-600"
-								: row.difference < 0
-									? "text-red-600"
-									: "text-slate-900",
-						)}
-					>
-						{row.difference > 0 ? "+" : ""}
-						{row.difference.toLocaleString()} MZN
-					</p>
-				</div>
-			</div>
-
-			<div className="pt-4 border-t border-slate-200">
-				<h5 className="text-xs font-semibold text-slate-500 uppercase mb-3">
-					Acções Rápidas
-				</h5>
-				<div className="flex flex-wrap gap-2">
-					<Button size="sm" variant="outline" leftIcon={<MapPin size={14} />}>
-						Ver Localização
-					</Button>
-					<Button
-						size="sm"
-						variant="outline"
-						leftIcon={<CirclePlus size={14} />}
-						onClick={(e) => {
-							e.stopPropagation();
-							setSelectedCollector(row);
-							setIsTransferModalOpen(true);
-						}}
-					>
-						Transferir Clientes
-					</Button>
-					<Button
-						size="sm"
-						variant="outline"
-						leftIcon={<MoreVertical size={14} />}
-					>
-						Mais Opções
-					</Button>
-				</div>
-			</div>
-
-			<div className="pt-4 border-t border-slate-200">
-				<h5 className="text-xs font-semibold text-slate-500 uppercase mb-3">
-					Informação de Contacto
-				</h5>
-				<div className="grid grid-cols-2 gap-4 text-sm">
-					<div>
-						<span className="text-slate-500">Telefone:</span>
-						<span className="ml-2 font-medium text-slate-900">{row.phone}</span>
-					</div>
-					<div>
-						<span className="text-slate-500">Estado:</span>
-						<span className="ml-2 font-medium text-slate-900 capitalize">
-							{row.status}
-						</span>
-					</div>
-				</div>
-			</div>
-		</ExpandableRowContent>
-	);
-
 	return (
 		<DashboardLayout>
 			<Sidebar items={sidebarItems} />
@@ -405,9 +303,9 @@ function CollectorsManagement() {
 
 				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{/* KPI Cards */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 						{kpiData.map((kpi) => (
-							<KPICard key={kpi.title} {...kpi} />
+							<PrototypeKPICard key={kpi.title} {...kpi} />
 						))}
 					</div>
 
@@ -438,36 +336,53 @@ function CollectorsManagement() {
 					</div>
 
 					{/* Table */}
-					<Card>
-						<CardContent className="p-0">
-							{filteredCollectors.length === 0 ? (
-								<div className="p-8">
-									<EmptyState
-										icon={Users}
-										title="Nenhum cobrador encontrado"
-										description="Tente ajustar os filtros ou pesquisar com outros termos"
-										actionLabel="Limpar Filtros"
-										onAction={() => setSelectedStatuses([])}
-									/>
-								</div>
-							) : (
-								<DataTable
-									data={filteredCollectors}
-									columns={columns}
-									searchable={true}
-									searchPlaceholder="Buscar por nome ou telefone..."
-									onRowClick={(row) => console.log("View collector:", row)}
-									emptyMessage="Nenhum cobrador encontrado"
-									expandable={true}
-									renderExpandedRow={renderExpandedRow}
-									onRowExpand={(row) => console.log("Row expanded:", row.id)}
-									striped={true}
-									hoverable={true}
-								/>
-							)}
-						</CardContent>
-					</Card>
+					{filteredCollectors.length === 0 ? (
+						<div className="p-8">
+							<EmptyState
+								icon={Users}
+								title="Nenhum cobrador encontrado"
+								description="Tente ajustar os filtros ou pesquisar com outros termos"
+								actionLabel="Limpar Filtros"
+								onAction={() => setSelectedStatuses([])}
+							/>
+						</div>
+					) : (
+						<PrototypeTable
+							data={filteredCollectors}
+							columns={columns}
+							showAvatars={true}
+							showStatusBadges={true}
+							onRowClick={(row) => console.log("View collector:", row)}
+							pagination={{
+								currentPage: 1,
+								totalPages: Math.ceil(filteredCollectors.length / 10),
+								totalItems: filteredCollectors.length,
+								onPageChange: (page) => console.log("Page change:", page),
+							}}
+						/>
+					)}
+
+					{/* Support Section */}
+					<SupportSection />
 				</main>
+
+				{/* FAB */}
+				<FAB
+					actions={[
+						{
+							icon: <Phone size={20} />,
+							label: "Nova Colecta",
+							onClick: () => console.log("Nova Colecta"),
+							color: "bg-emerald-600 text-white",
+						},
+						{
+							icon: <MapPin size={20} />,
+							label: "Mapa de Rota",
+							onClick: () => console.log("Mapa de Rota"),
+							color: "bg-blue-600 text-white",
+						},
+					]}
+				/>
 			</div>
 
 			<RegisterCollectorModal

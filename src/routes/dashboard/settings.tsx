@@ -14,6 +14,8 @@ import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
+import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
+import { SupportSection } from "#/components/ui/SupportSection";
 import { cn } from "#/lib/design-system";
 import { useSettings } from "#/features/settings";
 
@@ -129,7 +131,7 @@ function SettingsPage() {
 								className={cn(
 									"flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2",
 									activeTab === tab.id
-										? "border-emerald-600 text-emerald-600"
+										? "border-slate-900 text-slate-900"
 										: "border-transparent text-slate-500 hover:text-slate-700",
 								)}
 							>
@@ -138,6 +140,28 @@ function SettingsPage() {
 							</button>
 						))}
 					</nav>
+
+					{/* Settings Summary Cards */}
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+						<PrototypeKPICard
+							title="Membros da Equipa"
+							value={`${settings?.team.admins.length + settings?.team.collectors.length}`}
+							subtext="Administradores e cobradores"
+							borderColor="primary"
+						/>
+						<PrototypeKPICard
+							title="Métodos de Pagamento"
+							value={String(settings?.payments.acceptedMethods.length)}
+							subtext="Métodos activos"
+							borderColor="success"
+						/>
+						<PrototypeKPICard
+							title="Notificações"
+							value={Object.values(notificationsForm).filter(Boolean).length.toString()}
+							subtext="Tipos activados"
+							borderColor="info"
+						/>
+					</div>
 
 					{/* Organization Settings */}
 					{activeTab === "organization" && (
@@ -159,7 +183,7 @@ function SettingsPage() {
 											onChange={(e) =>
 												setOrgForm({ ...orgForm, name: e.target.value })
 											}
-											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900"
 										/>
 									</div>
 									<div>
@@ -172,7 +196,7 @@ function SettingsPage() {
 											onChange={(e) =>
 												setOrgForm({ ...orgForm, email: e.target.value })
 											}
-											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900"
 										/>
 									</div>
 									<div>
@@ -185,7 +209,7 @@ function SettingsPage() {
 											onChange={(e) =>
 												setOrgForm({ ...orgForm, phone: e.target.value })
 											}
-											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900"
 										/>
 									</div>
 									<div>
@@ -201,7 +225,7 @@ function SettingsPage() {
 													monthlyFee: Number(e.target.value),
 												})
 											}
-											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900"
 										/>
 									</div>
 									<div>
@@ -219,7 +243,7 @@ function SettingsPage() {
 													cycleDay: Number(e.target.value),
 												})
 											}
-											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+											className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900"
 										/>
 									</div>
 								</div>
@@ -269,7 +293,7 @@ function SettingsPage() {
 											}
 											className={cn(
 												"relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-												value ? "bg-emerald-600" : "bg-slate-200",
+												value ? "bg-slate-900" : "bg-slate-200",
 											)}
 										>
 											<span
@@ -317,15 +341,15 @@ function SettingsPage() {
 													onChange={(e) => {
 														const newMethods = e.target.checked
 															? [
-																	...settings!.payments.acceptedMethods,
-																	method as any,
-																]
+																...settings!.payments.acceptedMethods,
+																method as any,
+															]
 															: settings!.payments.acceptedMethods.filter(
-																	(m) => m !== method,
-																);
+																(m) => m !== method,
+															);
 														updatePayments({ acceptedMethods: newMethods });
 													}}
-													className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-600"
+													className="rounded border-slate-300 text-slate-900 focus:ring-slate-900"
 												/>
 												<span className="text-sm text-slate-700 capitalize">
 													{method}
@@ -427,7 +451,7 @@ function SettingsPage() {
 												className={cn(
 													"text-xs px-2 py-1 rounded-full",
 													collector.active
-														? "bg-emerald-100 text-emerald-700"
+														? "bg-slate-900 text-white"
 														: "bg-slate-100 text-slate-500",
 												)}
 											>
@@ -439,6 +463,9 @@ function SettingsPage() {
 							</CardContent>
 						</Card>
 					)}
+
+					{/* Support Section */}
+					<SupportSection />
 				</main>
 			</div>
 		</DashboardLayout>

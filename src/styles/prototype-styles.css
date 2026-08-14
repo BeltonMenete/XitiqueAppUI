@@ -1,0 +1,167 @@
+/* Custom scrollbar for prototype tables */
+.prototype-scrollbar::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+
+.prototype-scrollbar::-webkit-scrollbar-thumb {
+	background: #cbd5e1;
+	border-radius: 10px;
+}
+
+.prototype-scrollbar::-webkit-scrollbar-track {
+	background: #f1f5f9;
+}
+
+/* Custom border colors for prototype cards */
+.border-prototype-primary {
+	border-left: 4px solid #0f172a;
+}
+
+.border-prototype-success {
+	border-left: 4px solid #10b981;
+}
+
+.border-prototype-error {
+	border-left: 4px solid #ef4444;
+}
+
+.border-prototype-warning {
+	border-left: 4px solid #f59e0b;
+}
+
+.border-prototype-info {
+	border-left: 4px solid #3b82f6;
+}
+
+/* Custom text gradient for prototype headings */
+.text-gradient-prototype {
+	background: linear-gradient(135deg, #0f172a 0%, #064e3b 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+/* Custom shadow for prototype cards */
+.shadow-prototype {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* Custom hover effects for prototype rows */
+.row-hover-prototype:hover {
+	background-color: #f8fafc;
+	transition: background-color 0.2s ease;
+}
+
+/* Custom badge styles for prototype */
+.badge-prototype {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.75rem;
+	border-radius: 9999px;
+	font-size: 0.75rem;
+	font-weight: 600;
+}
+
+.badge-prototype-success {
+	background-color: rgba(16, 185, 129, 0.1);
+	color: #10b981;
+}
+
+.badge-prototype-error {
+	background-color: rgba(239, 68, 68, 0.1);
+	color: #ef4444;
+}
+
+.badge-prototype-warning {
+	background-color: rgba(245, 158, 11, 0.1);
+	color: #f59e0b;
+}
+
+.badge-prototype-info {
+	background-color: rgba(59, 130, 246, 0.1);
+	color: #3b82f6;
+}
+
+/* Custom button styles for prototype */
+.button-prototype {
+	background-color: #0f172a;
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	font-weight: 600;
+	transition: all 0.2s ease;
+}
+
+.button-prototype:hover {
+	background-color: #1e293b;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button-prototype:active {
+	transform: scale(0.95);
+}
+
+/* Custom input styles for prototype */
+.input-prototype {
+	background-color: #f1f5f9;
+	border: none;
+	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
+	width: 100%;
+	transition: all 0.2s ease;
+}
+
+.input-prototype:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.2);
+}
+
+/* Custom card styles for prototype */
+.card-prototype {
+	background-color: #f8fafc;
+	border-radius: 0.75rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	padding: 1rem;
+}
+
+/* Custom table styles for prototype */
+.table-prototype th {
+	background-color: #f1f5f9;
+	padding: 0.75rem 1rem;
+	text-align: left;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: #64748b;
+}
+
+.table-prototype td {
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+/* Custom status indicator */
+.status-indicator {
+	width: 0.75rem;
+	height: 0.75rem;
+	border-radius: 50%;
+	border: 2px solid white;
+}
+
+.status-indicator-active {
+	background-color: #10b981;
+}
+
+.status-indicator-inactive {
+	background-color: #64748b;
+}
+
+.status-indicator-error {
+	background-color: #ef4444;
+}
+
+.status-indicator-warning {
+	background-color: #f59e0b;
+}

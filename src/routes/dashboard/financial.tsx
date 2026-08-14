@@ -15,10 +15,11 @@ import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
-import { DataTable } from "#/components/ui/DataTable";
 import { EmptyState } from "#/components/ui/EmptyState";
 import { FilterChips } from "#/components/ui/FilterChips";
-import { KPICard } from "#/components/ui/KPICard";
+import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
+import { PrototypeTable } from "#/components/ui/PrototypeTable";
+import { SupportSection } from "#/components/ui/SupportSection";
 import { cn } from "#/lib/design-system";
 import {
 	useCashFlow,
@@ -69,39 +70,31 @@ function FinancialDashboard() {
 
 	const kpiData = summary
 		? [
-				{
-					title: "Saldo Total",
-					value: `${summary.balance.toLocaleString()} MZN`,
-					subtext: "Disponível",
-					icon: Wallet,
-					color: "text-emerald-600 bg-emerald-50 border-emerald-100",
-					isDebt: false,
-				},
-				{
-					title: "Receitas (Mês)",
-					value: `${summary.totalIncome.toLocaleString()} MZN`,
-					subtext: "+12.5% vs mês anterior",
-					icon: ArrowUpRight,
-					color: "text-emerald-600 bg-emerald-50 border-emerald-100",
-					isDebt: false,
-				},
-				{
-					title: "Despesas (Mês)",
-					value: `${summary.totalExpense.toLocaleString()} MZN`,
-					subtext: "+5.2% vs mês anterior",
-					icon: ArrowDownLeft,
-					color: "text-red-600 bg-red-50 border-red-100",
-					isDebt: true,
-				},
-				{
-					title: "Empréstimos Ativos",
-					value: `${summary.totalLoans.toLocaleString()} MZN`,
-					subtext: "Valor total",
-					icon: Wallet,
-					color: "text-amber-600 bg-amber-50 border-amber-100",
-					isDebt: true,
-				},
-			]
+			{
+				title: "Saldo Total",
+				value: `${summary.balance.toLocaleString()} MZN`,
+				subtext: "Disponível",
+				borderColor: "success" as const,
+			},
+			{
+				title: "Receitas (Mês)",
+				value: `${summary.totalIncome.toLocaleString()} MZN`,
+				subtext: "+12.5% vs mês anterior",
+				borderColor: "success" as const,
+			},
+			{
+				title: "Despesas (Mês)",
+				value: `${summary.totalExpense.toLocaleString()} MZN`,
+				subtext: "+5.2% vs mês anterior",
+				borderColor: "error" as const,
+			},
+			{
+				title: "Empréstimos Ativos",
+				value: `${summary.totalLoans.toLocaleString()} MZN`,
+				subtext: "Valor total",
+				borderColor: "warning" as const,
+			},
+		]
 		: [];
 
 	const columns = [
@@ -208,7 +201,7 @@ function FinancialDashboard() {
 					{/* KPI Cards */}
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 						{kpiData.map((kpi) => (
-							<KPICard key={kpi.title} {...kpi} />
+							<PrototypeKPICard key={kpi.title} {...kpi} />
 						))}
 					</div>
 
@@ -270,7 +263,7 @@ function FinancialDashboard() {
 												</span>
 												<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
 													<div
-														className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-600"
+														className="h-full bg-slate-900 rounded-full transition-all duration-300 hover:bg-slate-800"
 														style={{
 															width: `${(item.balance / 500000) * 100}%`,
 														}}
@@ -288,43 +281,44 @@ function FinancialDashboard() {
 					</Card>
 
 					{/* Transactions Table */}
-					<Card>
-						<CardHeader className="flex justify-between items-center pb-4">
-							<h4 className="font-semibold text-slate-900">
-								Transações Recentes
-							</h4>
-						</CardHeader>
-						<CardContent className="p-0">
-							{transactionsLoading ? (
-								<div className="p-8">
-									<div className="h-64 bg-slate-50 rounded-lg animate-pulse" />
-								</div>
-							) : transactions && transactions.data.length > 0 ? (
-								<DataTable
-									data={transactions.data}
-									columns={columns}
-									searchable={true}
-									searchPlaceholder="Pesquisar transação..."
-									emptyMessage="Nenhuma transação encontrada"
-									striped={true}
-									hoverable={true}
-								/>
-							) : (
-								<div className="p-8">
-									<EmptyState
-										icon={Wallet}
-										title="Nenhuma transação encontrada"
-										description="Ajuste os filtros ou registre uma nova transação"
-										actionLabel="Limpar Filtros"
-										onAction={() => {
-											setSelectedType([]);
-											setSelectedCategory([]);
-										}}
-									/>
-								</div>
-							)}
-						</CardContent>
-					</Card>
+					{transactionsLoading ? (
+						<div className="p-8">
+							<div className="h-64 bg-slate-50 rounded-lg animate-pulse" />
+						</div>
+					) : transactions && transactions.data.length > 0 ? (
+						<PrototypeTable
+							data={transactions.data}
+							columns={columns}
+							showStatusBadges={true}
+							onRowClick={(row) => console.log("View transaction:", row)}
+							pagination={{
+								currentPage: 1,
+								totalPages: Math.ceil(transactions.data.length / 10),
+								totalItems: transactions.data.length,
+								onPageChange: (page) => console.log("Page change:", page),
+							}}
+						/>
+					) : (
+						<div className="p-8">
+							<EmptyState
+								icon={Wallet}
+								title="Nenhuma transação encontrada"
+								description="Ajuste os filtros ou registre uma nova transação"
+								actionLabel="Limpar Filtros"
+								onAction={() => {
+									setSelectedType([]);
+									setSelectedCategory([]);
+								}}
+							/>
+						</div>
+					)}
+
+					{/* Support Section */}
+					<SupportSection
+						performanceTitle="Desempenho Financeiro"
+						performanceText="Este mês, a organização atingiu 82% da meta de arrecadação. Continue monitorando os fluxos."
+						performanceAction="Ver Relatório Financeiro"
+					/>
 				</main>
 			</div>
 		</DashboardLayout>

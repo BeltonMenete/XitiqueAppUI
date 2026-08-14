@@ -1,6 +1,10 @@
 export { Button } from "./Button";
 export { Card, CardContent, CardHeader, CardFooter } from "./Card";
 export { KPICard } from "./KPICard";
+export { PrototypeKPICard } from "./PrototypeKPICard";
+export { PrototypeTable } from "./PrototypeTable";
+export { SupportSection } from "./SupportSection";
+export { FAB } from "./FAB";
 export { Modal } from "./Modal";
 export { DataTable } from "./DataTable";
 export {

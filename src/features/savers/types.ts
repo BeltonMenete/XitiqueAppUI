@@ -1,6 +1,7 @@
 export interface Saver {
 	id: string;
 	cardNumber: number;
+	alphanumericId?: string;
 	name: string;
 	dailyAmount: number;
 	organizationId: string;
@@ -16,8 +17,9 @@ export interface Saver {
 	status: "active" | "inactive" | "in_debt";
 	organization?: {
 		id: string;
-		name: string;
+		name: string
 	};
+	paymentDays?: Array<{ day: number; paid: boolean }>;
 }
 
 export interface SaverDeposit {

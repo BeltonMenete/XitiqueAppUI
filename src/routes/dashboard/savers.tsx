@@ -12,6 +12,8 @@ import {
 	TrendingUp,
 	Users,
 	Wallet,
+	Grid,
+	List,
 } from "lucide-react";
 import { useState } from "react";
 import { QuickDepositModal } from "#/components/business/QuickDepositModal";
@@ -34,9 +36,234 @@ import {
 	DebtBadge,
 	InactiveBadge,
 } from "#/components/ui/StatusBadge";
-import { useSavers } from "#/features/savers";
+import { useSavers, enrichSaversWithAlphanumericIds } from "#/features/savers";
 import type { Saver } from "#/features/savers/types";
 import { cn } from "#/lib/design-system";
+
+// MonthCalendarGrid Component
+interface MonthCalendarGridProps {
+	days: Array<{ day: number; paid: boolean }>;
+	onDayClick?: (day: number) => void;
+}
+
+function MonthCalendarGrid({ days, onDayClick }: MonthCalendarGridProps) {
+	const weekDays = ["S", "T", "Q", "Q", "S", "S", "D"];
+	return (
+		<div className="flex flex-col items-center">
+			<div className="grid grid-cols-[repeat(30,minmax(16px,1fr))] gap-0.5 justify-center mb-1">
+				{weekDays.map((day, i) => (
+					<span
+						key={`header-${i}`}
+						className="text-[8px] leading-tight text-center uppercase text-slate-400 font-medium"
+					>
+						{day}
+					</span>
+				))}
+			</div>
+			<div className="grid grid-cols-[repeat(30,minmax(16px,1fr))] gap-0.5 justify-center">
+				{days.map((dayData) => (
+					<div
+						key={dayData.day}
+						className={cn(
+							"w-4 h-4 rounded-sm border cursor-pointer transition-colors",
+							dayData.paid
+								? "border-slate-300 bg-emerald-500"
+								: "border-slate-300 bg-slate-100",
+						)}
+						onClick={() => onDayClick?.(dayData.day)}
+						title={`Dia ${dayData.day}: ${dayData.paid ? "Pago" : "Não pago"}`}
+					/>
+				))}
+			</div>
+		</div>
+	);
+}
+
+// CalendarKPIs Component
+interface CalendarKPIsProps {
+	totalSavers: number;
+	totalCollected: string;
+	inDebt: number;
+	adherenceRate: number;
+}
+
+function CalendarKPIs({
+	totalSavers,
+	totalCollected,
+	inDebt,
+	adherenceRate,
+}: CalendarKPIsProps) {
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+			<div className="flex-1 min-w-[200px] bg-emerald-50 p-4 rounded-xl text-emerald-900 flex items-center justify-between group">
+				<div>
+					<h4 className="text-[10px] opacity-80 uppercase tracking-widest font-semibold">
+						Colecção do Dia
+					</h4>
+					<p className="text-lg font-bold">{totalCollected}</p>
+				</div>
+				<div className="flex items-center text-emerald-600 font-bold text-[10px]">
+					<TrendingUp size={14} className="mr-1" />
+					+12.4%
+				</div>
+			</div>
+			<div className="flex-1 min-w-[200px] bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between group">
+				<div>
+					<h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
+						Em Dívida
+					</h4>
+					<p className="text-lg font-bold text-red-600">{inDebt}</p>
+				</div>
+				<AlertCircle size={16} className="text-red-500 opacity-40" />
+			</div>
+			<div className="flex-1 min-w-[200px] bg-white p-4 rounded-xl border border-slate-200 flex flex-col justify-center group">
+				<div className="flex justify-between items-center mb-1">
+					<h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
+						Adesão
+					</h4>
+					<p className="text-lg font-bold text-slate-900">{adherenceRate}%</p>
+				</div>
+				<div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+					<div
+						className="bg-slate-900 h-full"
+						style={{ width: `${adherenceRate}%` }}
+					/>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+// SaversCalendarView Component
+interface SaversCalendarViewProps {
+	savers: Saver[];
+	onRowClick: (saver: Saver) => void;
+	selectedMonth: string;
+	onMonthChange: (month: string) => void;
+}
+
+function SaversCalendarView({
+	savers,
+	onRowClick,
+	selectedMonth,
+	onMonthChange,
+}: SaversCalendarViewProps) {
+	const months = ["Jan 2024", "Fev 2024", "Março 2024", "Abril 2024", "Maio 2024"];
+
+	return (
+		<div className="space-y-6">
+			{/* Month Selector */}
+			<div className="flex items-center space-x-2 overflow-x-auto pb-2">
+				{months.map((month) => (
+					<button
+						key={month}
+						type="button"
+						className={cn(
+							"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap",
+							selectedMonth === month
+								? "bg-slate-900 text-white"
+								: "bg-slate-100 text-slate-500 hover:bg-slate-200",
+						)}
+						onClick={() => onMonthChange(month)}
+					>
+						{month}
+					</button>
+				))}
+			</div>
+
+			{/* Calendar Table */}
+			<div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+				<div className="overflow-x-auto">
+					<table className="w-full text-left border-collapse">
+						<thead className="bg-slate-50 border-b border-slate-200">
+							<tr>
+								<th className="px-3 py-2 text-[12px] text-slate-500 font-semibold w-48">
+									TICANTE
+								</th>
+								<th className="px-3 py-2 text-[12px] text-slate-500 font-semibold">
+									<MonthCalendarGrid
+										days={Array.from({ length: 30 }, (_, i) => ({
+											day: i + 1,
+											paid: false,
+										}))}
+									/>
+								</th>
+								<th className="px-3 py-2 text-[12px] text-slate-500 font-semibold w-24">
+									ESTADO
+								</th>
+							</tr>
+						</thead>
+						<tbody className="divide-y divide-slate-200">
+							{savers.map((saver) => (
+								<tr
+									key={saver.id}
+									className="hover:bg-slate-50 transition-colors cursor-pointer"
+									onClick={() => onRowClick(saver)}
+								>
+									<td className="px-3 py-2">
+										<div className="flex flex-col">
+											<div className="flex items-center gap-1">
+												<span className="font-mono text-[11px] text-slate-400">
+													{saver.alphanumericId || String(saver.cardNumber)}
+												</span>
+											</div>
+											<span className="font-bold text-sm text-slate-900 truncate w-32">
+												{saver.name}
+											</span>
+										</div>
+									</td>
+									<td className="px-3 py-2">
+										<MonthCalendarGrid
+											days={saver.paymentDays || []}
+											onDayClick={(day) => console.log(`Day ${day} clicked for ${saver.name}`)}
+										/>
+									</td>
+									<td className="px-3 py-2">
+										{saver.status === "active" && <ActiveBadge />}
+										{saver.status === "in_debt" && <DebtBadge />}
+										{saver.status === "inactive" && <InactiveBadge />}
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+
+				{/* Pagination */}
+				<div className="p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+					<p className="text-xs text-slate-500">
+						A mostrar 1-{savers.length} de {savers.length} ticantes
+					</p>
+					<div className="flex space-x-1">
+						<button className="p-1 rounded-lg hover:bg-slate-200 text-slate-400">
+							<ChevronDown size={16} className="rotate-90" />
+						</button>
+						<button className="w-8 h-8 rounded-lg bg-slate-900 text-white font-bold text-sm">
+							1
+						</button>
+						<button className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 font-bold text-sm">
+							2
+						</button>
+						<button className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 font-bold text-sm">
+							3
+						</button>
+						<button className="p-1 rounded-lg hover:bg-slate-200 text-slate-400">
+							<ChevronDown size={16} className="-rotate-90" />
+						</button>
+					</div>
+				</div>
+			</div>
+
+			{/* KPIs */}
+			<CalendarKPIs
+				totalSavers={savers.length}
+				totalCollected="45.200 MZN"
+				inDebt={savers.filter((s) => s.status === "in_debt").length}
+				adherenceRate={88}
+			/>
+		</div>
+	);
+}
 
 export const Route = createFileRoute("/dashboard/savers")({
 	component: SaversManagement,
@@ -137,9 +364,10 @@ function SaversManagement() {
 	const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
 	const [selectedSaver, setSelectedSaver] = useState<Saver | null>(null);
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+	const [viewMode, setViewMode] = useState<"standard" | "calendar">("standard");
 
 	const { data: saversData, isLoading } = useSavers({ page: 1, pageSize: 20 });
-	const savers = saversData?.data || mockSavers;
+	const savers = enrichSaversWithAlphanumericIds(saversData?.data || mockSavers);
 
 	const statusFilters = [
 		{ id: "active", label: "Activo" },
@@ -387,222 +615,263 @@ function SaversManagement() {
 						{ label: "Gestão" },
 					]}
 					rightContent={
-						<Button
-							size="sm"
-							leftIcon={<Plus size={16} />}
-							onClick={() => setIsRegisterModalOpen(true)}
-						>
-							Novo Ticante
-						</Button>
+						<div className="flex items-center gap-2">
+							<div className="flex items-center bg-slate-100 rounded-lg p-1">
+								<button
+									type="button"
+									className={cn(
+										"p-1.5 rounded-md transition-colors",
+										viewMode === "standard"
+											? "bg-white text-slate-900 shadow-sm"
+											: "text-slate-500 hover:text-slate-700",
+									)}
+									onClick={() => setViewMode("standard")}
+									title="Vista padrão"
+								>
+									<List size={16} />
+								</button>
+								<button
+									type="button"
+									className={cn(
+										"p-1.5 rounded-md transition-colors",
+										viewMode === "calendar"
+											? "bg-white text-slate-900 shadow-sm"
+											: "text-slate-500 hover:text-slate-700",
+									)}
+									onClick={() => setViewMode("calendar")}
+									title="Vista calendário"
+								>
+									<Grid size={16} />
+								</button>
+							</div>
+							<Button
+								size="sm"
+								leftIcon={<Plus size={16} />}
+								onClick={() => setIsRegisterModalOpen(true)}
+							>
+								Novo Ticante
+							</Button>
+						</div>
 					}
 				/>
 
 				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
-					{/* Action Banner */}
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
-						<div>
-							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
-								Gestão de Ticantes
-							</h2>
-							<p className="text-[11px] text-slate-400">
-								Visão expandida e financeira dos membros
-							</p>
-						</div>
-						<div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-							<div className="flex items-center gap-2">
-								{["Março 2024", "Abril 2024", "Maio 2024"].map((month) => (
-									<button
-										key={month}
-										type="button"
-										className={cn(
-											"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
-											selectedMonth === month
-												? "bg-emerald-600 text-white"
-												: "bg-slate-100 text-slate-500 hover:bg-slate-200",
-										)}
-										onClick={() => setSelectedMonth(month)}
-									>
-										{month}
-									</button>
+					{viewMode === "standard" ? (
+						<>
+							{/* Action Banner */}
+							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
+								<div>
+									<h2 className="text-sm font-bold text-slate-950 tracking-tight">
+										Gestão de Ticantes
+									</h2>
+									<p className="text-[11px] text-slate-400">
+										Visão expandida e financeira dos membros
+									</p>
+								</div>
+								<div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+									<div className="flex items-center gap-2">
+										{["Março 2024", "Abril 2024", "Maio 2024"].map((month) => (
+											<button
+												key={month}
+												type="button"
+												className={cn(
+													"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
+													selectedMonth === month
+														? "bg-emerald-600 text-white"
+														: "bg-slate-100 text-slate-500 hover:bg-slate-200",
+												)}
+												onClick={() => setSelectedMonth(month)}
+											>
+												{month}
+											</button>
+										))}
+									</div>
+									<div className="flex items-center gap-2">
+										<FilterChips
+											filters={statusFilters}
+											selected={selectedStatuses}
+											onToggle={(id) => {
+												setSelectedStatuses((prev) =>
+													prev.includes(id)
+														? prev.filter((s) => s !== id)
+														: [...prev, id],
+												);
+											}}
+											onRemove={(id) => {
+												setSelectedStatuses((prev) => prev.filter((s) => s !== id));
+											}}
+										/>
+									</div>
+								</div>
+							</div>
+
+							{/* KPI Cards */}
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+								{kpiData.map((kpi) => (
+									<KPICard key={kpi.title} {...kpi} />
 								))}
 							</div>
-							<div className="flex items-center gap-2">
-								<FilterChips
-									filters={statusFilters}
-									selected={selectedStatuses}
-									onToggle={(id) => {
-										setSelectedStatuses((prev) =>
-											prev.includes(id)
-												? prev.filter((s) => s !== id)
-												: [...prev, id],
-										);
-									}}
-									onRemove={(id) => {
-										setSelectedStatuses((prev) => prev.filter((s) => s !== id));
-									}}
-								/>
-							</div>
-						</div>
-					</div>
 
-					{/* KPI Cards */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-						{kpiData.map((kpi) => (
-							<KPICard key={kpi.title} {...kpi} />
-						))}
-					</div>
-
-					{/* Main Content */}
-					<div className="grid grid-cols-12 gap-6">
-						{/* Savers Table */}
-						<div className="col-span-12">
-							<Card>
-								<CardContent className="p-0">
-									{isLoading ? (
-										<div className="p-8">
-											<LoadingSkeleton variant="table" />
-										</div>
-									) : filteredSavers.length === 0 ? (
-										<div className="p-8">
-											<EmptyState
-												icon={Users}
-												title="Nenhum ticante encontrado"
-												description="Tente ajustar os filtros ou pesquisar com outros termos"
-												actionLabel="Limpar Filtros"
-												onAction={() => setSelectedStatuses([])}
-											/>
-										</div>
-									) : (
-										<DataTable
-											data={filteredSavers}
-											columns={columns}
-											searchable={true}
-											searchPlaceholder="Pesquisar por nome ou número de cartão..."
-											onRowClick={(row) => console.log("View saver:", row)}
-											emptyMessage="Nenhum ticante encontrado"
-											expandable={true}
-											renderExpandedRow={renderExpandedRow}
-											onRowExpand={(row) =>
-												console.log("Row expanded:", row.id)
-											}
-											striped={true}
-											hoverable={true}
-										/>
-									)}
-								</CardContent>
-							</Card>
-						</div>
-
-						{/* Financial Summary */}
-						<div className="col-span-12 lg:col-span-4">
-							<Card>
-								<CardContent className="p-5">
-									<h3 className="text-sm font-semibold text-slate-900 mb-4">
-										Resumo Financeiro
-									</h3>
-									<div className="space-y-4">
-										<div className="p-4 bg-emerald-50 rounded-lg">
-											<p className="text-xs text-slate-500 mb-1">
-												Colectado Este Mês
-											</p>
-											<p className="text-xl font-bold text-emerald-600">
-												75.000 MZN
-											</p>
-											<p className="text-[10px] text-emerald-600 mt-1">
-												+15% vs mês anterior
-											</p>
-										</div>
-										<div className="p-4 bg-red-50 rounded-lg">
-											<p className="text-xs text-slate-500 mb-1">Em Dívida</p>
-											<p className="text-xl font-bold text-red-600">
-												2.300 MZN
-											</p>
-											<p className="text-[10px] text-red-600 mt-1">
-												4 ticantes afectados
-											</p>
-										</div>
-										<div className="p-4 bg-slate-50 rounded-lg">
-											<p className="text-xs text-slate-500 mb-1">
-												Taxa de Assiduidade
-											</p>
-											<p className="text-xl font-bold text-slate-900">94.2%</p>
-											<p className="text-[10px] text-slate-400 mt-1">
-												322 de 342 ticantes
-											</p>
-										</div>
-									</div>
-								</CardContent>
-							</Card>
-						</div>
-
-						{/* Recent Activity */}
-						<div className="col-span-12 lg:col-span-8">
-							<Card>
-								<CardContent className="p-5">
-									<h3 className="text-sm font-semibold text-slate-900 mb-4">
-										Actividade Recente
-									</h3>
-									<div className="space-y-3">
-										{[
-											{
-												id: "1",
-												action: "Novo depósito",
-												user: "Carlos Mondlane",
-												amount: "500 MZN",
-												time: "Há 5 min",
-											},
-											{
-												id: "2",
-												action: "Empréstimo aprovado",
-												user: "Ana Vilanculos",
-												amount: "1.000 MZN",
-												time: "Há 15 min",
-											},
-											{
-												id: "3",
-												action: "Pagamento recebido",
-												user: "Bento Sitoe",
-												amount: "300 MZN",
-												time: "Há 30 min",
-											},
-											{
-												id: "4",
-												action: "Novo ticante registado",
-												user: "Eduarda Langa",
-												amount: "-",
-												time: "Há 1 hora",
-											},
-										].map((activity) => (
-											<div
-												key={activity.id}
-												className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"
-											>
-												<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-													<Users size={16} className="text-emerald-600" />
+							{/* Main Content */}
+							<div className="grid grid-cols-12 gap-6">
+								{/* Savers Table */}
+								<div className="col-span-12">
+									<Card>
+										<CardContent className="p-0">
+											{isLoading ? (
+												<div className="p-8">
+													<LoadingSkeleton variant="table" />
 												</div>
-												<div className="flex-1">
-													<p className="text-xs font-medium text-slate-900">
-														{activity.action}
+											) : filteredSavers.length === 0 ? (
+												<div className="p-8">
+													<EmptyState
+														icon={Users}
+														title="Nenhum ticante encontrado"
+														description="Tente ajustar os filtros ou pesquisar com outros termos"
+														actionLabel="Limpar Filtros"
+														onAction={() => setSelectedStatuses([])}
+													/>
+												</div>
+											) : (
+												<DataTable
+													data={filteredSavers}
+													columns={columns}
+													searchable={true}
+													searchPlaceholder="Pesquisar por nome ou número de cartão..."
+													onRowClick={(row) => console.log("View saver:", row)}
+													emptyMessage="Nenhum ticante encontrado"
+													expandable={true}
+													renderExpandedRow={renderExpandedRow}
+													onRowExpand={(row) =>
+														console.log("Row expanded:", row.id)
+													}
+													striped={true}
+													hoverable={true}
+												/>
+											)}
+										</CardContent>
+									</Card>
+								</div>
+
+								{/* Financial Summary */}
+								<div className="col-span-12 lg:col-span-4">
+									<Card>
+										<CardContent className="p-5">
+											<h3 className="text-sm font-semibold text-slate-900 mb-4">
+												Resumo Financeiro
+											</h3>
+											<div className="space-y-4">
+												<div className="p-4 bg-emerald-50 rounded-lg">
+													<p className="text-xs text-slate-500 mb-1">
+														Colectado Este Mês
 													</p>
-													<p className="text-[10px] text-slate-400">
-														{activity.user}
+													<p className="text-xl font-bold text-emerald-600">
+														75.000 MZN
+													</p>
+													<p className="text-[10px] text-emerald-600 mt-1">
+														+15% vs mês anterior
 													</p>
 												</div>
-												<div className="text-right">
-													<p className="text-xs font-semibold text-slate-900">
-														{activity.amount}
+												<div className="p-4 bg-red-50 rounded-lg">
+													<p className="text-xs text-slate-500 mb-1">Em Dívida</p>
+													<p className="text-xl font-bold text-red-600">
+														2.300 MZN
 													</p>
-													<p className="text-[10px] text-slate-400">
-														{activity.time}
+													<p className="text-[10px] text-red-600 mt-1">
+														4 ticantes afectados
+													</p>
+												</div>
+												<div className="p-4 bg-slate-50 rounded-lg">
+													<p className="text-xs text-slate-500 mb-1">
+														Taxa de Assiduidade
+													</p>
+													<p className="text-xl font-bold text-slate-900">94.2%</p>
+													<p className="text-[10px] text-slate-400 mt-1">
+														322 de 342 ticantes
 													</p>
 												</div>
 											</div>
-										))}
-									</div>
-								</CardContent>
-							</Card>
-						</div>
-					</div>
+										</CardContent>
+									</Card>
+								</div>
+
+								{/* Recent Activity */}
+								<div className="col-span-12 lg:col-span-8">
+									<Card>
+										<CardContent className="p-5">
+											<h3 className="text-sm font-semibold text-slate-900 mb-4">
+												Actividade Recente
+											</h3>
+											<div className="space-y-3">
+												{[
+													{
+														id: "1",
+														action: "Novo depósito",
+														user: "Carlos Mondlane",
+														amount: "500 MZN",
+														time: "Há 5 min",
+													},
+													{
+														id: "2",
+														action: "Empréstimo aprovado",
+														user: "Ana Vilanculos",
+														amount: "1.000 MZN",
+														time: "Há 15 min",
+													},
+													{
+														id: "3",
+														action: "Pagamento recebido",
+														user: "Bento Sitoe",
+														amount: "300 MZN",
+														time: "Há 30 min",
+													},
+													{
+														id: "4",
+														action: "Novo ticante registado",
+														user: "Eduarda Langa",
+														amount: "-",
+														time: "Há 1 hora",
+													},
+												].map((activity) => (
+													<div
+														key={activity.id}
+														className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"
+													>
+														<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+															<Users size={16} className="text-emerald-600" />
+														</div>
+														<div className="flex-1">
+															<p className="text-xs font-medium text-slate-900">
+																{activity.action}
+															</p>
+															<p className="text-[10px] text-slate-400">
+																{activity.user}
+															</p>
+														</div>
+														<div className="text-right">
+															<p className="text-xs font-semibold text-slate-900">
+																{activity.amount}
+															</p>
+															<p className="text-[10px] text-slate-400">
+																{activity.time}
+															</p>
+														</div>
+													</div>
+												))}
+											</div>
+										</CardContent>
+									</Card>
+								</div>
+							</div>
+						</>
+					) : (
+						<SaversCalendarView
+							savers={filteredSavers}
+							onRowClick={(saver) => console.log("View saver:", saver)}
+							selectedMonth={selectedMonth}
+							onMonthChange={setSelectedMonth}
+						/>
+					)}
 				</main>
 			</div>
 
