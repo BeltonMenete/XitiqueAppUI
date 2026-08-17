@@ -1,5 +1,6 @@
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, X } from "lucide-react";
 import type { ReactNode } from "react";
+import { useState } from "react";
 import { Breadcrumbs } from "#/components/ui";
 import { cn } from "#/lib/design-system";
 
@@ -28,39 +29,78 @@ export function Header({
 	breadcrumbs,
 	actions,
 }: HeaderProps) {
+	const [showMobileSearch, setShowMobileSearch] = useState(false);
+
 	return (
 		<header
 			className={cn(
-				"h-16 border-b border-slate-200/80 bg-white px-6 flex items-center justify-between select-none shrink-0",
+				"h-14 border-b border-slate-200/80 bg-white px-4 sm:px-6 flex items-center justify-between select-none shrink-0",
 				className,
 			)}
 		>
-			<div className="flex-1">
+			<div className="flex-1 min-w-0">
 				{breadcrumbs && <Breadcrumbs items={breadcrumbs} className="mb-1" />}
-				<h1 className="text-sm font-bold text-slate-950 tracking-tight">
+				<h1 className="text-sm font-bold text-slate-950 tracking-tight truncate">
 					{title}
 				</h1>
 				{description && (
-					<p className="text-[11px] text-slate-400 hidden sm:block">
+					<p className="text-[11px] text-slate-400 hidden sm:block truncate">
 						{description}
 					</p>
 				)}
 			</div>
 
-			<div className="flex items-center gap-4">
+			<div className="flex items-center gap-2 sm:gap-4">
 				{actions}
 
 				{showSearch && (
-					<div className="relative w-48 sm:w-64 group hidden md:block">
-						<Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
-						<input
-							type="text"
-							placeholder={searchPlaceholder}
-							value={searchValue}
-							onChange={(e) => onSearchChange?.(e.target.value)}
-							className="w-full pl-8 pr-3 py-2 bg-slate-50 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 focus:bg-white transition-all duration-200"
-						/>
-					</div>
+					<>
+						{/* Desktop Search */}
+						<div className="relative w-48 sm:w-64 group hidden md:block">
+							<Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+							<input
+								type="text"
+								placeholder={searchPlaceholder}
+								value={searchValue}
+								onChange={(e) => onSearchChange?.(e.target.value)}
+								className="w-full pl-8 pr-3 py-2 bg-slate-50 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 focus:bg-white transition-all duration-200"
+							/>
+						</div>
+
+						{/* Mobile Search Button */}
+						<button
+							type="button"
+							onClick={() => setShowMobileSearch(!showMobileSearch)}
+							className="md:hidden p-2 text-slate-400 hover:text-slate-600 bg-slate-50 rounded-lg border border-slate-100 transition-all hover:shadow-sm"
+							aria-label="Pesquisar"
+						>
+							<Search size={16} />
+						</button>
+
+						{/* Mobile Search Input */}
+						{showMobileSearch && (
+							<div className="md:hidden absolute top-16 left-0 right-0 bg-white border-b border-slate-200 p-4 z-50">
+								<div className="relative">
+									<Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+									<input
+										type="text"
+										placeholder={searchPlaceholder}
+										value={searchValue}
+										onChange={(e) => onSearchChange?.(e.target.value)}
+										autoFocus
+										className="w-full pl-8 pr-10 py-2 bg-slate-50 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 focus:bg-white transition-all duration-200"
+									/>
+									<button
+										type="button"
+										onClick={() => setShowMobileSearch(false)}
+										className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+									>
+										<X size={16} />
+									</button>
+								</div>
+							</div>
+						)}
+					</>
 				)}
 
 				<button

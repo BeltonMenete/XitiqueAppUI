@@ -128,18 +128,7 @@ function SuperDashboard() {
 						{ label: "Super Dashboard" },
 					]}
 					rightContent={
-						<div className="flex items-center gap-3">
-							<div className="relative hidden md:block">
-								<Search
-									className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-									size={18}
-								/>
-								<Input
-									type="text"
-									placeholder="Pesquisar global..."
-									className="pl-10 w-64"
-								/>
-							</div>
+						<div className="flex items-center gap-2 sm:gap-3">
 							<Button
 								size="sm"
 								variant="ghost"
@@ -158,22 +147,22 @@ function SuperDashboard() {
 
 				<main className="flex-1 overflow-hidden flex flex-col">
 					{/* Tab Bar */}
-					<div className="border-b border-slate-200 bg-white px-6 py-3">
+					<div className="border-b border-slate-200 bg-white px-4 sm:px-6 py-3">
 						<Tabs value={activeTab} onValueChange={setActiveTab}>
-							<TabsList>
+							<TabsList className="overflow-x-auto">
 								{tabs.map((tab) => (
-									<TabsTrigger key={tab.id} value={tab.id}>
+									<TabsTrigger key={tab.id} value={tab.id} className="whitespace-nowrap">
 										{tab.icon}
-										<span className="ml-2">{tab.label}</span>
+										<span className="ml-2 hidden sm:inline">{tab.label}</span>
 										{tab.badge && (
-											<Badge variant="destructive" className="ml-2">
+											<Badge variant="default" className="ml-2 bg-emerald-500 text-white hover:bg-emerald-600">
 												{tab.badge}
 											</Badge>
 										)}
 									</TabsTrigger>
 								))}
 							</TabsList>
-							<div className="flex-1 overflow-y-auto p-6">
+							<div className="flex-1 overflow-y-auto p-4 sm:p-6">
 								<TabsContent value="overview">
 									<OverviewTab kpis={overviewKPIs} />
 								</TabsContent>

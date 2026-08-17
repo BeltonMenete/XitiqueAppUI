@@ -31,7 +31,7 @@ export { Breadcrumbs } from "./Breadcrumbs";
 export { ProgressCircle } from "./ProgressCircle";
 export { Badge as OriginalBadge } from "./Badge";
 export { ShadcnBadge as Badge } from "./ShadcnBadge";
-export { NotificationToast } from "./NotificationToast";
+export { Toaster } from "./Toaster";
 export { Input } from "./Input";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./Tabs";
 export {
@@ -56,3 +56,9 @@ export {
 	DialogTitle,
 	DialogDescription,
 } from "./Dialog";
+export {
+	ContextMenu,
+	ContextMenuItem,
+	ContextMenuSeparator,
+	ContextMenuHeader,
+} from "./ContextMenu";

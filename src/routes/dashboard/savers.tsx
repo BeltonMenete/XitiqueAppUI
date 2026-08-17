@@ -16,9 +16,11 @@ import {
 	List,
 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { QuickDepositModal } from "#/components/business/QuickDepositModal";
 import { QuickLoanModal } from "#/components/business/QuickLoanModal";
 import { RegisterSaverModal } from "#/components/business/RegisterSaverModal";
+import { DayActionModal } from "#/components/business/DayActionModal";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
@@ -43,27 +45,28 @@ import { cn } from "#/lib/design-system";
 // MonthCalendarGrid Component
 interface MonthCalendarGridProps {
 	days: Array<{ day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }>;
-	onDayClick?: (day: number) => void;
+	onDayClick?: (dayData: { day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }) => void;
 	showHeader?: boolean;
 	saverName?: string;
 	headerOnly?: boolean;
+	saver?: Saver;
 }
 
-function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, headerOnly = false }: MonthCalendarGridProps) {
+function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, headerOnly = false, saver }: MonthCalendarGridProps) {
 	const weekDays = ["S", "T", "Q", "Q", "S", "S", "D"];
 	// Repeat week days to cover 30 days
 	const repeatedWeekDays = Array.from({ length: 30 }, (_, i) => weekDays[i % 7]);
 
 	return (
-		<div className="flex flex-col items-center">
+		<div className="flex flex-col items-center min-w-[640px]">
 			{showHeader && (
 				<>
-					<div className="grid grid-cols-[repeat(30,minmax(20px,1fr))] gap-0.5 justify-center text-[8px] leading-tight text-center uppercase text-slate-400 font-medium mb-1">
+					<div className="grid grid-cols-[repeat(30,minmax(18px,1fr))] gap-0.5 justify-center text-[7px] leading-tight text-center uppercase text-slate-400 font-medium mb-0.5">
 						{repeatedWeekDays.map((day, i) => (
 							<span key={`weekday-${i}`}>{day}</span>
 						))}
 					</div>
-					<div className="grid grid-cols-[repeat(30,minmax(20px,1fr))] gap-0.5 justify-center text-[8px] leading-tight text-center text-slate-400 font-medium mb-1">
+					<div className="grid grid-cols-[repeat(30,minmax(18px,1fr))] gap-0.5 justify-center text-[7px] leading-tight text-center text-slate-400 font-medium mb-0.5">
 						{days.map((dayData) => (
 							<span key={`daynum-${dayData.day}`}>{dayData.day}</span>
 						))}
@@ -71,12 +74,12 @@ function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, he
 				</>
 			)}
 			{!headerOnly && (
-				<div className="grid grid-cols-[repeat(30,minmax(20px,1fr))] gap-0.5">
+				<div className="grid grid-cols-[repeat(30,minmax(18px,1fr))] gap-0.5">
 					{days.map((dayData) => (
 						<div
 							key={dayData.day}
 							className={cn(
-								"w-5 h-5 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group",
+								"w-4 h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group",
 								dayData.paid && dayData.isDebtPayment
 									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
 									: dayData.paid
@@ -85,7 +88,7 @@ function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, he
 											? "border-red-200 bg-red-100 hover:bg-red-200"
 											: "border-slate-200 bg-slate-50 hover:bg-slate-100",
 							)}
-							onClick={() => onDayClick?.(dayData.day)}
+							onClick={() => onDayClick?.(dayData)}
 						>
 							{/* Debt payment indicator */}
 							{dayData.isDebtPayment && (
@@ -96,18 +99,18 @@ function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, he
 								<div className="absolute top-0.5 left-0.5 w-1.5 h-1.5 bg-red-400 rounded-full" />
 							)}
 							{/* Beautiful Tooltip */}
-							<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-36 pointer-events-none">
-								<div className="font-semibold mb-1 text-slate-100">Dia {dayData.day}</div>
-								<div className="text-slate-300 text-[10px]">{saverName}</div>
+							<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-emerald-50 text-slate-900 text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-36 pointer-events-none border border-emerald-200">
+								<div className="font-semibold mb-1 text-slate-900">Dia {dayData.day}</div>
+								<div className="text-slate-600 text-[10px]">{saverName}</div>
 								<div className={cn(
 									"mt-1 font-medium",
 									dayData.isDebtPayment
-										? "text-amber-400"
+										? "text-amber-600"
 										: dayData.isInDebt && !dayData.paid
-											? "text-red-400"
+											? "text-red-600"
 											: dayData.paid
-												? "text-emerald-400"
-												: "text-slate-400"
+												? "text-emerald-600"
+												: "text-slate-500"
 								)}>
 									{dayData.isDebtPayment
 										? `Pagamento Dívida: ${dayData.amount || 0} MZN`
@@ -118,12 +121,12 @@ function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, he
 												: "Não depositado"}
 								</div>
 								{dayData.collector && (
-									<div className="text-[9px] text-slate-400 mt-1">
+									<div className="text-[9px] text-slate-500 mt-1">
 										Cobrador: {dayData.collector}
 									</div>
 								)}
 								{/* Arrow */}
-								<div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-800" />
+								<div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-emerald-200" />
 							</div>
 						</div>
 					))}
@@ -194,6 +197,7 @@ interface SaversCalendarViewProps {
 	onRowClick: (saver: Saver) => void;
 	selectedMonth: string;
 	onMonthChange: (month: string) => void;
+	onDayClick?: (saver: Saver, dayData: { day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }) => void;
 }
 
 function SaversCalendarView({
@@ -201,22 +205,23 @@ function SaversCalendarView({
 	onRowClick,
 	selectedMonth,
 	onMonthChange,
+	onDayClick,
 }: SaversCalendarViewProps) {
 	const months = ["Jan 2024", "Fev 2024", "Março 2024", "Abril 2024", "Maio 2024"];
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-4">
 			{/* Month Selector & Filters */}
-			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-				<div className="flex items-center space-x-2 overflow-x-auto pb-2">
+			<div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+				<div className="flex items-center space-x-2 overflow-x-auto">
 					{months.map((month) => (
 						<button
 							key={month}
 							type="button"
 							className={cn(
-								"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap",
+								"px-3 py-1 rounded-full text-xs font-semibold transition-colors whitespace-nowrap",
 								selectedMonth === month
-									? "bg-slate-900 text-white shadow-md"
+									? "bg-emerald-500 text-white shadow-sm"
 									: "bg-slate-100 text-slate-500 hover:bg-slate-200",
 							)}
 							onClick={() => onMonthChange(month)}
@@ -243,10 +248,10 @@ function SaversCalendarView({
 					<table className="w-full text-left border-collapse">
 						<thead className="bg-slate-50 border-b border-slate-200">
 							<tr>
-								<th className="px-3 py-1 text-[12px] text-slate-500 font-semibold w-48">
+								<th className="px-2 py-1 text-[11px] text-slate-500 font-semibold w-40">
 									TICANTE
 								</th>
-								<th className="px-3 py-1 text-[12px] text-slate-500 font-semibold">
+								<th className="px-2 py-1 text-[11px] text-slate-500 font-semibold">
 									<MonthCalendarGrid
 										days={Array.from({ length: 30 }, (_, i) => ({
 											day: i + 1,
@@ -256,10 +261,10 @@ function SaversCalendarView({
 										headerOnly={true}
 									/>
 								</th>
-								<th className="px-3 py-1 text-[12px] text-slate-500 font-semibold w-20 text-right">
+								<th className="px-2 py-1 text-[11px] text-slate-500 font-semibold w-16 text-right">
 									TOTAL
 								</th>
-								<th className="px-3 py-1 text-[12px] text-slate-500 font-semibold w-24">
+								<th className="px-2 py-1 text-[11px] text-slate-500 font-semibold w-20">
 									ESTADO
 								</th>
 							</tr>
@@ -271,14 +276,14 @@ function SaversCalendarView({
 									className="hover:bg-slate-50 transition-colors cursor-pointer border-b border-slate-200/50"
 									onClick={() => onRowClick(saver)}
 								>
-									<td className="px-3 py-1">
+									<td className="px-2 py-1">
 										<div className="flex flex-col">
 											<div className="flex items-center space-x-1">
-												<span className="font-mono text-[11px] text-slate-400">
+												<span className="font-mono text-[10px] text-slate-400">
 													{saver.alphanumericId || String(saver.cardNumber)}
 												</span>
 											</div>
-											<span className="font-bold text-sm text-slate-900 truncate w-32">
+											<span className="font-bold text-xs text-slate-900 truncate w-28">
 												{saver.name}
 											</span>
 										</div>
@@ -286,17 +291,18 @@ function SaversCalendarView({
 									<td className="px-3 py-1">
 										<MonthCalendarGrid
 											days={saver.paymentDays || []}
-											onDayClick={(day) => console.log(`Day ${day} clicked for ${saver.name}`)}
+											onDayClick={(dayData) => onDayClick?.(saver, dayData)}
 											showHeader={false}
 											saverName={saver.name}
+											saver={saver}
 										/>
 									</td>
-									<td className="px-3 py-1 text-right">
-										<span className="font-mono text-sm font-bold text-slate-900">
+									<td className="px-2 py-1 text-right">
+										<span className="font-mono text-xs font-bold text-slate-900">
 											{saver.totalSaved.toLocaleString()} MZN
 										</span>
 									</td>
-									<td className="px-3 py-1">
+									<td className="px-2 py-1">
 										{saver.status === "active" && <ActiveBadge />}
 										{saver.status === "in_debt" && <DebtBadge />}
 										{saver.status === "inactive" && <InactiveBadge />}
@@ -308,26 +314,26 @@ function SaversCalendarView({
 				</div>
 
 				{/* Legend */}
-				<div className="px-4 py-3 bg-slate-50 border-t border-slate-200 flex items-center gap-4">
+				<div className="px-3 py-2 bg-slate-50 border-t border-slate-200 flex items-center gap-3">
 					<div className="flex items-center gap-2">
-						<div className="w-5 h-5 rounded-sm border border-slate-300 bg-emerald-600" />
-						<span className="text-xs text-slate-600">Depósito Normal</span>
+						<div className="w-4 h-4 rounded-sm border border-slate-300 bg-emerald-600" />
+						<span className="text-[10px] text-slate-600">Depósito Normal</span>
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="w-5 h-5 rounded-sm border border-amber-300 bg-amber-500 relative">
+						<div className="w-4 h-4 rounded-sm border border-amber-300 bg-amber-500 relative">
 							<div className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-white rounded-full" />
 						</div>
-						<span className="text-xs text-slate-600">Pagamento de Dívida</span>
+						<span className="text-[10px] text-slate-600">Pagamento de Dívida</span>
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="w-5 h-5 rounded-sm border border-red-200 bg-red-100 relative">
+						<div className="w-4 h-4 rounded-sm border border-red-200 bg-red-100 relative">
 							<div className="absolute top-0.5 left-0.5 w-1.5 h-1.5 bg-red-400 rounded-full" />
 						</div>
-						<span className="text-xs text-slate-600">Em Dívida</span>
+						<span className="text-[10px] text-slate-600">Em Dívida</span>
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="w-5 h-5 rounded-sm border border-slate-200 bg-slate-50" />
-						<span className="text-xs text-slate-600">Não Depositado</span>
+						<div className="w-4 h-4 rounded-sm border border-slate-200 bg-slate-50" />
+						<span className="text-[10px] text-slate-600">Não Depositado</span>
 					</div>
 				</div>
 
@@ -545,9 +551,18 @@ function SaversManagement() {
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 	const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 	const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
+	const [isDayActionModalOpen, setIsDayActionModalOpen] = useState(false);
 	const [selectedSaver, setSelectedSaver] = useState<Saver | null>(null);
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 	const [viewMode, setViewMode] = useState<"standard" | "calendar">("standard");
+	const [selectedDayData, setSelectedDayData] = useState<{
+		day: number;
+		saverName: string;
+		status: "paid" | "unpaid" | "debt" | "debt_payment";
+		amount?: number;
+		collector?: string;
+		isDebtPayment?: boolean;
+	} | null>(null);
 
 	const { data: saversData, isLoading } = useSavers({ page: 1, pageSize: 20 });
 	const savers = enrichSaversWithAlphanumericIds(saversData?.data || mockSavers);
@@ -858,9 +873,9 @@ function SaversManagement() {
 												key={month}
 												type="button"
 												className={cn(
-													"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
+													"px-3 py-1 rounded-full text-xs font-semibold transition-colors",
 													selectedMonth === month
-														? "bg-emerald-600 text-white"
+														? "bg-emerald-500 text-white"
 														: "bg-slate-100 text-slate-500 hover:bg-slate-200",
 												)}
 												onClick={() => setSelectedMonth(month)}
@@ -1053,6 +1068,23 @@ function SaversManagement() {
 							onRowClick={(saver) => console.log("View saver:", saver)}
 							selectedMonth={selectedMonth}
 							onMonthChange={setSelectedMonth}
+							onDayClick={(saver, dayData) => {
+								setSelectedDayData({
+									day: dayData.day,
+									saverName: saver.name,
+									status: dayData.paid
+										? dayData.isDebtPayment
+											? "debt_payment"
+											: "paid"
+										: dayData.isInDebt
+											? "debt"
+											: "unpaid",
+									amount: dayData.amount,
+									collector: dayData.collector,
+									isDebtPayment: dayData.isDebtPayment,
+								});
+								setIsDayActionModalOpen(true);
+							}}
 						/>
 					)}
 				</main>
@@ -1086,6 +1118,38 @@ function SaversManagement() {
 				maxLoanAmount={
 					selectedSaver?.totalSaved ? selectedSaver.totalSaved * 2 : 50000
 				}
+			/>
+
+			<DayActionModal
+				isOpen={isDayActionModalOpen}
+				onClose={() => setIsDayActionModalOpen(false)}
+				saverName={selectedDayData?.saverName || ""}
+				day={selectedDayData?.day || 1}
+				dayStatus={selectedDayData?.status || "unpaid"}
+				amount={selectedDayData?.amount}
+				collector={selectedDayData?.collector}
+				isDebtPayment={selectedDayData?.isDebtPayment}
+				onActionComplete={(action, data) => {
+					console.log("Action completed:", action, data);
+					setIsDayActionModalOpen(false);
+
+					// Show toast based on action
+					if (action === "deposit" || action === "edit") {
+						toast.success(`Depósito de ${data.amount} MZN registrado com sucesso para ${data.saverName}`);
+					} else if (action === "delete") {
+						toast.success("Depósito deletado com sucesso");
+					} else if (action === "convert") {
+						toast.success("Depósito convertido para pagamento de dívida");
+					} else if (action === "note") {
+						toast.success("Nota adicionada com sucesso");
+					} else if (action === "unavailable") {
+						toast.info(`Dia marcado como não disponível: ${data.reason}`);
+					} else if (action === "revert") {
+						toast.success("Pagamento revertido para depósito normal");
+					} else {
+						toast.info(`Ação "${action}" executada com sucesso`);
+					}
+				}}
 			/>
 		</DashboardLayout>
 	);

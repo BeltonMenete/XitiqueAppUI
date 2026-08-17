@@ -18,12 +18,14 @@ export function AuthPageShell({
 	children,
 }: AuthPageShellProps) {
 	return (
-		<div className="login-bg min-h-screen flex items-center justify-center p-4 overflow-hidden">
+		<div className="login-bg min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
 			<div className="relative w-full max-w-4xl">
-				<AuthImagePanel />
+				<div className="hidden lg:block">
+					<AuthImagePanel />
+				</div>
 
-				<div className="relative lg:ml-auto lg:w-1/2 bg-white/95 rounded-2xl shadow-xl p-6 lg:p-10 min-h-125 flex flex-col justify-between transition-all duration-500 ease-in-out">
-					<div className="w-full max-w-sm mx-auto flex-1 flex flex-col justify-center space-y-5">
+				<div className="relative lg:ml-auto lg:w-1/2 bg-white/95 rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 lg:p-10 min-h-[500px] lg:min-h-[125px] flex flex-col justify-between transition-all duration-500 ease-in-out">
+					<div className="w-full max-w-sm mx-auto flex-1 flex flex-col justify-center space-y-4 sm:space-y-5">
 						<div className="flex justify-between items-center mb-1">
 							<div className="flex items-center gap-2">
 								<img
@@ -34,7 +36,7 @@ export function AuthPageShell({
 									height={32}
 									className="w-8 h-8"
 								/>
-								<span className="text-2xl font-semibold text-gray-900">
+								<span className="text-xl sm:text-2xl font-semibold text-gray-900">
 									{APP_NAME}
 								</span>
 							</div>
@@ -43,10 +45,10 @@ export function AuthPageShell({
 						</div>
 
 						<div>
-							<h1 className="text-2xl font-semibold text-gray-900 mb-0.5">
+							<h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-0.5">
 								{title}
 							</h1>
-							<p className="text-gray-500 text-xs">{description}</p>
+							<p className="text-gray-500 text-xs sm:text-sm">{description}</p>
 						</div>
 
 						{children}

@@ -2,11 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Ring2 } from "ldrs/react";
 import { UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { AuthPageShell } from "#/components/AuthPageShell";
 import { EmailInput } from "#/components/EmailInput";
 import { FormError } from "#/components/FormError";
 import { PasswordInput } from "#/components/PasswordInput";
-import { NotificationToast } from "#/components/ui/NotificationToast";
 import { LOGIN_SUBMIT_DELAY } from "#/lib/constants";
 import { validateLoginForm } from "#/lib/validation";
 
@@ -22,9 +22,6 @@ function Login() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isShaking, setIsShaking] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastType, setToastType] = useState<"success" | "error">("success");
 
   // Load remembered email on mount
   useEffect(() => {
@@ -54,9 +51,7 @@ function Login() {
     setIsLoading(false);
 
     // Show success toast
-    setToastMessage("Sessão iniciada com sucesso!");
-    setToastType("success");
-    setShowToast(true);
+    toast.success("Sessão iniciada com sucesso!");
 
     // Save remember me preference
     if (rememberMe) {
@@ -94,9 +89,9 @@ function Login() {
       <form
         onSubmit={handleSubmit}
         noValidate
-        className="flex flex-col space-y-1"
+        className="flex flex-col space-y-1 w-full"
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <EmailInput
             value={email}
             onChange={setEmail}
@@ -111,7 +106,7 @@ function Login() {
           </div>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <PasswordInput
             value={password}
             onChange={setPassword}
@@ -127,7 +122,7 @@ function Login() {
           </div>
         </div>
 
-        <div className="flex justify-between items-center pb-2">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 pb-2">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -168,14 +163,6 @@ function Login() {
           )}
         </button>
       </form>
-
-      {showToast && (
-        <NotificationToast
-          message={toastMessage}
-          type={toastType}
-          onClose={() => setShowToast(false)}
-        />
-      )}
     </AuthPageShell>
   );
 }

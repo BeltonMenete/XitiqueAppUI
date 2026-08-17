@@ -1,5 +1,6 @@
 import { Camera, CheckCircle2, Mail, Phone, User, X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "#/components/ui/Button";
 import { Modal, ModalFooter } from "#/components/ui/Modal";
 
@@ -30,16 +31,11 @@ export function RegisterCollectorModal({
 		isActive: true,
 	});
 
-	const [showToast, setShowToast] = useState(false);
-
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		onSubmit(formData);
-		setShowToast(true);
-		setTimeout(() => {
-			setShowToast(false);
-			onClose();
-		}, 3000);
+		toast.success("Cobrador registado com sucesso");
+		onClose();
 	};
 
 	const handleCancel = () => {
@@ -207,29 +203,6 @@ export function RegisterCollectorModal({
 					</Button>
 				</ModalFooter>
 			</Modal>
-
-			{/* Toast Notification */}
-			{showToast && (
-				<div className="fixed bottom-6 right-6 bg-white border-l-4 border-emerald-500 shadow-lg rounded-lg p-4 transform transition-all duration-300 z-50 flex items-start gap-4 max-w-sm">
-					<CheckCircle2 className="text-emerald-500 fill mt-0.5" size={20} />
-					<div className="flex-1">
-						<h4 className="text-sm font-medium text-slate-900">
-							Cobrador criado com sucesso
-						</h4>
-						<p className="text-xs text-slate-500 mt-1">
-							Um SMS foi enviado para o telefone com o PIN de acesso:{" "}
-							<span className="font-mono font-bold text-slate-900">1234</span>.
-						</p>
-					</div>
-					<button
-						type="button"
-						onClick={() => setShowToast(false)}
-						className="text-slate-400 hover:text-slate-600 transition-colors"
-					>
-						<X size={16} />
-					</button>
-				</div>
-			)}
 		</>
 	);
 }
