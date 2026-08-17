@@ -38,6 +38,7 @@ import {
 	DebtBadge,
 	InactiveBadge,
 } from "#/components/ui/StatusBadge";
+
 import { useSavers, enrichSaversWithAlphanumericIds } from "#/features/savers";
 import type { Saver } from "#/features/savers/types";
 import { cn } from "#/lib/design-system";
@@ -50,36 +51,69 @@ interface MonthCalendarGridProps {
 	saverName?: string;
 	headerOnly?: boolean;
 	saver?: Saver;
+	selectedMonth?: string;
 }
 
-function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, headerOnly = false, saver }: MonthCalendarGridProps) {
+function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, headerOnly = false, saver, selectedMonth }: MonthCalendarGridProps) {
 	const weekDays = ["S", "T", "Q", "Q", "S", "S", "D"];
-	// Repeat week days to cover 30 days
-	const repeatedWeekDays = Array.from({ length: 30 }, (_, i) => weekDays[i % 7]);
+
+	// Calculate the starting weekday based on the selected month
+	let startDayIndex = 0; // Default to Sunday (index 0)
+	if (selectedMonth) {
+		// Parse month string like "Maio 2024" or "May 2024"
+		const monthNames = {
+			"Jan": 0, "Janeiro": 0,
+			"Fev": 1, "Fevereiro": 1,
+			"Mar": 2, "Março": 2, "Marco": 2,
+			"Abr": 3, "Abril": 3,
+			"Mai": 4, "Maio": 4, "May": 4,
+			"Jun": 5, "Junho": 5,
+			"Jul": 6, "Julho": 6,
+			"Ago": 7, "Agosto": 7,
+			"Set": 8, "Setembro": 8,
+			"Out": 9, "Outubro": 9,
+			"Nov": 10, "Novembro": 10,
+			"Dez": 11, "Dezembro": 11
+		};
+
+		const parts = selectedMonth.split(" ");
+		const monthPart = parts[0];
+		const yearPart = parts[1] ? parseInt(parts[1]) : 2024;
+
+		const monthIndex = monthNames[monthPart as keyof typeof monthNames];
+		if (monthIndex !== undefined) {
+			// Get the day of the week for day 1 of the selected month
+			const firstDay = new Date(yearPart, monthIndex, 1);
+			startDayIndex = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+		}
+	}
+
+	// Repeat week days to cover 30 days, starting from the correct day
+	const repeatedWeekDays = Array.from({ length: 30 }, (_, i) => weekDays[(startDayIndex + i) % 7]);
 
 	return (
-		<div className="flex flex-col items-center min-w-[640px]">
+		<div className="flex flex-col items-center min-w-[720px]">
 			{showHeader && (
-				<>
-					<div className="grid grid-cols-[repeat(30,minmax(18px,1fr))] gap-0.5 justify-center text-[7px] leading-tight text-center uppercase text-slate-400 font-medium mb-0.5">
-						{repeatedWeekDays.map((day, i) => (
-							<span key={`weekday-${i}`}>{day}</span>
-						))}
-					</div>
-					<div className="grid grid-cols-[repeat(30,minmax(18px,1fr))] gap-0.5 justify-center text-[7px] leading-tight text-center text-slate-400 font-medium mb-0.5">
-						{days.map((dayData) => (
-							<span key={`daynum-${dayData.day}`}>{dayData.day}</span>
-						))}
-					</div>
-				</>
+				<div className="grid grid-cols-[repeat(30,minmax(20px,1fr))] gap-0.5 justify-center mb-0.5">
+					{days.map((dayData, i) => (
+						<div key={`header-${dayData.day}`} className="flex flex-col items-center">
+							<span className="text-[9px] leading-tight text-center uppercase text-slate-400 font-medium">
+								{repeatedWeekDays[i]}
+							</span>
+							<span className="text-[9px] leading-tight text-center text-slate-400 font-medium">
+								{dayData.day}
+							</span>
+						</div>
+					))}
+				</div>
 			)}
 			{!headerOnly && (
-				<div className="grid grid-cols-[repeat(30,minmax(18px,1fr))] gap-0.5">
+				<div className="grid grid-cols-[repeat(30,minmax(20px,1fr))] gap-0.5 justify-center">
 					{days.map((dayData) => (
 						<div
 							key={dayData.day}
 							className={cn(
-								"w-4 h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group",
+								"w-5 h-5 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group",
 								dayData.paid && dayData.isDebtPayment
 									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
 									: dayData.paid
@@ -90,36 +124,28 @@ function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, he
 							)}
 							onClick={() => onDayClick?.(dayData)}
 						>
-							{/* Debt payment indicator */}
-							{dayData.isDebtPayment && (
-								<div className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-white rounded-full" />
-							)}
-							{/* Debt day indicator */}
-							{dayData.isInDebt && !dayData.paid && (
-								<div className="absolute top-0.5 left-0.5 w-1.5 h-1.5 bg-red-400 rounded-full" />
-							)}
-							{/* Beautiful Tooltip */}
+							{/* Beautiful Tooltip - Tonal Layering style consistent with step-1 */}
 							<div className={cn(
-								"absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-36 pointer-events-none border",
+								"absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2.5 text-xs rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-40 pointer-events-none border bg-white",
 								dayData.paid
-									? "bg-emerald-500 text-white border-emerald-600"
+									? "border-emerald-100"
 									: dayData.isInDebt && !dayData.paid
-										? "bg-red-500 text-white border-red-600"
+										? "border-red-100"
 										: dayData.isDebtPayment
-											? "bg-amber-500 text-white border-amber-600"
-											: "bg-slate-700 text-white border-slate-800"
+											? "border-amber-100"
+											: "border-slate-200"
 							)}>
-								<div className="font-semibold mb-1">Dia {dayData.day}</div>
-								<div className="text-emerald-100 text-[10px]">{saverName}</div>
+								<div className="font-semibold text-gray-900 mb-1">Dia {dayData.day}</div>
+								<div className="text-gray-600 text-[10px]">{saverName}</div>
 								<div className={cn(
 									"mt-1 font-medium",
 									dayData.isDebtPayment
-										? "text-amber-100"
+										? "text-amber-700"
 										: dayData.isInDebt && !dayData.paid
-											? "text-red-100"
+											? "text-red-700"
 											: dayData.paid
-												? "text-emerald-100"
-												: "text-slate-300"
+												? "text-emerald-700"
+												: "text-slate-600"
 								)}>
 									{dayData.isDebtPayment
 										? `Pagamento Dívida: ${dayData.amount || 0} MZN`
@@ -130,12 +156,21 @@ function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, he
 												: "Não depositado"}
 								</div>
 								{dayData.collector && (
-									<div className="text-[9px] text-slate-500 mt-1">
+									<div className="text-[9px] text-gray-500 mt-1">
 										Cobrador: {dayData.collector}
 									</div>
 								)}
-								{/* Arrow */}
-								<div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-emerald-200" />
+								{/* Arrow indicativa com cores combinantes */}
+								<div className={cn(
+									"absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-white border-r border-b rotate-45",
+									dayData.paid
+										? "border-emerald-100"
+										: dayData.isInDebt && !dayData.paid
+											? "border-red-100"
+											: dayData.isDebtPayment
+												? "border-amber-100"
+												: "border-slate-200"
+								)} />
 							</div>
 						</div>
 					))}
@@ -160,8 +195,8 @@ function CalendarKPIs({
 	adherenceRate,
 }: CalendarKPIsProps) {
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-			<div className="flex-1 min-w-[200px] bg-emerald-50 p-4 rounded-xl text-emerald-900 flex items-center justify-between group">
+		<div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+			<div className="flex-1 min-w-[200px] bg-emerald-50 p-3 rounded-xl text-emerald-900 flex items-center justify-between group">
 				<div>
 					<h4 className="text-[10px] opacity-80 uppercase tracking-widest font-semibold">
 						Colecção do Dia
@@ -173,7 +208,7 @@ function CalendarKPIs({
 					+12.4%
 				</div>
 			</div>
-			<div className="flex-1 min-w-[200px] bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between group">
+			<div className="flex-1 min-w-[200px] bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between group">
 				<div>
 					<h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
 						Em Dívida
@@ -182,7 +217,7 @@ function CalendarKPIs({
 				</div>
 				<AlertCircle size={16} className="text-red-500 opacity-40" />
 			</div>
-			<div className="flex-1 min-w-[200px] bg-white p-4 rounded-xl border border-slate-200 flex flex-col justify-center group">
+			<div className="flex-1 min-w-[200px] bg-white p-3 rounded-xl border border-slate-200 flex flex-col justify-center group">
 				<div className="flex justify-between items-center mb-1">
 					<h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
 						Adesão
@@ -219,9 +254,9 @@ function SaversCalendarView({
 	const months = ["Jan 2024", "Fev 2024", "Março 2024", "Abril 2024", "Maio 2024"];
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-3">
 			{/* Month Selector & Filters */}
-			<div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+			<div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
 				<div className="flex items-center space-x-2 overflow-x-auto">
 					{months.map((month) => (
 						<button
@@ -268,9 +303,10 @@ function SaversCalendarView({
 										}))}
 										showHeader={true}
 										headerOnly={true}
+										selectedMonth={selectedMonth}
 									/>
 								</th>
-								<th className="px-2 py-1 text-[11px] text-slate-500 font-semibold w-16 text-right">
+								<th className="px-2 py-1 text-[11px] text-slate-500 font-semibold w-24 text-right">
 									TOTAL
 								</th>
 								<th className="px-2 py-1 text-[11px] text-slate-500 font-semibold w-20">
@@ -297,13 +333,14 @@ function SaversCalendarView({
 											</span>
 										</div>
 									</td>
-									<td className="px-3 py-1">
+									<td className="px-2 py-1">
 										<MonthCalendarGrid
 											days={saver.paymentDays || []}
 											onDayClick={(dayData) => onDayClick?.(saver, dayData)}
 											showHeader={false}
 											saverName={saver.name}
 											saver={saver}
+											selectedMonth={selectedMonth}
 										/>
 									</td>
 									<td className="px-2 py-1 text-right">
@@ -312,9 +349,11 @@ function SaversCalendarView({
 										</span>
 									</td>
 									<td className="px-2 py-1">
-										{saver.status === "active" && <ActiveBadge />}
-										{saver.status === "in_debt" && <DebtBadge />}
-										{saver.status === "inactive" && <InactiveBadge />}
+										<div className="flex gap-1">
+											{saver.status === "active" && <ActiveBadge />}
+											{saver.status === "inactive" && <InactiveBadge />}
+											{saver.currentDebt > 0 && <DebtBadge />}
+										</div>
 									</td>
 								</tr>
 							))}
@@ -323,21 +362,17 @@ function SaversCalendarView({
 				</div>
 
 				{/* Legend */}
-				<div className="px-3 py-2 bg-slate-50 border-t border-slate-200 flex items-center gap-3">
+				<div className="px-3 py-1.5 bg-slate-50 border-t border-slate-200 flex items-center gap-3">
 					<div className="flex items-center gap-2">
 						<div className="w-4 h-4 rounded-sm border border-slate-300 bg-emerald-600" />
 						<span className="text-[10px] text-slate-600">Depósito Normal</span>
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="w-4 h-4 rounded-sm border border-amber-300 bg-amber-500 relative">
-							<div className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-white rounded-full" />
-						</div>
+						<div className="w-4 h-4 rounded-sm border border-amber-300 bg-amber-500" />
 						<span className="text-[10px] text-slate-600">Pagamento de Dívida</span>
 					</div>
 					<div className="flex items-center gap-2">
-						<div className="w-4 h-4 rounded-sm border border-red-200 bg-red-100 relative">
-							<div className="absolute top-0.5 left-0.5 w-1.5 h-1.5 bg-red-400 rounded-full" />
-						</div>
+						<div className="w-4 h-4 rounded-sm border border-red-200 bg-red-100" />
 						<span className="text-[10px] text-slate-600">Em Dívida</span>
 					</div>
 					<div className="flex items-center gap-2">
@@ -347,7 +382,7 @@ function SaversCalendarView({
 				</div>
 
 				{/* Pagination */}
-				<div className="p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+				<div className="p-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
 					<p className="text-xs text-slate-500">
 						A mostrar 1-{savers.length} de {savers.length} ticantes
 					</p>
@@ -462,7 +497,7 @@ const mockSavers: Saver[] = [
 		totalSaved: 6600,
 		currentDebt: 0,
 		daysInCycle: 22,
-		status: "active",
+		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A03",
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
@@ -517,7 +552,7 @@ const mockSavers: Saver[] = [
 		totalSaved: 4500,
 		currentDebt: 0,
 		daysInCycle: 30,
-		status: "active",
+		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A05",
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
@@ -540,7 +575,7 @@ const mockSavers: Saver[] = [
 		totalSaved: 5000,
 		currentDebt: 0,
 		daysInCycle: 25,
-		status: "active",
+		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A06",
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
@@ -551,6 +586,533 @@ const mockSavers: Saver[] = [
 			isDebtPayment: false,
 			isInDebt: false,
 		})),
+	},
+	{
+		id: "7",
+		cardNumber: 1007,
+		name: "João Machava",
+		dailyAmount: 400,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-01-20",
+		totalSaved: 8000,
+		currentDebt: 3200,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A07",
+		paymentDays: (() => {
+			const debtDays = Math.floor(3200 / 400);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 12;
+				const isDebtPayment = i < 4;
+				const isInDebt = !paid && i < 12 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 400 : 0,
+					collector: paid ? "Arsénio Matusse" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "8",
+		cardNumber: 1008,
+		name: "Luisa Macamo",
+		dailyAmount: 150,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-03-01",
+		totalSaved: 3600,
+		currentDebt: 0,
+		daysInCycle: 24,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A08",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 24,
+			amount: i < 24 ? 150 : 0,
+			collector: i < 24 ? "Célia Mondlane" : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "9",
+		cardNumber: 1009,
+		name: "Mário Macie",
+		dailyAmount: 750,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-01-12",
+		totalSaved: 15000,
+		currentDebt: 4500,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A09",
+		paymentDays: (() => {
+			const debtDays = Math.floor(4500 / 750);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 15;
+				const isDebtPayment = i < 6;
+				const isInDebt = !paid && i < 15 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 750 : 0,
+					collector: paid ? "Filipe Nyusi Jr." : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "10",
+		cardNumber: 1010,
+		name: "Noémia Macuácua",
+		dailyAmount: 180,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-02-20",
+		totalSaved: 3600,
+		currentDebt: 900,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A10",
+		paymentDays: (() => {
+			const debtDays = Math.floor(900 / 180);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 15;
+				const isDebtPayment = i < 3;
+				const isInDebt = !paid && i < 15 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 180 : 0,
+					collector: paid ? "Arsénio Matusse" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "11",
+		cardNumber: 1011,
+		name: "Paulo Bila",
+		dailyAmount: 250,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-03-05",
+		totalSaved: 6250,
+		currentDebt: 0,
+		daysInCycle: 25,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A11",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 25,
+			amount: i < 25 ? 250 : 0,
+			collector: i < 25 ? "Célia Mondlane" : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "12",
+		cardNumber: 1012,
+		name: "Quiteria Zunguza",
+		dailyAmount: 350,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-01-25",
+		totalSaved: 8750,
+		currentDebt: 1750,
+		daysInCycle: 25,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A12",
+		paymentDays: (() => {
+			const debtDays = Math.floor(1750 / 350);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 20;
+				const isDebtPayment = i < 5;
+				const isInDebt = !paid && i < 20 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 350 : 0,
+					collector: paid ? "Filipe Nyusi Jr." : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "13",
+		cardNumber: 1013,
+		name: "Rui Chambule",
+		dailyAmount: 120,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-02-10",
+		totalSaved: 3000,
+		currentDebt: 0,
+		daysInCycle: 25,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A13",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 25,
+			amount: i < 25 ? 120 : 0,
+			collector: i < 25 ? "Arsénio Matusse" : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "14",
+		cardNumber: 1014,
+		name: "Sofia Munguambe",
+		dailyAmount: 500,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-01-08",
+		totalSaved: 12500,
+		currentDebt: 3000,
+		daysInCycle: 25,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A14",
+		paymentDays: (() => {
+			const debtDays = Math.floor(3000 / 500);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid: boolean = i < 19;
+				const isDebtPayment = i < 6;
+				const isInDebt = !paid && i < 19 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 500 : 0,
+					collector: paid ? "Célia Mondlane" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "15",
+		cardNumber: 1015,
+		name: "Tomás Nhapule",
+		dailyAmount: 220,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-03-15",
+		totalSaved: 4400,
+		currentDebt: 0,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A15",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 20,
+			amount: i < 20 ? 220 : 0,
+			collector: i < 20 ? "Filipe Nyusi Jr." : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "16",
+		cardNumber: 1016,
+		name: "Ussene Sitoe",
+		dailyAmount: 175,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-02-05",
+		totalSaved: 4200,
+		currentDebt: 525,
+		daysInCycle: 24,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A16",
+		paymentDays: (() => {
+			const debtDays = Math.floor(525 / 175);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 18;
+				const isDebtPayment = i < 3;
+				const isInDebt = !paid && i < 18 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 175 : 0,
+					collector: paid ? "Arsénio Matusse" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "17",
+		cardNumber: 1017,
+		name: "Verónica Muale",
+		dailyAmount: 300,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-01-18",
+		totalSaved: 7500,
+		currentDebt: 0,
+		daysInCycle: 25,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A17",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 25,
+			amount: i < 25 ? 300 : 0,
+			collector: i < 25 ? "Célia Mondlane" : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "18",
+		cardNumber: 1018,
+		name: "William Mujojo",
+		dailyAmount: 275,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-02-25",
+		totalSaved: 6600,
+		currentDebt: 1375,
+		daysInCycle: 24,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A18",
+		paymentDays: (() => {
+			const debtDays = Math.floor(1375 / 275);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 18;
+				const isDebtPayment = i < 5;
+				const isInDebt = !paid && i < 18 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 275 : 0,
+					collector: paid ? "Filipe Nyusi Jr." : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "19",
+		cardNumber: 1019,
+		name: "Xavier Massingue",
+		dailyAmount: 225,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-03-20",
+		totalSaved: 4500,
+		currentDebt: 0,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A19",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 20,
+			amount: i < 20 ? 225 : 0,
+			collector: i < 20 ? "Arsénio Matusse" : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "20",
+		cardNumber: 1020,
+		name: "Yolanda Zongo",
+		dailyAmount: 125,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-01-30",
+		totalSaved: 3125,
+		currentDebt: 0,
+		daysInCycle: 25,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A20",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 25,
+			amount: i < 25 ? 125 : 0,
+			collector: i < 25 ? "Célia Mondlane" : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "21",
+		cardNumber: 1021,
+		name: "Zacarias Mabjaia",
+		dailyAmount: 1500,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-01-22",
+		totalSaved: 30000,
+		currentDebt: 7500,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A21",
+		paymentDays: (() => {
+			const debtDays = Math.floor(7500 / 1500);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 15;
+				const isDebtPayment = i < 5;
+				const isInDebt = !paid && i < 15 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 1500 : 0,
+					collector: paid ? "Filipe Nyusi Jr." : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "22",
+		cardNumber: 1022,
+		name: "Amélia Júnior",
+		dailyAmount: 190,
+		organizationId: "org-1",
+		isActive: false,
+		registrationDate: "2023-12-15",
+		totalSaved: 5700,
+		currentDebt: 0,
+		daysInCycle: 30,
+		status: "inactive",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A22",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 30,
+			amount: i < 30 ? 190 : 0,
+			collector: i < 30 ? "Arsénio Matusse" : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "23",
+		cardNumber: 1023,
+		name: "Benedito Cossa",
+		dailyAmount: 160,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-02-28",
+		totalSaved: 3200,
+		currentDebt: 480,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A23",
+		paymentDays: (() => {
+			const debtDays = Math.floor(480 / 160);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 17;
+				const isDebtPayment = i < 3;
+				const isInDebt = !paid && i < 17 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 160 : 0,
+					collector: paid ? "Célia Mondlane" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
+	},
+	{
+		id: "24",
+		cardNumber: 1024,
+		name: "Catarina Jóia",
+		dailyAmount: 235,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-03-25",
+		totalSaved: 4700,
+		currentDebt: 0,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A24",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 20,
+			amount: i < 20 ? 235 : 0,
+			collector: i < 20 ? "Filipe Nyusi Jr." : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
+	},
+	{
+		id: "25",
+		cardNumber: 1025,
+		name: "Domingos Mondlane",
+		dailyAmount: 450,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-01-14",
+		totalSaved: 11250,
+		currentDebt: 2700,
+		daysInCycle: 25,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A25",
+		paymentDays: (() => {
+			const debtDays = Math.floor(2700 / 450);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 20;
+				const isDebtPayment = i < 6;
+				const isInDebt = !paid && i < 20 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 450 : 0,
+					collector: paid ? "Arsénio Matusse" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
 	},
 ];
 
@@ -578,13 +1140,18 @@ function SaversManagement() {
 
 	const statusFilters = [
 		{ id: "active", label: "Activo" },
-		{ id: "in_debt", label: "Em Dívida" },
 		{ id: "inactive", label: "Inativo" },
+		{ id: "has_debt", label: "Com Dívida" },
 	];
 
 	const filteredSavers = savers.filter((saver) => {
 		if (selectedStatuses.length === 0) return true;
-		return selectedStatuses.includes(saver.status);
+		return selectedStatuses.some((status) => {
+			if (status === "active") return saver.status === "active";
+			if (status === "inactive") return saver.status === "inactive";
+			if (status === "has_debt") return saver.currentDebt > 0;
+			return false;
+		});
 	});
 
 	const sidebarItems = [
@@ -862,11 +1429,11 @@ function SaversManagement() {
 					}
 				/>
 
-				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
+				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{viewMode === "standard" ? (
 						<>
 							{/* Action Banner */}
-							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
+							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
 								<div>
 									<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 										Gestão de Ticantes
@@ -875,7 +1442,7 @@ function SaversManagement() {
 										Visão expandida e financeira dos membros
 									</p>
 								</div>
-								<div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+								<div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
 									<div className="flex items-center gap-2">
 										{["Março 2024", "Abril 2024", "Maio 2024"].map((month) => (
 											<button
@@ -913,161 +1480,47 @@ function SaversManagement() {
 							</div>
 
 							{/* KPI Cards */}
-							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
 								{kpiData.map((kpi) => (
 									<KPICard key={kpi.title} {...kpi} />
 								))}
 							</div>
 
 							{/* Main Content */}
-							<div className="grid grid-cols-12 gap-6">
+							<div className="grid grid-cols-12 gap-4">
 								{/* Savers Table */}
 								<div className="col-span-12">
-									<Card>
-										<CardContent className="p-0">
-											{isLoading ? (
-												<div className="p-8">
-													<LoadingSkeleton variant="table" />
-												</div>
-											) : filteredSavers.length === 0 ? (
-												<div className="p-8">
-													<EmptyState
-														icon={Users}
-														title="Nenhum ticante encontrado"
-														description="Tente ajustar os filtros ou pesquisar com outros termos"
-														actionLabel="Limpar Filtros"
-														onAction={() => setSelectedStatuses([])}
-													/>
-												</div>
-											) : (
-												<DataTable
-													data={filteredSavers}
-													columns={columns}
-													searchable={true}
-													searchPlaceholder="Pesquisar por nome ou número de cartão..."
-													onRowClick={(row) => console.log("View saver:", row)}
-													emptyMessage="Nenhum ticante encontrado"
-													expandable={true}
-													renderExpandedRow={renderExpandedRow}
-													onRowExpand={(row) =>
-														console.log("Row expanded:", row.id)
-													}
-													striped={true}
-													hoverable={true}
-												/>
-											)}
-										</CardContent>
-									</Card>
-								</div>
-
-								{/* Financial Summary */}
-								<div className="col-span-12 lg:col-span-4">
-									<Card>
-										<CardContent className="p-5">
-											<h3 className="text-sm font-semibold text-slate-900 mb-4">
-												Resumo Financeiro
-											</h3>
-											<div className="space-y-4">
-												<div className="p-4 bg-emerald-50 rounded-lg">
-													<p className="text-xs text-slate-500 mb-1">
-														Colectado Este Mês
-													</p>
-													<p className="text-xl font-bold text-emerald-600">
-														75.000 MZN
-													</p>
-													<p className="text-[10px] text-emerald-600 mt-1">
-														+15% vs mês anterior
-													</p>
-												</div>
-												<div className="p-4 bg-red-50 rounded-lg">
-													<p className="text-xs text-slate-500 mb-1">Em Dívida</p>
-													<p className="text-xl font-bold text-red-600">
-														2.300 MZN
-													</p>
-													<p className="text-[10px] text-red-600 mt-1">
-														4 ticantes afectados
-													</p>
-												</div>
-												<div className="p-4 bg-slate-50 rounded-lg">
-													<p className="text-xs text-slate-500 mb-1">
-														Taxa de Assiduidade
-													</p>
-													<p className="text-xl font-bold text-slate-900">94.2%</p>
-													<p className="text-[10px] text-slate-400 mt-1">
-														322 de 342 ticantes
-													</p>
-												</div>
-											</div>
-										</CardContent>
-									</Card>
-								</div>
-
-								{/* Recent Activity */}
-								<div className="col-span-12 lg:col-span-8">
-									<Card>
-										<CardContent className="p-5">
-											<h3 className="text-sm font-semibold text-slate-900 mb-4">
-												Actividade Recente
-											</h3>
-											<div className="space-y-3">
-												{[
-													{
-														id: "1",
-														action: "Novo depósito",
-														user: "Carlos Mondlane",
-														amount: "500 MZN",
-														time: "Há 5 min",
-													},
-													{
-														id: "2",
-														action: "Empréstimo aprovado",
-														user: "Ana Vilanculos",
-														amount: "1.000 MZN",
-														time: "Há 15 min",
-													},
-													{
-														id: "3",
-														action: "Pagamento recebido",
-														user: "Bento Sitoe",
-														amount: "300 MZN",
-														time: "Há 30 min",
-													},
-													{
-														id: "4",
-														action: "Novo ticante registado",
-														user: "Eduarda Langa",
-														amount: "-",
-														time: "Há 1 hora",
-													},
-												].map((activity) => (
-													<div
-														key={activity.id}
-														className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"
-													>
-														<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-															<Users size={16} className="text-emerald-600" />
-														</div>
-														<div className="flex-1">
-															<p className="text-xs font-medium text-slate-900">
-																{activity.action}
-															</p>
-															<p className="text-[10px] text-slate-400">
-																{activity.user}
-															</p>
-														</div>
-														<div className="text-right">
-															<p className="text-xs font-semibold text-slate-900">
-																{activity.amount}
-															</p>
-															<p className="text-[10px] text-slate-400">
-																{activity.time}
-															</p>
-														</div>
-													</div>
-												))}
-											</div>
-										</CardContent>
-									</Card>
+									{isLoading ? (
+										<div className="p-4">
+											<LoadingSkeleton variant="table" />
+										</div>
+									) : filteredSavers.length === 0 ? (
+										<div className="p-4">
+											<EmptyState
+												icon={Users}
+												title="Nenhum ticante encontrado"
+												description="Tente ajustar os filtros ou pesquisar com outros termos"
+												actionLabel="Limpar Filtros"
+												onAction={() => setSelectedStatuses([])}
+											/>
+										</div>
+									) : (
+										<DataTable
+											data={filteredSavers}
+											columns={columns}
+											searchable={true}
+											searchPlaceholder="Pesquisar por nome ou número de cartão..."
+											onRowClick={(row) => console.log("View saver:", row)}
+											emptyMessage="Nenhum ticante encontrado"
+											expandable={true}
+											renderExpandedRow={renderExpandedRow}
+											onRowExpand={(row) =>
+												console.log("Row expanded:", row.id)
+											}
+											striped={true}
+											hoverable={true}
+										/>
+									)}
 								</div>
 							</div>
 						</>

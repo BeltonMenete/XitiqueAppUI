@@ -55,7 +55,7 @@ export const KPICard = memo(function KPICard({
 			className={cn(
 				"overflow-hidden",
 				clickable &&
-					"hover:shadow-md transition-all duration-200 cursor-pointer hover:-translate-y-0.5",
+				"hover:shadow-md transition-all duration-200 cursor-pointer hover:-translate-y-0.5",
 				className,
 			)}
 			onClick={handleClick}

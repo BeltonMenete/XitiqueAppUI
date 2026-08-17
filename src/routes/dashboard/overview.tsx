@@ -166,7 +166,7 @@ function OrganizationDashboard() {
 
 				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{/* Action Banner */}
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow duration-200">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-400 shadow-md hover:shadow-lg transition-shadow duration-300">
 						<div>
 							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 								Painel de Organização
@@ -197,13 +197,13 @@ function OrganizationDashboard() {
 										<h3 className="text-sm font-semibold text-slate-900">
 											Evolução de Colectas
 										</h3>
-										<select className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900">
+										<select className="text-xs border border-slate-400 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900">
 											<option>Últimos 6 meses</option>
 											<option>Último ano</option>
 										</select>
 									</div>
 									{/* Chart placeholder - CSS-only simple bar chart */}
-									<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
+									<div className="h-64 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-400 p-4">
 										<div className="w-full space-y-3">
 											{[
 												{ label: "Jan", value: 75 },
@@ -217,16 +217,16 @@ function OrganizationDashboard() {
 													key={item.label}
 													className="flex items-center gap-3"
 												>
-													<span className="text-xs text-slate-500 w-8">
+													<span className="text-xs text-slate-700 w-8">
 														{item.label}
 													</span>
-													<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
+													<div className="flex-1 h-4 bg-slate-300 rounded-full overflow-hidden">
 														<div
 															className="h-full bg-slate-900 rounded-full transition-all duration-300 hover:bg-slate-800"
 															style={{ width: `${item.value}%` }}
 														/>
 													</div>
-													<span className="text-xs font-semibold text-slate-700 w-10">
+													<span className="text-xs font-semibold text-slate-800 w-10">
 														{item.value}%
 													</span>
 												</div>
