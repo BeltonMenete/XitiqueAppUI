@@ -14,13 +14,16 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { RegisterSaverModal } from "#/components/business/RegisterSaverModal";
-import { TabBar, TabPanel } from "#/components/interactive";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
-import { Card, CardContent } from "#/components/ui/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/Card";
 import { KPICard } from "#/components/ui/KPICard";
+import { Input } from "#/components/ui/Input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "#/components/ui/Tabs";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "#/components/ui/Table";
+import { Badge } from "#/components/ui";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/")({
@@ -131,10 +134,10 @@ function SuperDashboard() {
 									className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
 									size={18}
 								/>
-								<input
+								<Input
 									type="text"
 									placeholder="Pesquisar global..."
-									className="pl-10 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 w-64"
+									className="pl-10 w-64"
 								/>
 							</div>
 							<Button
@@ -156,42 +159,48 @@ function SuperDashboard() {
 				<main className="flex-1 overflow-hidden flex flex-col">
 					{/* Tab Bar */}
 					<div className="border-b border-slate-200 bg-white px-6 py-3">
-						<TabBar
-							tabs={tabs}
-							activeTab={activeTab}
-							onTabChange={setActiveTab}
-							variant="underline"
-							size="md"
-						/>
-					</div>
+						<Tabs value={activeTab} onValueChange={setActiveTab}>
+							<TabsList>
+								{tabs.map((tab) => (
+									<TabsTrigger key={tab.id} value={tab.id}>
+										{tab.icon}
+										<span className="ml-2">{tab.label}</span>
+										{tab.badge && (
+											<Badge variant="destructive" className="ml-2">
+												{tab.badge}
+											</Badge>
+										)}
+									</TabsTrigger>
+								))}
+							</TabsList>
+							<div className="flex-1 overflow-y-auto p-6">
+								<TabsContent value="overview">
+									<OverviewTab kpis={overviewKPIs} />
+								</TabsContent>
 
-					{/* Tab Content */}
-					<div className="flex-1 overflow-y-auto p-6">
-						<TabPanel id="overview" activeTab={activeTab}>
-							<OverviewTab kpis={overviewKPIs} />
-						</TabPanel>
+								<TabsContent value="savers">
+									<SaversTab
+										onOpenRegisterModal={() => setIsRegisterModalOpen(true)}
+									/>
+								</TabsContent>
 
-						<TabPanel id="savers" activeTab={activeTab}>
-							<SaversTab
-								onOpenRegisterModal={() => setIsRegisterModalOpen(true)}
-							/>
-						</TabPanel>
+								<TabsContent value="collectors">
+									<CollectorsTab />
+								</TabsContent>
 
-						<TabPanel id="collectors" activeTab={activeTab}>
-							<CollectorsTab />
-						</TabPanel>
+								<TabsContent value="loans">
+									<LoansTab />
+								</TabsContent>
 
-						<TabPanel id="loans" activeTab={activeTab}>
-							<LoansTab />
-						</TabPanel>
+								<TabsContent value="finance">
+									<FinanceTab />
+								</TabsContent>
 
-						<TabPanel id="finance" activeTab={activeTab}>
-							<FinanceTab />
-						</TabPanel>
-
-						<TabPanel id="reports" activeTab={activeTab}>
-							<ReportsTab />
-						</TabPanel>
+								<TabsContent value="reports">
+									<ReportsTab />
+								</TabsContent>
+							</div>
+						</Tabs>
 					</div>
 				</main>
 			</div>
@@ -220,10 +229,10 @@ function OverviewTab({ kpis }: { kpis: any }) {
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 				{/* Collection Evolution */}
 				<Card>
-					<CardContent className="p-6">
-						<h3 className="font-semibold text-slate-900 mb-4">
-							Evolução da Arrecadação
-						</h3>
+					<CardHeader>
+						<CardTitle>Evolução da Arrecadação</CardTitle>
+					</CardHeader>
+					<CardContent>
 						<div className="h-64 flex items-center justify-center bg-slate-100 rounded-lg">
 							<p className="text-slate-400 text-sm">
 								Gráfico de evolução (a implementar)
@@ -234,10 +243,10 @@ function OverviewTab({ kpis }: { kpis: any }) {
 
 				{/* Recent Activity */}
 				<Card>
-					<CardContent className="p-6">
-						<h3 className="font-semibold text-slate-900 mb-4">
-							Actividade Recente
-						</h3>
+					<CardHeader>
+						<CardTitle>Actividade Recente</CardTitle>
+					</CardHeader>
+					<CardContent>
 						<div className="space-y-3">
 							{[1, 2, 3, 4].map((i) => (
 								<div
@@ -251,7 +260,7 @@ function OverviewTab({ kpis }: { kpis: any }) {
 										<p className="text-sm font-medium text-slate-900">
 											Novo ticante registado
 										</p>
-										<p className="text-xs text-text-emerald-600">Há 2 horas</p>
+										<p className="text-xs text-emerald-600">Há 2 horas</p>
 									</div>
 								</div>
 							))}
@@ -363,7 +372,7 @@ function SaversTab({
 									"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
 									selectedMonth === month
 										? "bg-slate-200 text-slate-900"
-										: "bg-slate-100 text-text-emerald-600 hover:bg-slate-200",
+										: "bg-slate-100 text-emerald-600 hover:bg-slate-200",
 								)}
 								onClick={() => setSelectedMonth(month)}
 							>
@@ -391,121 +400,103 @@ function SaversTab({
 
 			{/* Savers Table */}
 			<Card>
-				<CardContent className="p-0">
-					<div className="p-4 border-b border-slate-200 flex items-center gap-4">
+				<CardHeader>
+					<div className="flex items-center gap-4">
 						<div className="relative flex-1">
 							<Search
 								className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
 								size={18}
 							/>
-							<input
+							<Input
 								type="text"
 								placeholder="Pesquisar por nome ou número de cartão..."
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
-								className="pl-10 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 w-full"
+								className="pl-10"
 							/>
 						</div>
 					</div>
-					<div className="overflow-x-auto">
-						<table className="w-full text-left border-collapse">
-							<thead className="bg-slate-100">
-								<tr>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Ticante
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Valor Diário
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Total Poupado
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Dívida
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Dias
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Estado
-									</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y divide-border">
-								{mockSavers.map((saver) => (
-									<tr
-										key={saver.id}
-										className="hover:bg-slate-100 transition-colors cursor-pointer"
-									>
-										<td className="px-4 py-3">
-											<div className="flex flex-col">
-												<div className="flex items-center gap-1">
-													<span className="font-mono text-[11px] text-slate-400">
-														{saver.cardNumber}
-													</span>
-													<span
-														className={cn(
-															"w-1.5 h-1.5 rounded-full",
-															saver.status === "active"
-																? "bg-emerald-500"
-																: "bg-red-500",
-														)}
-													/>
-												</div>
-												<span className="font-bold text-sm text-slate-900">
-													{saver.name}
+				</CardHeader>
+				<CardContent>
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead>Ticante</TableHead>
+								<TableHead>Valor Diário</TableHead>
+								<TableHead>Total Poupado</TableHead>
+								<TableHead>Dívida</TableHead>
+								<TableHead>Dias</TableHead>
+								<TableHead>Estado</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{mockSavers.map((saver) => (
+								<TableRow
+									key={saver.id}
+									className="cursor-pointer"
+								>
+									<TableCell>
+										<div className="flex flex-col">
+											<div className="flex items-center gap-1">
+												<span className="font-mono text-[11px] text-slate-400">
+													{saver.cardNumber}
 												</span>
+												<span
+													className={cn(
+														"w-1.5 h-1.5 rounded-full",
+														saver.status === "active"
+															? "bg-emerald-500"
+															: "bg-red-500",
+													)}
+												/>
 											</div>
-										</td>
-										<td className="px-4 py-3 text-sm">
-											{saver.dailyAmount.toLocaleString()} MZN
-										</td>
-										<td className="px-4 py-3 text-sm">
-											{saver.totalSaved.toLocaleString()} MZN
-										</td>
-										<td
-											className={cn(
-												"px-4 py-3 text-sm",
-												saver.currentDebt > 0
-													? "text-red-500"
-													: "text-text-emerald-600",
-											)}
-										>
-											{saver.currentDebt.toLocaleString()} MZN
-										</td>
-										<td className="px-4 py-3 text-sm">
-											{saver.daysInCycle} Dias
-										</td>
-										<td className="px-4 py-3">
-											<span
-												className={cn(
-													"inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold",
-													saver.status === "active"
-														? "bg-emerald-500/10 text-emerald-500"
-														: "bg-red-500/10 text-red-500",
-												)}
-											>
-												{saver.status === "active" ? "Ativo" : "Em Dívida"}
+											<span className="font-bold text-sm text-slate-900">
+												{saver.name}
 											</span>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
+										</div>
+									</TableCell>
+									<TableCell>
+										{saver.dailyAmount.toLocaleString()} MZN
+									</TableCell>
+									<TableCell>
+										{saver.totalSaved.toLocaleString()} MZN
+									</TableCell>
+									<TableCell
+										className={cn(
+											saver.currentDebt > 0
+												? "text-red-500"
+												: "text-emerald-600",
+										)}
+									>
+										{saver.currentDebt.toLocaleString()} MZN
+									</TableCell>
+									<TableCell>
+										{saver.daysInCycle} Dias
+									</TableCell>
+									<TableCell>
+										<Badge
+											variant={saver.status === "active" ? "success" : "destructive"}
+										>
+											{saver.status === "active" ? "Ativo" : "Em Dívida"}
+										</Badge>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
 				</CardContent>
 			</Card>
 
 			{/* Financial Summary */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 				<Card>
-					<CardContent className="p-5">
-						<h3 className="text-sm font-semibold text-slate-900 mb-4">
-							Resumo Financeiro
-						</h3>
+					<CardHeader>
+						<CardTitle className="text-sm">Resumo Financeiro</CardTitle>
+					</CardHeader>
+					<CardContent>
 						<div className="space-y-4">
 							<div className="p-4 bg-emerald-600/10 rounded-lg">
-								<p className="text-xs text-text-emerald-600 mb-1">
+								<p className="text-xs text-emerald-600 mb-1">
 									Colectado Este Mês
 								</p>
 								<p className="text-xl font-bold text-emerald-600">75.000 MZN</p>
@@ -514,7 +505,7 @@ function SaversTab({
 								</p>
 							</div>
 							<div className="p-4 bg-red-500/10 rounded-lg">
-								<p className="text-xs text-text-emerald-600 mb-1">Em Dívida</p>
+								<p className="text-xs text-emerald-600 mb-1">Em Dívida</p>
 								<p className="text-xl font-bold text-red-500">2.300 MZN</p>
 								<p className="text-[10px] text-red-500 mt-1">
 									4 ticantes afectados
@@ -525,10 +516,10 @@ function SaversTab({
 				</Card>
 
 				<Card>
-					<CardContent className="p-5">
-						<h3 className="text-sm font-semibold text-slate-900 mb-4">
-							Actividade Recente
-						</h3>
+					<CardHeader>
+						<CardTitle className="text-sm">Actividade Recente</CardTitle>
+					</CardHeader>
+					<CardContent>
 						<div className="space-y-3">
 							{[
 								{
@@ -583,29 +574,29 @@ function SaversTab({
 				</Card>
 
 				<Card>
-					<CardContent className="p-5">
-						<h3 className="text-sm font-semibold text-slate-900 mb-4">
-							Distribuição por Estado
-						</h3>
+					<CardHeader>
+						<CardTitle className="text-sm">Distribuição por Estado</CardTitle>
+					</CardHeader>
+					<CardContent>
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-2">
 									<span className="w-3 h-3 rounded-full bg-emerald-500" />
-									<span className="text-sm text-text-emerald-600">Ativos</span>
+									<span className="text-sm text-emerald-600">Ativos</span>
 								</div>
 								<span className="text-sm font-medium text-slate-900">1</span>
 							</div>
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-2">
 									<span className="w-3 h-3 rounded-full bg-red-500" />
-									<span className="text-sm text-text-emerald-600">
+									<span className="text-sm text-emerald-600">
 										Em Dívida
 									</span>
 								</div>
 								<span className="text-sm font-medium text-slate-900">2</span>
 							</div>
 							<div className="mt-4 p-4 bg-slate-100 rounded-lg">
-								<p className="text-xs text-text-emerald-600 mb-2">
+								<p className="text-xs text-emerald-600 mb-2">
 									Taxa de Assiduidade
 								</p>
 								<p className="text-xl font-bold text-slate-900">94.2%</p>
@@ -705,117 +696,97 @@ function CollectorsTab() {
 
 			{/* Collectors Table */}
 			<Card>
-				<CardContent className="p-0">
-					<div className="p-4 border-b border-slate-200 flex items-center gap-4">
+				<CardHeader>
+					<div className="flex items-center gap-4">
 						<div className="relative flex-1">
 							<Search
 								className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
 								size={18}
 							/>
-							<input
+							<Input
 								type="text"
 								placeholder="Buscar por nome ou telefone..."
-								className="pl-10 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 w-full"
+								className="pl-10"
 							/>
 						</div>
 					</div>
-					<div className="overflow-x-auto">
-						<table className="w-full text-left border-collapse">
-							<thead className="bg-slate-100">
-								<tr>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Cobrador
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Clientes
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider text-right">
-										Volume Mensal
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider text-right">
-										Diferença
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider">
-										Estado
-									</th>
-									<th className="px-4 py-3 text-xs font-semibold text-text-emerald-600 uppercase tracking-wider text-center">
-										Acções
-									</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y divide-border">
-								{mockCollectors.map((collector) => (
-									<tr
-										key={collector.id}
-										className="hover:bg-slate-100 transition-colors"
-									>
-										<td className="px-4 py-3">
-											<div className="flex items-center gap-3">
-												<div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-text-emerald-600 font-semibold">
-													{String(collector.name).charAt(0)}
-												</div>
-												<div>
-													<p className="font-bold text-sm text-slate-900">
-														{collector.name}
-													</p>
-													<p className="text-xs text-slate-400 font-mono">
-														{collector.phone}
-													</p>
-												</div>
+				</CardHeader>
+				<CardContent>
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead>Cobrador</TableHead>
+								<TableHead>Clientes</TableHead>
+								<TableHead className="text-right">Volume Mensal</TableHead>
+								<TableHead className="text-right">Diferença</TableHead>
+								<TableHead>Estado</TableHead>
+								<TableHead className="text-center">Acções</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{mockCollectors.map((collector) => (
+								<TableRow key={collector.id}>
+									<TableCell>
+										<div className="flex items-center gap-3">
+											<div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-semibold">
+												{String(collector.name).charAt(0)}
 											</div>
-										</td>
-										<td className="px-4 py-3">
-											<div className="flex items-center gap-1">
-												<span className="font-bold text-sm text-slate-900">
-													{collector.clients}
-												</span>
-												<span className="text-xs text-slate-400">Ticantes</span>
+											<div>
+												<p className="font-bold text-sm text-slate-900">
+													{collector.name}
+												</p>
+												<p className="text-xs text-slate-400 font-mono">
+													{collector.phone}
+												</p>
 											</div>
-										</td>
-										<td className="px-4 py-3 text-right">
-											<span className="font-mono text-sm font-bold text-slate-900">
-												{collector.monthlyVolume.toLocaleString()} MZN
+										</div>
+									</TableCell>
+									<TableCell>
+										<div className="flex items-center gap-1">
+											<span className="font-bold text-sm text-slate-900">
+												{collector.clients}
 											</span>
-										</td>
-										<td className="px-4 py-3 text-right">
-											<span
-												className={cn(
-													"font-mono text-sm",
-													collector.difference > 0
-														? "text-emerald-500"
-														: collector.difference < 0
-															? "text-red-500"
-															: "text-text-emerald-600",
-												)}
-											>
-												{collector.difference > 0 ? "+" : ""}
-												{collector.difference.toLocaleString()} MZN
-											</span>
-										</td>
-										<td className="px-4 py-3">
-											<span
-												className={cn(
-													"inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold",
-													collector.status === "active"
-														? "bg-emerald-500/10 text-emerald-500"
-														: "bg-red-500/10 text-red-500",
-												)}
-											>
-												{collector.status === "active" ? "Ativo" : "Suspenso"}
-											</span>
-										</td>
-										<td className="px-4 py-3 text-center">
-											<div className="flex justify-center gap-2">
-												<button className="p-1 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all">
-													<MoreVertical size={16} />
-												</button>
-											</div>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
+											<span className="text-xs text-slate-400">Ticantes</span>
+										</div>
+									</TableCell>
+									<TableCell className="text-right">
+										<span className="font-mono text-sm font-bold text-slate-900">
+											{collector.monthlyVolume.toLocaleString()} MZN
+										</span>
+									</TableCell>
+									<TableCell className="text-right">
+										<span
+											className={cn(
+												"font-mono text-sm",
+												collector.difference > 0
+													? "text-emerald-500"
+													: collector.difference < 0
+														? "text-red-500"
+														: "text-slate-600",
+											)}
+										>
+											{collector.difference > 0 ? "+" : ""}
+											{collector.difference.toLocaleString()} MZN
+										</span>
+									</TableCell>
+									<TableCell>
+										<Badge
+											variant={collector.status === "active" ? "success" : "destructive"}
+										>
+											{collector.status === "active" ? "Ativo" : "Suspenso"}
+										</Badge>
+									</TableCell>
+									<TableCell className="text-center">
+										<div className="flex justify-center gap-2">
+											<button type="button" className="p-1 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all">
+												<MoreVertical size={16} />
+											</button>
+										</div>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
 				</CardContent>
 			</Card>
 		</div>
@@ -906,25 +877,25 @@ function LoansTab() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 				{/* Pending */}
 				<Card>
-					<CardContent className="p-4">
-						<div className="flex items-center justify-between mb-4">
-							<h3 className="font-semibold text-slate-900 text-sm">
-								Lista de Espera
-							</h3>
-							<span className="bg-amber-500/10 text-amber-500 px-2 py-1 rounded-full text-xs font-semibold">
+					<CardHeader>
+						<div className="flex items-center justify-between">
+							<CardTitle className="text-sm">Lista de Espera</CardTitle>
+							<Badge variant="warning">
 								{mockLoans.filter((l) => l.status === "pending").length}
-							</span>
+							</Badge>
 						</div>
+					</CardHeader>
+					<CardContent>
 						<div className="space-y-3">
 							{mockLoans
 								.filter((l) => l.status === "pending")
 								.map((loan) => (
 									<div
 										key={loan.id}
-										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-status-warning transition-colors cursor-pointer"
+										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-amber-500 transition-colors cursor-pointer"
 									>
 										<div className="flex items-center gap-2 mb-2">
-											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-text-emerald-600 font-bold text-xs">
+											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
 												{String(loan.client).charAt(0)}
 											</div>
 											<div>
@@ -958,25 +929,25 @@ function LoansTab() {
 
 				{/* Approved */}
 				<Card>
-					<CardContent className="p-4">
-						<div className="flex items-center justify-between mb-4">
-							<h3 className="font-semibold text-slate-900 text-sm">
-								Aprovados
-							</h3>
-							<span className="bg-emerald-500/10 text-emerald-500 px-2 py-1 rounded-full text-xs font-semibold">
+					<CardHeader>
+						<div className="flex items-center justify-between">
+							<CardTitle className="text-sm">Aprovados</CardTitle>
+							<Badge variant="success">
 								{mockLoans.filter((l) => l.status === "approved").length}
-							</span>
+							</Badge>
 						</div>
+					</CardHeader>
+					<CardContent>
 						<div className="space-y-3">
 							{mockLoans
 								.filter((l) => l.status === "approved")
 								.map((loan) => (
 									<div
 										key={loan.id}
-										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-status-success transition-colors cursor-pointer"
+										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-emerald-500 transition-colors cursor-pointer"
 									>
 										<div className="flex items-center gap-2 mb-2">
-											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-text-emerald-600 font-bold text-xs">
+											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
 												{String(loan.client).charAt(0)}
 											</div>
 											<div>
@@ -1010,23 +981,25 @@ function LoansTab() {
 
 				{/* Active */}
 				<Card>
-					<CardContent className="p-4">
-						<div className="flex items-center justify-between mb-4">
-							<h3 className="font-semibold text-slate-900 text-sm">Activos</h3>
-							<span className="bg-blue-500/10 text-blue-500 px-2 py-1 rounded-full text-xs font-semibold">
+					<CardHeader>
+						<div className="flex items-center justify-between">
+							<CardTitle className="text-sm">Activos</CardTitle>
+							<Badge variant="default">
 								{mockLoans.filter((l) => l.status === "active").length}
-							</span>
+							</Badge>
 						</div>
+					</CardHeader>
+					<CardContent>
 						<div className="space-y-3">
 							{mockLoans
 								.filter((l) => l.status === "active")
 								.map((loan) => (
 									<div
 										key={loan.id}
-										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-status-info transition-colors cursor-pointer"
+										className="p-3 bg-slate-100 rounded-lg border border-slate-200 hover:border-blue-500 transition-colors cursor-pointer"
 									>
 										<div className="flex items-center gap-2 mb-2">
-											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-text-emerald-600 font-bold text-xs">
+											<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
 												{String(loan.client).charAt(0)}
 											</div>
 											<div>

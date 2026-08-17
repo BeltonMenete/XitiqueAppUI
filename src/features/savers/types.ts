@@ -19,7 +19,7 @@ export interface Saver {
 		id: string;
 		name: string
 	};
-	paymentDays?: Array<{ day: number; paid: boolean }>;
+	paymentDays?: Array<{ day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }>;
 }
 
 export interface SaverDeposit {

@@ -42,39 +42,93 @@ import { cn } from "#/lib/design-system";
 
 // MonthCalendarGrid Component
 interface MonthCalendarGridProps {
-	days: Array<{ day: number; paid: boolean }>;
+	days: Array<{ day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }>;
 	onDayClick?: (day: number) => void;
+	showHeader?: boolean;
+	saverName?: string;
+	headerOnly?: boolean;
 }
 
-function MonthCalendarGrid({ days, onDayClick }: MonthCalendarGridProps) {
+function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, headerOnly = false }: MonthCalendarGridProps) {
 	const weekDays = ["S", "T", "Q", "Q", "S", "S", "D"];
+	// Repeat week days to cover 30 days
+	const repeatedWeekDays = Array.from({ length: 30 }, (_, i) => weekDays[i % 7]);
+
 	return (
 		<div className="flex flex-col items-center">
-			<div className="grid grid-cols-[repeat(30,minmax(16px,1fr))] gap-0.5 justify-center mb-1">
-				{weekDays.map((day, i) => (
-					<span
-						key={`header-${i}`}
-						className="text-[8px] leading-tight text-center uppercase text-slate-400 font-medium"
-					>
-						{day}
-					</span>
-				))}
-			</div>
-			<div className="grid grid-cols-[repeat(30,minmax(16px,1fr))] gap-0.5 justify-center">
-				{days.map((dayData) => (
-					<div
-						key={dayData.day}
-						className={cn(
-							"w-4 h-4 rounded-sm border cursor-pointer transition-colors",
-							dayData.paid
-								? "border-slate-300 bg-emerald-500"
-								: "border-slate-300 bg-slate-100",
-						)}
-						onClick={() => onDayClick?.(dayData.day)}
-						title={`Dia ${dayData.day}: ${dayData.paid ? "Pago" : "Não pago"}`}
-					/>
-				))}
-			</div>
+			{showHeader && (
+				<>
+					<div className="grid grid-cols-[repeat(30,minmax(20px,1fr))] gap-0.5 justify-center text-[8px] leading-tight text-center uppercase text-slate-400 font-medium mb-1">
+						{repeatedWeekDays.map((day, i) => (
+							<span key={`weekday-${i}`}>{day}</span>
+						))}
+					</div>
+					<div className="grid grid-cols-[repeat(30,minmax(20px,1fr))] gap-0.5 justify-center text-[8px] leading-tight text-center text-slate-400 font-medium mb-1">
+						{days.map((dayData) => (
+							<span key={`daynum-${dayData.day}`}>{dayData.day}</span>
+						))}
+					</div>
+				</>
+			)}
+			{!headerOnly && (
+				<div className="grid grid-cols-[repeat(30,minmax(20px,1fr))] gap-0.5">
+					{days.map((dayData) => (
+						<div
+							key={dayData.day}
+							className={cn(
+								"w-5 h-5 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group",
+								dayData.paid && dayData.isDebtPayment
+									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
+									: dayData.paid
+										? "border-slate-300 bg-emerald-600 hover:bg-emerald-700"
+										: dayData.isInDebt
+											? "border-red-200 bg-red-100 hover:bg-red-200"
+											: "border-slate-200 bg-slate-50 hover:bg-slate-100",
+							)}
+							onClick={() => onDayClick?.(dayData.day)}
+						>
+							{/* Debt payment indicator */}
+							{dayData.isDebtPayment && (
+								<div className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-white rounded-full" />
+							)}
+							{/* Debt day indicator */}
+							{dayData.isInDebt && !dayData.paid && (
+								<div className="absolute top-0.5 left-0.5 w-1.5 h-1.5 bg-red-400 rounded-full" />
+							)}
+							{/* Beautiful Tooltip */}
+							<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-36 pointer-events-none">
+								<div className="font-semibold mb-1 text-slate-100">Dia {dayData.day}</div>
+								<div className="text-slate-300 text-[10px]">{saverName}</div>
+								<div className={cn(
+									"mt-1 font-medium",
+									dayData.isDebtPayment
+										? "text-amber-400"
+										: dayData.isInDebt && !dayData.paid
+											? "text-red-400"
+											: dayData.paid
+												? "text-emerald-400"
+												: "text-slate-400"
+								)}>
+									{dayData.isDebtPayment
+										? `Pagamento Dívida: ${dayData.amount || 0} MZN`
+										: dayData.isInDebt && !dayData.paid
+											? "Em Dívida"
+											: dayData.paid
+												? `Depositado: ${dayData.amount || 0} MZN`
+												: "Não depositado"}
+								</div>
+								{dayData.collector && (
+									<div className="text-[9px] text-slate-400 mt-1">
+										Cobrador: {dayData.collector}
+									</div>
+								)}
+								{/* Arrow */}
+								<div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-800" />
+							</div>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }
@@ -152,23 +206,35 @@ function SaversCalendarView({
 
 	return (
 		<div className="space-y-6">
-			{/* Month Selector */}
-			<div className="flex items-center space-x-2 overflow-x-auto pb-2">
-				{months.map((month) => (
-					<button
-						key={month}
-						type="button"
-						className={cn(
-							"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap",
-							selectedMonth === month
-								? "bg-slate-900 text-white"
-								: "bg-slate-100 text-slate-500 hover:bg-slate-200",
-						)}
-						onClick={() => onMonthChange(month)}
-					>
-						{month}
+			{/* Month Selector & Filters */}
+			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+				<div className="flex items-center space-x-2 overflow-x-auto pb-2">
+					{months.map((month) => (
+						<button
+							key={month}
+							type="button"
+							className={cn(
+								"px-3 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap",
+								selectedMonth === month
+									? "bg-slate-900 text-white shadow-md"
+									: "bg-slate-100 text-slate-500 hover:bg-slate-200",
+							)}
+							onClick={() => onMonthChange(month)}
+						>
+							{month}
+						</button>
+					))}
+				</div>
+				<div className="flex space-x-2">
+					<button className="flex items-center space-x-2 px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+						<Filter size={16} />
+						<span className="text-xs font-semibold">Filtros</span>
 					</button>
-				))}
+					<button className="flex items-center space-x-2 px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+						<Grid size={16} />
+						<span className="text-xs font-semibold">Expandir Vista</span>
+					</button>
+				</div>
 			</div>
 
 			{/* Calendar Table */}
@@ -177,18 +243,23 @@ function SaversCalendarView({
 					<table className="w-full text-left border-collapse">
 						<thead className="bg-slate-50 border-b border-slate-200">
 							<tr>
-								<th className="px-3 py-2 text-[12px] text-slate-500 font-semibold w-48">
+								<th className="px-3 py-1 text-[12px] text-slate-500 font-semibold w-48">
 									TICANTE
 								</th>
-								<th className="px-3 py-2 text-[12px] text-slate-500 font-semibold">
+								<th className="px-3 py-1 text-[12px] text-slate-500 font-semibold">
 									<MonthCalendarGrid
 										days={Array.from({ length: 30 }, (_, i) => ({
 											day: i + 1,
 											paid: false,
 										}))}
+										showHeader={true}
+										headerOnly={true}
 									/>
 								</th>
-								<th className="px-3 py-2 text-[12px] text-slate-500 font-semibold w-24">
+								<th className="px-3 py-1 text-[12px] text-slate-500 font-semibold w-20 text-right">
+									TOTAL
+								</th>
+								<th className="px-3 py-1 text-[12px] text-slate-500 font-semibold w-24">
 									ESTADO
 								</th>
 							</tr>
@@ -197,12 +268,12 @@ function SaversCalendarView({
 							{savers.map((saver) => (
 								<tr
 									key={saver.id}
-									className="hover:bg-slate-50 transition-colors cursor-pointer"
+									className="hover:bg-slate-50 transition-colors cursor-pointer border-b border-slate-200/50"
 									onClick={() => onRowClick(saver)}
 								>
-									<td className="px-3 py-2">
+									<td className="px-3 py-1">
 										<div className="flex flex-col">
-											<div className="flex items-center gap-1">
+											<div className="flex items-center space-x-1">
 												<span className="font-mono text-[11px] text-slate-400">
 													{saver.alphanumericId || String(saver.cardNumber)}
 												</span>
@@ -212,13 +283,20 @@ function SaversCalendarView({
 											</span>
 										</div>
 									</td>
-									<td className="px-3 py-2">
+									<td className="px-3 py-1">
 										<MonthCalendarGrid
 											days={saver.paymentDays || []}
 											onDayClick={(day) => console.log(`Day ${day} clicked for ${saver.name}`)}
+											showHeader={false}
+											saverName={saver.name}
 										/>
 									</td>
-									<td className="px-3 py-2">
+									<td className="px-3 py-1 text-right">
+										<span className="font-mono text-sm font-bold text-slate-900">
+											{saver.totalSaved.toLocaleString()} MZN
+										</span>
+									</td>
+									<td className="px-3 py-1">
 										{saver.status === "active" && <ActiveBadge />}
 										{saver.status === "in_debt" && <DebtBadge />}
 										{saver.status === "inactive" && <InactiveBadge />}
@@ -227,6 +305,30 @@ function SaversCalendarView({
 							))}
 						</tbody>
 					</table>
+				</div>
+
+				{/* Legend */}
+				<div className="px-4 py-3 bg-slate-50 border-t border-slate-200 flex items-center gap-4">
+					<div className="flex items-center gap-2">
+						<div className="w-5 h-5 rounded-sm border border-slate-300 bg-emerald-600" />
+						<span className="text-xs text-slate-600">Depósito Normal</span>
+					</div>
+					<div className="flex items-center gap-2">
+						<div className="w-5 h-5 rounded-sm border border-amber-300 bg-amber-500 relative">
+							<div className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-white rounded-full" />
+						</div>
+						<span className="text-xs text-slate-600">Pagamento de Dívida</span>
+					</div>
+					<div className="flex items-center gap-2">
+						<div className="w-5 h-5 rounded-sm border border-red-200 bg-red-100 relative">
+							<div className="absolute top-0.5 left-0.5 w-1.5 h-1.5 bg-red-400 rounded-full" />
+						</div>
+						<span className="text-xs text-slate-600">Em Dívida</span>
+					</div>
+					<div className="flex items-center gap-2">
+						<div className="w-5 h-5 rounded-sm border border-slate-200 bg-slate-50" />
+						<span className="text-xs text-slate-600">Não Depositado</span>
+					</div>
 				</div>
 
 				{/* Pagination */}
@@ -283,6 +385,24 @@ const mockSavers: Saver[] = [
 		daysInCycle: 15,
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A01",
+		paymentDays: (() => {
+			const debtDays = Math.floor(2300 / 500);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 8;
+				const isDebtPayment = i < 3;
+				const isInDebt = !paid && i < 8 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 500 : 0,
+					collector: paid ? "Arsénio Matusse" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
 	},
 	{
 		id: "2",
@@ -297,6 +417,24 @@ const mockSavers: Saver[] = [
 		daysInCycle: 5,
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A02",
+		paymentDays: (() => {
+			const debtDays = Math.floor(1500 / 250);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 5 && i % 2 === 0;
+				const isDebtPayment = i === 2;
+				const isInDebt = !paid && i < 5 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 250 : 0,
+					collector: paid ? "Célia Mondlane" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
 	},
 	{
 		id: "3",
@@ -311,6 +449,15 @@ const mockSavers: Saver[] = [
 		daysInCycle: 22,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A03",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 22,
+			amount: i < 22 ? 300 : 0,
+			collector: i < 22 ? "Filipe Nyusi Jr." : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
 	},
 	{
 		id: "4",
@@ -325,6 +472,24 @@ const mockSavers: Saver[] = [
 		daysInCycle: 12,
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A04",
+		paymentDays: (() => {
+			const debtDays = Math.floor(2000 / 1000);
+			return Array.from({ length: 30 }, (_, i) => {
+				const day = i + 1;
+				const paid = i < 12;
+				const isDebtPayment = i < 5;
+				const isInDebt = !paid && i < 12 + debtDays;
+				return {
+					day,
+					paid,
+					amount: paid ? 1000 : 0,
+					collector: paid ? "Arsénio Matusse" : undefined,
+					isDebtPayment,
+					isInDebt,
+				};
+			});
+		})(),
 	},
 	{
 		id: "5",
@@ -339,6 +504,15 @@ const mockSavers: Saver[] = [
 		daysInCycle: 30,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A05",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 28,
+			amount: i < 28 ? 150 : 0,
+			collector: i < 28 ? "Célia Mondlane" : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
 	},
 	{
 		id: "6",
@@ -353,6 +527,15 @@ const mockSavers: Saver[] = [
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A06",
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 25,
+			amount: i < 25 ? 200 : 0,
+			collector: i < 25 ? "Filipe Nyusi Jr." : undefined,
+			isDebtPayment: false,
+			isInDebt: false,
+		})),
 	},
 ];
 
