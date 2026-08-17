@@ -38,16 +38,19 @@ export function Header({
 				className,
 			)}
 		>
-			<div className="flex-1 min-w-0">
-				{breadcrumbs && <Breadcrumbs items={breadcrumbs} className="mb-1" />}
-				<h1 className="text-sm font-bold text-slate-950 tracking-tight truncate">
-					{title}
-				</h1>
-				{description && (
-					<p className="text-[11px] text-slate-400 hidden sm:block truncate">
-						{description}
-					</p>
-				)}
+			<div className="flex items-center gap-3">
+				<img src="/xitique-logo.svg" alt="Xitique Logo" className="w-8 h-8" />
+				<div className="flex-1 min-w-0">
+					{breadcrumbs && <Breadcrumbs items={breadcrumbs} className="mb-1" />}
+					<h1 className="text-sm font-bold text-slate-950 tracking-tight truncate">
+						{title}
+					</h1>
+					{description && (
+						<p className="text-[11px] text-slate-400 hidden sm:block truncate">
+							{description}
+						</p>
+					)}
+				</div>
 			</div>
 
 			<div className="flex items-center gap-2 sm:gap-4">

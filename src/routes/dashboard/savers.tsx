@@ -99,18 +99,27 @@ function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, he
 								<div className="absolute top-0.5 left-0.5 w-1.5 h-1.5 bg-red-400 rounded-full" />
 							)}
 							{/* Beautiful Tooltip */}
-							<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-emerald-50 text-slate-900 text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-36 pointer-events-none border border-emerald-200">
-								<div className="font-semibold mb-1 text-slate-900">Dia {dayData.day}</div>
-								<div className="text-slate-600 text-[10px]">{saverName}</div>
+							<div className={cn(
+								"absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-36 pointer-events-none border",
+								dayData.paid
+									? "bg-emerald-500 text-white border-emerald-600"
+									: dayData.isInDebt && !dayData.paid
+										? "bg-red-500 text-white border-red-600"
+										: dayData.isDebtPayment
+											? "bg-amber-500 text-white border-amber-600"
+											: "bg-slate-700 text-white border-slate-800"
+							)}>
+								<div className="font-semibold mb-1">Dia {dayData.day}</div>
+								<div className="text-emerald-100 text-[10px]">{saverName}</div>
 								<div className={cn(
 									"mt-1 font-medium",
 									dayData.isDebtPayment
-										? "text-amber-600"
+										? "text-amber-100"
 										: dayData.isInDebt && !dayData.paid
-											? "text-red-600"
+											? "text-red-100"
 											: dayData.paid
-												? "text-emerald-600"
-												: "text-slate-500"
+												? "text-emerald-100"
+												: "text-slate-300"
 								)}>
 									{dayData.isDebtPayment
 										? `Pagamento Dívida: ${dayData.amount || 0} MZN`
