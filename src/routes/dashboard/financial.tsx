@@ -26,6 +26,7 @@ import {
 	useFinancialSummary,
 	useTransactions,
 } from "#/features/financial";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
 
 export const Route = createFileRoute("/dashboard/financial")({
 	component: FinancialDashboard,
@@ -42,18 +43,7 @@ function FinancialDashboard() {
 		});
 	const { data: cashFlow, isLoading: cashFlowLoading } = useCashFlow();
 
-	const sidebarItems = [
-		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
-		{ label: "Gestão", icon: Users, href: "/dashboard/savers" },
-		{
-			label: "Financeiro",
-			icon: Wallet,
-			href: "/dashboard/financial",
-			isActive: true,
-		},
-		{ label: "Relatórios", icon: TrendingUp, href: "/dashboard/reports" },
-		{ label: "Configurações", icon: Wallet, href: "/dashboard/settings" },
-	];
+	const sidebarItems = getDashboardSidebar("/dashboard/financial");
 
 	const typeFilters = [
 		{ id: "income", label: "Receitas" },
@@ -129,7 +119,7 @@ function FinancialDashboard() {
 					className={cn(
 						"font-mono text-sm font-bold",
 						row.type === "income" || row.type === "deposit"
-							? "text-emerald-600"
+							? "text-emerald-500"
 							: "text-red-600",
 					)}
 				>
@@ -170,10 +160,6 @@ function FinancialDashboard() {
 				<Header
 					title="Gestão Financeira"
 					description="Visão completa das transações e fluxo de caixa"
-					breadcrumbs={[
-						{ label: "Dashboard", href: "/dashboard/overview" },
-						{ label: "Financeiro" },
-					]}
 					rightContent={
 						<div className="flex items-center gap-2">
 							<Button
@@ -197,7 +183,7 @@ function FinancialDashboard() {
 					}
 				/>
 
-				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto">
+				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 max-w-7xl w-full mx-auto">
 					{/* KPI Cards */}
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 						{kpiData.map((kpi) => (
@@ -206,7 +192,7 @@ function FinancialDashboard() {
 					</div>
 
 					{/* Filters */}
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
 						<div>
 							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 								Filtros
@@ -255,7 +241,7 @@ function FinancialDashboard() {
 								<div className="h-64 bg-slate-50 rounded-lg animate-pulse" />
 							) : (
 								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
-									<div className="w-full space-y-3">
+									<div className="w-full space-y-4">
 										{cashFlow?.map((item) => (
 											<div key={item.month} className="flex items-center gap-3">
 												<span className="text-xs text-slate-500 w-8">
@@ -263,13 +249,13 @@ function FinancialDashboard() {
 												</span>
 												<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
 													<div
-														className="h-full bg-slate-900 rounded-full transition-all duration-300 hover:bg-slate-800"
+														className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-400"
 														style={{
 															width: `${(item.balance / 500000) * 100}%`,
 														}}
 													/>
 												</div>
-												<span className="text-xs font-semibold text-slate-700 w-20">
+												<span className="text-xs font-semibold text-slate-900 w-20">
 													{item.balance.toLocaleString()}k
 												</span>
 											</div>

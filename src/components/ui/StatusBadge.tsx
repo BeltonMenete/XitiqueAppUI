@@ -52,7 +52,7 @@ export function DebtBadge({
 }: {
 	children?: ReactNode;
 }) {
-	return <StatusBadge status="error">{children}</StatusBadge>;
+	return <StatusBadge status="debt">{children}</StatusBadge>;
 }
 
 export function ActiveBadge({ children = "Activo" }: { children?: ReactNode }) {

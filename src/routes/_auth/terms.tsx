@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, FileText, ShieldAlert } from "lucide-react";
 import { AuthImagePanel } from "#/components/AuthImagePanel";
 // Caminho atualizado para a pasta lib/terms.json
@@ -17,6 +17,18 @@ const iconMap = {
 };
 
 function TermsAndConditions() {
+	const navigate = useNavigate();
+	const search = useSearch({ from: "/_auth/terms" });
+	const accountType = search.type as "organization" | "individual" | undefined;
+
+	const handleAcceptTerms = () => {
+		if (accountType === "individual") {
+			navigate({ to: "/client/step-0" });
+		} else {
+			navigate({ to: "/organization/step-1" });
+		}
+	};
+
 	return (
 		<div className="login-bg min-h-screen flex items-center justify-center p-4 overflow-hidden">
 			<div className="relative w-full max-w-4xl">
@@ -91,12 +103,13 @@ function TermsAndConditions() {
 
 						{/* Ação Principal */}
 						<div className="pt-1">
-							<Link
-								to="/organization/step-1"
+							<button
+								type="button"
+								onClick={handleAcceptTerms}
 								className="w-full py-3 rounded-2xl text-white font-semibold text-center text-sm md:text-base bg-(--color-mint-leaf-500) hover:bg-(--color-mint-leaf-600) transition-all duration-300 active:scale-[0.99] shadow-md hover:shadow-lg flex items-center justify-center cursor-pointer"
 							>
 								Li e aceito os Termos
-							</Link>
+							</button>
 						</div>
 
 						{/* Rodapé */}

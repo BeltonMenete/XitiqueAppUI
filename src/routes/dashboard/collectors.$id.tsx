@@ -147,7 +147,7 @@ function CollectorDetails() {
 													<h2 className="text-2xl font-bold text-slate-900">
 														{collector?.name || "Cobrador"}
 													</h2>
-													<span className="px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-full text-xs font-semibold uppercase tracking-wider">
+													<span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-xs font-semibold uppercase tracking-wider">
 														Ativo
 													</span>
 												</div>
@@ -176,7 +176,7 @@ function CollectorDetails() {
 													<span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">
 														{collector?.clients || 0} clientes
 													</span>
-													<span className="px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-full text-xs font-semibold flex items-center gap-1">
+													<span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-xs font-semibold flex items-center gap-1">
 														<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
 														Último login: Recentemente
 													</span>
@@ -261,8 +261,8 @@ function CollectorDetails() {
 									className={cn(
 										"pb-4 px-2 whitespace-nowrap text-sm transition-all border-b-2",
 										activeTab === tab.id
-											? "border-emerald-600 text-emerald-600 font-bold"
-											: "border-transparent text-slate-500 hover:text-emerald-600",
+											? "border-emerald-500 text-emerald-500 font-bold"
+											: "border-transparent text-slate-500 hover:text-emerald-500",
 									)}
 								>
 									{tab.label}
@@ -282,7 +282,7 @@ function CollectorDetails() {
 								value="12.600 MZN"
 								subtext="Registado no Sistema: 12.600 MZN"
 								icon={Calendar}
-								color="text-emerald-600 bg-emerald-50 border-emerald-100"
+								color="text-emerald-500 bg-emerald-50 border-emerald-100"
 								trend={{ value: "Conforme", isPositive: true }}
 							/>
 							<KPICard
@@ -290,7 +290,7 @@ function CollectorDetails() {
 								value="125.000 MZN"
 								subtext="↑12% vs mês passado"
 								icon={TrendingUp}
-								color="text-emerald-600 bg-emerald-50 border-emerald-100"
+								color="text-emerald-500 bg-emerald-50 border-emerald-100"
 								trend={{ value: "12%", isPositive: true }}
 							/>
 							<KPICard
@@ -320,7 +320,7 @@ function CollectorDetails() {
 										</h4>
 										<button
 											type="button"
-											className="text-emerald-600 hover:underline text-sm font-bold"
+											className="text-emerald-500 hover:underline text-sm font-bold"
 										>
 											Ver Tudo
 										</button>
@@ -344,7 +344,7 @@ function CollectorDetails() {
 													>
 														<td className="px-6 py-3">
 															<div className="flex items-center gap-3">
-																<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-xs">
+																<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-500 font-bold text-xs">
 																	{activity.initials}
 																</div>
 																<span className="text-sm font-medium text-slate-900">
@@ -366,7 +366,7 @@ function CollectorDetails() {
 																className={cn(
 																	"px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
 																	activity.status === "synchronized"
-																		? "bg-emerald-500/10 text-emerald-600"
+																		? "bg-emerald-500/10 text-emerald-500"
 																		: "bg-orange-500/10 text-orange-600",
 																)}
 															>

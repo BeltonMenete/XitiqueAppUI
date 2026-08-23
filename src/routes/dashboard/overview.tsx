@@ -5,8 +5,6 @@ import {
 	Handshake,
 	Info,
 	Plus,
-	Settings,
-	Star,
 	TrendingUp,
 	Users,
 	Wallet,
@@ -20,6 +18,7 @@ import { Card, CardContent } from "#/components/ui/Card";
 import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { SupportSection } from "#/components/ui/SupportSection";
 import { cn } from "#/lib/design-system";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
 
 export const Route = createFileRoute("/dashboard/overview")({
 	component: OrganizationDashboard,
@@ -27,19 +26,7 @@ export const Route = createFileRoute("/dashboard/overview")({
 
 function OrganizationDashboard() {
 	const [searchTerm, setSearchTerm] = useState("");
-
-	const sidebarItems = [
-		{
-			label: "Painel",
-			icon: TrendingUp,
-			href: "/dashboard/overview",
-			isActive: true,
-		},
-		{ label: "Gestão", icon: Users, href: "/dashboard/savers" },
-		{ label: "Financeiro", icon: Wallet, href: "/dashboard/financial" },
-		{ label: "Relatórios", icon: Info, href: "/dashboard/reports" },
-		{ label: "Configurações", icon: Settings, href: "/dashboard/settings" },
-	];
+	const sidebarItems = getDashboardSidebar("/dashboard/overview");
 
 	const kpiData = [
 		{
@@ -49,7 +36,7 @@ function OrganizationDashboard() {
 			borderColor: "success" as const,
 			clickable: true,
 			expandedContent: (
-				<div className="space-y-3">
+				<div className="space-y-4">
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Meta Mensal</span>
 						<span className="font-semibold text-slate-900">500.000 MZN</span>
@@ -62,7 +49,7 @@ function OrganizationDashboard() {
 					</div>
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Progresso</span>
-						<span className="font-semibold text-emerald-600">90%</span>
+						<span className="font-semibold text-emerald-500">90%</span>
 					</div>
 					<Button size="sm" variant="outline" className="w-full mt-2">
 						Ver Relatório Detalhado
@@ -77,7 +64,7 @@ function OrganizationDashboard() {
 			borderColor: "warning" as const,
 			clickable: true,
 			expandedContent: (
-				<div className="space-y-3">
+				<div className="space-y-4">
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Meta de Comissão</span>
 						<span className="font-semibold text-slate-900">50.000 MZN</span>
@@ -105,7 +92,7 @@ function OrganizationDashboard() {
 			borderColor: "primary" as const,
 			clickable: true,
 			expandedContent: (
-				<div className="space-y-3">
+				<div className="space-y-4">
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Total Solicitado</span>
 						<span className="font-semibold text-slate-900">85.000 MZN</span>
@@ -116,7 +103,7 @@ function OrganizationDashboard() {
 					</div>
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Taxa de Aprovação</span>
-						<span className="font-semibold text-emerald-600">94%</span>
+						<span className="font-semibold text-emerald-500">94%</span>
 					</div>
 					<Button size="sm" variant="outline" className="w-full mt-2">
 						Gerir Empréstimos
@@ -131,7 +118,7 @@ function OrganizationDashboard() {
 			borderColor: "error" as const,
 			clickable: true,
 			expandedContent: (
-				<div className="space-y-3">
+				<div className="space-y-4">
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Última Reconciliação</span>
 						<span className="font-semibold text-slate-900">Há 3 dias</span>
@@ -164,9 +151,9 @@ function OrganizationDashboard() {
 					searchPlaceholder="Pesquisar Ticantes..."
 				/>
 
-				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
+				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{/* Action Banner */}
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-400 shadow-md hover:shadow-lg transition-shadow duration-300">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
 						<div>
 							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 								Painel de Organização
@@ -197,14 +184,14 @@ function OrganizationDashboard() {
 										<h3 className="text-sm font-semibold text-slate-900">
 											Evolução de Colectas
 										</h3>
-										<select className="text-xs border border-slate-400 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900">
+										<select className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
 											<option>Últimos 6 meses</option>
 											<option>Último ano</option>
 										</select>
 									</div>
 									{/* Chart placeholder - CSS-only simple bar chart */}
-									<div className="h-64 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-400 p-4">
-										<div className="w-full space-y-3">
+									<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-200 p-4">
+										<div className="w-full space-y-4">
 											{[
 												{ label: "Jan", value: 75 },
 												{ label: "Fev", value: 82 },
@@ -217,16 +204,16 @@ function OrganizationDashboard() {
 													key={item.label}
 													className="flex items-center gap-3"
 												>
-													<span className="text-xs text-slate-700 w-8">
+													<span className="text-xs text-slate-600 w-8 font-medium">
 														{item.label}
 													</span>
-													<div className="flex-1 h-4 bg-slate-300 rounded-full overflow-hidden">
+													<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
 														<div
-															className="h-full bg-slate-900 rounded-full transition-all duration-300 hover:bg-slate-800"
+															className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-400"
 															style={{ width: `${item.value}%` }}
 														/>
 													</div>
-													<span className="text-xs font-semibold text-slate-800 w-10">
+													<span className="text-xs font-semibold text-slate-900 w-10">
 														{item.value}%
 													</span>
 												</div>
@@ -244,7 +231,7 @@ function OrganizationDashboard() {
 									<h3 className="text-sm font-semibold text-slate-900 mb-4">
 										Actividade Recente
 									</h3>
-									<div className="space-y-3">
+									<div className="space-y-4">
 										{[
 											{
 												id: "1",
@@ -336,7 +323,7 @@ function OrganizationDashboard() {
 									<h3 className="text-sm font-semibold text-slate-900 mb-4">
 										Visão Geral de Empréstimos
 									</h3>
-									<div className="space-y-3">
+									<div className="space-y-4">
 										{[
 											{
 												id: "1",
@@ -400,7 +387,11 @@ function OrganizationDashboard() {
 					</div>
 
 					{/* Support Section */}
-					<SupportSection />
+					<SupportSection
+						performanceTitle="Desempenho da Organização"
+						performanceText="Este mês, a organização atingiu 94% de eficiência nas coletas. Mantenha o bom trabalho!"
+						performanceAction="Ver Relatório Detalhado"
+					/>
 				</main>
 			</div>
 		</DashboardLayout>

@@ -18,6 +18,7 @@ import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { SupportSection } from "#/components/ui/SupportSection";
 import { cn } from "#/lib/design-system";
 import { useSettings } from "#/features/settings";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
 
 export const Route = createFileRoute("/dashboard/settings")({
 	component: SettingsPage,
@@ -53,18 +54,7 @@ function SettingsPage() {
 		overdueLoanAlert: settings?.notifications.overdueLoanAlert || false,
 	});
 
-	const sidebarItems = [
-		{ label: "Painel", icon: Building2, href: "/dashboard/overview" },
-		{ label: "Gestão", icon: Users, href: "/dashboard/savers" },
-		{ label: "Financeiro", icon: CreditCard, href: "/dashboard/financial" },
-		{ label: "Relatórios", icon: ShieldCheck, href: "/dashboard/reports" },
-		{
-			label: "Configurações",
-			icon: ShieldCheck,
-			href: "/dashboard/settings",
-			isActive: true,
-		},
-	];
+	const sidebarItems = getDashboardSidebar("/dashboard/settings");
 
 	const tabs = [
 		{ id: "organization", label: "Organização", icon: Building2 },
@@ -104,10 +94,6 @@ function SettingsPage() {
 				<Header
 					title="Configurações"
 					description="Gerencie as configurações da sua organização"
-					breadcrumbs={[
-						{ label: "Dashboard", href: "/dashboard/overview" },
-						{ label: "Configurações" },
-					]}
 					rightContent={
 						<Button
 							size="sm"
@@ -120,7 +106,7 @@ function SettingsPage() {
 					}
 				/>
 
-				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto">
+				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 max-w-7xl w-full mx-auto">
 					{/* Tab Navigation */}
 					<nav className="flex items-center border-b border-slate-200 gap-1 overflow-x-auto">
 						{tabs.map((tab) => (

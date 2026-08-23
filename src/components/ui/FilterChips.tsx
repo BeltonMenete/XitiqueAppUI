@@ -28,10 +28,10 @@ export function FilterChip({
 
 	const variantStyles = {
 		outlined: selected
-			? "bg-emerald-600 text-white border-emerald-600"
+			? "bg-emerald-500 text-white border-emerald-500"
 			: "bg-white text-slate-600 border-slate-300 hover:border-slate-400",
 		filled: selected
-			? "bg-emerald-600 text-white"
+			? "bg-emerald-500 text-white"
 			: "bg-slate-100 text-slate-600",
 	};
 

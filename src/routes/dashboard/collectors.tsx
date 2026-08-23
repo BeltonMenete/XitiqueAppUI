@@ -182,7 +182,7 @@ function CollectorsManagement() {
 									? "bg-emerald-500"
 									: row.status === "suspended"
 										? "bg-red-500"
-										: "bg-slate-400",
+										: "bg-slate-300",
 							)}
 						/>
 					</div>
@@ -224,7 +224,7 @@ function CollectorsManagement() {
 					className={cn(
 						"font-mono text-sm",
 						Number(value) > 0
-							? "text-emerald-600"
+							? "text-emerald-500"
 							: Number(value) < 0
 								? "text-red-600"
 								: "text-slate-500",
@@ -373,7 +373,7 @@ function CollectorsManagement() {
 							icon: <Phone size={20} />,
 							label: "Nova Colecta",
 							onClick: () => console.log("Nova Colecta"),
-							color: "bg-emerald-600 text-white",
+							color: "bg-emerald-500 text-white",
 						},
 						{
 							icon: <MapPin size={20} />,

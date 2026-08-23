@@ -26,7 +26,7 @@ export const KPICard = memo(function KPICard({
 	value,
 	subtext,
 	icon: Icon,
-	color = "text-emerald-600 bg-emerald-50 border-emerald-100",
+	color = "text-emerald-500 bg-emerald-50 border-emerald-100",
 	isDebt = false,
 	trend,
 	className = "",
@@ -88,7 +88,7 @@ export const KPICard = memo(function KPICard({
 								<span
 									className={cn(
 										"text-xs font-semibold",
-										trend.isPositive ? "text-emerald-600" : "text-red-600",
+										trend.isPositive ? "text-emerald-500" : "text-red-600",
 									)}
 								>
 									{trend.isPositive ? "+" : ""}

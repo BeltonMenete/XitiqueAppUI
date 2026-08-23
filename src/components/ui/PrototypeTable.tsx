@@ -164,7 +164,7 @@ export function PrototypeTable({
 									className={cn(
 										"px-3 py-2 rounded",
 										pagination.currentPage === page
-											? "bg-slate-900 text-white font-bold"
+											? "bg-[#3391C2] text-white font-bold"
 											: "hover:bg-slate-100",
 									)}
 									onClick={() => pagination.onPageChange(page)}

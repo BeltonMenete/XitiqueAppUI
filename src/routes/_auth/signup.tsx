@@ -20,7 +20,7 @@ function Signup() {
 
 	const handleSelectAccount = (type: AccountType) => {
 		setAccountType(type);
-		navigate({ to: "/terms" });
+		navigate({ to: "/terms", search: { type } });
 	};
 
 	return (
@@ -45,19 +45,17 @@ function Signup() {
 				<button
 					type="button"
 					onClick={() => handleSelectAccount("organization")}
-					className={`w-full border-2 rounded-2xl p-4 text-left cursor-pointer group transition-all duration-300 ${
-						accountType === "organization"
+					className={`w-full border-2 rounded-2xl p-4 text-left cursor-pointer group transition-all duration-300 ${accountType === "organization"
 							? "border-(--color-mint-leaf-500) bg-gray-50/50 shadow-sm"
 							: "border-gray-100 hover:border-gray-300 hover:bg-gray-50/30"
-					}`}
+						}`}
 				>
 					<div className="flex items-start gap-3.5">
 						<div
-							className={`p-2.5 rounded-xl transition-colors ${
-								accountType === "organization"
+							className={`p-2.5 rounded-xl transition-colors ${accountType === "organization"
 									? "bg-(--color-mint-leaf-500) text-white"
 									: "bg-gray-100 text-gray-700 group-hover:bg-(--color-mint-leaf-500) group-hover:text-white"
-							}`}
+								}`}
 						>
 							<Building2 size={20} />
 						</div>
@@ -80,19 +78,17 @@ function Signup() {
 				<button
 					type="button"
 					onClick={() => handleSelectAccount("individual")}
-					className={`w-full border-2 rounded-2xl p-4 text-left cursor-pointer group transition-all duration-300 ${
-						accountType === "individual"
+					className={`w-full border-2 rounded-2xl p-4 text-left cursor-pointer group transition-all duration-300 ${accountType === "individual"
 							? "border-(--color-mint-leaf-500) bg-gray-50/50 shadow-sm"
 							: "border-gray-100 hover:border-gray-300 hover:bg-gray-50/30"
-					}`}
+						}`}
 				>
 					<div className="flex items-start gap-3.5">
 						<div
-							className={`p-2.5 rounded-xl transition-colors ${
-								accountType === "individual"
+							className={`p-2.5 rounded-xl transition-colors ${accountType === "individual"
 									? "bg-(--color-mint-leaf-500) text-white"
 									: "bg-gray-100 text-gray-700 group-hover:bg-(--color-mint-leaf-500) group-hover:text-white"
-							}`}
+								}`}
 						>
 							<CircleDollarSign size={20} />
 						</div>

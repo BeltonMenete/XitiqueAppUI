@@ -174,10 +174,10 @@ function SaverDetails() {
 											</p>
 										</div>
 										<div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-center min-w-[100px]">
-											<p className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider mb-1">
+											<p className="text-[10px] uppercase font-bold text-emerald-500 tracking-wider mb-1">
 												Poupado
 											</p>
-											<p className="font-mono text-emerald-600 font-bold">
+											<p className="font-mono text-emerald-500 font-bold">
 												{mockSaver.totalSaved}
 											</p>
 										</div>
@@ -214,7 +214,7 @@ function SaverDetails() {
 								className={cn(
 									"px-6 py-3 text-sm font-semibold border-b-2 transition-colors flex items-center gap-2",
 									activeTab === tab.id
-										? "text-emerald-600 border-emerald-600"
+										? "text-emerald-500 border-emerald-500"
 										: "text-slate-500 border-transparent hover:text-slate-700",
 								)}
 							>
@@ -242,7 +242,7 @@ function SaverDetails() {
 												day.status === "paid" && "bg-emerald-500 text-white",
 												day.status === "partial" && "bg-amber-500 text-white",
 												day.status === "unpaid" &&
-													"bg-slate-100 text-slate-400 border-2 border-slate-200",
+												"bg-slate-100 text-slate-400 border-2 border-slate-200",
 											)}
 										>
 											{day.status === "paid"
@@ -354,7 +354,7 @@ function SaverDetails() {
 													{transaction.status === "paid" ? (
 														<CheckCircle2
 															size={16}
-															className="text-emerald-600"
+															className="text-emerald-500"
 														/>
 													) : transaction.status === "partial" ? (
 														<AlertCircle size={16} className="text-amber-600" />
@@ -481,7 +481,7 @@ function SaverDetails() {
 											className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"
 										>
 											<div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-												<History size={16} className="text-emerald-600" />
+												<History size={16} className="text-emerald-500" />
 											</div>
 											<div className="flex-1">
 												<p className="text-xs font-medium text-slate-900">

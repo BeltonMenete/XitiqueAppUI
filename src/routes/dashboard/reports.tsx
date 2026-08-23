@@ -25,6 +25,7 @@ import { SupportSection } from "#/components/ui/SupportSection";
 import { TimeRangeSelector } from "#/components/ui/TimeRangeSelector";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { cn } from "#/lib/design-system";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
 
 export const Route = createFileRoute("/dashboard/reports")({
 	component: ReportsDashboard,
@@ -34,18 +35,7 @@ function ReportsDashboard() {
 	const [timeRange, setTimeRange] = useState("month");
 	const [activeTab, setActiveTab] = useState("overview");
 
-	const sidebarItems = [
-		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
-		{ label: "Gestão", icon: Users, href: "/dashboard/savers" },
-		{ label: "Financeiro", icon: Wallet, href: "/dashboard/financial" },
-		{
-			label: "Relatórios",
-			icon: FileText,
-			href: "/dashboard/reports",
-			isActive: true,
-		},
-		{ label: "Configurações", icon: Settings, href: "/dashboard/settings" },
-	];
+	const sidebarItems = getDashboardSidebar("/dashboard/reports");
 
 	const tabs = [
 		{ id: "overview", label: "Visão Geral", icon: BarChart3 },
@@ -90,10 +80,6 @@ function ReportsDashboard() {
 				<Header
 					title="Relatórios"
 					description="Análise detalhada de desempenho e métricas"
-					breadcrumbs={[
-						{ label: "Dashboard", href: "/dashboard/overview" },
-						{ label: "Relatórios" },
-					]}
 					rightContent={
 						<div className="flex items-center gap-2">
 							<TimeRangeSelector value={timeRange} onChange={setTimeRange} />
@@ -108,7 +94,7 @@ function ReportsDashboard() {
 					}
 				/>
 
-				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto">
+				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 max-w-7xl w-full mx-auto">
 					{/* Tab Navigation */}
 					<nav className="flex items-center border-b border-slate-200 gap-1 overflow-x-auto">
 						{tabs.map((tab) => (
@@ -179,7 +165,7 @@ function ReportsDashboard() {
 							</CardHeader>
 							<CardContent>
 								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
-									<div className="w-full space-y-3">
+									<div className="w-full space-y-4">
 										{[
 											{ label: "Jan", value: 320 },
 											{ label: "Fev", value: 380 },
@@ -189,16 +175,16 @@ function ReportsDashboard() {
 											{ label: "Jun", value: 480 },
 										].map((item) => (
 											<div key={item.label} className="flex items-center gap-3">
-												<span className="text-xs text-slate-500 w-8">
+												<span className="text-xs text-slate-600 w-8 font-medium">
 													{item.label}
 												</span>
 												<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
 													<div
-														className="h-full bg-slate-900 rounded-full transition-all duration-300 hover:bg-slate-800"
+														className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-400"
 														style={{ width: `${(item.value / 500) * 100}%` }}
 													/>
 												</div>
-												<span className="text-xs font-semibold text-slate-700 w-12">
+												<span className="text-xs font-semibold text-slate-900 w-12">
 													{item.value}k
 												</span>
 											</div>
@@ -223,18 +209,18 @@ function ReportsDashboard() {
 							</CardHeader>
 							<CardContent>
 								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
-									<div className="w-full space-y-3">
+									<div className="w-full space-y-4">
 										{[
-											{ label: "Colectas", value: 60, color: "bg-slate-900" },
+											{ label: "Colectas", value: 60, color: "bg-emerald-500" },
 											{
 												label: "Empréstimos",
 												value: 25,
 												color: "bg-amber-500",
 											},
-											{ label: "Outros", value: 15, color: "bg-slate-400" },
+											{ label: "Outros", value: 15, color: "bg-slate-300" },
 										].map((item) => (
 											<div key={item.label} className="flex items-center gap-3">
-												<span className="text-xs text-slate-500 w-20">
+												<span className="text-xs text-slate-600 w-20 font-medium">
 													{item.label}
 												</span>
 												<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
@@ -243,7 +229,7 @@ function ReportsDashboard() {
 														style={{ width: `${item.value}%` }}
 													/>
 												</div>
-												<span className="text-xs font-semibold text-slate-700 w-8">
+												<span className="text-xs font-semibold text-slate-900 w-8">
 													{item.value}%
 												</span>
 											</div>
@@ -300,7 +286,7 @@ function ReportsDashboard() {
 										key: "profit",
 										header: "Lucro",
 										render: (value) => (
-											<span className="text-sm font-medium text-emerald-600">
+											<span className="text-sm font-medium text-emerald-500">
 												{value as string}
 											</span>
 										),
@@ -309,7 +295,7 @@ function ReportsDashboard() {
 										key: "growth",
 										header: "Crescimento",
 										render: (value) => (
-											<span className="text-sm text-emerald-600">
+											<span className="text-sm text-emerald-500">
 												{value as string}
 											</span>
 										),

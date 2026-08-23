@@ -10,12 +10,21 @@ export const colors = {
 		darker: "#1e293b", // slate-800
 	},
 
-	// Secondary (Emerald - accent)
+	// Secondary (Emerald - accent) - Lightened
 	secondary: {
-		DEFAULT: "#059669", // emerald-600
-		light: "#10b981", // emerald-500
-		dark: "#047857", // emerald-700
-		darker: "#065f46", // emerald-800
+		DEFAULT: "#10b981", // emerald-500 (lightened from emerald-600)
+		light: "#34d399", // emerald-400
+		dark: "#059669", // emerald-600 (lightened from emerald-700)
+		darker: "#047857", // emerald-700 (lightened from emerald-800)
+	},
+
+	// Tertiary (Blue - new accent color #3391C2)
+	tertiary: {
+		DEFAULT: "#3391C2", // Primary blue
+		light: "#4AA3D0", // Light blue
+		dark: "#2A7A9E", // Dark blue
+		lighter: "#6BB4DD", // Lighter blue
+		darker: "#1F637E", // Darker blue
 	},
 
 	// Backgrounds
@@ -32,6 +41,7 @@ export const colors = {
 		warning: "#f59e0b", // amber-500
 		error: "#ef4444", // red-500
 		info: "#3b82f6", // blue-500
+		inactive: "#3391C2", // new blue for inactive status
 	},
 
 	// Text Colors
@@ -161,13 +171,15 @@ export const tailwindClasses = {
 	warning: "text-amber-500 bg-amber-50 border-amber-200",
 	error: "text-red-500 bg-red-50 border-red-200",
 	info: "text-blue-500 bg-blue-50 border-blue-200",
+	inactive: "text-[#3391C2] bg-[#3391C2]/10 border-[#3391C2]/20",
 
 	// Button variants
-	buttonPrimary: "bg-emerald-600 text-white hover:bg-emerald-700",
+	buttonPrimary: "bg-emerald-500 text-white hover:bg-emerald-600",
 	buttonSecondary: "bg-slate-100 text-slate-700 hover:bg-slate-200",
 	buttonDanger: "bg-red-500 text-white hover:bg-red-600",
 	buttonGhost: "bg-transparent text-slate-600 hover:bg-slate-100",
 	buttonOutline: "border border-slate-300 text-slate-700 hover:bg-slate-50",
+	buttonInactive: "bg-[#3391C2] text-white hover:bg-[#2A7A9E]",
 
 	// Card styles
 	card: "bg-white border border-slate-200 rounded-lg shadow-sm",
@@ -199,7 +211,8 @@ export type StatusType =
 	| "info"
 	| "pending"
 	| "active"
-	| "inactive";
+	| "inactive"
+	| "debt";
 
 export function getStatusColor(status: StatusType): string {
 	switch (status) {
@@ -210,8 +223,10 @@ export function getStatusColor(status: StatusType): string {
 		case "pending":
 			return tailwindClasses.warning;
 		case "error":
-		case "inactive":
+		case "debt":
 			return tailwindClasses.error;
+		case "inactive":
+			return tailwindClasses.inactive;
 		case "info":
 			return tailwindClasses.info;
 		default:
@@ -225,7 +240,8 @@ export type ButtonVariant =
 	| "secondary"
 	| "danger"
 	| "ghost"
-	| "outline";
+	| "outline"
+	| "inactive";
 
 export function getButtonVariant(variant: ButtonVariant): string {
 	switch (variant) {
@@ -239,6 +255,8 @@ export function getButtonVariant(variant: ButtonVariant): string {
 			return tailwindClasses.buttonGhost;
 		case "outline":
 			return tailwindClasses.buttonOutline;
+		case "inactive":
+			return tailwindClasses.buttonInactive;
 		default:
 			return tailwindClasses.buttonPrimary;
 	}
