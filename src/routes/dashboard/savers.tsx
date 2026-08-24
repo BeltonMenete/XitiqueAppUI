@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	AlertCircle,
 	Calendar,
@@ -31,6 +31,7 @@ import { FilterChips } from "#/components/ui/FilterChips";
 import { KPICard } from "#/components/ui/KPICard";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { ProgressCircle } from "#/components/ui/ProgressCircle";
+import { QuickActionMenu } from "#/components/interactive/QuickActionMenu";
 import {
 	ActiveBadge,
 	DebtBadge,
@@ -300,6 +301,8 @@ interface SaversCalendarViewProps {
 			isInDebt?: boolean;
 		},
 	) => void;
+	onDepositClick?: (saver: Saver) => void;
+	onLoanClick?: (saver: Saver) => void;
 }
 
 function SaversCalendarView({
@@ -308,6 +311,8 @@ function SaversCalendarView({
 	selectedMonth,
 	onMonthChange,
 	onDayClick,
+	onDepositClick,
+	onLoanClick,
 }: SaversCalendarViewProps) {
 	const months = [
 		"Jan 2024",
@@ -382,6 +387,9 @@ function SaversCalendarView({
 								<th className="px-2 py-0.5 text-[10px] text-slate-500 font-semibold w-20">
 									ESTADO
 								</th>
+								<th className="px-2 py-0.5 text-[10px] text-slate-500 font-semibold w-24">
+									AÇÕES
+								</th>
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-slate-200">
@@ -425,6 +433,27 @@ function SaversCalendarView({
 											{saver.status === "inactive" && <InactiveBadge />}
 											{saver.currentDebt > 0 && <DebtBadge />}
 										</div>
+									</td>
+									<td className="px-2 py-0.5">
+										<QuickActionMenu
+											actions={[
+												{
+													id: "view-details",
+													label: "Ver Detalhes",
+													onClick: () => onRowClick(saver),
+												},
+												{
+													id: "deposit",
+													label: "Registar Depósito",
+													onClick: () => onDepositClick?.(saver),
+												},
+												{
+													id: "loan",
+													label: "Solicitar Empréstimo",
+													onClick: () => onLoanClick?.(saver),
+												},
+											]}
+										/>
 									</td>
 								</tr>
 							))}
@@ -1205,6 +1234,7 @@ const mockSavers: Saver[] = [
 ];
 
 function SaversManagement() {
+	const navigate = useNavigate();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedMonth, setSelectedMonth] = useState("Maio 2024");
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -1352,7 +1382,7 @@ function SaversManagement() {
 	const renderExpandedRow = (row: Saver) => (
 		<ExpandableRowContent
 			title={`Detalhes de ${row.name}`}
-			onViewFullDetails={() => console.log("Navigate to full details:", row.id)}
+			onViewFullDetails={() => navigate({ to: '/dashboard/savers/' + String(row.id) })}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 				<div className="space-y-2">
@@ -1589,7 +1619,7 @@ function SaversManagement() {
 											columns={columns}
 											searchable={true}
 											searchPlaceholder="Pesquisar por nome ou número de cartão..."
-											onRowClick={(row) => console.log("View saver:", row)}
+											onRowClick={(row) => navigate({ to: '/dashboard/savers/' + String(row.id) })}
 											emptyMessage="Nenhum ticante encontrado"
 											expandable={true}
 											renderExpandedRow={renderExpandedRow}
@@ -1606,7 +1636,7 @@ function SaversManagement() {
 					) : (
 						<SaversCalendarView
 							savers={filteredSavers}
-							onRowClick={(saver) => console.log("View saver:", saver)}
+							onRowClick={(saver) => navigate({ to: '/dashboard/savers/' + String(saver.id) })}
 							selectedMonth={selectedMonth}
 							onMonthChange={setSelectedMonth}
 							onDayClick={(saver, dayData) => {
@@ -1625,6 +1655,14 @@ function SaversManagement() {
 									isDebtPayment: dayData.isDebtPayment,
 								});
 								setIsDayActionModalOpen(true);
+							}}
+							onDepositClick={(saver) => {
+								setSelectedSaver(saver);
+								setIsDepositModalOpen(true);
+							}}
+							onLoanClick={(saver) => {
+								setSelectedSaver(saver);
+								setIsLoanModalOpen(true);
 							}}
 						/>
 					)}

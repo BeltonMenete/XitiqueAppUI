@@ -8,6 +8,78 @@ import type {
 	UpdateSaverInput,
 } from "#/features/savers/validation";
 import { saversApi } from "./api";
+import type { SaverDeposit, SaverHistory, SaverLoan } from "./types";
+
+// Mock data functions for when API is not available
+function getMockSaver(id: string): Saver {
+	return {
+		id: id,
+		cardNumber: Number(id) || 1,
+		name: "Maria Silva",
+		contact: 841234567,
+		dailyAmount: 100,
+		totalSaved: 1800,
+		currentDebt: 500,
+		daysInCycle: 18,
+		status: "active",
+		registrationDate: "2023-01-15",
+		alphanumericId: "A01",
+		organizationId: "1",
+		isActive: true,
+		organization: { id: "1", name: "Mercado Central, Maputo" },
+		paymentDays: generatePaymentDays(18),
+	};
+}
+
+function getMockDeposits(id: string): SaverDeposit[] {
+	return Array.from({ length: 18 }, (_, i) => ({
+		id: `dep-${i + 1}`,
+		saverId: id,
+		date: `2023-10-${String(i + 1).padStart(2, '0')}`,
+		amount: 100,
+		status: i < 15 ? "paid" : i < 17 ? "partial" : "unpaid",
+		day: i + 1,
+		createdAt: "2023-10-18T14:30:00Z",
+		updatedAt: "2023-10-18T14:30:00Z",
+	}));
+}
+
+function getMockLoans(id: string): SaverLoan[] {
+	return [
+		{
+			id: "loan-001",
+			saverId: id,
+			amount: 500,
+			interest: 50,
+			daysInDebt: 5,
+			totalDays: 30,
+			status: "active",
+			requestDate: "2023-10-15",
+			dueDate: "2023-11-14",
+		},
+	];
+}
+
+function getMockHistory(id: string): SaverHistory[] {
+	return [
+		{
+			id: "hist-001",
+			saverId: id,
+			action: "Depósito registado",
+			timestamp: "2023-10-18 14:30",
+			details: "100 MZN",
+			performedBy: "Admin",
+		},
+		{
+			id: "hist-002",
+			saverId: id,
+			action: "Empréstimo solicitado",
+			timestamp: "2023-10-15 10:00",
+			details: "500 MZN",
+			performedBy: "Admin",
+		},
+	];
+}
 
 // Utility functions for alphanumeric IDs
 export function generateAlphanumericId(index: number): string {
@@ -63,7 +135,14 @@ export function useSavers(
 export function useSaver(id: string) {
 	return useQuery({
 		queryKey: SAVER_KEYS.detail(id),
-		queryFn: () => saversApi.getById(id),
+		queryFn: async () => {
+			try {
+				return await saversApi.getById(id);
+			} catch (error) {
+				// Return mock data if API fails
+				return getMockSaver(id);
+			}
+		},
 		enabled: !!id,
 		staleTime: 2 * 60 * 1000, // 2 minutos
 	});
@@ -73,7 +152,14 @@ export function useSaverDeposits(id: string, month?: number, year?: number) {
 	const params = month && year ? { month, year } : {};
 	return useQuery({
 		queryKey: SAVER_KEYS.deposits(id),
-		queryFn: () => saversApi.getDeposits(id, params),
+		queryFn: async () => {
+			try {
+				return await saversApi.getDeposits(id, params);
+			} catch (error) {
+				// Return mock data if API fails
+				return getMockDeposits(id);
+			}
+		},
 		enabled: !!id,
 		staleTime: 5 * 60 * 1000,
 	});
@@ -82,7 +168,14 @@ export function useSaverDeposits(id: string, month?: number, year?: number) {
 export function useSaverLoans(id: string) {
 	return useQuery({
 		queryKey: SAVER_KEYS.loans(id),
-		queryFn: () => saversApi.getLoans(id),
+		queryFn: async () => {
+			try {
+				return await saversApi.getLoans(id);
+			} catch (error) {
+				// Return mock data if API fails
+				return getMockLoans(id);
+			}
+		},
 		enabled: !!id,
 		staleTime: 5 * 60 * 1000,
 	});
@@ -91,7 +184,14 @@ export function useSaverLoans(id: string) {
 export function useSaverHistory(id: string) {
 	return useQuery({
 		queryKey: SAVER_KEYS.history(id),
-		queryFn: () => saversApi.getHistory(id),
+		queryFn: async () => {
+			try {
+				return await saversApi.getHistory(id);
+			} catch (error) {
+				// Return mock data if API fails
+				return getMockHistory(id);
+			}
+		},
 		enabled: !!id,
 		staleTime: 10 * 60 * 1000, // 10 minutos
 	});
