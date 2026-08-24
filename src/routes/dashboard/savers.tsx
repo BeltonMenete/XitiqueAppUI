@@ -110,7 +110,7 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 			Dezembro: 11,
 		};
 
-		const parts = selectedMonth.split(" ");
+		const parts = _selectedMonth.split(" ");
 		const monthPart = parts[0];
 		const yearPart = parts[1] ? parseInt(parts[1], 10) : 2024;
 
