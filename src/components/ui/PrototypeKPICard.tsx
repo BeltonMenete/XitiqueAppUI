@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
 import { cn } from "#/lib/design-system";
 
 interface PrototypeKPICardProps {
@@ -65,17 +65,10 @@ export function PrototypeKPICard({
 				{title}
 			</span>
 			<div className="flex items-baseline gap-2">
-				<span
-					className={cn(
-						"text-2xl font-bold",
-						textColorMap[borderColor],
-					)}
-				>
+				<span className={cn("text-2xl font-bold", textColorMap[borderColor])}>
 					{value}
 				</span>
-				{subtext && (
-					<span className="text-xs text-slate-500">{subtext}</span>
-				)}
+				{subtext && <span className="text-xs text-slate-500">{subtext}</span>}
 			</div>
 			{icon && <div className="mt-2">{icon}</div>}
 			{expandedContent && clickable && (

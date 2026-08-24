@@ -1,5 +1,10 @@
-import { MessageCircle, Mail, Phone, ArrowRight, CheckCircle } from "lucide-react";
-import { cn } from "#/lib/design-system";
+import {
+	ArrowRight,
+	CheckCircle,
+	Mail,
+	MessageCircle,
+	Phone,
+} from "lucide-react";
 
 interface SupportSectionProps {
 	performanceTitle?: string;
@@ -22,7 +27,9 @@ export function SupportSection({
 						<CheckCircle size={120} />
 					</div>
 					<h3 className="text-xl font-bold mb-2">{performanceTitle}</h3>
-					<p className="text-sm text-emerald-50 mb-4 opacity-90">{performanceText}</p>
+					<p className="text-sm text-emerald-50 mb-4 opacity-90">
+						{performanceText}
+					</p>
 					<button
 						type="button"
 						className="flex items-center gap-2 font-bold border-b border-emerald-300 pb-1 hover:text-white hover:border-white transition-all"

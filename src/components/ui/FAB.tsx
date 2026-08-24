@@ -1,5 +1,5 @@
+import { Plus, X } from "lucide-react";
 import { useState } from "react";
-import { Plus, X, MapPin, Phone, PhoneCall } from "lucide-react";
 import { cn } from "#/lib/design-system";
 
 interface FABAction {
@@ -76,11 +76,7 @@ export function FAB({
 				)}
 				onClick={handleMainClick}
 			>
-				{isOpen && actions.length > 0 ? (
-					<X size={32} />
-				) : (
-					mainIcon
-				)}
+				{isOpen && actions.length > 0 ? <X size={32} /> : mainIcon}
 			</button>
 		</div>
 	);

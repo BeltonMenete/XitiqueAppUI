@@ -3,7 +3,6 @@ import {
 	BarChart3,
 	Calendar,
 	Download,
-	FileText,
 	Filter,
 	LineChart,
 	PieChart,
@@ -23,9 +22,8 @@ import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { PrototypeTable } from "#/components/ui/PrototypeTable";
 import { SupportSection } from "#/components/ui/SupportSection";
 import { TimeRangeSelector } from "#/components/ui/TimeRangeSelector";
-import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
-import { cn } from "#/lib/design-system";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
+import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/reports")({
 	component: ReportsDashboard,

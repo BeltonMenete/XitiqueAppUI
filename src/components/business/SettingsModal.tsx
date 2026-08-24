@@ -1,7 +1,7 @@
 import {
+	BellRing,
 	Building2,
 	Layers,
-	BellRing,
 	Ruler,
 	Trash2,
 	Upload,
@@ -385,7 +385,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 		},
 	];
 
-	const handleSave = () => {
+	const _handleSave = () => {
 		// Save logic would go here
 		onSave(formData);
 		onClose();

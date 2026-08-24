@@ -1,3 +1,4 @@
+import type { PaginationParams } from "#/features/savers/types";
 import type {
 	CashFlow,
 	CreateTransactionInput,
@@ -6,7 +7,6 @@ import type {
 	Transaction,
 	UpdateTransactionInput,
 } from "./types";
-import type { PaginationParams } from "#/features/savers/types";
 
 // Mock data
 const mockTransactions: Transaction[] = [

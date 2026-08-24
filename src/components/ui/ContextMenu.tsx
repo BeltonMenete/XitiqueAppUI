@@ -1,4 +1,3 @@
-import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { cn } from "#/lib/design-system";
 
@@ -54,7 +53,7 @@ export function ContextMenu({
 			ref={menuRef}
 			className={cn(
 				"fixed z-50 min-w-[200px] bg-white rounded-lg shadow-xl border border-slate-200 py-1",
-				className
+				className,
 			)}
 			style={positionStyle}
 		>
@@ -86,7 +85,7 @@ export function ContextMenuItem({
 			className={cn(
 				"w-full px-4 py-2 flex items-center gap-3 text-sm transition-colors",
 				"hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed",
-				danger ? "text-red-600 hover:bg-red-50" : "text-slate-700"
+				danger ? "text-red-600 hover:bg-red-50" : "text-slate-700",
 			)}
 		>
 			{icon && <span className="w-4 h-4">{icon}</span>}
@@ -99,7 +98,9 @@ interface ContextMenuSeparatorProps {
 	className?: string;
 }
 
-export function ContextMenuSeparator({ className = "" }: ContextMenuSeparatorProps) {
+export function ContextMenuSeparator({
+	className = "",
+}: ContextMenuSeparatorProps) {
 	return <div className={cn("h-px bg-slate-200 my-1", className)} />;
 }
 
@@ -108,9 +109,17 @@ interface ContextMenuHeaderProps {
 	className?: string;
 }
 
-export function ContextMenuHeader({ children, className = "" }: ContextMenuHeaderProps) {
+export function ContextMenuHeader({
+	children,
+	className = "",
+}: ContextMenuHeaderProps) {
 	return (
-		<div className={cn("px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider", className)}>
+		<div
+			className={cn(
+				"px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider",
+				className,
+			)}
+		>
 			{children}
 		</div>
 	);

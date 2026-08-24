@@ -1,8 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { cn } from "#/lib/design-system";
 import { APP_NAME } from "#/lib/constants";
+import { cn } from "#/lib/design-system";
 
 interface NavItem {
 	label: string;

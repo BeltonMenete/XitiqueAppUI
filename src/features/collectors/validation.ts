@@ -1,4 +1,4 @@
-import { minLength, object, string, optional } from "valibot";
+import { object, optional, string } from "valibot";
 
 export const createCollectorSchema = object({
 	name: optional(string("Nome é obrigatório")),

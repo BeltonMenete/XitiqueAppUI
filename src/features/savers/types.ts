@@ -17,9 +17,16 @@ export interface Saver {
 	status: "active" | "inactive";
 	organization?: {
 		id: string;
-		name: string
+		name: string;
 	};
-	paymentDays?: Array<{ day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }>;
+	paymentDays?: Array<{
+		day: number;
+		paid: boolean;
+		amount?: number;
+		collector?: string;
+		isDebtPayment?: boolean;
+		isInDebt?: boolean;
+	}>;
 }
 
 export interface SaverDeposit {

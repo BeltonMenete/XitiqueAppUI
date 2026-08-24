@@ -25,12 +25,12 @@ import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
 import { KPICard } from "#/components/ui/KPICard";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
-import { cn } from "#/lib/design-system";
 import {
+	useCollectionRecords,
 	useCollector,
 	useCollectorClients,
-	useCollectionRecords,
 } from "#/features/collectors";
+import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/collectors/$id")({
 	component: CollectorDetails,

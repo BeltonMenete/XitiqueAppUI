@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { KPICard } from "./KPICard";
+import { render, screen } from "@testing-library/react";
 import { Wallet } from "lucide-react";
+import { describe, expect, it } from "vitest";
+import { KPICard } from "./KPICard";
 
 describe("KPICard", () => {
 	describe("Rendering", () => {

@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	AlertCircle,
-	ArrowLeft,
 	Calendar,
 	CheckCircle2,
 	History,
@@ -18,18 +17,17 @@ import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
-import { Breadcrumbs } from "#/components/ui/Breadcrumbs";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
-import { DebtBadge } from "#/components/ui/StatusBadge";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { ProgressCircle } from "#/components/ui/ProgressCircle";
-import { cn } from "#/lib/design-system";
+import { DebtBadge } from "#/components/ui/StatusBadge";
 import {
 	useSaver,
 	useSaverDeposits,
-	useSaverLoans,
 	useSaverHistory,
+	useSaverLoans,
 } from "#/features/savers";
+import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/savers/$id")({
 	component: SaverDetails,
@@ -37,7 +35,7 @@ export const Route = createFileRoute("/dashboard/savers/$id")({
 
 function SaverDetails() {
 	const { id } = Route.useParams();
-	const navigate = useNavigate();
+	const _navigate = useNavigate();
 	const [activeTab, setActiveTab] = useState<
 		"card" | "statement" | "loans" | "history"
 	>("card");
@@ -242,7 +240,7 @@ function SaverDetails() {
 												day.status === "paid" && "bg-emerald-500 text-white",
 												day.status === "partial" && "bg-amber-500 text-white",
 												day.status === "unpaid" &&
-												"bg-slate-100 text-slate-400 border-2 border-slate-200",
+													"bg-slate-100 text-slate-400 border-2 border-slate-200",
 											)}
 										>
 											{day.status === "paid"

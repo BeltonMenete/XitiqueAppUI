@@ -1,14 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-	ArrowDownLeft,
-	ArrowUpRight,
-	Download,
-	Filter,
-	Plus,
-	TrendingUp,
-	Users,
-	Wallet,
-} from "lucide-react";
+import { Download, Filter, Plus, Wallet } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
@@ -20,13 +11,13 @@ import { FilterChips } from "#/components/ui/FilterChips";
 import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { PrototypeTable } from "#/components/ui/PrototypeTable";
 import { SupportSection } from "#/components/ui/SupportSection";
-import { cn } from "#/lib/design-system";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
 import {
 	useCashFlow,
 	useFinancialSummary,
 	useTransactions,
 } from "#/features/financial";
-import { getDashboardSidebar } from "#/config/dashboardSidebar";
+import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/financial")({
 	component: FinancialDashboard,
@@ -60,31 +51,31 @@ function FinancialDashboard() {
 
 	const kpiData = summary
 		? [
-			{
-				title: "Saldo Total",
-				value: `${summary.balance.toLocaleString()} MZN`,
-				subtext: "Disponível",
-				borderColor: "success" as const,
-			},
-			{
-				title: "Receitas (Mês)",
-				value: `${summary.totalIncome.toLocaleString()} MZN`,
-				subtext: "+12.5% vs mês anterior",
-				borderColor: "success" as const,
-			},
-			{
-				title: "Despesas (Mês)",
-				value: `${summary.totalExpense.toLocaleString()} MZN`,
-				subtext: "+5.2% vs mês anterior",
-				borderColor: "error" as const,
-			},
-			{
-				title: "Empréstimos Ativos",
-				value: `${summary.totalLoans.toLocaleString()} MZN`,
-				subtext: "Valor total",
-				borderColor: "warning" as const,
-			},
-		]
+				{
+					title: "Saldo Total",
+					value: `${summary.balance.toLocaleString()} MZN`,
+					subtext: "Disponível",
+					borderColor: "success" as const,
+				},
+				{
+					title: "Receitas (Mês)",
+					value: `${summary.totalIncome.toLocaleString()} MZN`,
+					subtext: "+12.5% vs mês anterior",
+					borderColor: "success" as const,
+				},
+				{
+					title: "Despesas (Mês)",
+					value: `${summary.totalExpense.toLocaleString()} MZN`,
+					subtext: "+5.2% vs mês anterior",
+					borderColor: "error" as const,
+				},
+				{
+					title: "Empréstimos Ativos",
+					value: `${summary.totalLoans.toLocaleString()} MZN`,
+					subtext: "Valor total",
+					borderColor: "warning" as const,
+				},
+			]
 		: [];
 
 	const columns = [

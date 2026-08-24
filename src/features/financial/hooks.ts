@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { financialApi } from "./api";
 import type {
-	FinancialFilters,
 	CreateTransactionInput,
+	FinancialFilters,
 	UpdateTransactionInput,
 } from "./types";
-import { financialApi } from "./api";
 
 // Query keys
 export const FINANCIAL_KEYS = {
@@ -69,8 +69,7 @@ export function useUpdateTransaction(id: string) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (data: UpdateTransactionInput) =>
-			financialApi.update(id, data),
+		mutationFn: (data: UpdateTransactionInput) => financialApi.update(id, data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: FINANCIAL_KEYS.detail(id) });
 			queryClient.invalidateQueries({ queryKey: FINANCIAL_KEYS.lists() });

@@ -1,7 +1,7 @@
 import type {
+	CollectionRecord,
 	Collector,
 	CollectorClient,
-	CollectionRecord,
 	CreateCollectorInput,
 	PaginationParams,
 	UpdateCollectorInput,
@@ -181,12 +181,12 @@ export const collectorsApi = {
 	},
 
 	// Get collector clients
-	getClients: (collectorId: string) => {
+	getClients: (_collectorId: string) => {
 		return Promise.resolve(mockClients);
 	},
 
 	// Get collection records
-	getCollectionRecords: (collectorId: string) => {
+	getCollectionRecords: (_collectorId: string) => {
 		return Promise.resolve(mockCollectionRecords);
 	},
 

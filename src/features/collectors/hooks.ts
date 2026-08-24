@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { PaginationParams, CreateCollectorInput, UpdateCollectorInput } from "./types";
 import { collectorsApi } from "./api";
+import type {
+	CreateCollectorInput,
+	PaginationParams,
+	UpdateCollectorInput,
+} from "./types";
 
 // Query keys
 export const COLLECTOR_KEYS = {
@@ -66,8 +70,7 @@ export function useUpdateCollector(id: string) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (data: UpdateCollectorInput) =>
-			collectorsApi.update(id, data),
+		mutationFn: (data: UpdateCollectorInput) => collectorsApi.update(id, data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: COLLECTOR_KEYS.detail(id) });
 			queryClient.invalidateQueries({ queryKey: COLLECTOR_KEYS.lists() });

@@ -1,13 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-	Bell,
-	CreditCard,
-	Users,
-	Save,
-	RotateCcw,
-	ShieldCheck,
-	Building2,
-} from "lucide-react";
+import { Bell, Building2, CreditCard, Save, Users } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
@@ -16,9 +8,9 @@ import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
 import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { SupportSection } from "#/components/ui/SupportSection";
-import { cn } from "#/lib/design-system";
-import { useSettings } from "#/features/settings";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
+import { useSettings } from "#/features/settings";
+import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/settings")({
 	component: SettingsPage,
@@ -143,7 +135,9 @@ function SettingsPage() {
 						/>
 						<PrototypeKPICard
 							title="Notificações"
-							value={Object.values(notificationsForm).filter(Boolean).length.toString()}
+							value={Object.values(notificationsForm)
+								.filter(Boolean)
+								.length.toString()}
 							subtext="Tipos activados"
 							borderColor="info"
 						/>
@@ -160,10 +154,14 @@ function SettingsPage() {
 							<CardContent className="space-y-4">
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div>
-										<label className="block text-sm font-medium text-slate-700 mb-1">
+										<label
+											htmlFor="org-name"
+											className="block text-sm font-medium text-slate-700 mb-1"
+										>
 											Nome da Organização
 										</label>
 										<input
+											id="org-name"
 											type="text"
 											value={orgForm.name}
 											onChange={(e) =>
@@ -173,10 +171,14 @@ function SettingsPage() {
 										/>
 									</div>
 									<div>
-										<label className="block text-sm font-medium text-slate-700 mb-1">
+										<label
+											htmlFor="org-email"
+											className="block text-sm font-medium text-slate-700 mb-1"
+										>
 											Email
 										</label>
 										<input
+											id="org-email"
 											type="email"
 											value={orgForm.email}
 											onChange={(e) =>
@@ -186,7 +188,10 @@ function SettingsPage() {
 										/>
 									</div>
 									<div>
-										<label className="block text-sm font-medium text-slate-700 mb-1">
+										<label
+											htmlFor="org-phone"
+											className="block text-sm font-medium text-slate-700 mb-1"
+										>
 											Telefone
 										</label>
 										<input
@@ -199,10 +204,14 @@ function SettingsPage() {
 										/>
 									</div>
 									<div>
-										<label className="block text-sm font-medium text-slate-700 mb-1">
+										<label
+											htmlFor="org-fee"
+											className="block text-sm font-medium text-slate-700 mb-1"
+										>
 											Taxa Mensal (MZN)
 										</label>
 										<input
+											id="org-fee"
 											type="number"
 											value={orgForm.monthlyFee}
 											onChange={(e) =>
@@ -215,10 +224,14 @@ function SettingsPage() {
 										/>
 									</div>
 									<div>
-										<label className="block text-sm font-medium text-slate-700 mb-1">
+										<label
+											htmlFor="org-cycle"
+											className="block text-sm font-medium text-slate-700 mb-1"
+										>
 											Dia do Ciclo
 										</label>
 										<input
+											id="org-cycle"
 											type="number"
 											min="1"
 											max="31"
@@ -313,36 +326,39 @@ function SettingsPage() {
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<div>
-									<label className="block text-sm font-medium text-slate-700 mb-2">
-										Métodos de Pagamento Aceitos
-									</label>
-									<div className="flex flex-wrap gap-2">
-										{["bank", "mobile", "cash"].map((method) => (
-											<label key={method} className="flex items-center gap-2">
-												<input
-													type="checkbox"
-													checked={settings?.payments.acceptedMethods.includes(
-														method as any,
-													)}
-													onChange={(e) => {
-														const newMethods = e.target.checked
-															? [
-																...settings!.payments.acceptedMethods,
-																method as any,
-															]
-															: settings!.payments.acceptedMethods.filter(
-																(m) => m !== method,
-															);
-														updatePayments({ acceptedMethods: newMethods });
-													}}
-													className="rounded border-slate-300 text-slate-900 focus:ring-slate-900"
-												/>
-												<span className="text-sm text-slate-700 capitalize">
-													{method}
-												</span>
-											</label>
-										))}
-									</div>
+									<fieldset>
+										<legend className="block text-sm font-medium text-slate-700 mb-2">
+											Métodos de Pagamento Aceitos
+										</legend>
+										<div className="flex flex-wrap gap-2">
+											{["bank", "mobile", "cash"].map((method) => (
+												<label key={method} className="flex items-center gap-2">
+													<input
+														type="checkbox"
+														checked={settings?.payments.acceptedMethods.includes(
+															method as string,
+														)}
+														onChange={(e) => {
+															const newMethods = e.target.checked
+																? [
+																		...(settings?.payments.acceptedMethods ??
+																			[]),
+																		method as string,
+																	]
+																: (settings?.payments.acceptedMethods.filter(
+																		(m) => m !== method,
+																	) ?? []);
+															updatePayments({ acceptedMethods: newMethods });
+														}}
+														className="rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+													/>
+													<span className="text-sm text-slate-700 capitalize">
+														{method}
+													</span>
+												</label>
+											))}
+										</div>
+									</fieldset>
 								</div>
 								{settings?.payments.bankAccount && (
 									<div className="bg-slate-50 p-4 rounded-lg">

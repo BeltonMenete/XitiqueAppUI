@@ -1,4 +1,4 @@
-import { number, object, string, optional } from "valibot";
+import { number, object, optional, string } from "valibot";
 
 export const createTransactionSchema = object({
 	date: string("Data é obrigatória"),

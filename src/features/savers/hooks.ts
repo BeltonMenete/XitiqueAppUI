@@ -16,7 +16,9 @@ export function generateAlphanumericId(index: number): string {
 	return `${letter}${number.toString().padStart(2, "0")}`;
 }
 
-export function generatePaymentDays(daysInCycle: number): Array<{ day: number; paid: boolean }> {
+export function generatePaymentDays(
+	daysInCycle: number,
+): Array<{ day: number; paid: boolean }> {
 	const days = [];
 	for (let i = 1; i <= 30; i++) {
 		days.push({

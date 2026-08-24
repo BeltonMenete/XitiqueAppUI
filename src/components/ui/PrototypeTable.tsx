@@ -29,7 +29,7 @@ export function PrototypeTable({
 	onRowClick,
 	pagination,
 }: PrototypeTableProps) {
-	const getStatusBadgeColor = (status: string) => {
+	const _getStatusBadgeColor = (status: string) => {
 		switch (status) {
 			case "active":
 			case "approved":
@@ -47,7 +47,7 @@ export function PrototypeTable({
 		}
 	};
 
-	const getStatusBadgeText = (status: string) => {
+	const _getStatusBadgeText = (status: string) => {
 		switch (status) {
 			case "active":
 				return "Ativo";
@@ -102,10 +102,7 @@ export function PrototypeTable({
 								{columns.map((column) => (
 									<td
 										key={column.key}
-										className={cn(
-											"px-4 py-3",
-											column.className,
-										)}
+										className={cn("px-4 py-3", column.className)}
 									>
 										{column.render ? (
 											column.render(row[column.key], row)
@@ -127,10 +124,7 @@ export function PrototypeTable({
 					<p className="text-xs text-slate-500">
 						Mostrando{" "}
 						<span className="font-bold text-slate-900">
-							{Math.min(
-								data.length,
-								pagination.currentPage * 10,
-							)}
+							{Math.min(data.length, pagination.currentPage * 10)}
 						</span>{" "}
 						de{" "}
 						<span className="font-bold text-slate-900">
@@ -143,7 +137,9 @@ export function PrototypeTable({
 							type="button"
 							className="p-2 rounded border border-slate-200 hover:bg-slate-100 disabled:opacity-50"
 							disabled={pagination.currentPage === 1}
-							onClick={() => pagination.onPageChange(pagination.currentPage - 1)}
+							onClick={() =>
+								pagination.onPageChange(pagination.currentPage - 1)
+							}
 						>
 							<svg
 								width="16"
@@ -177,7 +173,9 @@ export function PrototypeTable({
 							type="button"
 							className="p-2 rounded border border-slate-200 hover:bg-slate-100 disabled:opacity-50"
 							disabled={pagination.currentPage === pagination.totalPages}
-							onClick={() => pagination.onPageChange(pagination.currentPage + 1)}
+							onClick={() =>
+								pagination.onPageChange(pagination.currentPage + 1)
+							}
 						>
 							<svg
 								width="16"

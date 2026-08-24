@@ -90,7 +90,6 @@ export function Header({
 										placeholder={searchPlaceholder}
 										value={searchValue}
 										onChange={(e) => onSearchChange?.(e.target.value)}
-										autoFocus
 										className="w-full pl-8 pr-10 py-2 bg-slate-50 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 focus:bg-white transition-all duration-200"
 									/>
 									<button

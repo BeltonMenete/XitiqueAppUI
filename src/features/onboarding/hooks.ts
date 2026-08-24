@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { ClientOnboardingData } from "./types";
 
 const ONBOARDING_STORAGE_KEY = "onboarding_data";

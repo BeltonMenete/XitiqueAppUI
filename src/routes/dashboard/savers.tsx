@@ -5,27 +5,25 @@ import {
 	ChevronDown,
 	DollarSign,
 	Filter,
+	Grid,
+	List,
 	MoreVertical,
 	Phone,
 	Plus,
-	Search,
 	TrendingUp,
 	Users,
 	Wallet,
-	Grid,
-	List,
 } from "lucide-react";
-import { useState, useMemo, memo } from "react";
+import { memo, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { DayActionModal } from "#/components/business/DayActionModal";
 import { QuickDepositModal } from "#/components/business/QuickDepositModal";
 import { QuickLoanModal } from "#/components/business/QuickLoanModal";
 import { RegisterSaverModal } from "#/components/business/RegisterSaverModal";
-import { DayActionModal } from "#/components/business/DayActionModal";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
-import { Card, CardContent } from "#/components/ui/Card";
 import { DataTable } from "#/components/ui/DataTable";
 import { EmptyState } from "#/components/ui/EmptyState";
 import { ExpandableRowContent } from "#/components/ui/ExpandableRow";
@@ -38,16 +36,29 @@ import {
 	DebtBadge,
 	InactiveBadge,
 } from "#/components/ui/StatusBadge";
-
-import { useSavers, enrichSaversWithAlphanumericIds } from "#/features/savers";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
+import { enrichSaversWithAlphanumericIds, useSavers } from "#/features/savers";
 import type { Saver } from "#/features/savers/types";
 import { cn } from "#/lib/design-system";
-import { getDashboardSidebar } from "#/config/dashboardSidebar";
 
 // MonthCalendarGrid Component
 interface MonthCalendarGridProps {
-	days: Array<{ day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }>;
-	onDayClick?: (dayData: { day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }) => void;
+	days: Array<{
+		day: number;
+		paid: boolean;
+		amount?: number;
+		collector?: string;
+		isDebtPayment?: boolean;
+		isInDebt?: boolean;
+	}>;
+	onDayClick?: (dayData: {
+		day: number;
+		paid: boolean;
+		amount?: number;
+		collector?: string;
+		isDebtPayment?: boolean;
+		isInDebt?: boolean;
+	}) => void;
 	showHeader?: boolean;
 	saverName?: string;
 	headerOnly?: boolean;
@@ -55,31 +66,53 @@ interface MonthCalendarGridProps {
 	selectedMonth?: string;
 }
 
-const MonthCalendarGrid = memo(function MonthCalendarGrid({ days, onDayClick, showHeader = false, saverName, headerOnly = false, saver, selectedMonth }: MonthCalendarGridProps) {
-	const weekDays = ["S", "T", "Q", "Q", "S", "S", "D"];
+const MonthCalendarGrid = memo(function MonthCalendarGrid({
+	days,
+	onDayClick,
+	showHeader = false,
+	saverName,
+	headerOnly = false,
+	saver: _saver,
+	selectedMonth: _selectedMonth,
+}: MonthCalendarGridProps) {
+	const weekDays = useMemo(() => ["S", "T", "Q", "Q", "S", "S", "D"], []);
 
 	// Calculate the starting weekday based on the selected month
 	let startDayIndex = 0; // Default to Sunday (index 0)
-	if (selectedMonth) {
+	if (_selectedMonth) {
 		// Parse month string like "Maio 2024" or "May 2024"
 		const monthNames = {
-			"Jan": 0, "Janeiro": 0,
-			"Fev": 1, "Fevereiro": 1,
-			"Mar": 2, "Março": 2, "Marco": 2,
-			"Abr": 3, "Abril": 3,
-			"Mai": 4, "Maio": 4, "May": 4,
-			"Jun": 5, "Junho": 5,
-			"Jul": 6, "Julho": 6,
-			"Ago": 7, "Agosto": 7,
-			"Set": 8, "Setembro": 8,
-			"Out": 9, "Outubro": 9,
-			"Nov": 10, "Novembro": 10,
-			"Dez": 11, "Dezembro": 11
+			Jan: 0,
+			Janeiro: 0,
+			Fev: 1,
+			Fevereiro: 1,
+			Mar: 2,
+			Março: 2,
+			Marco: 2,
+			Abr: 3,
+			Abril: 3,
+			Mai: 4,
+			Maio: 4,
+			May: 4,
+			Jun: 5,
+			Junho: 5,
+			Jul: 6,
+			Julho: 6,
+			Ago: 7,
+			Agosto: 7,
+			Set: 8,
+			Setembro: 8,
+			Out: 9,
+			Outubro: 9,
+			Nov: 10,
+			Novembro: 10,
+			Dez: 11,
+			Dezembro: 11,
 		};
 
 		const parts = selectedMonth.split(" ");
 		const monthPart = parts[0];
-		const yearPart = parts[1] ? parseInt(parts[1]) : 2024;
+		const yearPart = parts[1] ? parseInt(parts[1], 10) : 2024;
 
 		const monthIndex = monthNames[monthPart as keyof typeof monthNames];
 		if (monthIndex !== undefined) {
@@ -90,89 +123,106 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({ days, onDayClick, sh
 	}
 
 	// Repeat week days to cover 30 days, starting from the correct day
-	const repeatedWeekDays = useMemo(() =>
-		Array.from({ length: 30 }, (_, i) => weekDays[(startDayIndex + i) % 7]),
-		[startDayIndex]
+	const repeatedWeekDays = useMemo(
+		() =>
+			Array.from({ length: 30 }, (_, i) => weekDays[(startDayIndex + i) % 7]),
+		[startDayIndex, weekDays],
 	);
 
 	return (
-		<div className="flex flex-col items-center" style={{ minWidth: '650px' }}>
+		<div className="flex flex-col items-center" style={{ minWidth: "650px" }}>
 			<div className="grid grid-cols-[repeat(30,20px)] gap-0.5 justify-center">
-				{showHeader && days.map((dayData, i) => (
-					<div key={`header-${dayData.day}`} className="flex flex-col items-center justify-center h-6 mb-0.5">
-						<span className="text-[7px] sm:text-[8px] leading-tight text-center uppercase text-slate-400 font-medium">
-							{repeatedWeekDays[i]}
-						</span>
-						<span className="text-[7px] sm:text-[8px] leading-tight text-center text-slate-400 font-medium">
-							{dayData.day}
-						</span>
-					</div>
-				))}
-				{!headerOnly && days.map((dayData) => (
-					<div
-						key={dayData.day}
-						className={cn(
-							"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto",
-							dayData.paid && dayData.isDebtPayment
-								? "border-amber-300 bg-amber-500 hover:bg-amber-600"
-								: dayData.paid
-									? "border-slate-300 bg-emerald-500 hover:bg-emerald-600"
-									: dayData.isInDebt
-										? "border-red-200 bg-red-100 hover:bg-red-200"
-										: "border-slate-200 bg-slate-50 hover:bg-slate-100",
-						)}
-						onClick={() => onDayClick?.(dayData)}
-					>
-						{/* Beautiful Tooltip - Tonal Layering style consistent with step-1 */}
-						<div className={cn(
-							"absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 sm:px-3 py-2 sm:py-2.5 text-[10px] sm:text-xs rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-32 sm:w-40 pointer-events-none border bg-white",
-							dayData.paid
-								? "border-emerald-100"
-								: dayData.isInDebt && !dayData.paid
-									? "border-red-100"
-									: dayData.isDebtPayment
-										? "border-amber-100"
-										: "border-slate-200"
-						)}>
-							<div className="font-semibold text-gray-900 mb-1 text-[10px] sm:text-xs">Dia {dayData.day}</div>
-							<div className="text-gray-600 text-[9px] sm:text-[10px]">{saverName}</div>
-							<div className={cn(
-								"mt-1 font-medium text-[9px] sm:text-[10px]",
-								dayData.isDebtPayment
-									? "text-amber-700"
-									: dayData.isInDebt && !dayData.paid
-										? "text-red-700"
-										: dayData.paid
-											? "text-emerald-700"
-											: "text-slate-600"
-							)}>
-								{dayData.isDebtPayment
-									? `Pagamento Dívida: ${dayData.amount || 0} MZN`
-									: dayData.isInDebt && !dayData.paid
-										? "Em Dívida"
-										: dayData.paid
-											? `Depositado: ${dayData.amount || 0} MZN`
-											: "Não depositado"}
-							</div>
-							{dayData.collector && (
-								<div className="text-[8px] sm:text-[9px] text-gray-500 mt-1">
-									Cobrador: {dayData.collector}
-								</div>
-							)}
-							{/* Arrow indicativa com cores combinantes */}
-							<div className={cn(
-								"absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-white border-r border-b rotate-45",
-								dayData.paid
-									? "border-emerald-100"
-									: dayData.isInDebt && !dayData.paid
-										? "border-red-100"
-										: dayData.isDebtPayment
-											? "border-amber-100"
-											: "border-slate-200"
-							)} />
+				{showHeader &&
+					days.map((dayData, i) => (
+						<div
+							key={`header-${dayData.day}`}
+							className="flex flex-col items-center justify-center h-6 mb-0.5"
+						>
+							<span className="text-[7px] sm:text-[8px] leading-tight text-center uppercase text-slate-400 font-medium">
+								{repeatedWeekDays[i]}
+							</span>
+							<span className="text-[7px] sm:text-[8px] leading-tight text-center text-slate-400 font-medium">
+								{dayData.day}
+							</span>
 						</div>
-					</div>
-				))}
+					))}
+				{!headerOnly &&
+					days.map((dayData) => (
+						<button
+							key={dayData.day}
+							type="button"
+							className={cn(
+								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto",
+								dayData.paid && dayData.isDebtPayment
+									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
+									: dayData.paid
+										? "border-slate-300 bg-emerald-500 hover:bg-emerald-600"
+										: dayData.isInDebt
+											? "border-red-200 bg-red-100 hover:bg-red-200"
+											: "border-slate-200 bg-slate-50 hover:bg-slate-100",
+							)}
+							onClick={() => onDayClick?.(dayData)}
+						>
+							{/* Beautiful Tooltip - Tonal Layering style consistent with step-1 */}
+							<div
+								className={cn(
+									"absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 sm:px-3 py-2 sm:py-2.5 text-[10px] sm:text-xs rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-32 sm:w-40 pointer-events-none border bg-white",
+									dayData.paid
+										? "border-emerald-100"
+										: dayData.isInDebt && !dayData.paid
+											? "border-red-100"
+											: dayData.isDebtPayment
+												? "border-amber-100"
+												: "border-slate-200",
+								)}
+							>
+								<div className="font-semibold text-gray-900 mb-1 text-[10px] sm:text-xs">
+									Dia {dayData.day}
+								</div>
+								<div className="text-gray-600 text-[9px] sm:text-[10px]">
+									{saverName}
+								</div>
+								<div
+									className={cn(
+										"mt-1 font-medium text-[9px] sm:text-[10px]",
+										dayData.isDebtPayment
+											? "text-amber-700"
+											: dayData.isInDebt && !dayData.paid
+												? "text-red-700"
+												: dayData.paid
+													? "text-emerald-700"
+													: "text-slate-600",
+									)}
+								>
+									{dayData.isDebtPayment
+										? `Pagamento Dívida: ${dayData.amount || 0} MZN`
+										: dayData.isInDebt && !dayData.paid
+											? "Em Dívida"
+											: dayData.paid
+												? `Depositado: ${dayData.amount || 0} MZN`
+												: "Não depositado"}
+								</div>
+								{dayData.collector && (
+									<div className="text-[8px] sm:text-[9px] text-gray-500 mt-1">
+										Cobrador: {dayData.collector}
+									</div>
+								)}
+								{/* Arrow indicativa com cores combinantes */}
+								<div
+									className={cn(
+										"absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-white border-r border-b rotate-45",
+										dayData.paid
+											? "border-emerald-100"
+											: dayData.isInDebt && !dayData.paid
+												? "border-red-100"
+												: dayData.isDebtPayment
+													? "border-amber-100"
+													: "border-slate-200",
+									)}
+								/>
+							</div>
+						</button>
+					))}
 			</div>
 		</div>
 	);
@@ -187,7 +237,7 @@ interface CalendarKPIsProps {
 }
 
 function CalendarKPIs({
-	totalSavers,
+	totalSavers: _totalSavers,
 	totalCollected,
 	inDebt,
 	adherenceRate,
@@ -239,7 +289,17 @@ interface SaversCalendarViewProps {
 	onRowClick: (saver: Saver) => void;
 	selectedMonth: string;
 	onMonthChange: (month: string) => void;
-	onDayClick?: (saver: Saver, dayData: { day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }) => void;
+	onDayClick?: (
+		saver: Saver,
+		dayData: {
+			day: number;
+			paid: boolean;
+			amount?: number;
+			collector?: string;
+			isDebtPayment?: boolean;
+			isInDebt?: boolean;
+		},
+	) => void;
 }
 
 function SaversCalendarView({
@@ -249,7 +309,13 @@ function SaversCalendarView({
 	onMonthChange,
 	onDayClick,
 }: SaversCalendarViewProps) {
-	const months = ["Jan 2024", "Fev 2024", "Março 2024", "Abril 2024", "Maio 2024"];
+	const months = [
+		"Jan 2024",
+		"Fev 2024",
+		"Março 2024",
+		"Abril 2024",
+		"Maio 2024",
+	];
 
 	return (
 		<div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -273,11 +339,17 @@ function SaversCalendarView({
 					))}
 				</div>
 				<div className="flex space-x-2">
-					<button className="flex items-center space-x-2 px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+					<button
+						type="button"
+						className="flex items-center space-x-2 px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+					>
 						<Filter size={16} />
 						<span className="text-xs font-semibold">Filtros</span>
 					</button>
-					<button className="flex items-center space-x-2 px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+					<button
+						type="button"
+						className="flex items-center space-x-2 px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+					>
 						<Grid size={16} />
 						<span className="text-xs font-semibold">Expandir Vista</span>
 					</button>
@@ -368,7 +440,9 @@ function SaversCalendarView({
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="w-4 h-4 rounded-sm border border-amber-300 bg-amber-500" />
-						<span className="text-[10px] text-slate-600">Pagamento de Dívida</span>
+						<span className="text-[10px] text-slate-600">
+							Pagamento de Dívida
+						</span>
 					</div>
 					<div className="flex items-center gap-2">
 						<div className="w-4 h-4 rounded-sm border border-red-200 bg-red-100" />
@@ -386,19 +460,34 @@ function SaversCalendarView({
 						A mostrar 1-{savers.length} de {savers.length} ticantes
 					</p>
 					<div className="flex space-x-1">
-						<button className="p-1 rounded-lg hover:bg-slate-200 text-slate-400">
+						<button
+							type="button"
+							className="p-1 rounded-lg hover:bg-slate-200 text-slate-400"
+						>
 							<ChevronDown size={16} className="rotate-90" />
 						</button>
-						<button className="w-8 h-8 rounded-lg bg-[#3391C2] text-white font-bold text-sm">
+						<button
+							type="button"
+							className="w-8 h-8 rounded-lg bg-[#3391C2] text-white font-bold text-sm"
+						>
 							1
 						</button>
-						<button className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 font-bold text-sm">
+						<button
+							type="button"
+							className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 font-bold text-sm"
+						>
 							2
 						</button>
-						<button className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 font-bold text-sm">
+						<button
+							type="button"
+							className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 font-bold text-sm"
+						>
 							3
 						</button>
-						<button className="p-1 rounded-lg hover:bg-slate-200 text-slate-400">
+						<button
+							type="button"
+							className="p-1 rounded-lg hover:bg-slate-200 text-slate-400"
+						>
 							<ChevronDown size={16} className="-rotate-90" />
 						</button>
 					</div>
@@ -1135,7 +1224,9 @@ function SaversManagement() {
 	} | null>(null);
 
 	const { data: saversData, isLoading } = useSavers({ page: 1, pageSize: 20 });
-	const savers = enrichSaversWithAlphanumericIds(saversData?.data || mockSavers);
+	const savers = enrichSaversWithAlphanumericIds(
+		saversData?.data || mockSavers,
+	);
 
 	const statusFilters = [
 		{ id: "active", label: "Activo" },
@@ -1458,7 +1549,9 @@ function SaversManagement() {
 												);
 											}}
 											onRemove={(id) => {
-												setSelectedStatuses((prev) => prev.filter((s) => s !== id));
+												setSelectedStatuses((prev) =>
+													prev.filter((s) => s !== id),
+												);
 											}}
 										/>
 									</div>
@@ -1583,7 +1676,9 @@ function SaversManagement() {
 
 					// Show toast based on action
 					if (action === "deposit" || action === "edit") {
-						toast.success(`Depósito de ${data.amount} MZN registrado com sucesso para ${data.saverName}`);
+						toast.success(
+							`Depósito de ${data.amount} MZN registrado com sucesso para ${data.saverName}`,
+						);
 					} else if (action === "delete") {
 						toast.success("Depósito deletado com sucesso");
 					} else if (action === "convert") {

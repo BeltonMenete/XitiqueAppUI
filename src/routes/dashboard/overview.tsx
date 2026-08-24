@@ -1,14 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-	AlertCircle,
-	DollarSign,
-	Handshake,
-	Info,
-	Plus,
-	TrendingUp,
-	Users,
-	Wallet,
-} from "lucide-react";
+import { DollarSign, Plus, Users, Wallet } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
@@ -17,8 +8,8 @@ import { Button } from "#/components/ui/Button";
 import { Card, CardContent } from "#/components/ui/Card";
 import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { SupportSection } from "#/components/ui/SupportSection";
-import { cn } from "#/lib/design-system";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
+import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/overview")({
 	component: OrganizationDashboard,

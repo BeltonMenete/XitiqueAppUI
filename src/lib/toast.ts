@@ -18,7 +18,7 @@ export const showWarningToast = (message: string) => {
 	toast.warning(message);
 };
 
-export const showPromiseToast = <T,>(
+export const showPromiseToast = <T>(
 	promise: Promise<T>,
 	{
 		loading,
@@ -28,7 +28,7 @@ export const showPromiseToast = <T,>(
 		loading: string;
 		success: string | ((data: T) => string);
 		error: string | ((error: Error) => string);
-	}
+	},
 ) => {
 	return toast.promise(promise, {
 		loading,

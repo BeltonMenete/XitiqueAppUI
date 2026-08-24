@@ -17,16 +17,16 @@ import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { EmptyState } from "#/components/ui/EmptyState";
+import { FAB } from "#/components/ui/FAB";
 import { FilterChips } from "#/components/ui/FilterChips";
 import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { PrototypeTable } from "#/components/ui/PrototypeTable";
-import { SupportSection } from "#/components/ui/SupportSection";
-import { FAB } from "#/components/ui/FAB";
 import {
 	ActiveBadge,
 	InactiveBadge,
 	PendingBadge,
 } from "#/components/ui/StatusBadge";
+import { SupportSection } from "#/components/ui/SupportSection";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/collectors")({

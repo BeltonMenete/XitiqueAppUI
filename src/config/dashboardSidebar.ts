@@ -1,11 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import {
-	FileText,
-	Settings,
-	TrendingUp,
-	Users,
-	Wallet,
-} from "lucide-react";
+import { FileText, Settings, TrendingUp, Users, Wallet } from "lucide-react";
 
 export interface SidebarItem {
 	label: string;
