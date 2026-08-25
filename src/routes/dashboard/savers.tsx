@@ -13,6 +13,7 @@ import {
 	TrendingUp,
 	Users,
 	Wallet,
+	Eye,
 } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -287,7 +288,7 @@ function CalendarKPIs({
 // SaversCalendarView Component
 interface SaversCalendarViewProps {
 	savers: Saver[];
-	onRowClick: (saver: Saver) => void;
+	onRowDoubleClick?: (saver: Saver) => void;
 	selectedMonth: string;
 	onMonthChange: (month: string) => void;
 	onDayClick?: (
@@ -307,7 +308,7 @@ interface SaversCalendarViewProps {
 
 function SaversCalendarView({
 	savers,
-	onRowClick,
+	onRowDoubleClick,
 	selectedMonth,
 	onMonthChange,
 	onDayClick,
@@ -396,15 +397,17 @@ function SaversCalendarView({
 							{savers.map((saver) => (
 								<tr
 									key={saver.id}
-									className="hover:bg-slate-50 transition-colors cursor-pointer border-b border-slate-200/50"
-									onClick={() => onRowClick(saver)}
+									className="hover:bg-slate-50 transition-colors border-b border-slate-200/50"
 								>
 									<td className="px-2 py-0.5">
 										<div className="flex items-center gap-1.5">
 											<span className="font-mono text-[9px] text-slate-400 w-10 shrink-0">
 												{saver.alphanumericId || String(saver.cardNumber)}
 											</span>
-											<span className="font-bold text-xs text-slate-900 truncate flex-1">
+											<span
+												className="font-bold text-xs text-slate-900 truncate flex-1 cursor-pointer hover:text-emerald-600 hover:underline transition-colors"
+												onClick={() => onRowDoubleClick?.(saver)}
+											>
 												{saver.name}
 											</span>
 											<span className="text-[8px] text-slate-400 font-medium whitespace-nowrap">
@@ -440,7 +443,10 @@ function SaversCalendarView({
 												{
 													id: "view-details",
 													label: "Ver Detalhes",
-													onClick: () => onRowClick(saver),
+													onClick: () => {
+														setSelectedSaver(saver);
+														setIsSaverPopupOpen(true);
+													},
 												},
 												{
 													id: "deposit",
@@ -1241,6 +1247,7 @@ function SaversManagement() {
 	const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 	const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
 	const [isDayActionModalOpen, setIsDayActionModalOpen] = useState(false);
+	const [isSaverPopupOpen, setIsSaverPopupOpen] = useState(false);
 	const [selectedSaver, setSelectedSaver] = useState<Saver | null>(null);
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 	const [viewMode, setViewMode] = useState<"standard" | "calendar">("standard");
@@ -1328,7 +1335,13 @@ function SaversManagement() {
 								row.status === "active" ? "bg-emerald-500" : "bg-red-500",
 							)}
 						/>
-						<span className="font-bold text-xs text-slate-900 truncate">
+						<span
+							className="font-bold text-xs text-slate-900 truncate cursor-pointer hover:text-emerald-600 hover:underline transition-colors"
+							onClick={() => {
+								setSelectedSaver(row);
+								setIsSaverPopupOpen(true);
+							}}
+						>
 							{row.name}
 						</span>
 					</div>
@@ -1382,7 +1395,10 @@ function SaversManagement() {
 	const renderExpandedRow = (row: Saver) => (
 		<ExpandableRowContent
 			title={`Detalhes de ${row.name}`}
-			onViewFullDetails={() => navigate({ to: '/dashboard/savers/' + String(row.id) })}
+			onViewFullDetails={() => {
+				setSelectedSaver(row);
+				setIsSaverPopupOpen(true);
+			}}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 				<div className="space-y-2">
@@ -1456,8 +1472,13 @@ function SaversManagement() {
 						size="sm"
 						variant="outline"
 						leftIcon={<MoreVertical size={14} />}
+						onClick={(e) => {
+							e.stopPropagation();
+							setSelectedSaver(row);
+							setIsSaverPopupOpen(true);
+						}}
 					>
-						Mais Opções
+						Ver Detalhes
 					</Button>
 				</div>
 			</div>
@@ -1619,7 +1640,6 @@ function SaversManagement() {
 											columns={columns}
 											searchable={true}
 											searchPlaceholder="Pesquisar por nome ou número de cartão..."
-											onRowClick={(row) => navigate({ to: '/dashboard/savers/' + String(row.id) })}
 											emptyMessage="Nenhum ticante encontrado"
 											expandable={true}
 											renderExpandedRow={renderExpandedRow}
@@ -1636,7 +1656,10 @@ function SaversManagement() {
 					) : (
 						<SaversCalendarView
 							savers={filteredSavers}
-							onRowClick={(saver) => navigate({ to: '/dashboard/savers/' + String(saver.id) })}
+							onRowDoubleClick={(saver) => {
+								setSelectedSaver(saver);
+								setIsSaverPopupOpen(true);
+							}}
 							selectedMonth={selectedMonth}
 							onMonthChange={setSelectedMonth}
 							onDayClick={(saver, dayData) => {
@@ -1732,6 +1755,32 @@ function SaversManagement() {
 					}
 				}}
 			/>
+
+			{/* Saver Details Popup */}
+			{isSaverPopupOpen && selectedSaver && (
+				<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setIsSaverPopupOpen(false)}>
+					<div className="bg-white rounded-xl p-6 shadow-2xl max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+						<div className="flex items-center gap-3 mb-4">
+							<div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
+								<Eye size={24} className="text-emerald-600" />
+							</div>
+							<div>
+								<h3 className="font-bold text-slate-900">{selectedSaver.name}</h3>
+								<p className="text-sm text-slate-500">Ver detalhes completos</p>
+							</div>
+						</div>
+						<Button
+							className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+							onClick={() => {
+								setIsSaverPopupOpen(false);
+								navigate({ to: '/dashboard/saver-details' });
+							}}
+						>
+							Ver Detalhes
+						</Button>
+					</div>
+				</div>
+			)}
 		</DashboardLayout>
 	);
 }

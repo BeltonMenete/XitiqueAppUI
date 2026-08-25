@@ -1,8 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
 	AlertCircle,
 	AlertTriangle,
-	ArrowLeft,
 	Calendar,
 	CheckCircle2,
 	ChevronRight,
@@ -43,7 +42,7 @@ export const Route = createFileRoute("/dashboard/savers/$id")({
 
 function SaverDetails() {
 	const { id } = Route.useParams();
-	const navigate = useNavigate();
+	console.log("SaverDetails component rendered with id:", id);
 	const [activeTab, setActiveTab] = useState<
 		"card" | "statement" | "loans" | "history"
 	>("card");
@@ -106,7 +105,6 @@ function SaverDetails() {
 					{/* Breadcrumbs & Actions */}
 					<div className="flex justify-between items-center mb-6">
 						<div className="flex items-center gap-2 text-slate-500">
-							<ArrowLeft size={20} className="cursor-pointer hover:text-slate-700" onClick={() => navigate({ to: '/dashboard/savers' })} />
 							<span className="text-xs font-semibold tracking-wider">
 								Gestão / Clientes / {displaySaver?.name || "..."}
 							</span>
@@ -138,17 +136,17 @@ function SaverDetails() {
 							</CardContent>
 						</Card>
 					) : displaySaver ? (
-						<Card className="border-l-4 border-l-emerald-500">
+						<Card className="border-l-4 border-l-emerald-500 bg-white shadow-sm">
 							<CardContent className="p-6">
 								<div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
 									<div className="relative">
-										<div className="w-24 h-24 rounded-2xl bg-slate-200 flex items-center justify-center border-4 border-slate-100">
-											<span className="text-3xl font-bold text-slate-400">
+										<div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center border-4 border-white shadow-sm">
+											<span className="text-3xl font-bold text-emerald-700">
 												{displaySaver.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
 											</span>
 										</div>
 										<span className={cn(
-											"absolute -bottom-2 -right-2 px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border-2 border-white",
+											"absolute -bottom-2 -right-2 px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border-2 border-white shadow-sm",
 											displaySaver.status === "active" ? "bg-emerald-500 text-white" : "bg-slate-400 text-white"
 										)}>
 											{displaySaver.status === "active" ? "Ativo" : "Inativo"}
@@ -157,22 +155,22 @@ function SaverDetails() {
 
 									<div className="flex-1">
 										<div className="flex items-center gap-3 mb-2">
-											<h1 className="text-2xl font-bold text-emerald-900">
+											<h1 className="text-2xl font-bold text-slate-900">
 												Detalhes do Ticante - {displaySaver.name}
 											</h1>
-											<span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-mono font-semibold">
+											<span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-mono font-semibold border border-slate-200">
 												ID: {displaySaver.alphanumericId || String(displaySaver.cardNumber)}
 											</span>
 											{displaySaver.currentDebt > 0 && <DebtBadge />}
 										</div>
 										<div className="flex flex-wrap gap-4 text-sm text-slate-500">
 											<div className="flex items-center gap-2">
-												<MapPin size={16} />
+												<MapPin size={16} className="text-slate-400" />
 												<span>{displaySaver.organization?.name || "Mercado Central, Maputo"}</span>
 											</div>
 											{displaySaver.contact && (
 												<div className="flex items-center gap-2">
-													<Phone size={16} />
+													<Phone size={16} className="text-slate-400" />
 													<span>{displaySaver.contact}</span>
 												</div>
 											)}
@@ -184,15 +182,15 @@ function SaverDetails() {
 											<p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">
 												Taxa/Dia
 											</p>
-											<p className="font-mono text-emerald-900 font-bold">
+											<p className="font-mono text-slate-900 font-bold">
 												{displaySaver.dailyAmount.toLocaleString()} MZN
 											</p>
 										</div>
 										<div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-center min-w-[100px]">
-											<p className="text-[10px] uppercase font-bold text-emerald-500 tracking-wider mb-1">
+											<p className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider mb-1">
 												Poupado
 											</p>
-											<p className="font-mono text-emerald-500 font-bold">
+											<p className="font-mono text-emerald-600 font-bold">
 												{displaySaver.totalSaved.toLocaleString()} MZN
 											</p>
 										</div>
@@ -235,8 +233,8 @@ function SaverDetails() {
 								className={cn(
 									"px-6 py-3 text-sm font-semibold border-b-2 transition-colors flex items-center gap-2",
 									activeTab === tab.id
-										? "text-emerald-900 border-emerald-900"
-										: "text-slate-500 border-transparent hover:text-emerald-900",
+										? "text-slate-900 border-slate-900"
+										: "text-slate-500 border-transparent hover:text-slate-900",
 								)}
 							>
 								<tab.icon size={20} />
@@ -250,10 +248,10 @@ function SaverDetails() {
 						<div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 							{/* Main Grid Section */}
 							<div className="lg:col-span-8">
-								<Card>
+								<Card className="bg-white shadow-sm border border-slate-200">
 									<CardContent className="p-6">
 										<div className="flex justify-between items-center mb-6">
-											<h3 className="text-lg font-semibold text-emerald-900 flex items-center gap-2">
+											<h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
 												Ciclo Atual: Outubro 2023
 												<span className="bg-slate-200 text-slate-600 px-3 py-1 rounded-lg text-xs font-bold">
 													DIA {displaySaver.daysInCycle || 18}/30
@@ -277,8 +275,8 @@ function SaverDetails() {
 													stateClass = "bg-orange-100 border-orange-500 text-orange-600";
 													icon = "C";
 												} else if (paymentDay?.paid && !paymentDay.isDebtPayment) {
-													stateClass = "bg-emerald-100 border-emerald-500 text-emerald-600";
-													icon = "P";
+													stateClass = "bg-blue-100 border-blue-500 text-blue-600";
+													icon = "X";
 												} else if (paymentDay?.isInDebt) {
 													stateClass = "bg-red-100 border-red-300 text-red-400";
 												}
@@ -306,7 +304,7 @@ function SaverDetails() {
 												</div>
 												<p className="text-sm text-slate-500 italic">Legenda: Pago, Confirmado, Comissão do Coletor.</p>
 											</div>
-											<span className="font-mono text-sm text-emerald-900 font-bold">
+											<span className="font-mono text-sm text-slate-900 font-bold">
 												Total Ciclo: {(displaySaver.dailyAmount * 30).toLocaleString()} MZN
 											</span>
 										</div>
@@ -316,44 +314,44 @@ function SaverDetails() {
 
 							{/* Sidebar Actions */}
 							<div className="lg:col-span-4 space-y-4">
-								<Card>
+								<Card className="bg-white shadow-sm border border-slate-200">
 									<CardContent className="p-6">
-										<h4 className="text-xs font-semibold text-emerald-900 mb-4 uppercase tracking-widest">Ações Rápidas</h4>
+										<h4 className="text-xs font-semibold text-slate-900 mb-4 uppercase tracking-widest">Ações Rápidas</h4>
 										<div className="space-y-2">
 											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
 												<div className="flex items-center gap-3">
-													<CheckCircle2 size={20} className="text-emerald-900 group-hover:rotate-12 transition-transform" />
+													<CheckCircle2 size={20} className="text-slate-900 group-hover:rotate-12 transition-transform" />
 													<span className="text-xs font-semibold">Fechar Ciclo</span>
 												</div>
 												<ChevronRight size={20} className="text-slate-400" />
 											</button>
 											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
 												<div className="flex items-center gap-3">
-													<TrendingUp size={20} className="text-emerald-900 group-hover:translate-x-1 transition-transform" />
+													<TrendingUp size={20} className="text-slate-900 group-hover:translate-x-1 transition-transform" />
 													<span className="text-xs font-semibold">Transportar Dias</span>
 												</div>
 												<ChevronRight size={20} className="text-slate-400" />
 											</button>
-											<button className="w-full flex items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-all group">
+											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
 												<div className="flex items-center gap-3">
-													<Wallet size={20} className="text-emerald-900 group-hover:scale-110 transition-transform" />
-													<span className="text-xs font-semibold text-emerald-900">Novo Empréstimo</span>
+													<Wallet size={20} className="text-slate-900 group-hover:scale-110 transition-transform" />
+													<span className="text-xs font-semibold text-slate-900">Novo Empréstimo</span>
 												</div>
-												<ChevronRight size={20} className="text-emerald-900" />
+												<ChevronRight size={20} className="text-slate-400" />
 											</button>
 										</div>
 									</CardContent>
 								</Card>
 
 								{/* Statistics / Trends */}
-								<Card>
+								<Card className="bg-white shadow-sm border border-slate-200">
 									<CardContent className="p-6">
-										<h4 className="text-xs font-semibold text-emerald-900 mb-4 uppercase tracking-widest">Desempenho</h4>
+										<h4 className="text-xs font-semibold text-slate-900 mb-4 uppercase tracking-widest">Desempenho</h4>
 										<div className="space-y-4">
 											<div>
 												<div className="flex justify-between text-xs mb-1">
 													<span className="text-slate-500">Meta do Mês</span>
-													<span className="font-bold text-emerald-900">60%</span>
+													<span className="font-bold text-slate-900">60%</span>
 												</div>
 												<div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
 													<div className="bg-emerald-500 h-full w-[60%] rounded-full"></div>
@@ -361,14 +359,14 @@ function SaverDetails() {
 											</div>
 											<div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
 												<AlertTriangle size={16} className="text-amber-600" />
-												<p className="text-xs text-slate-600 font-medium">Maria tem 4 dias em atraso. Enviar lembrete via SMS?</p>
+												<p className="text-xs text-slate-600 font-medium">{displaySaver.name} tem 4 dias em atraso. Enviar lembrete via SMS?</p>
 											</div>
 										</div>
 									</CardContent>
 								</Card>
 
 								{/* Monthly Stamp */}
-								<div className="relative overflow-hidden bg-emerald-900 p-6 rounded-xl text-white shadow-lg">
+								<div className="relative overflow-hidden bg-slate-900 p-6 rounded-xl text-white shadow-lg">
 									<div className="absolute -right-4 -top-4 opacity-20">
 										<Verified size={120} />
 									</div>

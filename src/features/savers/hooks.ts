@@ -21,7 +21,7 @@ function getMockSaver(id: string): Saver {
 		totalSaved: 1800,
 		currentDebt: 500,
 		daysInCycle: 18,
-		status: "active",
+		status: "in_debt",
 		registrationDate: "2023-01-15",
 		alphanumericId: "A01",
 		organizationId: "1",
@@ -90,12 +90,17 @@ export function generateAlphanumericId(index: number): string {
 
 export function generatePaymentDays(
 	daysInCycle: number,
-): Array<{ day: number; paid: boolean }> {
+): Array<{ day: number; paid: boolean; amount?: number; collector?: string; isDebtPayment?: boolean; isInDebt?: boolean }> {
 	const days = [];
 	for (let i = 1; i <= 30; i++) {
+		const paid = i <= daysInCycle && Math.random() > 0.3;
 		days.push({
 			day: i,
-			paid: i <= daysInCycle && Math.random() > 0.3, // Mock logic: some days paid, some not
+			paid,
+			amount: paid ? 100 : 0,
+			collector: paid ? "Arsénio Matusse" : undefined,
+			isDebtPayment: paid && i <= 3,
+			isInDebt: !paid && i <= daysInCycle + 5,
 		});
 	}
 	return days;

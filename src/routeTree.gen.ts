@@ -22,6 +22,7 @@ import { Route as DashboardCollectorsRouteImport } from './routes/dashboard/coll
 import { Route as DashboardFinancialRouteImport } from './routes/dashboard/financial'
 import { Route as DashboardOverviewRouteImport } from './routes/dashboard/overview'
 import { Route as DashboardReportsRouteImport } from './routes/dashboard/reports'
+import { Route as DashboardSaverDetailsRouteImport } from './routes/dashboard/saver-details'
 import { Route as DashboardSaversRouteImport } from './routes/dashboard/savers'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as OrganizationAuthRouteImport } from './routes/organization/_auth'
@@ -106,6 +107,11 @@ const DashboardOverviewRoute = DashboardOverviewRouteImport.update({
 const DashboardReportsRoute = DashboardReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSaverDetailsRoute = DashboardSaverDetailsRouteImport.update({
+  id: '/saver-details',
+  path: '/saver-details',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardSaversRoute = DashboardSaversRouteImport.update({
@@ -226,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/financial': typeof DashboardFinancialRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/saver-details': typeof DashboardSaverDetailsRoute
   '/dashboard/savers': typeof DashboardSaversRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/organization': typeof OrganizationAuthRouteWithChildren
@@ -260,6 +267,7 @@ export interface FileRoutesByTo {
   '/dashboard/financial': typeof DashboardFinancialRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/saver-details': typeof DashboardSaverDetailsRoute
   '/dashboard/savers': typeof DashboardSaversRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/organization': typeof OrganizationAuthRouteWithChildren
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/dashboard/financial': typeof DashboardFinancialRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
   '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/saver-details': typeof DashboardSaverDetailsRoute
   '/dashboard/savers': typeof DashboardSaversRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/organization/_auth': typeof OrganizationAuthRouteWithChildren
@@ -333,6 +342,7 @@ export interface FileRouteTypes {
     | '/dashboard/financial'
     | '/dashboard/overview'
     | '/dashboard/reports'
+    | '/dashboard/saver-details'
     | '/dashboard/savers'
     | '/dashboard/settings'
     | '/organization'
@@ -367,6 +377,7 @@ export interface FileRouteTypes {
     | '/dashboard/financial'
     | '/dashboard/overview'
     | '/dashboard/reports'
+    | '/dashboard/saver-details'
     | '/dashboard/savers'
     | '/dashboard/settings'
     | '/organization'
@@ -402,6 +413,7 @@ export interface FileRouteTypes {
     | '/dashboard/financial'
     | '/dashboard/overview'
     | '/dashboard/reports'
+    | '/dashboard/saver-details'
     | '/dashboard/savers'
     | '/dashboard/settings'
     | '/organization/_auth'
@@ -528,6 +540,13 @@ declare module '@tanstack/react-router' {
       path: '/reports'
       fullPath: '/dashboard/reports'
       preLoaderRoute: typeof DashboardReportsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/saver-details': {
+      id: '/dashboard/saver-details'
+      path: '/saver-details'
+      fullPath: '/dashboard/saver-details'
+      preLoaderRoute: typeof DashboardSaverDetailsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/savers': {
@@ -701,6 +720,7 @@ interface DashboardRouteRouteChildren {
   DashboardFinancialRoute: typeof DashboardFinancialRoute
   DashboardOverviewRoute: typeof DashboardOverviewRoute
   DashboardReportsRoute: typeof DashboardReportsRoute
+  DashboardSaverDetailsRoute: typeof DashboardSaverDetailsRoute
   DashboardSaversRoute: typeof DashboardSaversRouteWithChildren
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
@@ -711,6 +731,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardFinancialRoute: DashboardFinancialRoute,
   DashboardOverviewRoute: DashboardOverviewRoute,
   DashboardReportsRoute: DashboardReportsRoute,
+  DashboardSaverDetailsRoute: DashboardSaverDetailsRoute,
   DashboardSaversRoute: DashboardSaversRouteWithChildren,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,

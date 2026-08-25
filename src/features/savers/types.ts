@@ -14,7 +14,7 @@ export interface Saver {
 	totalSaved: number;
 	currentDebt: number;
 	daysInCycle: number;
-	status: "active" | "inactive";
+	status: "active" | "inactive" | "in_debt";
 	organization?: {
 		id: string;
 		name: string;
