@@ -216,7 +216,7 @@ export function DataTable<T>({
 									className={cn(
 										"px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider",
 										col.sortable &&
-										"cursor-pointer hover:bg-slate-400 transition-colors duration-300",
+											"cursor-pointer hover:bg-slate-400 transition-colors duration-300",
 									)}
 									onClick={() => col.sortable && handleSort(col.key)}
 								>
@@ -325,11 +325,11 @@ export function DataTable<T>({
 										key={rowId}
 										className={cn(
 											hoverable &&
-											"hover:bg-slate-100 hover:border-l-4 hover:border-l-emerald-600 transition-all duration-300 animate-scale-hover",
+												"hover:bg-slate-100 hover:border-l-4 hover:border-l-emerald-600 transition-all duration-300 animate-scale-hover",
 											striped &&
-											(sortedData.indexOf(row) % 2 === 0
-												? "bg-white"
-												: "bg-slate-100"),
+												(sortedData.indexOf(row) % 2 === 0
+													? "bg-white"
+													: "bg-slate-100"),
 											(onRowClick || onRowDoubleClick) && "cursor-pointer",
 											selected && "bg-secondary/5",
 										)}

@@ -45,6 +45,7 @@ export function ExpandableCard({
 		>
 			{/* Header */}
 			<button
+				type="button"
 				onClick={handleToggle}
 				className="w-full flex items-center justify-between px-4 py-3 hover:bg-slate-100 transition-colors text-left"
 			>
@@ -107,6 +108,7 @@ export function ExpandableSection({
 	return (
 		<div className={cn("border-b border-slate-200", className)}>
 			<button
+				type="button"
 				onClick={() => setIsExpanded(!isExpanded)}
 				className={cn(
 					"w-full flex items-center justify-between py-3 px-4 hover:bg-slate-100 transition-colors",

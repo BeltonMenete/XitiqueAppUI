@@ -1,11 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-	AlertCircle,
-	AlertTriangle,
-	Calendar,
 	CheckCircle2,
 	ChevronRight,
-	History,
 	MapPin,
 	Phone,
 	Printer,
@@ -14,6 +10,10 @@ import {
 	TrendingUp,
 	Verified,
 	Wallet,
+	X,
+	Calendar,
+	AccountBalance,
+	History,
 } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
@@ -22,48 +22,30 @@ import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
-import { ProgressCircle } from "#/components/ui/ProgressCircle";
-import {
-	ActiveBadge,
-	DebtBadge,
-	InactiveBadge,
-} from "#/components/ui/StatusBadge";
-import {
-	useSaver,
-	useSaverDeposits,
-	useSaverHistory,
-	useSaverLoans,
-} from "#/features/savers";
+import { DebtBadge } from "#/components/ui/StatusBadge";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
 import { cn } from "#/lib/design-system";
+import { useSaver, useSaverDeposits, useSaverHistory, useSaverLoans } from "#/features/savers";
 
 export const Route = createFileRoute("/dashboard/savers/$id")({
 	component: SaverDetails,
 });
 
 function SaverDetails() {
-	const { id } = Route.useParams();
-	console.log("SaverDetails component rendered with id:", id);
 	const [activeTab, setActiveTab] = useState<
 		"card" | "statement" | "loans" | "history"
 	>("card");
+	const [selectedMonth, setSelectedMonth] = useState("Outubro 2023");
+	const [searchTerm, setSearchTerm] = useState("");
+	const { id } = Route.useParams();
 
-	const { data: saver, isLoading: saverLoading } = useSaver(id);
+	// Fetch saver data using the ID from route params
+	const { data: saver, isLoading: saverLoading, error } = useSaver(id);
 	const { data: deposits, isLoading: depositsLoading } = useSaverDeposits(id);
 	const { data: loans, isLoading: loansLoading } = useSaverLoans(id);
 	const { data: history, isLoading: historyLoading } = useSaverHistory(id);
 
-	const sidebarItems = [
-		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
-		{
-			label: "Gestão",
-			icon: TrendingUp,
-			href: "/dashboard/savers",
-			isActive: true,
-		},
-		{ label: "Financeiro", icon: Wallet, href: "/dashboard/financial" },
-		{ label: "Relatórios", icon: History, href: "/dashboard/reports" },
-		{ label: "Configurações", icon: Calendar, href: "/dashboard/settings" },
-	];
+	const sidebarItems = getDashboardSidebar("/dashboard/savers/$id");
 
 	const displaySaver = saver;
 
@@ -142,13 +124,22 @@ function SaverDetails() {
 									<div className="relative">
 										<div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-50 flex items-center justify-center border-4 border-white shadow-sm">
 											<span className="text-3xl font-bold text-emerald-700">
-												{displaySaver.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+												{displaySaver.name
+													.split(" ")
+													.map((n) => n[0])
+													.join("")
+													.slice(0, 2)
+													.toUpperCase()}
 											</span>
 										</div>
-										<span className={cn(
-											"absolute -bottom-2 -right-2 px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border-2 border-white shadow-sm",
-											displaySaver.status === "active" ? "bg-emerald-500 text-white" : "bg-slate-400 text-white"
-										)}>
+										<span
+											className={cn(
+												"absolute -bottom-2 -right-2 px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border-2 border-white shadow-sm",
+												displaySaver.status === "active"
+													? "bg-emerald-500 text-white"
+													: "bg-slate-400 text-white",
+											)}
+										>
 											{displaySaver.status === "active" ? "Ativo" : "Inativo"}
 										</span>
 									</div>
@@ -159,14 +150,19 @@ function SaverDetails() {
 												Detalhes do Ticante - {displaySaver.name}
 											</h1>
 											<span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-mono font-semibold border border-slate-200">
-												ID: {displaySaver.alphanumericId || String(displaySaver.cardNumber)}
+												ID:{" "}
+												{displaySaver.alphanumericId ||
+													String(displaySaver.cardNumber)}
 											</span>
 											{displaySaver.currentDebt > 0 && <DebtBadge />}
 										</div>
 										<div className="flex flex-wrap gap-4 text-sm text-slate-500">
 											<div className="flex items-center gap-2">
 												<MapPin size={16} className="text-slate-400" />
-												<span>{displaySaver.organization?.name || "Mercado Central, Maputo"}</span>
+												<span>
+													{displaySaver.organization?.name ||
+														"Mercado Central, Maputo"}
+												</span>
 											</div>
 											{displaySaver.contact && (
 												<div className="flex items-center gap-2">
@@ -258,24 +254,44 @@ function SaverDetails() {
 												</span>
 											</h3>
 											<div className="flex items-center gap-4 text-xs">
-												<div className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-blue-500"></span> Pago</div>
-												<div className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-slate-300"></span> Aberto</div>
-												<div className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-orange-500"></span> Comissão</div>
-												<div className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-emerald-500"></span> Confirmado</div>
+												<div className="flex items-center gap-1">
+													<span className="w-3 h-3 rounded-full bg-blue-500"></span>{" "}
+													Pago
+												</div>
+												<div className="flex items-center gap-1">
+													<span className="w-3 h-3 rounded-full bg-slate-300"></span>{" "}
+													Aberto
+												</div>
+												<div className="flex items-center gap-1">
+													<span className="w-3 h-3 rounded-full bg-orange-500"></span>{" "}
+													Comissão
+												</div>
+												<div className="flex items-center gap-1">
+													<span className="w-3 h-3 rounded-full bg-emerald-500"></span>{" "}
+													Confirmado
+												</div>
 											</div>
 										</div>
 										<div className="grid grid-cols-6 gap-2 mb-6">
 											{Array.from({ length: 30 }, (_, i) => {
 												const day = i + 1;
-												const paymentDay = displaySaver.paymentDays?.find(d => d.day === day);
-												let stateClass = "bg-slate-100 border-slate-300 text-slate-400";
+												const paymentDay = displaySaver.paymentDays?.find(
+													(d) => d.day === day,
+												);
+												let stateClass =
+													"bg-slate-100 border-slate-300 text-slate-400";
 												let icon: string | number = day;
 
 												if (paymentDay?.paid && paymentDay.isDebtPayment) {
-													stateClass = "bg-orange-100 border-orange-500 text-orange-600";
+													stateClass =
+														"bg-orange-100 border-orange-500 text-orange-600";
 													icon = "C";
-												} else if (paymentDay?.paid && !paymentDay.isDebtPayment) {
-													stateClass = "bg-blue-100 border-blue-500 text-blue-600";
+												} else if (
+													paymentDay?.paid &&
+													!paymentDay.isDebtPayment
+												) {
+													stateClass =
+														"bg-blue-100 border-blue-500 text-blue-600";
 													icon = "X";
 												} else if (paymentDay?.isInDebt) {
 													stateClass = "bg-red-100 border-red-300 text-red-400";
@@ -286,10 +302,12 @@ function SaverDetails() {
 														key={day}
 														className={cn(
 															"aspect-square rounded-lg border-2 flex flex-col items-center justify-center transition-all cursor-pointer hover:scale-105",
-															stateClass
+															stateClass,
 														)}
 													>
-														<span className="text-[10px] font-bold mb-1">{day}</span>
+														<span className="text-[10px] font-bold mb-1">
+															{day}
+														</span>
 														<span className="text-sm font-bold">{icon}</span>
 													</div>
 												);
@@ -298,14 +316,23 @@ function SaverDetails() {
 										<div className="mt-6 p-4 bg-slate-50 rounded-lg flex items-center justify-between">
 											<div className="flex items-center gap-4">
 												<div className="flex -space-x-2">
-													<div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs border-2 border-white">X</div>
-													<div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-xs border-2 border-white">P</div>
-													<div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs border-2 border-white">C</div>
+													<div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs border-2 border-white">
+														X
+													</div>
+													<div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-xs border-2 border-white">
+														P
+													</div>
+													<div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs border-2 border-white">
+														C
+													</div>
 												</div>
-												<p className="text-sm text-slate-500 italic">Legenda: Pago, Confirmado, Comissão do Coletor.</p>
+												<p className="text-sm text-slate-500 italic">
+													Legenda: Pago, Confirmado, Comissão do Coletor.
+												</p>
 											</div>
 											<span className="font-mono text-sm text-slate-900 font-bold">
-												Total Ciclo: {(displaySaver.dailyAmount * 30).toLocaleString()} MZN
+												Total Ciclo:{" "}
+												{(displaySaver.dailyAmount * 30).toLocaleString()} MZN
 											</span>
 										</div>
 									</CardContent>
@@ -316,26 +343,43 @@ function SaverDetails() {
 							<div className="lg:col-span-4 space-y-4">
 								<Card className="bg-white shadow-sm border border-slate-200">
 									<CardContent className="p-6">
-										<h4 className="text-xs font-semibold text-slate-900 mb-4 uppercase tracking-widest">Ações Rápidas</h4>
+										<h4 className="text-xs font-semibold text-slate-900 mb-4 uppercase tracking-widest">
+											Ações Rápidas
+										</h4>
 										<div className="space-y-2">
 											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
 												<div className="flex items-center gap-3">
-													<CheckCircle2 size={20} className="text-slate-900 group-hover:rotate-12 transition-transform" />
-													<span className="text-xs font-semibold">Fechar Ciclo</span>
+													<CheckCircle2
+														size={20}
+														className="text-slate-900 group-hover:rotate-12 transition-transform"
+													/>
+													<span className="text-xs font-semibold">
+														Fechar Ciclo
+													</span>
 												</div>
 												<ChevronRight size={20} className="text-slate-400" />
 											</button>
 											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
 												<div className="flex items-center gap-3">
-													<TrendingUp size={20} className="text-slate-900 group-hover:translate-x-1 transition-transform" />
-													<span className="text-xs font-semibold">Transportar Dias</span>
+													<TrendingUp
+														size={20}
+														className="text-slate-900 group-hover:translate-x-1 transition-transform"
+													/>
+													<span className="text-xs font-semibold">
+														Transportar Dias
+													</span>
 												</div>
 												<ChevronRight size={20} className="text-slate-400" />
 											</button>
 											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
 												<div className="flex items-center gap-3">
-													<Wallet size={20} className="text-slate-900 group-hover:scale-110 transition-transform" />
-													<span className="text-xs font-semibold text-slate-900">Novo Empréstimo</span>
+													<Wallet
+														size={20}
+														className="text-slate-900 group-hover:scale-110 transition-transform"
+													/>
+													<span className="text-xs font-semibold text-slate-900">
+														Novo Empréstimo
+													</span>
 												</div>
 												<ChevronRight size={20} className="text-slate-400" />
 											</button>
@@ -346,7 +390,9 @@ function SaverDetails() {
 								{/* Statistics / Trends */}
 								<Card className="bg-white shadow-sm border border-slate-200">
 									<CardContent className="p-6">
-										<h4 className="text-xs font-semibold text-slate-900 mb-4 uppercase tracking-widest">Desempenho</h4>
+										<h4 className="text-xs font-semibold text-slate-900 mb-4 uppercase tracking-widest">
+											Desempenho
+										</h4>
 										<div className="space-y-4">
 											<div>
 												<div className="flex justify-between text-xs mb-1">
@@ -359,7 +405,10 @@ function SaverDetails() {
 											</div>
 											<div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
 												<AlertTriangle size={16} className="text-amber-600" />
-												<p className="text-xs text-slate-600 font-medium">{displaySaver.name} tem 4 dias em atraso. Enviar lembrete via SMS?</p>
+												<p className="text-xs text-slate-600 font-medium">
+													{displaySaver.name} tem 4 dias em atraso. Enviar
+													lembrete via SMS?
+												</p>
 											</div>
 										</div>
 									</CardContent>
@@ -370,12 +419,22 @@ function SaverDetails() {
 									<div className="absolute -right-4 -top-4 opacity-20">
 										<Verified size={120} />
 									</div>
-									<p className="text-[10px] uppercase font-bold tracking-[0.2em] mb-2 opacity-80">Sync Status</p>
-									<h5 className="text-lg font-bold mb-2">Dados Sincronizados</h5>
-									<p className="text-xs opacity-70 mb-4">Última atualização: Hoje, 14:32</p>
+									<p className="text-[10px] uppercase font-bold tracking-[0.2em] mb-2 opacity-80">
+										Sync Status
+									</p>
+									<h5 className="text-lg font-bold mb-2">
+										Dados Sincronizados
+									</h5>
+									<p className="text-xs opacity-70 mb-4">
+										Última atualização: Hoje, 14:32
+									</p>
 									<div className="flex items-center gap-2">
-										<span className="bg-white/20 px-3 py-1 rounded text-[10px] font-bold">OFFLINE READY</span>
-										<span className="bg-emerald-500 px-3 py-1 rounded text-[10px] font-bold">SECURE</span>
+										<span className="bg-white/20 px-3 py-1 rounded text-[10px] font-bold">
+											OFFLINE READY
+										</span>
+										<span className="bg-emerald-500 px-3 py-1 rounded text-[10px] font-bold">
+											SECURE
+										</span>
 									</div>
 								</div>
 							</div>
@@ -416,7 +475,10 @@ function SaverDetails() {
 																className="text-emerald-500"
 															/>
 														) : transaction.status === "partial" ? (
-															<AlertCircle size={16} className="text-amber-600" />
+															<AlertCircle
+																size={16}
+																className="text-amber-600"
+															/>
 														) : (
 															<span className="text-slate-400">!</span>
 														)}

@@ -400,13 +400,17 @@ function SaversCalendarView({
 									className="hover:bg-slate-50 transition-colors border-b border-slate-200/50"
 								>
 									<td className="px-2 py-0.5">
+										{/* CALENDAR VIEW - Saver Name Click Navigation to Details */}
 										<div className="flex items-center gap-1.5">
 											<span className="font-mono text-[9px] text-slate-400 w-10 shrink-0">
 												{saver.alphanumericId || String(saver.cardNumber)}
 											</span>
 											<span
 												className="font-bold text-xs text-slate-900 truncate flex-1 cursor-pointer hover:text-emerald-600 hover:underline transition-colors"
-												onClick={() => onRowDoubleClick?.(saver)}
+												onClick={() => {
+													console.log('Calendar name click - navigating to saver-details for:', saver.id);
+													window.location.href = `/dashboard/saver-details?id=${saver.id}`;
+												}}
 											>
 												{saver.name}
 											</span>
@@ -438,14 +442,19 @@ function SaversCalendarView({
 										</div>
 									</td>
 									<td className="px-2 py-0.5">
+										{/* CALENDAR VIEW - QuickActionMenu "Ver Detalhes" Navigation */}
 										<QuickActionMenu
 											actions={[
 												{
 													id: "view-details",
 													label: "Ver Detalhes",
 													onClick: () => {
-														setSelectedSaver(saver);
-														setIsSaverPopupOpen(true);
+														console.log('Calendar QuickActionMenu - navigating to saver-details for:', saver.id);
+														// Navigate to saver-details page with saver ID
+														// setTimeout ensures menu closes before navigation
+														setTimeout(() => {
+															window.location.href = `/dashboard/saver-details?id=${saver.id}`;
+														}, 50);
 													},
 												},
 												{
@@ -1325,6 +1334,7 @@ function SaversManagement() {
 			header: "TICANTE",
 			render: (value: unknown, row: Saver) => (
 				<div className="flex flex-col leading-tight">
+					{/* STANDARD TABLE - Saver Name Click Navigation to Details */}
 					<div className="flex items-center gap-1">
 						<span className="font-mono text-[9px] text-slate-400">
 							{String(value)}
@@ -1338,8 +1348,8 @@ function SaversManagement() {
 						<span
 							className="font-bold text-xs text-slate-900 truncate cursor-pointer hover:text-emerald-600 hover:underline transition-colors"
 							onClick={() => {
-								setSelectedSaver(row);
-								setIsSaverPopupOpen(true);
+								console.log('Standard table name click - navigating to saver-details for:', row.id);
+								window.location.href = `/dashboard/saver-details?id=${row.id}`;
 							}}
 						>
 							{row.name}
@@ -1392,12 +1402,13 @@ function SaversManagement() {
 		},
 	];
 
+	// STANDARD TABLE - Expanded Row "Ver Detalhes" Navigation
 	const renderExpandedRow = (row: Saver) => (
 		<ExpandableRowContent
 			title={`Detalhes de ${row.name}`}
 			onViewFullDetails={() => {
-				setSelectedSaver(row);
-				setIsSaverPopupOpen(true);
+				console.log('Standard table expanded row - navigating to saver-details for:', row.id);
+				window.location.href = `/dashboard/saver-details?id=${row.id}`;
 			}}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">

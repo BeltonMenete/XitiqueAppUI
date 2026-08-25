@@ -41,6 +41,7 @@ export function SplitView({
 			{/* Collapse Toggle */}
 			{collapsible && (
 				<button
+					type="button"
 					onClick={() => setIsCollapsed(!isCollapsed)}
 					className={cn(
 						"absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white border border-slate-200 rounded-r-lg shadow-lg transition-all duration-300",
@@ -77,10 +78,11 @@ export function MasterItem({
 	children,
 }: MasterItemProps) {
 	return (
-		<div
+		<button
+			type="button"
 			onClick={onClick}
 			className={cn(
-				"p-4 border-b border-slate-200 cursor-pointer transition-colors hover:bg-slate-100",
+				"w-full text-left p-4 border-b border-slate-200 cursor-pointer transition-colors hover:bg-slate-100",
 				isActive && "bg-slate-100 border-l-4 border-l-secondary",
 			)}
 		>
@@ -96,6 +98,6 @@ export function MasterItem({
 				</div>
 			</div>
 			{children && <div className="mt-3">{children}</div>}
-		</div>
+		</button>
 	);
 }

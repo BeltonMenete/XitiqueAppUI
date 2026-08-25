@@ -56,6 +56,7 @@ export function TabBar({
 		<div className={cn(variantClasses[variant].container, className)}>
 			{tabs.map((tab) => (
 				<button
+					type="button"
 					key={tab.id}
 					onClick={() => !tab.disabled && onTabChange(tab.id)}
 					disabled={tab.disabled}
