@@ -261,29 +261,41 @@ export function SaverMasterDetail({
 							</h3>
 							<div className="space-y-4">
 								<div>
-									<label className="block text-xs font-semibold text-slate-600 mb-2">
+									<label
+										htmlFor="saver-name"
+										className="block text-xs font-semibold text-slate-600 mb-2"
+									>
 										Nome
 									</label>
 									<InlineEditor
+										id="saver-name"
 										value={selectedSaver.name}
 										onSave={(value) => console.log("Update name:", value)}
 									/>
 								</div>
 								<div>
-									<label className="block text-xs font-semibold text-slate-600 mb-2">
+									<label
+										htmlFor="saver-phone"
+										className="block text-xs font-semibold text-slate-600 mb-2"
+									>
 										Telefone
 									</label>
 									<InlineEditor
+										id="saver-phone"
 										value={selectedSaver.phone}
 										onSave={(value) => console.log("Update phone:", value)}
 										type="tel"
 									/>
 								</div>
 								<div>
-									<label className="block text-xs font-semibold text-slate-600 mb-2">
+									<label
+										htmlFor="saver-daily-amount"
+										className="block text-xs font-semibold text-slate-600 mb-2"
+									>
 										Valor Diário (MZN)
 									</label>
 									<InlineEditor
+										id="saver-daily-amount"
 										value={String(selectedSaver.dailyAmount)}
 										onSave={(value) =>
 											console.log("Update daily amount:", value)

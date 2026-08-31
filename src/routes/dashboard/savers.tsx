@@ -4,6 +4,7 @@ import {
 	Calendar,
 	ChevronDown,
 	DollarSign,
+	Eye,
 	Filter,
 	Grid,
 	List,
@@ -13,7 +14,6 @@ import {
 	TrendingUp,
 	Users,
 	Wallet,
-	Eye,
 } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -21,6 +21,7 @@ import { DayActionModal } from "#/components/business/DayActionModal";
 import { QuickDepositModal } from "#/components/business/QuickDepositModal";
 import { QuickLoanModal } from "#/components/business/QuickLoanModal";
 import { RegisterSaverModal } from "#/components/business/RegisterSaverModal";
+import { QuickActionMenu } from "#/components/interactive/QuickActionMenu";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
@@ -32,7 +33,6 @@ import { FilterChips } from "#/components/ui/FilterChips";
 import { KPICard } from "#/components/ui/KPICard";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { ProgressCircle } from "#/components/ui/ProgressCircle";
-import { QuickActionMenu } from "#/components/interactive/QuickActionMenu";
 import {
 	ActiveBadge,
 	DebtBadge,
@@ -157,8 +157,8 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto",
 								dayData.paid && dayData.isDebtPayment
 									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
-									: dayData.paid
-										? "border-slate-300 bg-emerald-500 hover:bg-emerald-600"
+									: dayData.paid && !dayData.isDebtPayment
+										? "border-emerald-300 bg-emerald-500 hover:bg-emerald-600"
 										: dayData.isInDebt
 											? "border-red-200 bg-red-100 hover:bg-red-200"
 											: "border-slate-200 bg-slate-50 hover:bg-slate-100",
@@ -197,12 +197,12 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 									)}
 								>
 									{dayData.isDebtPayment
-										? `Pagamento Dívida: ${dayData.amount || 0} MZN`
+										? `Pagamento de Dívida: ${dayData.amount || 0} MZN`
 										: dayData.isInDebt && !dayData.paid
 											? "Em Dívida"
 											: dayData.paid
-												? `Depositado: ${dayData.amount || 0} MZN`
-												: "Não depositado"}
+												? `Depósito Normal: ${dayData.amount || 0} MZN`
+												: "Não Depositado"}
 								</div>
 								{dayData.collector && (
 									<div className="text-[8px] sm:text-[9px] text-gray-500 mt-1">
@@ -308,7 +308,6 @@ interface SaversCalendarViewProps {
 
 function SaversCalendarView({
 	savers,
-	onRowDoubleClick,
 	selectedMonth,
 	onMonthChange,
 	onDayClick,
@@ -405,15 +404,25 @@ function SaversCalendarView({
 											<span className="font-mono text-[9px] text-slate-400 w-10 shrink-0">
 												{saver.alphanumericId || String(saver.cardNumber)}
 											</span>
-											<span
-												className="font-bold text-xs text-slate-900 truncate flex-1 cursor-pointer hover:text-emerald-600 hover:underline transition-colors"
+											<button
+												type="button"
+												className="font-bold text-xs text-slate-900 truncate flex-1 cursor-pointer hover:text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 text-left"
 												onClick={() => {
-													console.log('Calendar name click - navigating to saver-details for:', saver.id);
+													console.log(
+														"Calendar name click - navigating to saver-details for:",
+														saver.id,
+													);
 													window.location.href = `/dashboard/saver-details?id=${saver.id}`;
+												}}
+												onKeyDown={(e) => {
+													if (e.key === "Enter" || e.key === " ") {
+														e.preventDefault();
+														window.location.href = `/dashboard/saver-details?id=${saver.id}`;
+													}
 												}}
 											>
 												{saver.name}
-											</span>
+											</button>
 											<span className="text-[8px] text-slate-400 font-medium whitespace-nowrap">
 												{saver.dailyAmount} MZN/dia
 											</span>
@@ -449,7 +458,10 @@ function SaversCalendarView({
 													id: "view-details",
 													label: "Ver Detalhes",
 													onClick: () => {
-														console.log('Calendar QuickActionMenu - navigating to saver-details for:', saver.id);
+														console.log(
+															"Calendar QuickActionMenu - navigating to saver-details for:",
+															saver.id,
+														);
 														// Navigate to saver-details page with saver ID
 														// setTimeout ensures menu closes before navigation
 														setTimeout(() => {
@@ -1345,15 +1357,25 @@ function SaversManagement() {
 								row.status === "active" ? "bg-emerald-500" : "bg-red-500",
 							)}
 						/>
-						<span
-							className="font-bold text-xs text-slate-900 truncate cursor-pointer hover:text-emerald-600 hover:underline transition-colors"
+						<button
+							type="button"
+							className="font-bold text-xs text-slate-900 truncate cursor-pointer hover:text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 text-left"
 							onClick={() => {
-								console.log('Standard table name click - navigating to saver-details for:', row.id);
+								console.log(
+									"Standard table name click - navigating to saver-details for:",
+									row.id,
+								);
 								window.location.href = `/dashboard/saver-details?id=${row.id}`;
+							}}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									e.preventDefault();
+									window.location.href = `/dashboard/saver-details?id=${row.id}`;
+								}
 							}}
 						>
 							{row.name}
-						</span>
+						</button>
 					</div>
 					<span className="text-[8px] text-slate-400 font-medium">
 						{row.dailyAmount} MZN/dia
@@ -1407,7 +1429,10 @@ function SaversManagement() {
 		<ExpandableRowContent
 			title={`Detalhes de ${row.name}`}
 			onViewFullDetails={() => {
-				console.log('Standard table expanded row - navigating to saver-details for:', row.id);
+				console.log(
+					"Standard table expanded row - navigating to saver-details for:",
+					row.id,
+				);
 				window.location.href = `/dashboard/saver-details?id=${row.id}`;
 			}}
 		>
@@ -1680,10 +1705,10 @@ function SaversManagement() {
 									status: dayData.paid
 										? dayData.isDebtPayment
 											? "debt_payment"
-											: "paid"
+											: "normal_deposit"
 										: dayData.isInDebt
-											? "debt"
-											: "unpaid",
+											? "in_debt"
+											: "not_deposited",
 									amount: dayData.amount,
 									collector: dayData.collector,
 									isDebtPayment: dayData.isDebtPayment,
@@ -1769,14 +1794,33 @@ function SaversManagement() {
 
 			{/* Saver Details Popup */}
 			{isSaverPopupOpen && selectedSaver && (
-				<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setIsSaverPopupOpen(false)}>
-					<div className="bg-white rounded-xl p-6 shadow-2xl max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+				<div
+					className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+					onClick={() => setIsSaverPopupOpen(false)}
+					onKeyDown={(e) => {
+						if (e.key === "Escape") {
+							setIsSaverPopupOpen(false);
+						}
+					}}
+					role="dialog"
+					aria-modal="true"
+				>
+					<div
+						className="bg-white rounded-xl p-6 shadow-2xl max-w-sm w-full"
+						onClick={(e) => e.stopPropagation()}
+						onKeyDown={(e) => {
+							e.stopPropagation();
+						}}
+						role="document"
+					>
 						<div className="flex items-center gap-3 mb-4">
 							<div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
 								<Eye size={24} className="text-emerald-600" />
 							</div>
 							<div>
-								<h3 className="font-bold text-slate-900">{selectedSaver.name}</h3>
+								<h3 className="font-bold text-slate-900">
+									{selectedSaver.name}
+								</h3>
 								<p className="text-sm text-slate-500">Ver detalhes completos</p>
 							</div>
 						</div>
@@ -1784,7 +1828,7 @@ function SaversManagement() {
 							className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
 							onClick={() => {
 								setIsSaverPopupOpen(false);
-								navigate({ to: '/dashboard/saver-details' });
+								navigate({ to: "/dashboard/saver-details" });
 							}}
 						>
 							Ver Detalhes

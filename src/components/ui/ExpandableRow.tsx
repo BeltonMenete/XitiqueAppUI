@@ -7,7 +7,6 @@ interface ExpandableRowProps {
 	expandedContent: React.ReactNode;
 	isExpanded?: boolean;
 	onToggle?: () => void;
-	onDoubleClick?: () => void;
 	showExpandButton?: boolean;
 	className?: string;
 	expandedClassName?: string;
@@ -18,7 +17,6 @@ export function ExpandableRow({
 	expandedContent,
 	isExpanded: controlledExpanded,
 	onToggle,
-	onDoubleClick,
 	showExpandButton = true,
 	className = "",
 	expandedClassName = "",
@@ -44,10 +42,6 @@ export function ExpandableRow({
 					className,
 				)}
 				onClick={handleToggle}
-				onDoubleClick={(e) => {
-					e.stopPropagation();
-					onDoubleClick?.();
-				}}
 			>
 				{children}
 				{showExpandButton && (

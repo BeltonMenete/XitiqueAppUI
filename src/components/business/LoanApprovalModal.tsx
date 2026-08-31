@@ -258,10 +258,14 @@ export function LoanApprovalModal({
 						</h4>
 						<div className="space-y-4">
 							<div>
-								<label className="block text-xs font-semibold text-slate-600 mb-2">
+								<label
+									htmlFor="approved-amount"
+									className="block text-xs font-semibold text-slate-600 mb-2"
+								>
 									Valor a Aprovar (MZN)
 								</label>
 								<input
+									id="approved-amount"
 									type="number"
 									value={formData.approvedAmount}
 									onChange={(e) => handleAmountChange(Number(e.target.value))}
@@ -283,10 +287,14 @@ export function LoanApprovalModal({
 
 							<div className="grid grid-cols-2 gap-4">
 								<div>
-									<label className="block text-xs font-semibold text-slate-600 mb-2">
+									<label
+										htmlFor="interest-rate"
+										className="block text-xs font-semibold text-slate-600 mb-2"
+									>
 										Taxa de Juro (%)
 									</label>
 									<input
+										id="interest-rate"
 										type="number"
 										value={formData.interestRate}
 										onChange={(e) =>
@@ -298,10 +306,14 @@ export function LoanApprovalModal({
 									/>
 								</div>
 								<div>
-									<label className="block text-xs font-semibold text-slate-600 mb-2">
+									<label
+										htmlFor="repayment-period"
+										className="block text-xs font-semibold text-slate-600 mb-2"
+									>
 										Período de Pagamento (meses)
 									</label>
 									<input
+										id="repayment-period"
 										type="number"
 										value={formData.repaymentPeriod}
 										onChange={(e) => handlePeriodChange(Number(e.target.value))}

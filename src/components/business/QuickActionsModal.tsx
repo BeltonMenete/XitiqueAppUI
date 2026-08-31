@@ -182,6 +182,7 @@ export function QuickActionsModal({
 			<div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2">
 				{categories.map((category) => (
 					<button
+						type="button"
 						key={category.id}
 						onClick={() => setSelectedCategory(category.id)}
 						className={cn(
@@ -201,6 +202,7 @@ export function QuickActionsModal({
 			<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 				{filteredActions.map((action) => (
 					<button
+						type="button"
 						key={action.id}
 						onClick={() => {
 							action.action();
@@ -252,9 +254,9 @@ export function QuickActionsModal({
 						{ action: "Registar Depósito", time: "Há 5 min" },
 						{ action: "Solicitar Empréstimo", time: "Há 15 min" },
 						{ action: "Ligar via WhatsApp", time: "Há 1 hora" },
-					].map((item, index) => (
+					].map((item) => (
 						<div
-							key={index}
+							key={item.action}
 							className="flex items-center justify-between p-2 bg-slate-100 rounded-lg"
 						>
 							<span className="text-sm text-slate-900">{item.action}</span>

@@ -23,7 +23,6 @@ interface QuickActionMenuProps {
 export function QuickActionMenu({
 	actions,
 	trigger,
-	position = "right",
 	size = "md",
 }: QuickActionMenuProps) {
 	const [isOpen, setIsOpen] = useState(false);
@@ -102,6 +101,7 @@ export function QuickActionMenu({
 	return (
 		<>
 			<button
+				type="button"
 				ref={triggerRef}
 				onClick={handleTriggerClick}
 				className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
@@ -127,7 +127,7 @@ export function QuickActionMenu({
 								<button
 									type="button"
 									onClick={() => {
-										console.log('QuickActionMenu clicked:', action.id);
+										console.log("QuickActionMenu clicked:", action.id);
 										action.onClick();
 										setIsOpen(false);
 									}}
@@ -189,7 +189,9 @@ export function ContextMenu({ actions, children }: ContextMenuProps) {
 
 	return (
 		<>
-			<div onContextMenu={handleContextMenu}>{children}</div>
+			<div onContextMenu={handleContextMenu} role="presentation">
+				{children}
+			</div>
 
 			{isOpen && (
 				<div
@@ -199,6 +201,7 @@ export function ContextMenu({ actions, children }: ContextMenuProps) {
 				>
 					{actions.map((action) => (
 						<button
+							type="button"
 							key={action.id}
 							onClick={() => {
 								action.onClick();

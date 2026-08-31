@@ -12,6 +12,7 @@ interface InlineEditorProps {
 	disabled?: boolean;
 	showEditIcon?: boolean;
 	validation?: (value: string) => string | null;
+	id?: string;
 }
 
 export function InlineEditor({
@@ -24,6 +25,7 @@ export function InlineEditor({
 	disabled = false,
 	showEditIcon = true,
 	validation,
+	id,
 }: InlineEditorProps) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editValue, setEditValue] = useState(value);
@@ -107,6 +109,7 @@ export function InlineEditor({
 				/>
 				<div className="flex items-center gap-1">
 					<button
+						type="button"
 						onClick={handleSave}
 						className="p-1.5 hover:bg-emerald-500/10 text-emerald-500 rounded-lg transition-colors"
 						title="Save (Enter)"
@@ -114,6 +117,7 @@ export function InlineEditor({
 						<Check size={16} />
 					</button>
 					<button
+						type="button"
 						onClick={handleCancel}
 						className="p-1.5 hover:bg-red-500/10 text-red-500 rounded-lg transition-colors"
 						title="Cancel (Esc)"
@@ -131,8 +135,11 @@ export function InlineEditor({
 	}
 
 	return (
-		<div
+		<button
+			type="button"
+			id={id}
 			onClick={handleStartEdit}
+			disabled={disabled}
 			className={cn(
 				"group relative inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all cursor-pointer",
 				disabled ? "cursor-not-allowed opacity-50" : "hover:bg-slate-100",
@@ -147,7 +154,7 @@ export function InlineEditor({
 					className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity"
 				/>
 			)}
-		</div>
+		</button>
 	);
 }
 
@@ -160,6 +167,7 @@ interface InlineTextAreaProps {
 	className?: string;
 	disabled?: boolean;
 	showEditIcon?: boolean;
+	id?: string;
 }
 
 export function InlineTextArea({
@@ -171,6 +179,7 @@ export function InlineTextArea({
 	className,
 	disabled = false,
 	showEditIcon = true,
+	id,
 }: InlineTextAreaProps) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editValue, setEditValue] = useState(value);
@@ -231,12 +240,14 @@ export function InlineTextArea({
 					<span>Ctrl+Enter to save, Esc to cancel</span>
 					<div className="flex items-center gap-1">
 						<button
+							type="button"
 							onClick={handleCancel}
 							className="p-1.5 hover:bg-red-500/10 text-red-500 rounded-lg transition-colors"
 						>
 							<X size={14} />
 						</button>
 						<button
+							type="button"
 							onClick={handleSave}
 							className="p-1.5 hover:bg-emerald-500/10 text-emerald-500 rounded-lg transition-colors"
 						>
@@ -249,8 +260,11 @@ export function InlineTextArea({
 	}
 
 	return (
-		<div
+		<button
+			type="button"
+			id={id}
 			onClick={handleStartEdit}
+			disabled={disabled}
 			className={cn(
 				"group relative inline-block px-3 py-2 rounded-lg transition-all cursor-pointer",
 				disabled ? "cursor-not-allowed opacity-50" : "hover:bg-slate-100",
@@ -265,6 +279,6 @@ export function InlineTextArea({
 					className="absolute top-2 right-2 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity"
 				/>
 			)}
-		</div>
+		</button>
 	);
 }

@@ -27,17 +27,16 @@ interface DayActionModalProps {
 	onClose: () => void;
 	saverName: string;
 	day: number;
-	dayStatus: "paid" | "unpaid" | "debt" | "debt_payment";
+	dayStatus: "normal_deposit" | "not_deposited" | "in_debt" | "debt_payment";
 	amount?: number;
 	collector?: string;
 	isDebtPayment?: boolean;
-	onActionComplete?: (action: string, data?: any) => void;
-	saver?: any;
+	onActionComplete?: (action: string, data?: Record<string, unknown>) => void;
 }
 
 interface DayData {
 	day: number;
-	status: "paid" | "unpaid" | "debt" | "debt_payment";
+	status: "normal_deposit" | "not_deposited" | "in_debt" | "debt_payment";
 	amount?: number;
 	collector?: string;
 	isDebtPayment?: boolean;
@@ -53,7 +52,6 @@ export function DayActionModal({
 	collector,
 	isDebtPayment,
 	onActionComplete,
-	saver,
 }: DayActionModalProps) {
 	const [showMenu, setShowMenu] = useState(false);
 	const [menuPosition, setMenuPosition] = useState<{
@@ -85,7 +83,7 @@ export function DayActionModal({
 
 	const getActionsForStatus = (status: string) => {
 		switch (status) {
-			case "unpaid":
+			case "not_deposited":
 				return [
 					{
 						label: "Registrar Depósito",
@@ -103,7 +101,7 @@ export function DayActionModal({
 						action: "note",
 					},
 				];
-			case "paid":
+			case "normal_deposit":
 				return [
 					{
 						label: "Ver Detalhes",
@@ -132,7 +130,7 @@ export function DayActionModal({
 						action: "receipt",
 					},
 				];
-			case "debt":
+			case "in_debt":
 				return [
 					{
 						label: "Registrar Pagamento de Dívida",
@@ -257,13 +255,11 @@ export function DayActionModal({
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case "paid":
-				return isDebtPayment
-					? "bg-amber-50 border-amber-200"
-					: "bg-emerald-50 border-emerald-200";
-			case "unpaid":
+			case "normal_deposit":
+				return "bg-emerald-50 border-emerald-200";
+			case "not_deposited":
 				return "bg-slate-50 border-slate-200";
-			case "debt":
+			case "in_debt":
 				return "bg-red-50 border-red-200";
 			case "debt_payment":
 				return "bg-amber-50 border-amber-200";
@@ -274,11 +270,11 @@ export function DayActionModal({
 
 	const getStatusText = (status: string) => {
 		switch (status) {
-			case "paid":
-				return isDebtPayment ? "Pagamento de Dívida" : "Depositado";
-			case "unpaid":
+			case "normal_deposit":
+				return "Depósito Normal";
+			case "not_deposited":
 				return "Não Depositado";
-			case "debt":
+			case "in_debt":
 				return "Em Dívida";
 			case "debt_payment":
 				return "Pagamento de Dívida";
@@ -383,10 +379,14 @@ export function DayActionModal({
 								Adicionar Nota
 							</h4>
 							<div>
-								<label className="block text-xs text-slate-600 mb-1">
+								<label
+									htmlFor="note-input"
+									className="block text-xs text-slate-600 mb-1"
+								>
 									Nota
 								</label>
 								<textarea
+									id="note-input"
 									value={noteText}
 									onChange={(e) => setNoteText(e.target.value)}
 									className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
@@ -416,10 +416,14 @@ export function DayActionModal({
 								Marcar como Não Disponível
 							</h4>
 							<div>
-								<label className="block text-xs text-slate-600 mb-1">
+								<label
+									htmlFor="unavailable-reason"
+									className="block text-xs text-slate-600 mb-1"
+								>
 									Motivo
 								</label>
 								<select
+									id="unavailable-reason"
 									value={unavailableReason}
 									onChange={(e) => setUnavailableReason(e.target.value)}
 									className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -433,10 +437,14 @@ export function DayActionModal({
 							</div>
 							{unavailableReason === "Outro" && (
 								<div className="mt-2">
-									<label className="block text-xs text-slate-600 mb-1">
+									<label
+										htmlFor="specify-input"
+										className="block text-xs text-slate-600 mb-1"
+									>
 										Especificar
 									</label>
 									<input
+										id="specify-input"
 										type="text"
 										value={noteText}
 										onChange={(e) => setNoteText(e.target.value)}

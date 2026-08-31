@@ -3,16 +3,16 @@ import { cn } from "#/lib/design-system";
 interface Column {
 	key: string;
 	header: string;
-	render?: (value: unknown, row: any) => React.ReactNode;
+	render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
 	className?: string;
 }
 
 interface PrototypeTableProps {
-	data: any[];
+	data: Record<string, unknown>[];
 	columns: Column[];
 	showAvatars?: boolean;
 	showStatusBadges?: boolean;
-	onRowClick?: (row: any) => void;
+	onRowClick?: (row: Record<string, unknown>) => void;
 	pagination?: {
 		currentPage: number;
 		totalPages: number;
@@ -24,8 +24,6 @@ interface PrototypeTableProps {
 export function PrototypeTable({
 	data,
 	columns,
-	showAvatars = false,
-	showStatusBadges = false,
 	onRowClick,
 	pagination,
 }: PrototypeTableProps) {

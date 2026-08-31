@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+	Calendar,
 	CheckCircle2,
 	ChevronRight,
+	History,
 	MapPin,
 	Phone,
 	Printer,
@@ -10,10 +12,6 @@ import {
 	TrendingUp,
 	Verified,
 	Wallet,
-	X,
-	Calendar,
-	AccountBalance,
-	History,
 } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
@@ -24,8 +22,13 @@ import { Card, CardContent, CardHeader } from "#/components/ui/Card";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { DebtBadge } from "#/components/ui/StatusBadge";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
+import {
+	useSaver,
+	useSaverDeposits,
+	useSaverHistory,
+	useSaverLoans,
+} from "#/features/savers";
 import { cn } from "#/lib/design-system";
-import { useSaver, useSaverDeposits, useSaverHistory, useSaverLoans } from "#/features/savers";
 
 export const Route = createFileRoute("/dashboard/savers/$id")({
 	component: SaverDetails,
@@ -35,12 +38,12 @@ function SaverDetails() {
 	const [activeTab, setActiveTab] = useState<
 		"card" | "statement" | "loans" | "history"
 	>("card");
-	const [selectedMonth, setSelectedMonth] = useState("Outubro 2023");
-	const [searchTerm, setSearchTerm] = useState("");
+	const [_selectedMonth, _setSelectedMonth] = useState("Outubro 2023");
+	const [_searchTerm, _setSearchTerm] = useState("");
 	const { id } = Route.useParams();
 
 	// Fetch saver data using the ID from route params
-	const { data: saver, isLoading: saverLoading, error } = useSaver(id);
+	const { data: saver, isLoading: saverLoading, error: _error } = useSaver(id);
 	const { data: deposits, isLoading: depositsLoading } = useSaverDeposits(id);
 	const { data: loans, isLoading: loansLoading } = useSaverLoans(id);
 	const { data: history, isLoading: historyLoading } = useSaverHistory(id);
@@ -347,7 +350,10 @@ function SaverDetails() {
 											Ações Rápidas
 										</h4>
 										<div className="space-y-2">
-											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
+											<button
+												type="button"
+												className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group"
+											>
 												<div className="flex items-center gap-3">
 													<CheckCircle2
 														size={20}
@@ -359,7 +365,10 @@ function SaverDetails() {
 												</div>
 												<ChevronRight size={20} className="text-slate-400" />
 											</button>
-											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
+											<button
+												type="button"
+												className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group"
+											>
 												<div className="flex items-center gap-3">
 													<TrendingUp
 														size={20}
@@ -371,7 +380,10 @@ function SaverDetails() {
 												</div>
 												<ChevronRight size={20} className="text-slate-400" />
 											</button>
-											<button className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group">
+											<button
+												type="button"
+												className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all group"
+											>
 												<div className="flex items-center gap-3">
 													<Wallet
 														size={20}

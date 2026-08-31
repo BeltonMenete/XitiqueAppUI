@@ -81,9 +81,11 @@ export function KeyboardShortcutsModal({
 			className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${isOpen ? "block" : "hidden"}`}
 		>
 			{/* Backdrop */}
-			<div
-				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm"
+			<button
+				type="button"
+				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm border-0 p-0 cursor-pointer"
 				onClick={onClose}
+				aria-label="Fechar"
 			/>
 
 			{/* Modal */}
@@ -94,6 +96,7 @@ export function KeyboardShortcutsModal({
 						Atalhos de Teclado
 					</h2>
 					<button
+						type="button"
 						onClick={onClose}
 						className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
 					>
@@ -103,7 +106,10 @@ export function KeyboardShortcutsModal({
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
+							role="img"
+							aria-label="Fechar"
 						>
+							<title>Fechar</title>
 							<path
 								strokeLinecap="round"
 								strokeLinejoin="round"
@@ -123,9 +129,9 @@ export function KeyboardShortcutsModal({
 									{categories[category as keyof typeof categories] || category}
 								</h3>
 								<div className="space-y-2">
-									{categoryShortcuts.map((shortcut, index) => (
+									{categoryShortcuts.map((shortcut) => (
 										<div
-											key={index}
+											key={`${shortcut.key}-${shortcut.ctrl}-${shortcut.shift}-${shortcut.alt}`}
 											className="flex items-center justify-between p-3 bg-slate-100 rounded-lg"
 										>
 											<span className="text-sm text-slate-900">

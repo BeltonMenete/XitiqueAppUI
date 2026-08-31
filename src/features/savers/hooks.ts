@@ -441,23 +441,25 @@ function getMockSaver(id: string): Saver {
 		},
 	};
 
-	return mockSavers[id] || {
-		id: id,
-		cardNumber: Number(id) || 1,
-		name: "Maria Silva",
-		contact: 841234567,
-		dailyAmount: 100,
-		totalSaved: 1800,
-		currentDebt: 500,
-		daysInCycle: 18,
-		status: "in_debt",
-		registrationDate: "2023-01-15",
-		alphanumericId: "A01",
-		organizationId: "1",
-		isActive: true,
-		organization: { id: "1", name: "Mercado Central, Maputo" },
-		paymentDays: generatePaymentDays(18),
-	};
+	return (
+		mockSavers[id] || {
+			id: id,
+			cardNumber: Number(id) || 1,
+			name: "Maria Silva",
+			contact: 841234567,
+			dailyAmount: 100,
+			totalSaved: 1800,
+			currentDebt: 500,
+			daysInCycle: 18,
+			status: "in_debt",
+			registrationDate: "2023-01-15",
+			alphanumericId: "A01",
+			organizationId: "1",
+			isActive: true,
+			organization: { id: "1", name: "Mercado Central, Maputo" },
+			paymentDays: generatePaymentDays(18),
+		}
+	);
 }
 
 function getMockDeposits(id: string): SaverDeposit[] {
@@ -605,17 +607,22 @@ export function useSaverDeposits(id: string, month?: number, year?: number) {
 }
 
 // Hook to get deposit for a specific day
-export function useSaverDayDeposit(saverId: string, day: number, month: number, year: number) {
+export function useSaverDayDeposit(
+	saverId: string,
+	day: number,
+	month: number,
+	year: number,
+) {
 	return useQuery({
 		queryKey: [...SAVER_KEYS.deposits(saverId), day, month, year],
 		queryFn: async () => {
 			try {
 				const deposits = await saversApi.getDeposits(saverId, { month, year });
-				return deposits.find(d => d.day === day) || null;
+				return deposits.find((d) => d.day === day) || null;
 			} catch (_error) {
 				// Return mock data if API fails
 				const mockDeposits = getMockDeposits(saverId);
-				return mockDeposits.find(d => d.day === day) || null;
+				return mockDeposits.find((d) => d.day === day) || null;
 			}
 		},
 		enabled: !!saverId && !!day && !!month && !!year,

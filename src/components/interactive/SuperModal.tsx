@@ -59,9 +59,11 @@ export function SuperModal({
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
 			{/* Backdrop */}
-			<div
-				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-in fade-in duration-200"
+			<button
+				type="button"
+				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-in fade-in duration-200 border-0 p-0 cursor-pointer"
 				onClick={onClose}
+				aria-label="Fechar"
 			/>
 
 			{/* Modal */}
@@ -85,6 +87,7 @@ export function SuperModal({
 					</div>
 					{!hideCloseButton && (
 						<button
+							type="button"
 							onClick={onClose}
 							className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
 						>
@@ -113,6 +116,7 @@ export function SuperModal({
 					<div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-slate-50">
 						{onPrevious && (
 							<button
+								type="button"
 								onClick={onPrevious}
 								disabled={currentStep === 1}
 								className={cn(
@@ -129,6 +133,7 @@ export function SuperModal({
 						<div className="flex-1" />
 						{onNext && (
 							<button
+								type="button"
 								onClick={onNext}
 								disabled={currentStep === totalSteps}
 								className={cn(
@@ -175,9 +180,11 @@ export function SuperModalWithTabs({
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
 			{/* Backdrop */}
-			<div
-				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-in fade-in duration-200"
+			<button
+				type="button"
+				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-in fade-in duration-200 border-0 p-0 cursor-pointer"
 				onClick={onClose}
+				aria-label="Fechar"
 			/>
 
 			{/* Modal */}
@@ -193,6 +200,7 @@ export function SuperModalWithTabs({
 						{title}
 					</h2>
 					<button
+						type="button"
 						onClick={onClose}
 						className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
 					>
@@ -204,6 +212,7 @@ export function SuperModalWithTabs({
 				<div className="flex border-b border-slate-200 bg-slate-50">
 					{tabs.map((tab) => (
 						<button
+							type="button"
 							key={tab.id}
 							onClick={() => setActiveTab(tab.id)}
 							className={cn(

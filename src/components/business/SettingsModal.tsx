@@ -86,10 +86,14 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 					{/* Organization Info */}
 					<div className="space-y-4">
 						<div>
-							<label className="block text-sm font-semibold text-slate-900 mb-2">
+							<label
+								htmlFor="organization-name"
+								className="block text-sm font-semibold text-slate-900 mb-2"
+							>
 								Nome da Organização
 							</label>
 							<InlineEditor
+								id="organization-name"
 								value={formData.organizationName}
 								onSave={(value) =>
 									setFormData({ ...formData, organizationName: value })
@@ -100,10 +104,14 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 
 						<div className="grid grid-cols-2 gap-4">
 							<div>
-								<label className="block text-sm font-semibold text-slate-900 mb-2">
+								<label
+									htmlFor="province"
+									className="block text-sm font-semibold text-slate-900 mb-2"
+								>
 									Província
 								</label>
 								<select
+									id="province"
 									value={formData.province}
 									onChange={(e) =>
 										setFormData({ ...formData, province: e.target.value })
@@ -118,10 +126,14 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 							</div>
 
 							<div>
-								<label className="block text-sm font-semibold text-slate-900 mb-2">
+								<label
+									htmlFor="district"
+									className="block text-sm font-semibold text-slate-900 mb-2"
+								>
 									Distrito
 								</label>
 								<select
+									id="district"
 									value={formData.district}
 									onChange={(e) =>
 										setFormData({ ...formData, district: e.target.value })
@@ -136,10 +148,14 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 						</div>
 
 						<div>
-							<label className="block text-sm font-semibold text-slate-900 mb-2">
+							<label
+								htmlFor="phone"
+								className="block text-sm font-semibold text-slate-900 mb-2"
+							>
 								Telefone
 							</label>
 							<InlineEditor
+								id="phone"
 								value={formData.phone}
 								onSave={(value) => setFormData({ ...formData, phone: value })}
 								placeholder="+258 84 123 4567"
@@ -163,10 +179,14 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 							</h4>
 							<div className="space-y-4">
 								<div>
-									<label className="block text-sm font-medium text-slate-600 mb-2">
+									<label
+										htmlFor="daily-commission-rate"
+										className="block text-sm font-medium text-slate-600 mb-2"
+									>
 										Taxa de Comissão Diária (%)
 									</label>
 									<InlineEditor
+										id="daily-commission-rate"
 										value={String(formData.dailyCommissionRate)}
 										onSave={(value) =>
 											setFormData({
@@ -180,10 +200,14 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 								</div>
 
 								<div>
-									<label className="block text-sm font-medium text-slate-600 mb-2">
+									<label
+										htmlFor="loan-interest-rate"
+										className="block text-sm font-medium text-slate-600 mb-2"
+									>
 										Taxa de Juro para Empréstimos (%)
 									</label>
 									<InlineEditor
+										id="loan-interest-rate"
 										value={String(formData.loanInterestRate)}
 										onSave={(value) =>
 											setFormData({
@@ -197,10 +221,14 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 								</div>
 
 								<div>
-									<label className="block text-sm font-medium text-slate-600 mb-2">
+									<label
+										htmlFor="grace-period-days"
+										className="block text-sm font-medium text-slate-600 mb-2"
+									>
 										Período de Carência (dias)
 									</label>
 									<InlineEditor
+										id="grace-period-days"
 										value={String(formData.gracePeriodDays)}
 										onSave={(value) =>
 											setFormData({

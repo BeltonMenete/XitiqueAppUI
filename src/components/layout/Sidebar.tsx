@@ -33,9 +33,11 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 
 			{/* Mobile Overlay */}
 			{isOpen && (
-				<div
-					className="md:hidden fixed inset-0 bg-black/50 z-40"
+				<button
+					type="button"
+					className="md:hidden fixed inset-0 bg-black/50 z-40 border-0 p-0 cursor-pointer"
 					onClick={() => setIsOpen(false)}
+					aria-label="Fechar menu"
 				/>
 			)}
 

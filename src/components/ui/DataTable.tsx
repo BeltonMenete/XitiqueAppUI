@@ -21,7 +21,6 @@ interface DataTableProps<T> {
 	searchable?: boolean;
 	searchPlaceholder?: string;
 	onRowClick?: (row: T) => void;
-	onRowDoubleClick?: (row: T) => void;
 	emptyMessage?: string;
 	className?: string;
 	rowKey?: keyof T;
@@ -42,7 +41,6 @@ export function DataTable<T>({
 	searchable = false,
 	searchPlaceholder = "Pesquisar...",
 	onRowClick,
-	onRowDoubleClick,
 	emptyMessage = "Nenhum dado encontrado",
 	className = "",
 	rowKey = "id" as keyof T,
@@ -266,7 +264,6 @@ export function DataTable<T>({
 											key={rowId}
 											isExpanded={expanded}
 											onToggle={() => handleRowExpand(row)}
-											onDoubleClick={() => onRowDoubleClick?.(row)}
 											showExpandButton={true}
 											expandedContent={renderExpandedRow?.(row)}
 										>
@@ -330,11 +327,10 @@ export function DataTable<T>({
 												(sortedData.indexOf(row) % 2 === 0
 													? "bg-white"
 													: "bg-slate-100"),
-											(onRowClick || onRowDoubleClick) && "cursor-pointer",
+											onRowClick && "cursor-pointer",
 											selected && "bg-secondary/5",
 										)}
 										onClick={() => onRowClick?.(row)}
-										onDoubleClick={() => onRowDoubleClick?.(row)}
 									>
 										{selectable && (
 											<td className="px-4 py-3">
