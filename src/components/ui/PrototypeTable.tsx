@@ -146,7 +146,10 @@ export function PrototypeTable({
 								fill="none"
 								stroke="currentColor"
 								strokeWidth="2"
+								role="img"
+								aria-label="Previous page"
 							>
+								<title>Previous page</title>
 								<path d="M15 18l-6-6 6-6" />
 							</svg>
 						</button>
@@ -182,7 +185,10 @@ export function PrototypeTable({
 								fill="none"
 								stroke="currentColor"
 								strokeWidth="2"
+								role="img"
+								aria-label="Next page"
 							>
+								<title>Next page</title>
 								<path d="M9 18l6-6-6-6" />
 							</svg>
 						</button>

@@ -35,7 +35,8 @@ export function ProgressCircle({
 				className,
 			)}
 		>
-			<svg width={width} height={height} className="transform -rotate-90">
+			<svg width={width} height={height} className="transform -rotate-90" role="img" aria-label={label || `Progress: ${value}%`}>
+				<title>{label || `Progress: ${value}%`}</title>
 				<circle
 					cx={width / 2}
 					cy={height / 2}

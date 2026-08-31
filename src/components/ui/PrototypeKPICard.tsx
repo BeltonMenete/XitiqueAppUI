@@ -53,51 +53,80 @@ export function PrototypeKPICard({
 	};
 
 	return (
-		<div
-			className={cn(
-				"bg-slate-50 p-4 rounded-xl shadow-sm",
-				borderColorMap[borderColor],
-				clickable && "cursor-pointer hover:shadow-md transition-shadow",
-			)}
-			onClick={handleClick}
-		>
-			<span className="text-xs text-slate-500 block mb-2 uppercase tracking-wider font-semibold">
-				{title}
-			</span>
-			<div className="flex items-baseline gap-2">
-				<span className={cn("text-2xl font-bold", textColorMap[borderColor])}>
-					{value}
-				</span>
-				{subtext && <span className="text-xs text-slate-500">{subtext}</span>}
-			</div>
-			{icon && <div className="mt-2">{icon}</div>}
-			{expandedContent && clickable && (
+		<>
+			{clickable ? (
 				<button
 					type="button"
-					className="mt-2 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors"
-					onClick={(e) => {
-						e.stopPropagation();
-						setIsExpanded(!isExpanded);
+					className={cn(
+						"bg-slate-50 p-4 rounded-xl shadow-sm w-full text-left",
+						borderColorMap[borderColor],
+						"cursor-pointer hover:shadow-md transition-shadow",
+					)}
+					onClick={handleClick}
+					onKeyDown={(e) => {
+						if (e.key === "Enter" || e.key === " ") {
+							e.preventDefault();
+							handleClick();
+						}
 					}}
 				>
-					{isExpanded ? (
-						<>
-							<ChevronUp size={14} />
-							<span>Mostrar menos</span>
-						</>
-					) : (
-						<>
-							<ChevronDown size={14} />
-							<span>Mostrar mais</span>
-						</>
+					<span className="text-xs text-slate-500 block mb-2 uppercase tracking-wider font-semibold">
+						{title}
+					</span>
+					<div className="flex items-baseline gap-2">
+						<span className={cn("text-2xl font-bold", textColorMap[borderColor])}>
+							{value}
+						</span>
+						{subtext && <span className="text-xs text-slate-500">{subtext}</span>}
+					</div>
+					{icon && <div className="mt-2">{icon}</div>}
+					{expandedContent && clickable && (
+						<button
+							type="button"
+							className="mt-2 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors"
+							onClick={(e) => {
+								e.stopPropagation();
+								setIsExpanded(!isExpanded);
+							}}
+						>
+							{isExpanded ? (
+								<>
+									<ChevronUp size={14} />
+									<span>Mostrar menos</span>
+								</>
+							) : (
+								<>
+									<ChevronDown size={14} />
+									<span>Mostrar mais</span>
+								</>
+							)}
+						</button>
+					)}
+					{isExpanded && expandedContent && (
+						<div className="mt-4 pt-4 border-t border-slate-200">
+							{expandedContent}
+						</div>
 					)}
 				</button>
-			)}
-			{isExpanded && expandedContent && (
-				<div className="mt-4 pt-4 border-t border-slate-200">
-					{expandedContent}
+			) : (
+				<div
+					className={cn(
+						"bg-slate-50 p-4 rounded-xl shadow-sm",
+						borderColorMap[borderColor],
+					)}
+				>
+					<span className="text-xs text-slate-500 block mb-2 uppercase tracking-wider font-semibold">
+						{title}
+					</span>
+					<div className="flex items-baseline gap-2">
+						<span className={cn("text-2xl font-bold", textColorMap[borderColor])}>
+							{value}
+						</span>
+						{subtext && <span className="text-xs text-slate-500">{subtext}</span>}
+					</div>
+					{icon && <div className="mt-2">{icon}</div>}
 				</div>
 			)}
-		</div>
+		</>
 	);
 }

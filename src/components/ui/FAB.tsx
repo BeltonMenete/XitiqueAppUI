@@ -3,6 +3,7 @@ import { useState } from "react";
 import { cn } from "#/lib/design-system";
 
 interface FABAction {
+	id: string;
 	icon: React.ReactNode;
 	label: string;
 	onClick: () => void;
@@ -51,9 +52,9 @@ export function FAB({
 		>
 			{isOpen && actions.length > 0 && (
 				<div className="flex flex-col gap-3 mb-3 animate-in slide-in-from-bottom-2 duration-300">
-					{actions.map((action, index) => (
+					{actions.map((action) => (
 						<button
-							key={index}
+							key={action.id}
 							type="button"
 							className={cn(
 								"w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform",

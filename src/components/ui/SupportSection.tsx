@@ -1,9 +1,9 @@
 import {
 	ArrowRight,
 	CheckCircle,
-	Mail,
 	MessageCircle,
 	Phone,
+	Mail,
 } from "lucide-react";
 
 interface SupportSectionProps {
@@ -53,20 +53,20 @@ export function SupportSection({
 					</div>
 				</div>
 				<div className="flex flex-wrap gap-3">
-					<a
-						href="#"
+					<button
+						type="button"
 						className="bg-white border border-slate-200 px-4 py-2 rounded-lg flex items-center gap-2 hover:shadow-md transition-all"
 					>
 						<MessageCircle size={18} className="text-[#3391C2]" />
 						<span className="font-bold text-slate-700">WhatsApp</span>
-					</a>
-					<a
-						href="#"
+					</button>
+					<button
+						type="button"
 						className="bg-white border border-slate-200 px-4 py-2 rounded-lg flex items-center gap-2 hover:shadow-md transition-all"
 					>
 						<Mail size={18} className="text-slate-900" />
 						<span className="font-bold text-slate-700">Email</span>
-					</a>
+					</button>
 				</div>
 			</div>
 		</div>

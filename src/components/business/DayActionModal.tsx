@@ -27,19 +27,31 @@ interface DayActionModalProps {
 	onClose: () => void;
 	saverName: string;
 	day: number;
-	dayStatus: "normal_deposit" | "not_deposited" | "in_debt" | "debt_payment";
+	dayStatus:
+		| "paid"
+		| "partial"
+		| "unpaid"
+		| "deleted"
+		| "not_deposited"
+		| "in_debt"
+		| "current";
 	amount?: number;
 	collector?: string;
-	isDebtPayment?: boolean;
 	onActionComplete?: (action: string, data?: Record<string, unknown>) => void;
 }
 
 interface DayData {
 	day: number;
-	status: "normal_deposit" | "not_deposited" | "in_debt" | "debt_payment";
+	status:
+		| "paid"
+		| "partial"
+		| "unpaid"
+		| "deleted"
+		| "not_deposited"
+		| "in_debt"
+		| "current";
 	amount?: number;
 	collector?: string;
-	isDebtPayment?: boolean;
 }
 
 export function DayActionModal({
@@ -50,7 +62,6 @@ export function DayActionModal({
 	dayStatus,
 	amount,
 	collector,
-	isDebtPayment,
 	onActionComplete,
 }: DayActionModalProps) {
 	const [showMenu, setShowMenu] = useState(false);
@@ -78,12 +89,12 @@ export function DayActionModal({
 		status: dayStatus,
 		amount,
 		collector,
-		isDebtPayment,
 	};
 
 	const getActionsForStatus = (status: string) => {
 		switch (status) {
 			case "not_deposited":
+			case "unpaid":
 				return [
 					{
 						label: "Registrar Depósito",
@@ -101,7 +112,7 @@ export function DayActionModal({
 						action: "note",
 					},
 				];
-			case "normal_deposit":
+			case "paid":
 				return [
 					{
 						label: "Ver Detalhes",
@@ -130,25 +141,7 @@ export function DayActionModal({
 						action: "receipt",
 					},
 				];
-			case "in_debt":
-				return [
-					{
-						label: "Registrar Pagamento de Dívida",
-						icon: <DollarSign size={16} />,
-						action: "debt_payment",
-					},
-					{
-						label: "Ver Detalhes da Dívida",
-						icon: <AlertCircle size={16} />,
-						action: "debt_details",
-					},
-					{
-						label: "Calcular Plano de Pagamento",
-						icon: <Calendar size={16} />,
-						action: "payment_plan",
-					},
-				];
-			case "debt_payment":
+			case "partial":
 				return [
 					{
 						label: "Ver Detalhes do Pagamento",
@@ -169,6 +162,24 @@ export function DayActionModal({
 						label: "Ver Histórico do Empréstimo",
 						icon: <History size={16} />,
 						action: "loan_history",
+					},
+				];
+			case "in_debt":
+				return [
+					{
+						label: "Registrar Pagamento de Dívida",
+						icon: <DollarSign size={16} />,
+						action: "debt_payment",
+					},
+					{
+						label: "Ver Detalhes da Dívida",
+						icon: <AlertCircle size={16} />,
+						action: "debt_details",
+					},
+					{
+						label: "Calcular Plano de Pagamento",
+						icon: <Calendar size={16} />,
+						action: "payment_plan",
 					},
 				];
 			default:
@@ -255,14 +266,17 @@ export function DayActionModal({
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case "normal_deposit":
+			case "paid":
 				return "bg-emerald-50 border-emerald-200";
+			case "partial":
+				return "bg-amber-50 border-amber-200";
 			case "not_deposited":
+			case "unpaid":
 				return "bg-slate-50 border-slate-200";
 			case "in_debt":
 				return "bg-red-50 border-red-200";
-			case "debt_payment":
-				return "bg-amber-50 border-amber-200";
+			case "deleted":
+				return "bg-red-50 border-red-200";
 			default:
 				return "bg-slate-50 border-slate-200";
 		}
@@ -270,14 +284,17 @@ export function DayActionModal({
 
 	const getStatusText = (status: string) => {
 		switch (status) {
-			case "normal_deposit":
+			case "paid":
 				return "Depósito Normal";
+			case "partial":
+				return "Pagamento Parcial";
 			case "not_deposited":
+			case "unpaid":
 				return "Não Depositado";
 			case "in_debt":
 				return "Em Dívida";
-			case "debt_payment":
-				return "Pagamento de Dívida";
+			case "deleted":
+				return "Eliminado";
 			default:
 				return "Desconhecido";
 		}
@@ -304,15 +321,11 @@ export function DayActionModal({
 							<span
 								className={cn(
 									"text-xs font-semibold px-2 py-1 rounded-full",
-									dayStatus === "paid" &&
-										!isDebtPayment &&
-										"bg-emerald-100 text-emerald-700",
-									dayStatus === "paid" &&
-										isDebtPayment &&
-										"bg-amber-100 text-amber-700",
+									dayStatus === "paid" && "bg-emerald-100 text-emerald-700",
+									dayStatus === "partial" && "bg-amber-100 text-amber-700",
 									dayStatus === "unpaid" && "bg-slate-100 text-slate-600",
-									dayStatus === "debt" && "bg-red-100 text-red-700",
-									dayStatus === "debt_payment" && "bg-amber-100 text-amber-700",
+									dayStatus === "in_debt" && "bg-red-100 text-red-700",
+									dayStatus === "deleted" && "bg-red-100 text-red-700",
 								)}
 							>
 								{getStatusText(dayStatus)}
@@ -322,7 +335,7 @@ export function DayActionModal({
 							<span className="text-slate-600">Ticante:</span>
 							<span className="font-medium text-slate-900">{saverName}</span>
 						</div>
-						{amount && dayStatus === "paid" && (
+						{amount && (dayStatus === "paid" || dayStatus === "partial") && (
 							<div className="flex items-center justify-between text-sm">
 								<span className="text-slate-600">Valor:</span>
 								<span className="font-medium text-slate-900">
@@ -330,7 +343,7 @@ export function DayActionModal({
 								</span>
 							</div>
 						)}
-						{collector && dayStatus === "paid" && (
+						{collector && (dayStatus === "paid" || dayStatus === "partial") && (
 							<div className="flex items-center justify-between text-sm">
 								<span className="text-slate-600">Cobrador:</span>
 								<span className="font-medium text-slate-900">{collector}</span>
@@ -342,7 +355,7 @@ export function DayActionModal({
 					{showDepositForm && (
 						<div className="p-4 bg-slate-50 rounded-lg space-y-4">
 							<h4 className="text-sm font-semibold text-slate-900">
-								{dayStatus === "unpaid"
+								{dayStatus === "unpaid" || dayStatus === "not_deposited"
 									? "Registrar Depósito"
 									: "Editar Depósito"}
 							</h4>
@@ -353,7 +366,7 @@ export function DayActionModal({
 								</span>
 							</div>
 							<p className="text-xs text-slate-500">
-								{dayStatus === "unpaid"
+								{dayStatus === "unpaid" || dayStatus === "not_deposited"
 									? "Confirme o registro do depósito no valor diário fixo do ticante."
 									: "Confirme a edição do depósito."}
 							</p>
@@ -533,12 +546,14 @@ export function DayActionModal({
 									size="lg"
 									className="w-full"
 									leftIcon={
-										dayStatus === "unpaid" ? (
+										dayStatus === "unpaid" || dayStatus === "not_deposited" ? (
 											<DollarSign size={20} />
 										) : dayStatus === "paid" ? (
 											<FileText size={20} />
-										) : dayStatus === "debt" ? (
+										) : dayStatus === "in_debt" ? (
 											<DollarSign size={20} />
+										) : dayStatus === "partial" ? (
+											<FileText size={20} />
 										) : (
 											<FileText size={20} />
 										)
@@ -548,10 +563,11 @@ export function DayActionModal({
 										if (primaryAction) handleAction(primaryAction.action);
 									}}
 								>
-									{dayStatus === "unpaid" && "Registrar Depósito"}
+									{(dayStatus === "unpaid" || dayStatus === "not_deposited") &&
+										"Registrar Depósito"}
 									{dayStatus === "paid" && "Ver Detalhes do Depósito"}
-									{dayStatus === "debt" && "Registrar Pagamento de Dívida"}
-									{dayStatus === "debt_payment" && "Ver Detalhes do Pagamento"}
+									{dayStatus === "in_debt" && "Registrar Pagamento de Dívida"}
+									{dayStatus === "partial" && "Ver Detalhes do Pagamento"}
 								</Button>
 
 								{/* More Actions */}

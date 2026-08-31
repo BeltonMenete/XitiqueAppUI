@@ -4,8 +4,6 @@ import {
 	Check,
 	CheckCircle2,
 	ChevronRight,
-	Clock,
-	DollarSign,
 	History,
 	MapPin,
 	Phone,
@@ -13,20 +11,20 @@ import {
 	Receipt,
 	Share2,
 	TrendingUp,
-	User,
 	Verified,
 	Wallet,
 	X,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { DayDetailPopup } from "#/components/business/DayDetailPopup";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
 import { Button } from "#/components/ui/Button";
 import { Card, CardContent } from "#/components/ui/Card";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
-import { useSaver, useSaverDayDeposit } from "#/features/savers/hooks";
+import { useSaver } from "#/features/savers/hooks";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/saver-details")({
@@ -44,12 +42,17 @@ function SaverDetailsPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedDay, setSelectedDay] = useState<{
 		day: number;
-		status: string;
+		status:
+		| "paid"
+		| "partial"
+		| "unpaid"
+		| "deleted"
+		| "not_deposited"
+		| "in_debt"
+		| "current";
 		amount?: number;
 		collector?: string;
 	} | null>(null);
-	const [showDepositForm, setShowDepositForm] = useState(false);
-	const [depositAmount, setDepositAmount] = useState("");
 	const searchParams = Route.useSearch();
 	const saverId = searchParams.id as string;
 
@@ -69,19 +72,11 @@ function SaverDetailsPage() {
 		Dezembro: 12,
 	};
 	const [monthName, yearStr] = selectedMonth.split(" ");
-	const month = monthMap[monthName] || 10;
-	const year = parseInt(yearStr, 10) || 2023;
+	const _month = monthMap[monthName] || 10;
+	const _year = parseInt(yearStr, 10) || 2023;
 
 	// Fetch saver data using the ID from search params
 	const { data: saver, isLoading, error } = useSaver(saverId);
-
-	// Fetch deposit data for the selected day
-	const { data: dayDeposit, isLoading: isLoadingDeposit } = useSaverDayDeposit(
-		saverId,
-		selectedDay?.day || 0,
-		month,
-		year,
-	);
 
 	const sidebarItems = getDashboardSidebar("/dashboard/saver-details");
 
@@ -284,15 +279,15 @@ function SaverDetailsPage() {
 											</h3>
 											<div className="flex items-center gap-3 text-[10px]">
 												<div className="flex items-center gap-1">
-													<Check size={8} className="text-emerald-500" />{" "}
-													Depósito Normal
+													<Check size={8} className="text-emerald-500" /> Pago
 												</div>
 												<div className="flex items-center gap-1">
-													<X size={8} className="text-amber-500" />{" "}
-													Pagamento de Dívida
+													<X size={8} className="text-amber-500" /> Parcial
 												</div>
 												<div className="flex items-center gap-1">
-													<span className="text-[9px] font-bold text-red-500">D</span>{" "}
+													<span className="text-[9px] font-bold text-red-500">
+														D
+													</span>{" "}
 													Em Dívida
 												</div>
 												<div className="flex items-center gap-1">
@@ -307,7 +302,7 @@ function SaverDetailsPage() {
 												let stateClass =
 													"bg-slate-100 border-slate-300 text-slate-400";
 												let icon: "check" | "x" | "d" | number = day;
-												let status = "open";
+												let status: "paid" | "partial" | "unpaid" | "deleted" | "not_deposited" | "in_debt" | "current" = "not_deposited";
 												let amount = saver.dailyAmount;
 												let collector = "N/A";
 
@@ -322,7 +317,7 @@ function SaverDetailsPage() {
 														stateClass =
 															"bg-amber-100 border-amber-500 text-amber-600";
 														icon = "x";
-														status = "debt_payment";
+														status = "partial";
 														amount = paymentDay.amount || saver.dailyAmount;
 														collector = paymentDay.collector || "N/A";
 													} else if (
@@ -333,7 +328,7 @@ function SaverDetailsPage() {
 														stateClass =
 															"bg-emerald-100 border-emerald-500 text-emerald-600";
 														icon = "check";
-														status = "normal_deposit";
+														status = "paid";
 														amount = paymentDay.amount || saver.dailyAmount;
 														collector = paymentDay.collector || "N/A";
 													} else if (!paymentDay.paid && paymentDay.isInDebt) {
@@ -392,291 +387,33 @@ function SaverDetailsPage() {
 										</div>
 
 										{/* Day Detail Popup */}
-										{selectedDay && (
-											<div
-												className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-												onClick={() => setSelectedDay(null)}
-												onKeyDown={(e) => {
-													if (e.key === "Escape") {
-														setSelectedDay(null);
-													}
-												}}
-												role="dialog"
-												aria-modal="true"
-											>
-												<div
-													className="bg-white rounded-xl shadow-xl p-4 max-w-xs w-full mx-4 animate-in scale-in duration-200"
-													onClick={(e) => e.stopPropagation()}
-													onKeyDown={(e) => {
-														e.stopPropagation();
-													}}
-													role="document"
-												>
-													<div className="flex justify-between items-start mb-3">
-														<div>
-															<h4 className="text-sm font-bold text-slate-900">
-																Dia {selectedDay.day}
-															</h4>
-															<p className="text-xs text-slate-500">
-																{selectedMonth}
-															</p>
-														</div>
-														<button
-															type="button"
-															onClick={() => setSelectedDay(null)}
-															className="p-1 hover:bg-slate-100 rounded-lg transition-colors"
-														>
-															<X size={16} className="text-slate-500" />
-														</button>
-													</div>
-													{isLoadingDeposit ? (
-														<div className="flex items-center justify-center py-4">
-															<p className="text-xs text-slate-500">
-																Carregando detalhes...
-															</p>
-														</div>
-													) : dayDeposit ? (
-														<div className="space-y-2">
-															<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-																<span className="text-xs text-slate-600">
-																	Estado
-																</span>
-																<span
-																	className={`text-xs font-bold px-2 py-0.5 rounded ${dayDeposit.status === "paid"
-																		? "bg-emerald-100 text-emerald-600"
-																		: dayDeposit.status === "partial"
-																			? "bg-amber-100 text-amber-600"
-																			: dayDeposit.status === "deleted"
-																				? "bg-red-100 text-red-600"
-																				: "bg-slate-200 text-slate-600"
-																		}`}
-																>
-																	{dayDeposit.status === "paid"
-																		? "Depósito Normal"
-																		: dayDeposit.status === "partial"
-																			? "Pagamento Parcial"
-																			: dayDeposit.status === "deleted"
-																				? "Eliminado"
-																				: "Não Depositado"}
-																</span>
-															</div>
-															<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-																<span className="text-xs text-slate-600">
-																	Valor
-																</span>
-																<span className="text-xs font-bold text-slate-900">
-																	{dayDeposit.amount.toLocaleString()} MZN
-																</span>
-															</div>
-															<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-																<span className="text-xs text-slate-600 flex items-center gap-1">
-																	<Clock size={12} />
-																	Data
-																</span>
-																<span className="text-xs font-bold text-slate-900">
-																	{new Date(dayDeposit.date).toLocaleDateString(
-																		"pt-PT",
-																		{
-																			day: "2-digit",
-																			month: "2-digit",
-																			year: "numeric",
-																		},
-																	)}
-																</span>
-															</div>
-															<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-																<span className="text-xs text-slate-600 flex items-center gap-1">
-																	<User size={12} />
-																	Coletor
-																</span>
-																<span className="text-xs font-bold text-slate-900">
-																	{dayDeposit.collectorAgent || "N/A"}
-																</span>
-															</div>
-															<div className="pt-2 border-t border-slate-200">
-																<p className="text-[9px] text-slate-400">
-																	ID: {dayDeposit.id}
-																</p>
-															</div>
-															<div className="flex gap-2 pt-2">
-																<Button
-																	size="sm"
-																	variant="outline"
-																	onClick={() => {
-																		toast.info(
-																			"Funcionalidade de editar depósito em desenvolvimento",
-																		);
-																	}}
-																	className="flex-1 text-xs"
-																>
-																	Editar
-																</Button>
-																<Button
-																	size="sm"
-																	variant="outline"
-																	onClick={() => {
-																		toast.success(
-																			"Depósito eliminado com sucesso",
-																		);
-																		setSelectedDay(null);
-																	}}
-																	className="flex-1 border-red-300 text-red-600 hover:bg-red-50 text-xs"
-																>
-																	Eliminar
-																</Button>
-															</div>
-														</div>
-													) : showDepositForm ? (
-														<div className="space-y-3">
-															<div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
-																<div className="flex items-center gap-2 mb-1">
-																	<DollarSign
-																		size={14}
-																		className="text-emerald-600"
-																	/>
-																	<h5 className="text-xs font-semibold text-emerald-900">
-																		Registrar Depósito
-																	</h5>
-																</div>
-																<p className="text-[10px] text-emerald-700">
-																	Dia {selectedDay.day} - {selectedMonth}
-																</p>
-															</div>
-															<div className="space-y-2">
-																<div>
-																	<label
-																		htmlFor="deposit-amount"
-																		className="block text-xs font-medium text-slate-700 mb-1"
-																	>
-																		Valor (MZN)
-																	</label>
-																	<input
-																		id="deposit-amount"
-																		type="number"
-																		value={depositAmount}
-																		onChange={(e) =>
-																			setDepositAmount(e.target.value)
-																		}
-																		placeholder={saver.dailyAmount.toString()}
-																		className="w-full px-2 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-xs"
-																	/>
-																</div>
-																<div>
-																	<label
-																		htmlFor="deposit-type"
-																		className="block text-xs font-medium text-slate-700 mb-1"
-																	>
-																		Tipo
-																	</label>
-																	<select
-																		id="deposit-type"
-																		className="w-full px-2 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-xs"
-																		defaultValue="normal"
-																	>
-																		<option value="normal">Normal</option>
-																		<option value="debt_payment">Dívida</option>
-																	</select>
-																</div>
-															</div>
-															<div className="flex gap-2 pt-2">
-																<Button
-																	size="sm"
-																	variant="outline"
-																	onClick={() => {
-																		setShowDepositForm(false);
-																		setDepositAmount("");
-																	}}
-																	className="flex-1 text-xs"
-																>
-																	Cancelar
-																</Button>
-																<Button
-																	size="sm"
-																	onClick={() => {
-																		const amount =
-																			parseFloat(depositAmount) ||
-																			saver.dailyAmount;
-																		toast.success(
-																			`Depósito de ${amount.toLocaleString()} MZN registrado com sucesso para ${saver.name}`,
-																		);
-																		setShowDepositForm(false);
-																		setDepositAmount("");
-																		setSelectedDay(null);
-																	}}
-																	className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs"
-																>
-																	Confirmar
-																</Button>
-															</div>
-														</div>
-													) : (
-														<div className="space-y-2">
-															<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-																<span className="text-xs text-slate-600">
-																	Estado
-																</span>
-																<span
-																	className={`text-xs font-bold px-2 py-0.5 rounded ${selectedDay.status === "normal_deposit"
-																		? "bg-emerald-100 text-emerald-600"
-																		: selectedDay.status === "debt_payment"
-																			? "bg-amber-100 text-amber-600"
-																			: selectedDay.status === "in_debt"
-																				? "bg-red-100 text-red-600"
-																				: selectedDay.status === "current"
-																					? "bg-emerald-900 text-white"
-																					: "bg-slate-200 text-slate-600"
-																		}`}
-																>
-																	{selectedDay.status === "normal_deposit"
-																		? "Depósito Normal"
-																		: selectedDay.status === "debt_payment"
-																			? "Pagamento de Dívida"
-																			: selectedDay.status === "in_debt"
-																				? "Em Dívida"
-																				: selectedDay.status === "current"
-																					? "Atual"
-																					: "Não Depositado"}
-																</span>
-															</div>
-															<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-																<span className="text-xs text-slate-600">
-																	Valor
-																</span>
-																<span className="text-xs font-bold text-slate-900">
-																	{selectedDay.amount?.toLocaleString()} MZN
-																</span>
-															</div>
-															<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-																<span className="text-xs text-slate-600 flex items-center gap-1">
-																	<User size={12} />
-																	Coletor
-																</span>
-																<span className="text-xs font-bold text-slate-900">
-																	{selectedDay.collector}
-																</span>
-															</div>
-															{selectedDay.status === "not_deposited" ||
-																selectedDay.status === "in_debt" ? (
-																<Button
-																	size="sm"
-																	onClick={() => setShowDepositForm(true)}
-																	className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs"
-																	leftIcon={<DollarSign size={14} />}
-																>
-																	Registrar Depósito
-																</Button>
-															) : (
-																<div className="p-2 bg-amber-50 rounded-lg border border-amber-200">
-																	<p className="text-[10px] text-amber-700">
-																		Já possui registo
-																	</p>
-																</div>
-															)}
-														</div>
-													)}
-												</div>
-											</div>
-										)}
+										<DayDetailPopup
+											isOpen={selectedDay !== null}
+											onClose={() => setSelectedDay(null)}
+											day={selectedDay?.day || 1}
+											month={selectedMonth}
+											saverName={saver.name}
+											saverDailyAmount={saver.dailyAmount}
+											dayStatus={selectedDay?.status || "not_deposited"}
+											amount={selectedDay?.amount}
+											collector={selectedDay?.collector}
+											isLoading={isLoadingDeposit}
+											onDeposit={(data) => {
+												toast.success(
+													`Depósito de ${data.amount.toLocaleString()} MZN registrado com sucesso para ${saver.name}`,
+												);
+												setSelectedDay(null);
+											}}
+											onEdit={() => {
+												toast.info(
+													"Funcionalidade de editar depósito em desenvolvimento",
+												);
+											}}
+											onDelete={() => {
+												toast.success("Depósito eliminado com sucesso");
+												setSelectedDay(null);
+											}}
+										/>
 									</CardContent>
 								</Card>
 							</div>

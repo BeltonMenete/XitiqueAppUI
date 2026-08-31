@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	AlertCircle,
 	Calendar,
+	Check,
 	ChevronDown,
 	DollarSign,
 	Eye,
@@ -14,10 +15,11 @@ import {
 	TrendingUp,
 	Users,
 	Wallet,
+	X,
 } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { DayActionModal } from "#/components/business/DayActionModal";
+import { DayDetailPopup } from "#/components/business/DayDetailPopup";
 import { QuickDepositModal } from "#/components/business/QuickDepositModal";
 import { QuickLoanModal } from "#/components/business/QuickLoanModal";
 import { RegisterSaverModal } from "#/components/business/RegisterSaverModal";
@@ -154,7 +156,7 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 							key={dayData.day}
 							type="button"
 							className={cn(
-								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto",
+								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto flex items-center justify-center",
 								dayData.paid && dayData.isDebtPayment
 									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
 									: dayData.paid && !dayData.isDebtPayment
@@ -165,6 +167,17 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 							)}
 							onClick={() => onDayClick?.(dayData)}
 						>
+							{dayData.paid && !dayData.isDebtPayment && (
+								<Check size={8} className="text-white font-bold" />
+							)}
+							{dayData.paid && dayData.isDebtPayment && (
+								<X size={8} className="text-white font-bold" />
+							)}
+							{dayData.isInDebt && !dayData.paid && (
+								<span className="text-[6px] sm:text-[8px] font-bold text-red-600">
+									D
+								</span>
+							)}
 							{/* Beautiful Tooltip - Tonal Layering style consistent with step-1 */}
 							<div
 								className={cn(
@@ -1275,10 +1288,17 @@ function SaversManagement() {
 	const [selectedDayData, setSelectedDayData] = useState<{
 		day: number;
 		saverName: string;
-		status: "paid" | "unpaid" | "debt" | "debt_payment";
+		saverDailyAmount: number;
+		status:
+			| "paid"
+			| "partial"
+			| "unpaid"
+			| "deleted"
+			| "not_deposited"
+			| "in_debt"
+			| "current";
 		amount?: number;
 		collector?: string;
-		isDebtPayment?: boolean;
 	} | null>(null);
 
 	const { data: saversData, isLoading } = useSavers({ page: 1, pageSize: 20 });
@@ -1702,16 +1722,16 @@ function SaversManagement() {
 								setSelectedDayData({
 									day: dayData.day,
 									saverName: saver.name,
+									saverDailyAmount: saver.dailyAmount,
 									status: dayData.paid
 										? dayData.isDebtPayment
-											? "debt_payment"
-											: "normal_deposit"
+											? "partial"
+											: "paid"
 										: dayData.isInDebt
 											? "in_debt"
 											: "not_deposited",
 									amount: dayData.amount,
 									collector: dayData.collector,
-									isDebtPayment: dayData.isDebtPayment,
 								});
 								setIsDayActionModalOpen(true);
 							}}
@@ -1758,37 +1778,28 @@ function SaversManagement() {
 				}
 			/>
 
-			<DayActionModal
+			<DayDetailPopup
 				isOpen={isDayActionModalOpen}
 				onClose={() => setIsDayActionModalOpen(false)}
-				saverName={selectedDayData?.saverName || ""}
 				day={selectedDayData?.day || 1}
-				dayStatus={selectedDayData?.status || "unpaid"}
+				month={selectedMonth}
+				saverName={selectedDayData?.saverName || ""}
+				saverDailyAmount={selectedDayData?.saverDailyAmount || 500}
+				dayStatus={selectedDayData?.status || "not_deposited"}
 				amount={selectedDayData?.amount}
 				collector={selectedDayData?.collector}
-				isDebtPayment={selectedDayData?.isDebtPayment}
-				onActionComplete={(action, data) => {
-					console.log("Action completed:", action, data);
+				onDeposit={(data) => {
+					toast.success(
+						`Depósito de ${data.amount.toLocaleString()} MZN registrado com sucesso para ${selectedDayData?.saverName}`,
+					);
 					setIsDayActionModalOpen(false);
-
-					// Show toast based on action
-					if (action === "deposit" || action === "edit") {
-						toast.success(
-							`Depósito de ${data.amount} MZN registrado com sucesso para ${data.saverName}`,
-						);
-					} else if (action === "delete") {
-						toast.success("Depósito deletado com sucesso");
-					} else if (action === "convert") {
-						toast.success("Depósito convertido para pagamento de dívida");
-					} else if (action === "note") {
-						toast.success("Nota adicionada com sucesso");
-					} else if (action === "unavailable") {
-						toast.info(`Dia marcado como não disponível: ${data.reason}`);
-					} else if (action === "revert") {
-						toast.success("Pagamento revertido para depósito normal");
-					} else {
-						toast.info(`Ação "${action}" executada com sucesso`);
-					}
+				}}
+				onEdit={() => {
+					toast.info("Funcionalidade de editar depósito em desenvolvimento");
+				}}
+				onDelete={() => {
+					toast.success("Depósito eliminado com sucesso");
+					setIsDayActionModalOpen(false);
 				}}
 			/>
 

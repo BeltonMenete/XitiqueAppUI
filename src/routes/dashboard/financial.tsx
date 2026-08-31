@@ -27,10 +27,10 @@ function FinancialDashboard() {
 	const [selectedType, setSelectedType] = useState<string[]>([]);
 	const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
 
-	const { data: summary, isLoading: summaryLoading } = useFinancialSummary();
+	const { data: summary, isLoading: _summaryLoading } = useFinancialSummary();
 	const { data: transactions, isLoading: transactionsLoading } =
 		useTransactions({
-			type: selectedType.length > 0 ? (selectedType[0] as any) : undefined,
+			type: selectedType.length > 0 ? (selectedType[0] as "income" | "expense" | "loan" | "deposit") : undefined,
 		});
 	const { data: cashFlow, isLoading: cashFlowLoading } = useCashFlow();
 
@@ -51,31 +51,31 @@ function FinancialDashboard() {
 
 	const kpiData = summary
 		? [
-				{
-					title: "Saldo Total",
-					value: `${summary.balance.toLocaleString()} MZN`,
-					subtext: "Disponível",
-					borderColor: "success" as const,
-				},
-				{
-					title: "Receitas (Mês)",
-					value: `${summary.totalIncome.toLocaleString()} MZN`,
-					subtext: "+12.5% vs mês anterior",
-					borderColor: "success" as const,
-				},
-				{
-					title: "Despesas (Mês)",
-					value: `${summary.totalExpense.toLocaleString()} MZN`,
-					subtext: "+5.2% vs mês anterior",
-					borderColor: "error" as const,
-				},
-				{
-					title: "Empréstimos Ativos",
-					value: `${summary.totalLoans.toLocaleString()} MZN`,
-					subtext: "Valor total",
-					borderColor: "warning" as const,
-				},
-			]
+			{
+				title: "Saldo Total",
+				value: `${summary.balance.toLocaleString()} MZN`,
+				subtext: "Disponível",
+				borderColor: "success" as const,
+			},
+			{
+				title: "Receitas (Mês)",
+				value: `${summary.totalIncome.toLocaleString()} MZN`,
+				subtext: "+12.5% vs mês anterior",
+				borderColor: "success" as const,
+			},
+			{
+				title: "Despesas (Mês)",
+				value: `${summary.totalExpense.toLocaleString()} MZN`,
+				subtext: "+5.2% vs mês anterior",
+				borderColor: "error" as const,
+			},
+			{
+				title: "Empréstimos Ativos",
+				value: `${summary.totalLoans.toLocaleString()} MZN`,
+				subtext: "Valor total",
+				borderColor: "warning" as const,
+			},
+		]
 		: [];
 
 	const columns = [
@@ -105,7 +105,7 @@ function FinancialDashboard() {
 		{
 			key: "amount",
 			header: "VALOR",
-			render: (value: unknown, row: any) => (
+			render: (value: unknown, row: { type: string }) => (
 				<span
 					className={cn(
 						"font-mono text-sm font-bold",

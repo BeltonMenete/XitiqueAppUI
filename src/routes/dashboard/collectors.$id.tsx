@@ -80,7 +80,7 @@ function CollectorDetails() {
 	const [activeTab, setActiveTab] = useState("overview");
 
 	const { data: collector, isLoading: collectorLoading } = useCollector(id);
-	const { data: clients, isLoading: clientsLoading } = useCollectorClients(id);
+	const { data: _clients, isLoading: _clientsLoading } = useCollectorClients(id);
 	const { data: records, isLoading: recordsLoading } = useCollectionRecords(id);
 	const [showDropdown, setShowDropdown] = useState(false);
 

@@ -189,9 +189,7 @@ export function ContextMenu({ actions, children }: ContextMenuProps) {
 
 	return (
 		<>
-			<div onContextMenu={handleContextMenu} role="presentation">
-				{children}
-			</div>
+			<div onContextMenu={handleContextMenu}>{children}</div>
 
 			{isOpen && (
 				<div

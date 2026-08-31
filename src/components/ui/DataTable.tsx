@@ -202,7 +202,11 @@ export function DataTable<T>({
 									<input
 										type="checkbox"
 										checked={allSelected}
-										ref={(el) => el && (el.indeterminate = someSelected)}
+										ref={(el) => {
+											if (el) {
+												el.indeterminate = someSelected;
+											}
+										}}
 										onChange={(e) => handleSelectAll(e.target.checked)}
 										className="w-4 h-4 rounded border-slate-200 text-emerald-700 focus:ring-emerald-700/20"
 									/>
@@ -214,7 +218,7 @@ export function DataTable<T>({
 									className={cn(
 										"px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider",
 										col.sortable &&
-											"cursor-pointer hover:bg-slate-400 transition-colors duration-300",
+										"cursor-pointer hover:bg-slate-400 transition-colors duration-300",
 									)}
 									onClick={() => col.sortable && handleSort(col.key)}
 								>
@@ -293,9 +297,16 @@ export function DataTable<T>({
 																placeholder={col.header}
 															/>
 														) : col.editable ? (
-															<div
-																className="group relative cursor-pointer hover:bg-slate-100 -mx-2 px-2 py-1 rounded transition-colors duration-300"
+															<button
+																type="button"
+																className="group relative cursor-pointer hover:bg-slate-100 -mx-2 px-2 py-1 rounded transition-colors duration-300 w-full text-left"
 																onClick={() => handleCellEdit(rowId, col.key)}
+																onKeyDown={(e) => {
+																	if (e.key === "Enter" || e.key === " ") {
+																		e.preventDefault();
+																		handleCellEdit(rowId, col.key);
+																	}
+																}}
 															>
 																{col.render
 																	? col.render(row[col.key as keyof T], row)
@@ -304,7 +315,7 @@ export function DataTable<T>({
 																	size={12}
 																	className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-slate-400"
 																/>
-															</div>
+															</button>
 														) : col.render ? (
 															col.render(row[col.key as keyof T], row)
 														) : (
@@ -322,11 +333,11 @@ export function DataTable<T>({
 										key={rowId}
 										className={cn(
 											hoverable &&
-												"hover:bg-slate-100 hover:border-l-4 hover:border-l-emerald-600 transition-all duration-300 animate-scale-hover",
+											"hover:bg-slate-100 hover:border-l-4 hover:border-l-emerald-600 transition-all duration-300 animate-scale-hover",
 											striped &&
-												(sortedData.indexOf(row) % 2 === 0
-													? "bg-white"
-													: "bg-slate-100"),
+											(sortedData.indexOf(row) % 2 === 0
+												? "bg-white"
+												: "bg-slate-100"),
 											onRowClick && "cursor-pointer",
 											selected && "bg-secondary/5",
 										)}
@@ -358,9 +369,16 @@ export function DataTable<T>({
 															placeholder={col.header}
 														/>
 													) : col.editable ? (
-														<div
-															className="group relative cursor-pointer hover:bg-slate-100 -mx-2 px-2 py-1 rounded transition-colors duration-300"
+														<button
+															type="button"
+															className="group relative cursor-pointer hover:bg-slate-100 -mx-2 px-2 py-1 rounded transition-colors duration-300 w-full text-left"
 															onClick={() => handleCellEdit(rowId, col.key)}
+															onKeyDown={(e) => {
+																if (e.key === "Enter" || e.key === " ") {
+																	e.preventDefault();
+																	handleCellEdit(rowId, col.key);
+																}
+															}}
 														>
 															{col.render
 																? col.render(row[col.key as keyof T], row)
@@ -369,7 +387,7 @@ export function DataTable<T>({
 																size={12}
 																className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-slate-400"
 															/>
-														</div>
+														</button>
 													) : col.render ? (
 														col.render(row[col.key as keyof T], row)
 													) : (

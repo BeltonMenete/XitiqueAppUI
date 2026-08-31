@@ -6,6 +6,7 @@ import {
 	MapPin,
 	Phone,
 	Plus,
+	TrendingUp,
 	Users,
 	Wallet,
 } from "lucide-react";
@@ -66,30 +67,6 @@ function CollectorsManagement() {
 		// TODO: Integrate with API
 	};
 
-	const statusFilters = [
-		{ id: "active", label: "Activo" },
-		{ id: "suspended", label: "Suspenso" },
-		{ id: "inactive", label: "Inativo" },
-	];
-
-	const filteredCollectors = mockCollectors.filter((collector) => {
-		if (selectedStatuses.length === 0) return true;
-		return selectedStatuses.includes(collector.status);
-	});
-
-	const sidebarItems = [
-		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
-		{ label: "Gestão", icon: Users, href: "/dashboard/savers" },
-		{
-			label: "Cobradores",
-			icon: CirclePlus,
-			href: "/dashboard/collectors",
-			isActive: true,
-		},
-		{ label: "Financeiro", icon: Wallet, href: "/dashboard/financial" },
-		{ label: "Relatórios", icon: TrendingUp, href: "/dashboard/reports" },
-	];
-
 	const mockCollectors: Collector[] = [
 		{
 			id: "1",
@@ -112,30 +89,63 @@ function CollectorsManagement() {
 		{
 			id: "3",
 			name: "Filipe Nyusi Jr.",
-			phone: "+258 87 555 0192",
-			clients: 58,
-			monthlyVolume: 156000,
-			difference: 0,
+			phone: "+258 84 654 3210",
+			clients: 28,
+			monthlyVolume: 72100,
+			difference: 3200,
 			status: "active",
 		},
 		{
 			id: "4",
-			name: "Maria Machava",
-			phone: "+258 86 444 5678",
+			name: "Isabel Nhantumbo",
+			phone: "+258 82 111 2222",
 			clients: 41,
-			monthlyVolume: 105800,
-			difference: 800,
+			monthlyVolume: 108900,
+			difference: -1200,
 			status: "active",
 		},
 		{
 			id: "5",
-			name: "João Sitoe",
-			phone: "+258 85 333 4455",
-			clients: 35,
-			monthlyVolume: 89000,
-			difference: -1500,
+			name: "Jaime Macamo",
+			phone: "+258 84 333 4444",
+			clients: 36,
+			monthlyVolume: 95600,
+			difference: 5600,
 			status: "suspended",
 		},
+		{
+			id: "6",
+			name: "Lídia Manhiça",
+			phone: "+258 82 555 6666",
+			clients: 43,
+			monthlyVolume: 117300,
+			difference: 7800,
+			status: "active",
+		},
+	];
+
+	const statusFilters = [
+		{ id: "active", label: "Activo" },
+		{ id: "suspended", label: "Suspenso" },
+		{ id: "inactive", label: "Inativo" },
+	];
+
+	const filteredCollectors = mockCollectors.filter((collector) => {
+		if (selectedStatuses.length === 0) return true;
+		return selectedStatuses.includes(collector.status);
+	});
+
+	const sidebarItems = [
+		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
+		{ label: "Gestão", icon: Users, href: "/dashboard/savers" },
+		{
+			label: "Cobradores",
+			icon: CirclePlus,
+			href: "/dashboard/collectors",
+			isActive: true,
+		},
+		{ label: "Financeiro", icon: Wallet, href: "/dashboard/financial" },
+		{ label: "Relatórios", icon: TrendingUp, href: "/dashboard/reports" },
 	];
 
 	const kpiData = [
@@ -169,29 +179,32 @@ function CollectorsManagement() {
 		{
 			key: "name",
 			header: "COBRADOR",
-			render: (value: unknown, row: Collector) => (
-				<div className="flex items-center gap-3">
-					<div className="relative">
-						<div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-semibold">
-							{String(row.name).charAt(0)}
+			render: (value: unknown, row: Record<string, unknown>) => {
+				const collector = row as unknown as Collector;
+				return (
+					<div className="flex items-center gap-3">
+						<div className="relative">
+							<div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-semibold">
+								{String(collector.name).charAt(0)}
+							</div>
+							<span
+								className={cn(
+									"absolute -bottom-1 -right-1 w-3 h-3 border-2 border-white rounded-full",
+									collector.status === "active"
+										? "bg-emerald-500"
+										: collector.status === "suspended"
+											? "bg-red-500"
+											: "bg-slate-300",
+								)}
+							/>
 						</div>
-						<span
-							className={cn(
-								"absolute -bottom-1 -right-1 w-3 h-3 border-2 border-white rounded-full",
-								row.status === "active"
-									? "bg-emerald-500"
-									: row.status === "suspended"
-										? "bg-red-500"
-										: "bg-slate-300",
-							)}
-						/>
+						<div>
+							<p className="font-bold text-sm text-slate-900">{String(value)}</p>
+							<p className="text-xs text-slate-400 font-mono">{collector.phone}</p>
+						</div>
 					</div>
-					<div>
-						<p className="font-bold text-sm text-slate-900">{String(value)}</p>
-						<p className="text-xs text-slate-400 font-mono">{row.phone}</p>
-					</div>
-				</div>
-			),
+				);
+			},
 		},
 		{
 			key: "clients",
@@ -238,9 +251,10 @@ function CollectorsManagement() {
 		{
 			key: "status",
 			header: "ESTADO",
-			render: (_: unknown, row: Collector) => {
-				if (row.status === "active") return <ActiveBadge />;
-				if (row.status === "suspended")
+			render: (_: unknown, row: Record<string, unknown>) => {
+				const collector = row as unknown as Collector;
+				if (collector.status === "active") return <ActiveBadge />;
+				if (collector.status === "suspended")
 					return <PendingBadge>Em Análise</PendingBadge>;
 				return <InactiveBadge />;
 			},
@@ -249,7 +263,7 @@ function CollectorsManagement() {
 			key: "actions",
 			header: "ACÇÕES",
 			className: "text-center",
-			render: (_: unknown, _row: Collector) => (
+			render: (_: unknown, _row: Record<string, unknown>) => (
 				<div className="flex justify-center gap-2">
 					<button
 						type="button"
@@ -348,7 +362,7 @@ function CollectorsManagement() {
 						</div>
 					) : (
 						<PrototypeTable
-							data={filteredCollectors}
+							data={filteredCollectors as Record<string, unknown>[]}
 							columns={columns}
 							showAvatars={true}
 							showStatusBadges={true}
@@ -370,12 +384,14 @@ function CollectorsManagement() {
 				<FAB
 					actions={[
 						{
+							id: "new-collection",
 							icon: <Phone size={20} />,
 							label: "Nova Colecta",
 							onClick: () => console.log("Nova Colecta"),
 							color: "bg-emerald-500 text-white",
 						},
 						{
+							id: "route-map",
 							icon: <MapPin size={20} />,
 							label: "Mapa de Rota",
 							onClick: () => console.log("Mapa de Rota"),

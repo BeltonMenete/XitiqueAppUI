@@ -32,7 +32,7 @@ export function Breadcrumbs({
 			</Link>
 			{separator}
 			{items.map((item, index) => (
-				<div key={index} className="flex items-center gap-2">
+				<div key={item.href || item.label} className="flex items-center gap-2">
 					{item.href ? (
 						<Link
 							to={item.href}
