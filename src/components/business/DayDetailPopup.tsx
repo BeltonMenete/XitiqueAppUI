@@ -11,13 +11,13 @@ interface DayDetailPopupProps {
 	saverName: string;
 	saverDailyAmount: number;
 	dayStatus:
-		| "paid"
-		| "partial"
-		| "unpaid"
-		| "deleted"
-		| "not_deposited"
-		| "in_debt"
-		| "current";
+	| "paid"
+	| "partial"
+	| "unpaid"
+	| "deleted"
+	| "not_deposited"
+	| "in_debt"
+	| "current";
 	amount?: number;
 	collector?: string;
 	isLoading?: boolean;
@@ -70,7 +70,7 @@ export function DayDetailPopup({
 			case "paid":
 				return "Depósito Normal";
 			case "partial":
-				return "Pagamento Parcial";
+				return "Pagamento de Dívida";
 			case "deleted":
 				return "Eliminado";
 			case "in_debt":
@@ -285,7 +285,7 @@ export function DayDetailPopup({
 									<Check size={12} className="text-emerald-600" />
 								)}
 								{dayStatus === "partial" && (
-									<X size={12} className="text-amber-600" />
+									<Check size={12} className="text-amber-600" />
 								)}
 								<span
 									className={cn(

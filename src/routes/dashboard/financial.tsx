@@ -105,19 +105,22 @@ function FinancialDashboard() {
 		{
 			key: "amount",
 			header: "VALOR",
-			render: (value: unknown, row: { type: string }) => (
-				<span
-					className={cn(
-						"font-mono text-sm font-bold",
-						row.type === "income" || row.type === "deposit"
-							? "text-emerald-500"
-							: "text-red-600",
-					)}
-				>
-					{row.type === "income" || row.type === "deposit" ? "+" : ""}
-					{Number(value).toLocaleString()} MZN
-				</span>
-			),
+			render: (value: unknown, row: Record<string, unknown>) => {
+				const typedRow = row as { type: string };
+				return (
+					<span
+						className={cn(
+							"font-mono text-sm font-bold",
+							typedRow.type === "income" || typedRow.type === "deposit"
+								? "text-emerald-500"
+								: "text-red-600",
+						)}
+					>
+						{typedRow.type === "income" || typedRow.type === "deposit" ? "+" : ""}
+						{Number(value).toLocaleString()} MZN
+					</span>
+				);
+			},
 		},
 		{
 			key: "status",
@@ -264,7 +267,7 @@ function FinancialDashboard() {
 						</div>
 					) : transactions && transactions.data.length > 0 ? (
 						<PrototypeTable
-							data={transactions.data}
+							data={transactions.data as unknown as Record<string, unknown>[]}
 							columns={columns}
 							showStatusBadges={true}
 							onRowClick={(row) => console.log("View transaction:", row)}

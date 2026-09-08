@@ -19,7 +19,7 @@ const iconMap = {
 function TermsAndConditions() {
 	const navigate = useNavigate();
 	const search = useSearch({ from: "/_auth/terms" });
-	const accountType = search.type as "organization" | "individual" | undefined;
+	const accountType = (search as any).type as "organization" | "individual" | undefined;
 
 	const handleAcceptTerms = () => {
 		if (accountType === "individual") {

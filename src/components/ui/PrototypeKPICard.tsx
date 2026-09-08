@@ -81,12 +81,20 @@ export function PrototypeKPICard({
 					</div>
 					{icon && <div className="mt-2">{icon}</div>}
 					{expandedContent && clickable && (
-						<button
-							type="button"
-							className="mt-2 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors"
+						<div
+							role="button"
+							tabIndex={0}
+							className="mt-2 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors cursor-pointer"
 							onClick={(e) => {
 								e.stopPropagation();
 								setIsExpanded(!isExpanded);
+							}}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									e.preventDefault();
+									e.stopPropagation();
+									setIsExpanded(!isExpanded);
+								}
 							}}
 						>
 							{isExpanded ? (
@@ -100,7 +108,7 @@ export function PrototypeKPICard({
 									<span>Mostrar mais</span>
 								</>
 							)}
-						</button>
+						</div>
 					)}
 					{isExpanded && expandedContent && (
 						<div className="mt-4 pt-4 border-t border-slate-200">

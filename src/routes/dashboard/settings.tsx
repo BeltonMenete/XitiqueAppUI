@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Bell, Building2, CreditCard, Save, Users } from "lucide-react";
+import { Bell, Building2, CreditCard, RotateCcw, Save, Users } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
@@ -123,7 +123,7 @@ function SettingsPage() {
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 						<PrototypeKPICard
 							title="Membros da Equipa"
-							value={`${settings?.team.admins.length + settings?.team.collectors.length}`}
+							value={`${(settings?.team.admins?.length ?? 0) + (settings?.team.collectors?.length ?? 0)}`}
 							subtext="Administradores e cobradores"
 							borderColor="primary"
 						/>
@@ -331,24 +331,24 @@ function SettingsPage() {
 											Métodos de Pagamento Aceitos
 										</legend>
 										<div className="flex flex-wrap gap-2">
-											{["bank", "mobile", "cash"].map((method) => (
+											{(["bank", "mobile", "cash"] as const).map((method) => (
 												<label key={method} className="flex items-center gap-2">
 													<input
 														type="checkbox"
 														checked={settings?.payments.acceptedMethods.includes(
-															method as string,
+															method,
 														)}
 														onChange={(e) => {
 															const newMethods = e.target.checked
 																? [
-																		...(settings?.payments.acceptedMethods ??
-																			[]),
-																		method as string,
-																	]
+																	...(settings?.payments.acceptedMethods ??
+																		[]),
+																	method,
+																]
 																: (settings?.payments.acceptedMethods.filter(
-																		(m) => m !== method,
-																	) ?? []);
-															updatePayments({ acceptedMethods: newMethods });
+																	(m) => m !== method,
+																) ?? []);
+															updatePayments({ acceptedMethods: newMethods as ("mobile" | "bank" | "cash")[] });
 														}}
 														className="rounded border-slate-300 text-slate-900 focus:ring-slate-900"
 													/>

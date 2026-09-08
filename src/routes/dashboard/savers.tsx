@@ -15,7 +15,6 @@ import {
 	TrendingUp,
 	Users,
 	Wallet,
-	X,
 } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -134,18 +133,18 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 	);
 
 	return (
-		<div className="flex flex-col items-center" style={{ minWidth: "650px" }}>
-			<div className="grid grid-cols-[repeat(30,20px)] gap-0.5 justify-center">
+		<div className="flex flex-col items-center w-full">
+			<div className="grid grid-cols-[repeat(30,minmax(15px,1fr))] gap-0.5 justify-center w-full">
 				{showHeader &&
 					days.map((dayData, i) => (
 						<div
 							key={`header-${dayData.day}`}
-							className="flex flex-col items-center justify-center h-6 mb-0.5"
+							className="flex flex-col items-center justify-center h-5 mb-0.5"
 						>
-							<span className="text-[7px] sm:text-[8px] leading-tight text-center uppercase text-slate-400 font-medium">
+							<span className="text-[6px] sm:text-[7px] leading-tight text-center uppercase text-slate-400 font-medium">
 								{repeatedWeekDays[i]}
 							</span>
-							<span className="text-[7px] sm:text-[8px] leading-tight text-center text-slate-400 font-medium">
+							<span className="text-[6px] sm:text-[7px] leading-tight text-center text-slate-400 font-medium">
 								{dayData.day}
 							</span>
 						</div>
@@ -156,7 +155,7 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 							key={dayData.day}
 							type="button"
 							className={cn(
-								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto flex items-center justify-center",
+								"w-2 h-2 sm:w-3 sm:h-3 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto flex items-center justify-center",
 								dayData.paid && dayData.isDebtPayment
 									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
 									: dayData.paid && !dayData.isDebtPayment
@@ -167,27 +166,19 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 							)}
 							onClick={() => onDayClick?.(dayData)}
 						>
-							{dayData.paid && !dayData.isDebtPayment && (
-								<Check size={8} className="text-white font-bold" />
-							)}
-							{dayData.paid && dayData.isDebtPayment && (
-								<X size={8} className="text-white font-bold" />
-							)}
-							{dayData.isInDebt && !dayData.paid && (
-								<span className="text-[6px] sm:text-[8px] font-bold text-red-600">
-									D
-								</span>
+							{dayData.paid && (
+								<Check size={6} className="text-white font-bold" />
 							)}
 							{/* Beautiful Tooltip - Tonal Layering style consistent with step-1 */}
 							<div
 								className={cn(
 									"absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 sm:px-3 py-2 sm:py-2.5 text-[10px] sm:text-xs rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-32 sm:w-40 pointer-events-none border bg-white",
-									dayData.paid
-										? "border-emerald-100"
-										: dayData.isInDebt && !dayData.paid
-											? "border-red-100"
-											: dayData.isDebtPayment
-												? "border-amber-100"
+									dayData.paid && dayData.isDebtPayment
+										? "border-amber-100"
+										: dayData.paid && !dayData.isDebtPayment
+											? "border-emerald-100"
+											: dayData.isInDebt && !dayData.paid
+												? "border-red-100"
 												: "border-slate-200",
 								)}
 							>
@@ -380,10 +371,10 @@ function SaversCalendarView({
 					<table className="w-full text-left border-collapse">
 						<thead className="bg-slate-50 border-b border-slate-200">
 							<tr>
-								<th className="px-2 py-0.5 text-[10px] text-slate-500 font-semibold w-40">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-28">
 									TICANTE
 								</th>
-								<th className="px-2 py-0.5 text-[10px] text-slate-500 font-semibold">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold">
 									<MonthCalendarGrid
 										days={Array.from({ length: 30 }, (_, i) => ({
 											day: i + 1,
@@ -394,13 +385,13 @@ function SaversCalendarView({
 										selectedMonth={selectedMonth}
 									/>
 								</th>
-								<th className="px-2 py-0.5 text-[10px] text-slate-500 font-semibold w-24 text-right">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-16 text-right">
 									TOTAL
 								</th>
-								<th className="px-2 py-0.5 text-[10px] text-slate-500 font-semibold w-20">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-14">
 									ESTADO
 								</th>
-								<th className="px-2 py-0.5 text-[10px] text-slate-500 font-semibold w-24">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-14">
 									AÇÕES
 								</th>
 							</tr>
@@ -411,10 +402,10 @@ function SaversCalendarView({
 									key={saver.id}
 									className="hover:bg-slate-50 transition-colors border-b border-slate-200/50"
 								>
-									<td className="px-2 py-0.5">
+									<td className="px-1 py-0.5">
 										{/* CALENDAR VIEW - Saver Name Click Navigation to Details */}
-										<div className="flex items-center gap-1.5">
-											<span className="font-mono text-[9px] text-slate-400 w-10 shrink-0">
+										<div className="flex items-center gap-1">
+											<span className="font-mono text-[9px] text-slate-400 w-8 shrink-0">
 												{saver.alphanumericId || String(saver.cardNumber)}
 											</span>
 											<button
@@ -451,19 +442,24 @@ function SaversCalendarView({
 											selectedMonth={selectedMonth}
 										/>
 									</td>
-									<td className="px-2 py-0.5 text-right">
-										<span className="font-mono text-xs font-bold text-slate-900">
-											{saver.totalSaved.toLocaleString()} MZN
-										</span>
+									<td className="px-1 py-0.5 text-right">
+										<div className="flex flex-col items-end">
+											<span className="font-mono text-xs font-bold text-slate-900 leading-none">
+												{saver.totalSaved.toLocaleString()}
+											</span>
+											<span className="text-[8px] text-slate-400 font-medium">
+												MZN
+											</span>
+										</div>
 									</td>
-									<td className="px-2 py-0.5">
-										<div className="flex gap-1">
+									<td className="px-1 py-0.5">
+										<div className="flex gap-0.5">
 											{saver.status === "active" && <ActiveBadge />}
 											{saver.status === "inactive" && <InactiveBadge />}
 											{saver.currentDebt > 0 && <DebtBadge />}
 										</div>
 									</td>
-									<td className="px-2 py-0.5">
+									<td className="px-1 py-0.5">
 										{/* CALENDAR VIEW - QuickActionMenu "Ver Detalhes" Navigation */}
 										<QuickActionMenu
 											actions={[
@@ -1290,13 +1286,13 @@ function SaversManagement() {
 		saverName: string;
 		saverDailyAmount: number;
 		status:
-			| "paid"
-			| "partial"
-			| "unpaid"
-			| "deleted"
-			| "not_deposited"
-			| "in_debt"
-			| "current";
+		| "paid"
+		| "partial"
+		| "unpaid"
+		| "deleted"
+		| "not_deposited"
+		| "in_debt"
+		| "current";
 		amount?: number;
 		collector?: string;
 	} | null>(null);

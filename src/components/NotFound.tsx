@@ -176,7 +176,6 @@ export default function NotFound() {
 	const handleHomePage = () => {
 		navigate({
 			to: "/",
-			search: { welcome: true },
 		});
 	};
 

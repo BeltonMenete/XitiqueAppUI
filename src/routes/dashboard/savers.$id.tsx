@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+	AlertCircle,
+	AlertTriangle,
 	Calendar,
 	CheckCircle2,
 	ChevronRight,
@@ -287,17 +289,18 @@ function SaverDetails() {
 
 												if (paymentDay?.paid && paymentDay.isDebtPayment) {
 													stateClass =
-														"bg-orange-100 border-orange-500 text-orange-600";
-													icon = "C";
+														"bg-amber-100 border-amber-500 text-amber-600";
+													icon = "✓";
 												} else if (
 													paymentDay?.paid &&
 													!paymentDay.isDebtPayment
 												) {
 													stateClass =
-														"bg-blue-100 border-blue-500 text-blue-600";
-													icon = "X";
+														"bg-emerald-100 border-emerald-500 text-emerald-600";
+													icon = "✓";
 												} else if (paymentDay?.isInDebt) {
 													stateClass = "bg-red-100 border-red-300 text-red-400";
+													icon = day;
 												}
 
 												return (

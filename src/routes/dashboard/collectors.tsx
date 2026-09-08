@@ -362,7 +362,7 @@ function CollectorsManagement() {
 						</div>
 					) : (
 						<PrototypeTable
-							data={filteredCollectors as Record<string, unknown>[]}
+							data={filteredCollectors as unknown as Record<string, unknown>[]}
 							columns={columns}
 							showAvatars={true}
 							showStatusBadges={true}

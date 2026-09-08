@@ -90,7 +90,7 @@ export function PrototypeTable({
 					<tbody className="divide-y divide-slate-200">
 						{data.map((row, index) => (
 							<tr
-								key={row.id || index}
+								key={(row as Record<string, unknown>).id as string || index}
 								className={cn(
 									"hover:bg-slate-100 transition-colors",
 									onRowClick && "cursor-pointer",

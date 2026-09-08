@@ -398,7 +398,7 @@ export function LoanApprovalModal({
 							>
 								Cancelar
 							</Button>
-							<Button size="sm" variant="danger" onClick={handleReject}>
+							<Button size="sm" variant="destructive" onClick={handleReject}>
 								<X size={16} className="mr-1" />
 								Confirmar Rejeição
 							</Button>

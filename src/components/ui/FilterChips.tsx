@@ -88,7 +88,7 @@ export function FilterChips({
 					selected={selected.includes(filter.id)}
 					onToggle={() => onToggle(filter.id)}
 					onRemove={
-						selected.includes(filter.id) ? () => onRemove(filter.id) : undefined
+						selected.includes(filter.id) ? () => onRemove?.(filter.id) : undefined
 					}
 					variant={variant}
 					size={size}

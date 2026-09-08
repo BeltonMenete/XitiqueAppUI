@@ -104,9 +104,9 @@ export function QuickActionMenu({
 				type="button"
 				ref={triggerRef}
 				onClick={handleTriggerClick}
-				className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
+				className="p-1 hover:bg-slate-100 rounded transition-colors text-slate-600 hover:text-slate-900"
 			>
-				{trigger || <MoreVertical size={18} />}
+				{trigger || <MoreVertical size={14} />}
 			</button>
 
 			{isOpen &&

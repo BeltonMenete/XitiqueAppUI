@@ -13,7 +13,6 @@ import {
 	TrendingUp,
 	Verified,
 	Wallet,
-	X,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -282,12 +281,11 @@ function SaverDetailsPage() {
 													<Check size={8} className="text-emerald-500" /> Pago
 												</div>
 												<div className="flex items-center gap-1">
-													<X size={8} className="text-amber-500" /> Parcial
+													<Check size={8} className="text-amber-500" /> Pagamento
+													Dívida
 												</div>
 												<div className="flex items-center gap-1">
-													<span className="text-[9px] font-bold text-red-500">
-														D
-													</span>{" "}
+													<span className="w-2 h-2 rounded-full bg-red-200"></span>{" "}
 													Em Dívida
 												</div>
 												<div className="flex items-center gap-1">
@@ -301,7 +299,7 @@ function SaverDetailsPage() {
 												const day = i + 1;
 												let stateClass =
 													"bg-slate-100 border-slate-300 text-slate-400";
-												let icon: "check" | "x" | "d" | number = day;
+												let icon: "check" | number = day;
 												let status: "paid" | "partial" | "unpaid" | "deleted" | "not_deposited" | "in_debt" | "current" = "not_deposited";
 												let amount = saver.dailyAmount;
 												let collector = "N/A";
@@ -316,8 +314,8 @@ function SaverDetailsPage() {
 														// Pagamento de Dívida
 														stateClass =
 															"bg-amber-100 border-amber-500 text-amber-600";
-														icon = "x";
-														status = "partial";
+														icon = "check";
+														status = "paid";
 														amount = paymentDay.amount || saver.dailyAmount;
 														collector = paymentDay.collector || "N/A";
 													} else if (
@@ -335,7 +333,7 @@ function SaverDetailsPage() {
 														// Em Dívida
 														stateClass =
 															"bg-red-100 border-red-300 text-red-600";
-														icon = "d";
+														icon = day;
 														status = "in_debt";
 														amount = 0;
 														collector = "N/A";
@@ -372,10 +370,6 @@ function SaverDetailsPage() {
 														</span>
 														{icon === "check" ? (
 															<Check size={10} className="font-bold" />
-														) : icon === "x" ? (
-															<X size={10} className="font-bold" />
-														) : icon === "d" ? (
-															<span className="text-[9px] font-bold">D</span>
 														) : (
 															<span className="text-[9px] font-bold">
 																{icon}
@@ -397,7 +391,6 @@ function SaverDetailsPage() {
 											dayStatus={selectedDay?.status || "not_deposited"}
 											amount={selectedDay?.amount}
 											collector={selectedDay?.collector}
-											isLoading={isLoadingDeposit}
 											onDeposit={(data) => {
 												toast.success(
 													`Depósito de ${data.amount.toLocaleString()} MZN registrado com sucesso para ${saver.name}`,
