@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import { Download, Filter, Plus, Wallet } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/dashboard/financial")({
 });
 
 function FinancialDashboard() {
+	const location = useLocation();
 	const [selectedType, setSelectedType] = useState<string[]>([]);
 	const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
 
@@ -34,10 +35,10 @@ function FinancialDashboard() {
 		});
 	const { data: cashFlow, isLoading: cashFlowLoading } = useCashFlow();
 
-	const sidebarItems = getDashboardSidebar("/dashboard/financial");
+	const sidebarItems = getDashboardSidebar(location.pathname);
 
 	const typeFilters = [
-		{ id: "income", label: "Receitas" },
+		{ id: "income", label: "Caderno" },
 		{ id: "expense", label: "Despesas" },
 		{ id: "loan", label: "Empréstimos" },
 		{ id: "deposit", label: "Depósitos" },
@@ -52,13 +53,19 @@ function FinancialDashboard() {
 	const kpiData = summary
 		? [
 			{
-				title: "Saldo Total",
+				title: "Total Colectado (Mês)",
 				value: `${summary.balance.toLocaleString()} MZN`,
 				subtext: "Disponível",
 				borderColor: "success" as const,
 			},
 			{
-				title: "Receitas (Mês)",
+				title: "Total Guardado",
+				value: `${summary.totalDeposits.toLocaleString()} MZN`,
+				subtext: "Valor total guardado",
+				borderColor: "info" as const,
+			},
+			{
+				title: "Caderno",
 				value: `${summary.totalIncome.toLocaleString()} MZN`,
 				subtext: "+12.5% vs mês anterior",
 				borderColor: "success" as const,
@@ -152,7 +159,7 @@ function FinancialDashboard() {
 
 			<div className="flex-1 flex flex-col h-full overflow-hidden">
 				<Header
-					title="Gestão Financeira"
+					title="Gestão de Finanças"
 					description="Visão completa das transações e fluxo de caixa"
 					rightContent={
 						<div className="flex items-center gap-2">
@@ -179,7 +186,7 @@ function FinancialDashboard() {
 
 				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 max-w-7xl w-full mx-auto">
 					{/* KPI Cards */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
 						{kpiData.map((kpi) => (
 							<PrototypeKPICard key={kpi.title} {...kpi} />
 						))}
@@ -295,9 +302,9 @@ function FinancialDashboard() {
 
 					{/* Support Section */}
 					<SupportSection
-						performanceTitle="Desempenho Financeiro"
+						performanceTitle="Desempenho das Finanças"
 						performanceText="Este mês, a organização atingiu 82% da meta de arrecadação. Continue monitorando os fluxos."
-						performanceAction="Ver Relatório Financeiro"
+						performanceAction="Ver Relatório de Finanças"
 					/>
 				</main>
 			</div>

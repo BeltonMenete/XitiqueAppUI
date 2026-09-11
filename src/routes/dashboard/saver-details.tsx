@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import {
 	Calendar,
 	Check,
@@ -34,6 +34,7 @@ export const Route = createFileRoute("/dashboard/saver-details")({
 });
 
 function SaverDetailsPage() {
+	const location = useLocation();
 	const [activeTab, setActiveTab] = useState<
 		"card" | "statement" | "loans" | "history"
 	>("card");
@@ -77,7 +78,7 @@ function SaverDetailsPage() {
 	// Fetch saver data using the ID from search params
 	const { data: saver, isLoading, error } = useSaver(saverId);
 
-	const sidebarItems = getDashboardSidebar("/dashboard/saver-details");
+	const sidebarItems = getDashboardSidebar(location.pathname);
 
 	if (isLoading) {
 		return (

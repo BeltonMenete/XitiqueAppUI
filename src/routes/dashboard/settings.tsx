@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import { Bell, Building2, CreditCard, RotateCcw, Save, Users } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/dashboard/settings")({
 });
 
 function SettingsPage() {
+	const location = useLocation();
 	const [activeTab, setActiveTab] = useState("organization");
 	const {
 		settings,
@@ -46,7 +47,7 @@ function SettingsPage() {
 		overdueLoanAlert: settings?.notifications.overdueLoanAlert || false,
 	});
 
-	const sidebarItems = getDashboardSidebar("/dashboard/settings");
+	const sidebarItems = getDashboardSidebar(location.pathname);
 
 	const tabs = [
 		{ id: "organization", label: "Organização", icon: Building2 },

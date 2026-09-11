@@ -10,6 +10,8 @@ interface QuickLoanModalProps {
 	onSubmit: (data: LoanData) => void;
 	saverName?: string;
 	maxLoanAmount?: number;
+	dailyDepositAmount?: number;
+	currentSavings?: number;
 }
 
 interface LoanData {
@@ -17,6 +19,11 @@ interface LoanData {
 	reason: string;
 	isEmergency: boolean;
 	repaymentDate: string;
+	loanToProvide?: number;
+	interestAmount?: number;
+	commissionAmount?: number;
+	totalToRepay?: number;
+	repaymentDays?: number;
 }
 
 export function QuickLoanModal({
@@ -25,7 +32,12 @@ export function QuickLoanModal({
 	onSubmit,
 	saverName,
 	maxLoanAmount = 50000,
+	dailyDepositAmount = 100,
+	currentSavings = 0,
 }: QuickLoanModalProps) {
+	const INTEREST_RATE = 10;
+	const COMMISSION_AMOUNT = dailyDepositAmount;
+
 	const [formData, setFormData] = useState<LoanData>({
 		amount: "",
 		reason: "",
@@ -33,9 +45,27 @@ export function QuickLoanModal({
 		repaymentDate: "",
 	});
 
+	// Calculate eligibility
+	const requiredSavings = (Number(formData.amount) * INTEREST_RATE) / 100;
+	const isEligible = currentSavings >= requiredSavings;
+
+	// Calculate loan details
+	const loanToProvide = Math.max(0, Number(formData.amount) - currentSavings);
+	const interestAmount = Math.round((loanToProvide * INTEREST_RATE) / 100);
+	const totalToRepay = loanToProvide + interestAmount;
+	const repaymentDays = Math.ceil(totalToRepay / dailyDepositAmount);
+
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		onSubmit(formData);
+		const submissionData = {
+			...formData,
+			loanToProvide,
+			interestAmount,
+			commissionAmount: COMMISSION_AMOUNT,
+			totalToRepay,
+			repaymentDays,
+		};
+		onSubmit(submissionData);
 		toast.success("Empréstimo solicitado com sucesso");
 		onClose();
 	};
@@ -55,7 +85,7 @@ export function QuickLoanModal({
 			isOpen={isOpen}
 			onClose={handleCancel}
 			title="Solicitar Empréstimo"
-			size="md"
+			size="sm"
 		>
 			<form onSubmit={handleSubmit} className="space-y-4">
 				{saverName && (
@@ -97,6 +127,60 @@ export function QuickLoanModal({
 						Máximo disponível: {maxLoanAmount.toLocaleString()} MZN
 					</p>
 				</div>
+
+				{formData.amount && !isEligible && (
+					<div className="bg-red-50 border border-red-200 rounded-lg p-3">
+						<p className="text-sm text-red-700">
+							⚠️ Poupança insuficiente. Você precisa de pelo menos:
+							{requiredSavings.toLocaleString()} MZN (10% do valor solicitado)
+						</p>
+						<p className="text-xs text-red-600 mt-1">
+							Poupança atual: {currentSavings.toLocaleString()} MZN
+						</p>
+					</div>
+				)}
+
+				{formData.amount && isEligible && (
+					<div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 space-y-2">
+						<div className="flex justify-between text-sm">
+							<span className="text-slate-600">Valor Solicitado:</span>
+							<span className="font-semibold">{Number(formData.amount).toLocaleString()} MZN</span>
+						</div>
+						<div className="flex justify-between text-sm">
+							<span className="text-slate-600">Poupança Atual:</span>
+							<span className="font-semibold">{currentSavings.toLocaleString()} MZN</span>
+						</div>
+						<div className="flex justify-between text-sm">
+							<span className="text-slate-600">Valor a Receber:</span>
+							<span className="font-bold text-emerald-700">{loanToProvide.toLocaleString()} MZN</span>
+						</div>
+						<div className="border-t border-emerald-200 pt-2">
+							<div className="flex justify-between text-sm">
+								<span className="text-slate-600">Comissão (1 dia):</span>
+								<span className="font-semibold text-amber-600">{COMMISSION_AMOUNT} MZN</span>
+							</div>
+							<div className="flex justify-between text-sm">
+								<span className="text-slate-600">Juros (10%):</span>
+								<span className="font-semibold text-amber-600">{interestAmount.toLocaleString()} MZN</span>
+							</div>
+							<div className="text-xs text-slate-500 mt-1 italic">
+								* Serão deduzidos durante o mês
+							</div>
+						</div>
+						<div className="border-t border-emerald-200 pt-2 flex justify-between">
+							<span className="text-slate-700 font-medium">Total a Repagar:</span>
+							<span className="font-bold text-emerald-700">{totalToRepay.toLocaleString()} MZN</span>
+						</div>
+						<div className="flex justify-between text-sm">
+							<span className="text-slate-600">Seu depósito diário:</span>
+							<span className="font-semibold">{dailyDepositAmount} MZN</span>
+						</div>
+						<div className="flex justify-between text-sm">
+							<span className="text-slate-600">Dias para pagar:</span>
+							<span className="font-bold text-emerald-600">{repaymentDays} dias</span>
+						</div>
+					</div>
+				)}
 
 				<div>
 					<label

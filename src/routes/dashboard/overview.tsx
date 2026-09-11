@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import { DollarSign, Plus, Users, Wallet } from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
@@ -16,8 +16,9 @@ export const Route = createFileRoute("/dashboard/overview")({
 });
 
 function OrganizationDashboard() {
+	const location = useLocation();
 	const [searchTerm, setSearchTerm] = useState("");
-	const sidebarItems = getDashboardSidebar("/dashboard/overview");
+	const sidebarItems = getDashboardSidebar(location.pathname);
 
 	const kpiData = [
 		{

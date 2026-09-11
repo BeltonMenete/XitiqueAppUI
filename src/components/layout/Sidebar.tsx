@@ -46,24 +46,24 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 			<aside
 				className={cn(
 					"fixed md:static inset-y-0 left-0 z-50 md:z-auto flex flex-col bg-white border-r border-slate-200/80 justify-between select-none shrink-0 transform transition-all duration-300 md:transform-none",
-					isCollapsed ? "w-16" : "w-52",
+					isCollapsed ? "w-20" : "w-48",
 					isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
 					className,
 				)}
 			>
-				<div className={cn("space-y-7", isCollapsed ? "p-3" : "p-5")}>
+				<div className={cn("space-y-4", isCollapsed ? "p-4" : "p-5")}>
 					{/* Logo Section with Close Button on Mobile */}
 					<div className="flex items-center justify-between">
-						<div className={cn("flex items-center", isCollapsed ? "justify-center" : "gap-2.5")}>
-							<img
-								loading="lazy"
-								src="/xitique-logo.svg"
-								alt={APP_NAME}
-								width={32}
-								height={32}
-								className="w-8 h-8"
-							/>
-							{!isCollapsed && (
+						{!isCollapsed && (
+							<div className="flex items-center gap-2.5">
+								<img
+									loading="lazy"
+									src="/xitique-logo.svg"
+									alt={APP_NAME}
+									width={32}
+									height={32}
+									className="w-8 h-8"
+								/>
 								<div className="flex flex-col">
 									<span className="text-sm font-extrabold tracking-tight text-slate-950">
 										{APP_NAME}
@@ -72,8 +72,8 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 										Gestor de Poupança
 									</span>
 								</div>
-							)}
-						</div>
+							</div>
+						)}
 						<div className="flex items-center gap-1">
 							<button
 								type="button"
@@ -82,9 +82,9 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 								aria-label={isCollapsed ? "Expandir menu" : "Recolher menu"}
 							>
 								{isCollapsed ? (
-									<ChevronRight size={16} className="text-slate-700" />
+									<ChevronRight size={24} className="text-slate-700" />
 								) : (
-									<ChevronLeft size={16} className="text-slate-700" />
+									<ChevronLeft size={18} className="text-slate-700" />
 								)}
 							</button>
 							<button
@@ -107,7 +107,7 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 								onClick={() => setIsOpen(false)}
 								className={cn(
 									"flex items-center rounded-xl text-xs font-medium transition-all",
-									isCollapsed ? "justify-center p-2.5" : "gap-3 px-3 py-2.5",
+									isCollapsed ? "justify-center p-4" : "gap-3 px-3 py-2.5",
 									item.isActive
 										? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/10"
 										: "text-slate-600 hover:bg-slate-50 hover:text-slate-900 group",
@@ -115,7 +115,7 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 								title={isCollapsed ? item.label : undefined}
 							>
 								<item.icon
-									size={16}
+									size={isCollapsed ? 24 : 18}
 									className={cn(
 										item.isActive
 											? "text-white"
@@ -131,7 +131,7 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 				{/* Footer */}
 				{!isCollapsed && (
 					<div className="pt-4 border-t border-slate-100 flex items-center justify-between text-slate-400 text-[10px] font-bold uppercase tracking-wider px-5">
-						<span>Licença Oficial</span>
+						<span>Licença</span>
 						<span className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md text-[9px]">
 							MZ-2026
 						</span>

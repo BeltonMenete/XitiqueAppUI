@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import {
 	AlertCircle,
 	ArrowLeftRight,
@@ -25,6 +25,7 @@ import { Button } from "#/components/ui/Button";
 import { Card, CardContent, CardHeader } from "#/components/ui/Card";
 import { KPICard } from "#/components/ui/KPICard";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
 import {
 	useCollectionRecords,
 	useCollector,
@@ -77,12 +78,15 @@ const mockActivities = [
 
 function CollectorDetails() {
 	const { id } = Route.useParams();
+	const location = useLocation();
 	const [activeTab, setActiveTab] = useState("overview");
 
 	const { data: collector, isLoading: collectorLoading } = useCollector(id);
 	const { data: _clients, isLoading: _clientsLoading } = useCollectorClients(id);
 	const { data: records, isLoading: recordsLoading } = useCollectionRecords(id);
 	const [showDropdown, setShowDropdown] = useState(false);
+
+	const sidebarItems = getDashboardSidebar(location.pathname);
 
 	const tabs = [
 		{ id: "overview", label: "Visão Geral" },
@@ -92,19 +96,6 @@ function CollectorDetails() {
 		{ id: "performance", label: "Desempenho" },
 		{ id: "audit", label: "Auditoria" },
 		{ id: "settings", label: "Configurações" },
-	];
-
-	const sidebarItems = [
-		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
-		{ label: "Gestão", icon: Star, href: "/dashboard/savers" },
-		{
-			label: "Cobradores",
-			icon: Info,
-			href: "/dashboard/collectors",
-			isActive: true,
-		},
-		{ label: "Financeiro", icon: Star, href: "/dashboard/financial" },
-		{ label: "Relatórios", icon: TrendingUp, href: "/dashboard/reports" },
 	];
 
 	return (

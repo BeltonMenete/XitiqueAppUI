@@ -21,6 +21,7 @@ interface LoanRequest {
 	requestedAmount: number;
 	cycleProgress: number;
 	currentDebt: number;
+	dailyDepositAmount?: number;
 }
 
 interface LoanApprovalModalProps {
@@ -34,8 +35,7 @@ interface LoanApprovalModalProps {
 interface LoanApprovalData {
 	approvedAmount: number;
 	interestRate: number;
-	repaymentPeriod: number;
-	monthlyPayment: number;
+	repaymentDays: number;
 	totalToRepay: number;
 }
 
@@ -46,12 +46,20 @@ export function LoanApprovalModal({
 	onApprove,
 	onReject,
 }: LoanApprovalModalProps) {
+	const INTEREST_RATE = 10;
+	const COMMISSION_AMOUNT = loanRequest.dailyDepositAmount || 100;
+	const dailyDepositAmount = loanRequest.dailyDepositAmount || 100;
+
+	const loanToProvide = Math.max(0, loanRequest.requestedAmount - loanRequest.totalSaved);
+	const interestAmount = Math.round((loanToProvide * INTEREST_RATE) / 100);
+	const totalToRepay = loanToProvide + interestAmount;
+	const repaymentDays = Math.ceil(totalToRepay / dailyDepositAmount);
+
 	const [formData, setFormData] = useState<LoanApprovalData>({
-		approvedAmount: loanRequest.requestedAmount,
-		interestRate: 10,
-		repaymentPeriod: 3,
-		monthlyPayment: 0,
-		totalToRepay: 0,
+		approvedAmount: loanToProvide,
+		interestRate: INTEREST_RATE,
+		repaymentDays,
+		totalToRepay,
 	});
 
 	const [rejectReason, setRejectReason] = useState("");
@@ -61,33 +69,24 @@ export function LoanApprovalModal({
 	const handleAmountChange = (value: number) => {
 		const newInterest = (value * formData.interestRate) / 100;
 		const newTotal = value + newInterest;
-		const newMonthly = Math.round(newTotal / formData.repaymentPeriod);
+		const newDays = Math.ceil(newTotal / dailyDepositAmount);
 		setFormData({
 			...formData,
 			approvedAmount: value,
 			totalToRepay: Math.round(newTotal),
-			monthlyPayment: newMonthly,
+			repaymentDays: newDays,
 		});
 	};
 
 	const handleInterestChange = (value: number) => {
 		const newInterest = (formData.approvedAmount * value) / 100;
 		const newTotal = formData.approvedAmount + newInterest;
-		const newMonthly = Math.round(newTotal / formData.repaymentPeriod);
+		const newDays = Math.ceil(newTotal / dailyDepositAmount);
 		setFormData({
 			...formData,
 			interestRate: value,
 			totalToRepay: Math.round(newTotal),
-			monthlyPayment: newMonthly,
-		});
-	};
-
-	const handlePeriodChange = (value: number) => {
-		const newMonthly = Math.round(formData.totalToRepay / value);
-		setFormData({
-			...formData,
-			repaymentPeriod: value,
-			monthlyPayment: newMonthly,
+			repaymentDays: newDays,
 		});
 	};
 
@@ -146,7 +145,7 @@ export function LoanApprovalModal({
 			isOpen={isOpen}
 			onClose={onClose}
 			title="Aprovação de Empréstimo"
-			size="lg"
+			size="md"
 		>
 			<div className="space-y-6">
 				{/* Client Info */}
@@ -307,25 +306,58 @@ export function LoanApprovalModal({
 								</div>
 								<div>
 									<label
-										htmlFor="repayment-period"
+										htmlFor="repayment-days"
 										className="block text-xs font-semibold text-slate-600 mb-2"
 									>
-										Período de Pagamento (meses)
+										Dias para Pagar
 									</label>
 									<input
-										id="repayment-period"
+										id="repayment-days"
 										type="number"
-										value={formData.repaymentPeriod}
-										onChange={(e) => handlePeriodChange(Number(e.target.value))}
-										min={1}
-										max={12}
-										className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+										value={formData.repaymentDays}
+										readOnly
+										className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 text-slate-600"
 									/>
 								</div>
 							</div>
 
 							{/* Calculation Results */}
 							<div className="p-4 bg-slate-100 rounded-lg space-y-2">
+								<div className="flex items-center justify-between">
+									<span className="text-sm text-slate-600">
+										Valor Solicitado
+									</span>
+									<span className="text-sm font-medium text-slate-900">
+										{loanRequest.requestedAmount.toLocaleString()} MZN
+									</span>
+								</div>
+								<div className="flex items-center justify-between">
+									<span className="text-sm text-slate-600">
+										Poupança Atual
+									</span>
+									<span className="text-sm font-medium text-slate-900">
+										{loanRequest.totalSaved.toLocaleString()} MZN
+									</span>
+								</div>
+								<div className="flex items-center justify-between">
+									<span className="text-sm text-slate-600">
+										Valor a Fornecer
+									</span>
+									<span className="text-lg font-bold text-emerald-700">
+										{formData.approvedAmount.toLocaleString()} MZN
+									</span>
+								</div>
+								<div className="border-t border-slate-200 pt-2">
+									<div className="flex items-center justify-between text-sm">
+										<span className="text-slate-600">Comissão (1 dia)</span>
+										<span className="font-semibold text-amber-600">
+											{COMMISSION_AMOUNT} MZN
+										</span>
+									</div>
+									<div className="text-xs text-slate-500 italic">
+										* Será deduzido durante o mês
+									</div>
+								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-slate-600">
 										Total a Repagar
@@ -336,10 +368,10 @@ export function LoanApprovalModal({
 								</div>
 								<div className="flex items-center justify-between">
 									<span className="text-sm text-slate-600">
-										Pagamento Mensal
+										Depósito Diário
 									</span>
-									<span className="text-lg font-bold text-emerald-600">
-										{formData.monthlyPayment.toLocaleString()} MZN
+									<span className="text-sm font-medium text-slate-900">
+										{dailyDepositAmount} MZN
 									</span>
 								</div>
 								<div className="flex items-center justify-between">
@@ -424,7 +456,7 @@ export function LoanApprovalModal({
 						</>
 					)}
 				</div>
-			</div>
-		</SuperModal>
+			</div >
+		</SuperModal >
 	);
 }

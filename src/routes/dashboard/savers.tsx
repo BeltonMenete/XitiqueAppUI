@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useLocation } from "@tanstack/react-router";
 import {
 	AlertCircle,
 	Calendar,
@@ -239,17 +239,23 @@ interface CalendarKPIsProps {
 	totalSavers: number;
 	totalCollected: string;
 	inDebt: number;
-	adherenceRate: number;
+	totalDebts: number;
+	totalLoans: number;
+	totalInterest: number;
+	totalCommission: number;
 }
 
 function CalendarKPIs({
 	totalSavers: _totalSavers,
 	totalCollected,
 	inDebt,
-	adherenceRate,
+	totalDebts,
+	totalLoans,
+	totalInterest,
+	totalCommission,
 }: CalendarKPIsProps) {
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+		<div className="grid grid-cols-1 md:grid-cols-6 gap-3 mt-4">
 			<div className="flex-1 min-w-[200px] bg-emerald-50 p-3 rounded-xl text-emerald-900 flex items-center justify-between group">
 				<div>
 					<h4 className="text-[10px] opacity-80 uppercase tracking-widest font-semibold">
@@ -271,19 +277,41 @@ function CalendarKPIs({
 				</div>
 				<AlertCircle size={16} className="text-red-500 opacity-40" />
 			</div>
-			<div className="flex-1 min-w-[200px] bg-white p-3 rounded-xl border border-slate-200 flex flex-col justify-center group">
-				<div className="flex justify-between items-center mb-1">
-					<h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
-						Adesão
+			<div className="flex-1 min-w-[200px] bg-red-50 p-3 rounded-xl border border-red-200 flex items-center justify-between group">
+				<div>
+					<h4 className="text-[10px] text-red-500 uppercase tracking-widest font-semibold">
+						Total Dívidas
 					</h4>
-					<p className="text-lg font-bold text-slate-900">{adherenceRate}%</p>
+					<p className="text-lg font-bold text-red-600">{totalDebts.toLocaleString()} MZN</p>
 				</div>
-				<div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-					<div
-						className="bg-slate-900 h-full"
-						style={{ width: `${adherenceRate}%` }}
-					/>
+				<AlertCircle size={16} className="text-red-500 opacity-40" />
+			</div>
+			<div className="flex-1 min-w-[200px] bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex items-center justify-between group">
+				<div>
+					<h4 className="text-[10px] text-emerald-500 uppercase tracking-widest font-semibold">
+						Total Comissão
+					</h4>
+					<p className="text-lg font-bold text-emerald-600">{totalCommission.toLocaleString()} MZN</p>
 				</div>
+				<DollarSign size={16} className="text-emerald-500 opacity-40" />
+			</div>
+			<div className="flex-1 min-w-[200px] bg-blue-50 p-3 rounded-xl border border-blue-200 flex items-center justify-between group">
+				<div>
+					<h4 className="text-[10px] text-blue-500 uppercase tracking-widest font-semibold">
+						Total Empréstimos
+					</h4>
+					<p className="text-lg font-bold text-blue-600">{totalLoans.toLocaleString()} MZN</p>
+				</div>
+				<DollarSign size={16} className="text-blue-500 opacity-40" />
+			</div>
+			<div className="flex-1 min-w-[200px] bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-center justify-between group">
+				<div>
+					<h4 className="text-[10px] text-amber-500 uppercase tracking-widest font-semibold">
+						Total Juros
+					</h4>
+					<p className="text-lg font-bold text-amber-600">{totalInterest.toLocaleString()} MZN</p>
+				</div>
+				<TrendingUp size={16} className="text-amber-500 opacity-40" />
 			</div>
 		</div>
 	);
@@ -374,6 +402,9 @@ function SaversCalendarView({
 								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-28">
 									TICANTE
 								</th>
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-12 text-right">
+									DIÁRIO
+								</th>
 								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold">
 									<MonthCalendarGrid
 										days={Array.from({ length: 30 }, (_, i) => ({
@@ -427,10 +458,12 @@ function SaversCalendarView({
 											>
 												{saver.name}
 											</button>
-											<span className="text-[8px] text-slate-400 font-medium whitespace-nowrap">
-												{saver.dailyAmount} MZN/dia
-											</span>
 										</div>
+									</td>
+									<td className="px-1 py-0.5 text-right">
+										<span className="font-mono text-[10px] font-semibold text-slate-600">
+											{saver.dailyAmount}
+										</span>
 									</td>
 									<td className="px-2 py-0.5">
 										<MonthCalendarGrid
@@ -519,6 +552,36 @@ function SaversCalendarView({
 					</div>
 				</div>
 
+				{/* Totals Footer */}
+				<div className="px-3 py-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[10px] font-semibold text-slate-700">
+					<div className="flex items-center gap-4">
+						<div className="flex items-center gap-1">
+							<span className="text-slate-500">Total Comissão:</span>
+							<span className="text-emerald-600">
+								{totalCommission.toLocaleString()} MZN
+							</span>
+						</div>
+						<div className="flex items-center gap-1">
+							<span className="text-slate-500">Total Dívidas:</span>
+							<span className="text-red-600">
+								{savers.reduce((sum, s) => sum + (s.currentDebt || 0), 0).toLocaleString()} MZN
+							</span>
+						</div>
+						<div className="flex items-center gap-1">
+							<span className="text-slate-500">Total Empréstimos:</span>
+							<span className="text-blue-600">
+								{savers.reduce((sum, s) => sum + (s.totalLoans || 0), 0).toLocaleString()} MZN
+							</span>
+						</div>
+						<div className="flex items-center gap-1">
+							<span className="text-slate-500">Total Juros:</span>
+							<span className="text-amber-600">
+								{savers.reduce((sum, s) => sum + (s.totalInterest || 0), 0).toLocaleString()} MZN
+							</span>
+						</div>
+					</div>
+				</div>
+
 				{/* Pagination */}
 				<div className="p-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
 					<p className="text-xs text-slate-500">
@@ -564,7 +627,10 @@ function SaversCalendarView({
 				totalSavers={savers.length}
 				totalCollected="45.200 MZN"
 				inDebt={savers.filter((s) => s.status === "in_debt").length}
-				adherenceRate={88}
+				totalDebts={savers.reduce((sum, s) => sum + (s.currentDebt || 0), 0)}
+				totalLoans={savers.reduce((sum, s) => sum + (s.totalLoans || 0), 0)}
+				totalInterest={savers.reduce((sum, s) => sum + (s.totalInterest || 0), 0)}
+				totalCommission={savers.reduce((sum, s) => sum + s.dailyAmount, 0)}
 			/>
 		</div>
 	);
@@ -589,6 +655,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A01",
+		totalLoans: 5000,
+		totalInterest: 750,
 		paymentDays: (() => {
 			const debtDays = Math.floor(2300 / 500);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -621,6 +689,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A02",
+		totalLoans: 3000,
+		totalInterest: 450,
 		paymentDays: (() => {
 			const debtDays = Math.floor(1500 / 250);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -653,6 +723,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A03",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 22,
@@ -676,6 +748,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A04",
+		totalLoans: 8000,
+		totalInterest: 1200,
 		paymentDays: (() => {
 			const debtDays = Math.floor(2000 / 1000);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -708,6 +782,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A05",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 28,
@@ -731,6 +807,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A06",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 25,
@@ -754,6 +832,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A07",
+		totalLoans: 6000,
+		totalInterest: 900,
 		paymentDays: (() => {
 			const debtDays = Math.floor(3200 / 400);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -786,6 +866,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A08",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 24,
@@ -809,6 +891,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A09",
+		totalLoans: 10000,
+		totalInterest: 1500,
 		paymentDays: (() => {
 			const debtDays = Math.floor(4500 / 750);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -841,6 +925,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A10",
+		totalLoans: 2000,
+		totalInterest: 300,
 		paymentDays: (() => {
 			const debtDays = Math.floor(900 / 180);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -873,6 +959,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A11",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 25,
@@ -896,6 +984,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A12",
+		totalLoans: 4000,
+		totalInterest: 600,
 		paymentDays: (() => {
 			const debtDays = Math.floor(1750 / 350);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -928,6 +1018,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A13",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 25,
@@ -951,6 +1043,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A14",
+		totalLoans: 7000,
+		totalInterest: 1050,
 		paymentDays: (() => {
 			const debtDays = Math.floor(3000 / 500);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -983,6 +1077,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A15",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 20,
@@ -1006,6 +1102,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A16",
+		totalLoans: 1000,
+		totalInterest: 150,
 		paymentDays: (() => {
 			const debtDays = Math.floor(525 / 175);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -1038,6 +1136,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A17",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 25,
@@ -1061,6 +1161,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A18",
+		totalLoans: 2500,
+		totalInterest: 375,
 		paymentDays: (() => {
 			const debtDays = Math.floor(1375 / 275);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -1093,6 +1195,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A19",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 20,
@@ -1116,6 +1220,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A20",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 25,
@@ -1139,6 +1245,8 @@ const mockSavers: Saver[] = [
 		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A21",
+		totalLoans: 15000,
+		totalInterest: 2250,
 		paymentDays: (() => {
 			const debtDays = Math.floor(7500 / 1500);
 			return Array.from({ length: 30 }, (_, i) => {
@@ -1171,6 +1279,8 @@ const mockSavers: Saver[] = [
 		status: "inactive",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A22",
+		totalLoans: 0,
+		totalInterest: 0,
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
 			day: i + 1,
 			paid: i < 30,
@@ -1271,6 +1381,7 @@ const mockSavers: Saver[] = [
 
 function SaversManagement() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedMonth, setSelectedMonth] = useState("Maio 2024");
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -1318,7 +1429,9 @@ function SaversManagement() {
 		});
 	});
 
-	const sidebarItems = getDashboardSidebar("/dashboard/savers");
+	const sidebarItems = getDashboardSidebar(location.pathname);
+
+	const totalCommission = savers.reduce((sum, s) => sum + s.dailyAmount, 0);
 
 	const kpiData = [
 		{
@@ -1327,6 +1440,14 @@ function SaversManagement() {
 			subtext: "Total registado",
 			icon: Users,
 			color: "text-emerald-500 bg-emerald-50 border-emerald-100",
+			isDebt: false,
+		},
+		{
+			title: "Total Comissão",
+			value: `${totalCommission.toLocaleString()} MZN`,
+			subtext: "Soma dos diários",
+			icon: Wallet,
+			color: "text-blue-600 bg-blue-50 border-blue-100",
 			isDebt: false,
 		},
 		{
@@ -1394,7 +1515,7 @@ function SaversManagement() {
 						</button>
 					</div>
 					<span className="text-[8px] text-slate-400 font-medium">
-						{row.dailyAmount} MZN/dia
+						{row.dailyAmount}
 					</span>
 				</div>
 			),
@@ -1772,6 +1893,8 @@ function SaversManagement() {
 				maxLoanAmount={
 					selectedSaver?.totalSaved ? selectedSaver.totalSaved * 2 : 50000
 				}
+				dailyDepositAmount={selectedSaver?.dailyAmount}
+				currentSavings={selectedSaver?.totalSaved}
 			/>
 
 			<DayDetailPopup

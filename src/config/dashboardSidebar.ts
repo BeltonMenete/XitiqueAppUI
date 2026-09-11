@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { FileText, Settings, TrendingUp, Users, Wallet } from "lucide-react";
+import { FileText, Settings, TrendingUp, Users, Wallet, Users2 } from "lucide-react";
 
 export interface SidebarItem {
 	label: string;
@@ -25,25 +25,31 @@ export const getDashboardSidebar = (currentPath: string): SidebarItem[] => {
 			label: "Gestão",
 			icon: Users,
 			href: "/dashboard/savers",
-			isActive: currentPath === "/dashboard/savers",
+			isActive: currentPath.startsWith("/dashboard/savers") || currentPath === "/dashboard/saver-details",
 		},
 		{
-			label: "Financeiro",
+			label: "Cobradores",
+			icon: Users2,
+			href: "/dashboard/collectors",
+			isActive: currentPath.startsWith("/dashboard/collectors"),
+		},
+		{
+			label: "Finanças",
 			icon: Wallet,
 			href: "/dashboard/financial",
-			isActive: currentPath === "/dashboard/financial",
+			isActive: currentPath.startsWith("/dashboard/financial"),
 		},
 		{
 			label: "Relatórios",
 			icon: FileText,
 			href: "/dashboard/reports",
-			isActive: currentPath === "/dashboard/reports",
+			isActive: currentPath.startsWith("/dashboard/reports"),
 		},
 		{
 			label: "Configurações",
 			icon: Settings,
 			href: "/dashboard/settings",
-			isActive: currentPath === "/dashboard/settings",
+			isActive: currentPath.startsWith("/dashboard/settings"),
 		},
 	];
 

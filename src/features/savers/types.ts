@@ -27,6 +27,8 @@ export interface Saver {
 		isDebtPayment?: boolean;
 		isInDebt?: boolean;
 	}>;
+	totalLoans?: number;
+	totalInterest?: number;
 }
 
 export interface SaverDeposit {

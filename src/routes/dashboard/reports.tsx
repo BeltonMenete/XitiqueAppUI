@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import {
 	BarChart3,
 	Calendar,
@@ -30,14 +30,15 @@ export const Route = createFileRoute("/dashboard/reports")({
 });
 
 function ReportsDashboard() {
+	const location = useLocation();
 	const [timeRange, setTimeRange] = useState("month");
 	const [activeTab, setActiveTab] = useState("overview");
 
-	const sidebarItems = getDashboardSidebar("/dashboard/reports");
+	const sidebarItems = getDashboardSidebar(location.pathname);
 
 	const tabs = [
 		{ id: "overview", label: "Visão Geral", icon: BarChart3 },
-		{ id: "financial", label: "Financeiro", icon: Wallet },
+		{ id: "financial", label: "Finanças", icon: Wallet },
 		{ id: "performance", label: "Desempenho", icon: TrendingUp },
 		{ id: "members", label: "Membros", icon: Users },
 		{ id: "custom", label: "Personalizado", icon: Settings },
@@ -45,7 +46,19 @@ function ReportsDashboard() {
 
 	const reportCards = [
 		{
-			title: "Receita Total",
+			title: "Total Colectado",
+			value: "450.000 MZN",
+			subtext: "+12.5% vs mês anterior",
+			borderColor: "success" as const,
+		},
+		{
+			title: "Total Guardado",
+			value: "380.000 MZN",
+			subtext: "+8.2% vs mês anterior",
+			borderColor: "info" as const,
+		},
+		{
+			title: "Caderno Total",
 			value: "450.000 MZN",
 			subtext: "+12.5% vs mês anterior",
 			borderColor: "success" as const,
@@ -131,7 +144,7 @@ function ReportsDashboard() {
 					</div>
 
 					{/* Report Cards */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 						{reportCards.map((card) => (
 							<PrototypeKPICard key={card.title} {...card} />
 						))}
@@ -142,7 +155,7 @@ function ReportsDashboard() {
 						<Card>
 							<CardHeader className="flex justify-between items-center pb-4">
 								<h4 className="font-semibold text-slate-900">
-									Evolução de Receitas
+									Evolução de Caderno
 								</h4>
 								<div className="flex gap-2">
 									<Button
@@ -278,7 +291,7 @@ function ReportsDashboard() {
 								]}
 								columns={[
 									{ key: "period", header: "Período" },
-									{ key: "revenue", header: "Receita" },
+									{ key: "revenue", header: "Caderno" },
 									{ key: "expenses", header: "Despesas" },
 									{
 										key: "profit",

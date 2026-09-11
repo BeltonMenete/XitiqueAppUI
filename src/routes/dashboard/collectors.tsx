@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import {
 	CirclePlus,
 	Edit,
@@ -28,6 +28,7 @@ import {
 	PendingBadge,
 } from "#/components/ui/StatusBadge";
 import { SupportSection } from "#/components/ui/SupportSection";
+import { getDashboardSidebar } from "#/config/dashboardSidebar";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/collectors")({
@@ -54,6 +55,7 @@ interface CollectorData {
 }
 
 function CollectorsManagement() {
+	const location = useLocation();
 	const [_searchTerm, _setSearchTerm] = useState("");
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 	const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
@@ -74,6 +76,7 @@ function CollectorsManagement() {
 			phone: "+258 84 123 4567",
 			clients: 47,
 			monthlyVolume: 125400,
+			saved: 118000,
 			difference: 1200,
 			status: "active",
 		},
@@ -83,6 +86,7 @@ function CollectorsManagement() {
 			phone: "+258 82 987 6543",
 			clients: 32,
 			monthlyVolume: 84200,
+			saved: 75000,
 			difference: -4500,
 			status: "suspended",
 		},
@@ -92,6 +96,7 @@ function CollectorsManagement() {
 			phone: "+258 84 654 3210",
 			clients: 28,
 			monthlyVolume: 72100,
+			saved: 68000,
 			difference: 3200,
 			status: "active",
 		},
@@ -101,6 +106,7 @@ function CollectorsManagement() {
 			phone: "+258 82 111 2222",
 			clients: 41,
 			monthlyVolume: 108900,
+			saved: 102000,
 			difference: -1200,
 			status: "active",
 		},
@@ -110,6 +116,7 @@ function CollectorsManagement() {
 			phone: "+258 84 333 4444",
 			clients: 36,
 			monthlyVolume: 95600,
+			saved: 89000,
 			difference: 5600,
 			status: "suspended",
 		},
@@ -119,6 +126,7 @@ function CollectorsManagement() {
 			phone: "+258 82 555 6666",
 			clients: 43,
 			monthlyVolume: 117300,
+			saved: 110000,
 			difference: 7800,
 			status: "active",
 		},
@@ -135,18 +143,7 @@ function CollectorsManagement() {
 		return selectedStatuses.includes(collector.status);
 	});
 
-	const sidebarItems = [
-		{ label: "Painel", icon: TrendingUp, href: "/dashboard/overview" },
-		{ label: "Gestão", icon: Users, href: "/dashboard/savers" },
-		{
-			label: "Cobradores",
-			icon: CirclePlus,
-			href: "/dashboard/collectors",
-			isActive: true,
-		},
-		{ label: "Financeiro", icon: Wallet, href: "/dashboard/financial" },
-		{ label: "Relatórios", icon: TrendingUp, href: "/dashboard/reports" },
-	];
+	const sidebarItems = getDashboardSidebar(location.pathname);
 
 	const kpiData = [
 		{
@@ -162,16 +159,22 @@ function CollectorsManagement() {
 			borderColor: "success" as const,
 		},
 		{
-			title: "Arrecadado (Mês)",
+			title: "Clientes Este Mês",
+			value: "34",
+			subtext: "Novos registados",
+			borderColor: "success" as const,
+		},
+		{
+			title: "Total Colectado",
 			value: "450.000 MZN",
 			subtext: "Total colectado",
 			borderColor: "info" as const,
 		},
 		{
-			title: "Meta de Colecta",
-			value: "82%",
-			subtext: "Progresso mensal",
-			borderColor: "warning" as const,
+			title: "Total Guardado",
+			value: "380.000 MZN",
+			subtext: "Valor total guardado",
+			borderColor: "success" as const,
 		},
 	];
 
@@ -208,7 +211,7 @@ function CollectorsManagement() {
 		},
 		{
 			key: "clients",
-			header: "CLIENTES",
+			header: "CLIENTES REGISTRADOS",
 			render: (value: unknown) => (
 				<div className="flex items-center gap-1">
 					<span className="font-bold text-sm text-slate-900">
@@ -219,11 +222,35 @@ function CollectorsManagement() {
 			),
 		},
 		{
+			key: "newClients",
+			header: "CLIENTES ESTE MÊS",
+			className: "text-right",
+			render: (_value: unknown, row: Record<string, unknown>) => {
+				const collector = row as unknown as Collector;
+				const newClients = Math.floor(Math.random() * 5) + 1; // Mock data
+				return (
+					<span className="font-mono text-sm font-bold text-emerald-600">
+						{newClients}
+					</span>
+				);
+			},
+		},
+		{
 			key: "monthlyVolume",
 			header: "VOLUME MENSAL",
 			className: "text-right",
 			render: (value: unknown) => (
 				<span className="font-mono text-sm font-bold text-slate-900">
+					{Number(value).toLocaleString()} MZN
+				</span>
+			),
+		},
+		{
+			key: "saved",
+			header: "GUARDADO",
+			className: "text-right",
+			render: (value: unknown) => (
+				<span className="font-mono text-sm font-bold text-emerald-600">
 					{Number(value).toLocaleString()} MZN
 				</span>
 			),
@@ -317,7 +344,7 @@ function CollectorsManagement() {
 
 				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{/* KPI Cards */}
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
 						{kpiData.map((kpi) => (
 							<PrototypeKPICard key={kpi.title} {...kpi} />
 						))}

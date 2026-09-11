@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import {
 	AlertCircle,
 	AlertTriangle,
@@ -37,6 +37,7 @@ export const Route = createFileRoute("/dashboard/savers/$id")({
 });
 
 function SaverDetails() {
+	const location = useLocation();
 	const [activeTab, setActiveTab] = useState<
 		"card" | "statement" | "loans" | "history"
 	>("card");
@@ -50,7 +51,7 @@ function SaverDetails() {
 	const { data: loans, isLoading: loansLoading } = useSaverLoans(id);
 	const { data: history, isLoading: historyLoading } = useSaverHistory(id);
 
-	const sidebarItems = getDashboardSidebar("/dashboard/savers/$id");
+	const sidebarItems = getDashboardSidebar(location.pathname);
 
 	const displaySaver = saver;
 

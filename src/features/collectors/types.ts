@@ -5,6 +5,7 @@ export interface Collector {
 	email?: string;
 	clients: number;
 	monthlyVolume: number;
+	saved?: number;
 	difference: number;
 	status: "active" | "suspended" | "inactive";
 	avatar?: string;
