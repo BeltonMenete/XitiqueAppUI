@@ -1,9 +1,8 @@
-import { createFileRoute, useNavigate, useLocation } from "@tanstack/react-router";
+import { createFileRoute, useLocation, useNavigate } from "@tanstack/react-router";
 import {
 	AlertCircle,
 	Calendar,
 	Check,
-	ChevronDown,
 	DollarSign,
 	Eye,
 	Filter,
@@ -12,11 +11,9 @@ import {
 	MoreVertical,
 	Phone,
 	Plus,
-	TrendingUp,
 	Users,
-	Wallet,
 } from "lucide-react";
-import { memo, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { DayDetailPopup } from "#/components/business/DayDetailPopup";
 import { QuickDepositModal } from "#/components/business/QuickDepositModal";
@@ -31,7 +28,7 @@ import { DataTable } from "#/components/ui/DataTable";
 import { EmptyState } from "#/components/ui/EmptyState";
 import { ExpandableRowContent } from "#/components/ui/ExpandableRow";
 import { FilterChips } from "#/components/ui/FilterChips";
-import { KPICard } from "#/components/ui/KPICard";
+import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { ProgressCircle } from "#/components/ui/ProgressCircle";
 import {
@@ -62,6 +59,7 @@ interface MonthCalendarGridProps {
 		isDebtPayment?: boolean;
 		isInDebt?: boolean;
 	}) => void;
+	onSaverClick?: (saverId: string) => void;
 	showHeader?: boolean;
 	saverName?: string;
 	headerOnly?: boolean;
@@ -72,6 +70,7 @@ interface MonthCalendarGridProps {
 const MonthCalendarGrid = memo(function MonthCalendarGrid({
 	days,
 	onDayClick,
+	onSaverClick: _onSaverClick,
 	showHeader = false,
 	saverName,
 	headerOnly = false,
@@ -234,89 +233,6 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 	);
 });
 
-// CalendarKPIs Component
-interface CalendarKPIsProps {
-	totalSavers: number;
-	totalCollected: string;
-	inDebt: number;
-	totalDebts: number;
-	totalLoans: number;
-	totalInterest: number;
-	totalCommission: number;
-}
-
-function CalendarKPIs({
-	totalSavers: _totalSavers,
-	totalCollected,
-	inDebt,
-	totalDebts,
-	totalLoans,
-	totalInterest,
-	totalCommission,
-}: CalendarKPIsProps) {
-	return (
-		<div className="grid grid-cols-1 md:grid-cols-6 gap-3 mt-4">
-			<div className="flex-1 min-w-[200px] bg-emerald-50 p-3 rounded-xl text-emerald-900 flex items-center justify-between group">
-				<div>
-					<h4 className="text-[10px] opacity-80 uppercase tracking-widest font-semibold">
-						Colecção do Dia
-					</h4>
-					<p className="text-lg font-bold">{totalCollected}</p>
-				</div>
-				<div className="flex items-center text-emerald-500 font-bold text-[10px]">
-					<TrendingUp size={14} className="mr-1" />
-					+12.4%
-				</div>
-			</div>
-			<div className="flex-1 min-w-[200px] bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between group">
-				<div>
-					<h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
-						Em Dívida
-					</h4>
-					<p className="text-lg font-bold text-red-600">{inDebt}</p>
-				</div>
-				<AlertCircle size={16} className="text-red-500 opacity-40" />
-			</div>
-			<div className="flex-1 min-w-[200px] bg-red-50 p-3 rounded-xl border border-red-200 flex items-center justify-between group">
-				<div>
-					<h4 className="text-[10px] text-red-500 uppercase tracking-widest font-semibold">
-						Total Dívidas
-					</h4>
-					<p className="text-lg font-bold text-red-600">{totalDebts.toLocaleString()} MZN</p>
-				</div>
-				<AlertCircle size={16} className="text-red-500 opacity-40" />
-			</div>
-			<div className="flex-1 min-w-[200px] bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex items-center justify-between group">
-				<div>
-					<h4 className="text-[10px] text-emerald-500 uppercase tracking-widest font-semibold">
-						Total Comissão
-					</h4>
-					<p className="text-lg font-bold text-emerald-600">{totalCommission.toLocaleString()} MZN</p>
-				</div>
-				<DollarSign size={16} className="text-emerald-500 opacity-40" />
-			</div>
-			<div className="flex-1 min-w-[200px] bg-blue-50 p-3 rounded-xl border border-blue-200 flex items-center justify-between group">
-				<div>
-					<h4 className="text-[10px] text-blue-500 uppercase tracking-widest font-semibold">
-						Total Empréstimos
-					</h4>
-					<p className="text-lg font-bold text-blue-600">{totalLoans.toLocaleString()} MZN</p>
-				</div>
-				<DollarSign size={16} className="text-blue-500 opacity-40" />
-			</div>
-			<div className="flex-1 min-w-[200px] bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-center justify-between group">
-				<div>
-					<h4 className="text-[10px] text-amber-500 uppercase tracking-widest font-semibold">
-						Total Juros
-					</h4>
-					<p className="text-lg font-bold text-amber-600">{totalInterest.toLocaleString()} MZN</p>
-				</div>
-				<TrendingUp size={16} className="text-amber-500 opacity-40" />
-			</div>
-		</div>
-	);
-}
-
 // SaversCalendarView Component
 interface SaversCalendarViewProps {
 	savers: Saver[];
@@ -336,6 +252,7 @@ interface SaversCalendarViewProps {
 	) => void;
 	onDepositClick?: (saver: Saver) => void;
 	onLoanClick?: (saver: Saver) => void;
+	onSaverClick?: (saverId: string) => void;
 }
 
 function SaversCalendarView({
@@ -345,8 +262,12 @@ function SaversCalendarView({
 	onDayClick,
 	onDepositClick,
 	onLoanClick,
+	onSaverClick,
 }: SaversCalendarViewProps) {
 	const totalCommission = savers.reduce((sum, s) => sum + s.dailyAmount, 0);
+	const [visibleCount, setVisibleCount] = useState(25);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
+	const tableContainerRef = useRef<HTMLDivElement>(null);
 
 	const months = [
 		"Jan 2024",
@@ -356,8 +277,35 @@ function SaversCalendarView({
 		"Maio 2024",
 	];
 
+	const visibleSavers = savers.slice(0, visibleCount);
+	const hasMore = visibleCount < savers.length;
+
+	const loadMore = useCallback(() => {
+		if (isLoadingMore || !hasMore) return;
+		setIsLoadingMore(true);
+		setTimeout(() => {
+			setVisibleCount((prev) => Math.min(prev + 25, savers.length));
+			setIsLoadingMore(false);
+		}, 500);
+	}, [isLoadingMore, hasMore, savers.length]);
+
+	useEffect(() => {
+		const container = tableContainerRef.current;
+		if (!container) return;
+
+		const handleScroll = () => {
+			const { scrollTop, scrollHeight, clientHeight } = container;
+			if (scrollHeight - scrollTop - clientHeight < 100 && hasMore) {
+				loadMore();
+			}
+		};
+
+		container.addEventListener("scroll", handleScroll);
+		return () => container.removeEventListener("scroll", handleScroll);
+	}, [hasMore, loadMore]);
+
 	return (
-		<div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+		<div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
 			{/* Month Selector & Filters */}
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
 				<div className="flex items-center space-x-2 overflow-x-auto">
@@ -396,8 +344,8 @@ function SaversCalendarView({
 			</div>
 
 			{/* Calendar Table */}
-			<div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-				<div className="overflow-x-auto">
+			<div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
+				<div ref={tableContainerRef} className="overflow-x-auto max-h-[600px] overflow-y-auto">
 					<table className="w-full text-left border-collapse">
 						<thead className="bg-slate-50 border-b border-slate-200">
 							<tr>
@@ -430,7 +378,7 @@ function SaversCalendarView({
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-slate-200">
-							{savers.map((saver) => (
+							{visibleSavers.map((saver) => (
 								<tr
 									key={saver.id}
 									className="hover:bg-slate-50 transition-colors border-b border-slate-200/50"
@@ -449,12 +397,12 @@ function SaversCalendarView({
 														"Calendar name click - navigating to saver-details for:",
 														saver.id,
 													);
-													window.location.href = `/dashboard/saver-details?id=${saver.id}`;
+													onSaverClick?.(saver.id);
 												}}
 												onKeyDown={(e) => {
 													if (e.key === "Enter" || e.key === " ") {
 														e.preventDefault();
-														window.location.href = `/dashboard/saver-details?id=${saver.id}`;
+														onSaverClick?.(saver.id);
 													}
 												}}
 											>
@@ -471,6 +419,7 @@ function SaversCalendarView({
 										<MonthCalendarGrid
 											days={saver.paymentDays || []}
 											onDayClick={(dayData) => onDayClick?.(saver, dayData)}
+											onSaverClick={onSaverClick}
 											showHeader={false}
 											saverName={saver.name}
 											saver={saver}
@@ -509,7 +458,7 @@ function SaversCalendarView({
 														// Navigate to saver-details page with saver ID
 														// setTimeout ensures menu closes before navigation
 														setTimeout(() => {
-															window.location.href = `/dashboard/saver-details?id=${saver.id}`;
+															onSaverClick?.(saver.id);
 														}, 50);
 													},
 												},
@@ -528,112 +477,76 @@ function SaversCalendarView({
 									</td>
 								</tr>
 							))}
+							{isLoadingMore && (
+								<tr>
+									<td colSpan={6} className="px-4 py-3 text-center">
+										<div className="flex items-center justify-center gap-2 text-xs text-slate-500">
+											<div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+											<span>Carregando mais...</span>
+										</div>
+									</td>
+								</tr>
+							)}
 						</tbody>
 					</table>
 				</div>
 
-				{/* Legend */}
-				<div className="px-3 py-1.5 bg-slate-50 border-t border-slate-200 flex items-center gap-3">
-					<div className="flex items-center gap-2">
-						<div className="w-4 h-4 rounded-sm border border-slate-300 bg-emerald-500" />
-						<span className="text-[10px] text-slate-600">Depósito Normal</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<div className="w-4 h-4 rounded-sm border border-amber-300 bg-amber-500" />
-						<span className="text-[10px] text-slate-600">
-							Pagamento de Dívida
-						</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<div className="w-4 h-4 rounded-sm border border-red-200 bg-red-100" />
-						<span className="text-[10px] text-slate-600">Em Dívida</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<div className="w-4 h-4 rounded-sm border border-slate-200 bg-slate-50" />
-						<span className="text-[10px] text-slate-600">Não Depositado</span>
-					</div>
-				</div>
-
 				{/* Totals Footer */}
-				<div className="px-3 py-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[10px] font-semibold text-slate-700">
-					<div className="flex items-center gap-4">
-						<div className="flex items-center gap-1">
-							<span className="text-slate-500">Total Comissão:</span>
-							<span className="text-emerald-600">
-								{totalCommission.toLocaleString()} MZN
-							</span>
+				<div className="px-4 py-3 bg-gradient-to-r from-emerald-50 to-slate-50 border-t border-slate-200">
+					<div className="flex flex-wrap items-center justify-between gap-2">
+						<div className="flex flex-wrap items-center gap-3 text-[10px] font-semibold">
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 rounded-lg">
+								<span className="text-emerald-700">Colecção do Dia:</span>
+								<span className="text-emerald-900 font-bold">
+									{savers.reduce((sum, s) => sum + (s.totalSaved || 0), 0).toLocaleString()} MZN
+								</span>
+							</div>
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 rounded-lg">
+								<span className="text-emerald-700">Total Comissão:</span>
+								<span className="text-emerald-900 font-bold">
+									{totalCommission.toLocaleString()} MZN
+								</span>
+							</div>
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-blue-100 rounded-lg">
+								<span className="text-blue-700">Total Empréstimos:</span>
+								<span className="text-blue-900 font-bold">
+									{savers.reduce((sum, s) => sum + (s.totalLoans || 0), 0).toLocaleString()} MZN
+								</span>
+							</div>
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 rounded-lg">
+								<span className="text-emerald-700">Total Juros:</span>
+								<span className="text-emerald-900 font-bold">
+									{savers.reduce((sum, s) => sum + (s.totalInterest || 0), 0).toLocaleString()} MZN
+								</span>
+							</div>
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-red-100 rounded-lg">
+								<span className="text-red-700">Total Dívidas:</span>
+								<span className="text-red-900 font-bold">
+									{savers.reduce((sum, s) => sum + (s.currentDebt || 0), 0).toLocaleString()} MZN
+								</span>
+							</div>
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-red-100 rounded-lg">
+								<span className="text-red-700">Em Dívida:</span>
+								<span className="text-red-900 font-bold">
+									{savers.filter((s) => s.status === "in_debt").length}
+								</span>
+							</div>
 						</div>
-						<div className="flex items-center gap-1">
-							<span className="text-slate-500">Total Dívidas:</span>
-							<span className="text-red-600">
-								{savers.reduce((sum, s) => sum + (s.currentDebt || 0), 0).toLocaleString()} MZN
-							</span>
+						<div className="flex items-center gap-3 text-[10px] font-semibold">
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-slate-200 rounded-lg">
+								<span className="text-slate-600">Total Ticantes:</span>
+								<span className="text-slate-900 font-bold">{savers.length}</span>
+							</div>
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-slate-200 rounded-lg">
+								<span className="text-slate-600">Total Poupado:</span>
+								<span className="text-slate-900 font-bold">
+									{savers.reduce((sum, s) => sum + (s.totalSaved || 0), 0).toLocaleString()} MZN
+								</span>
+							</div>
 						</div>
-						<div className="flex items-center gap-1">
-							<span className="text-slate-500">Total Empréstimos:</span>
-							<span className="text-blue-600">
-								{savers.reduce((sum, s) => sum + (s.totalLoans || 0), 0).toLocaleString()} MZN
-							</span>
-						</div>
-						<div className="flex items-center gap-1">
-							<span className="text-slate-500">Total Juros:</span>
-							<span className="text-amber-600">
-								{savers.reduce((sum, s) => sum + (s.totalInterest || 0), 0).toLocaleString()} MZN
-							</span>
-						</div>
-					</div>
-				</div>
-
-				{/* Pagination */}
-				<div className="p-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-					<p className="text-xs text-slate-500">
-						A mostrar 1-{savers.length} de {savers.length} ticantes
-					</p>
-					<div className="flex space-x-1">
-						<button
-							type="button"
-							className="p-1 rounded-lg hover:bg-slate-200 text-slate-400"
-						>
-							<ChevronDown size={16} className="rotate-90" />
-						</button>
-						<button
-							type="button"
-							className="w-8 h-8 rounded-lg bg-[#3391C2] text-white font-bold text-sm"
-						>
-							1
-						</button>
-						<button
-							type="button"
-							className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 font-bold text-sm"
-						>
-							2
-						</button>
-						<button
-							type="button"
-							className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 font-bold text-sm"
-						>
-							3
-						</button>
-						<button
-							type="button"
-							className="p-1 rounded-lg hover:bg-slate-200 text-slate-400"
-						>
-							<ChevronDown size={16} className="-rotate-90" />
-						</button>
 					</div>
 				</div>
 			</div>
-
-			{/* KPIs */}
-			<CalendarKPIs
-				totalSavers={savers.length}
-				totalCollected="45.200 MZN"
-				inDebt={savers.filter((s) => s.status === "in_debt").length}
-				totalDebts={savers.reduce((sum, s) => sum + (s.currentDebt || 0), 0)}
-				totalLoans={savers.reduce((sum, s) => sum + (s.totalLoans || 0), 0)}
-				totalInterest={savers.reduce((sum, s) => sum + (s.totalInterest || 0), 0)}
-				totalCommission={savers.reduce((sum, s) => sum + s.dailyAmount, 0)}
-			/>
 		</div>
 	);
 }
@@ -1440,42 +1353,31 @@ function SaversManagement() {
 			title: "Total Ticantes",
 			value: String(savers.length),
 			subtext: "Total registado",
-			icon: Users,
-			color: "text-emerald-500 bg-emerald-50 border-emerald-100",
-			isDebt: false,
+			borderColor: "success" as const,
 		},
 		{
 			title: "Total Comissão",
 			value: `${totalCommission.toLocaleString()} MZN`,
 			subtext: "Soma dos diários",
-			icon: Wallet,
-			color: "text-blue-600 bg-blue-50 border-blue-100",
-			isDebt: false,
+			borderColor: "info" as const,
 		},
 		{
 			title: "Total Sob Gestão",
 			value: "450.000 MZN",
 			subtext: "+12.5% vs mês anterior",
-			icon: Wallet,
-			color: "text-slate-600 bg-slate-50 border-slate-100",
-			isDebt: false,
-			trend: { value: "12.5%", isPositive: true },
+			borderColor: "primary" as const,
 		},
 		{
 			title: "Empréstimos Activos",
 			value: "8.000 MZN",
 			subtext: "3 empréstimos activos",
-			icon: Wallet,
-			color: "text-amber-600 bg-amber-50 border-amber-100",
-			isDebt: false,
+			borderColor: "warning" as const,
 		},
 		{
 			title: "Em Incumprimento",
 			value: String(savers.filter((s) => s.status === "in_debt").length),
 			subtext: "Ticantes em dívida",
-			icon: AlertCircle,
-			color: "text-red-600 bg-red-50 border-red-100",
-			isDebt: true,
+			borderColor: "error" as const,
 		},
 	];
 
@@ -1504,12 +1406,12 @@ function SaversManagement() {
 									"Standard table name click - navigating to saver-details for:",
 									row.id,
 								);
-								window.location.href = `/dashboard/saver-details?id=${row.id}`;
+								navigate({ to: "/dashboard/saver-details", search: { id: row.id } });
 							}}
 							onKeyDown={(e) => {
 								if (e.key === "Enter" || e.key === " ") {
 									e.preventDefault();
-									window.location.href = `/dashboard/saver-details?id=${row.id}`;
+									navigate({ to: "/dashboard/saver-details", search: { id: row.id } });
 								}
 							}}
 						>
@@ -1572,7 +1474,7 @@ function SaversManagement() {
 					"Standard table expanded row - navigating to saver-details for:",
 					row.id,
 				);
-				window.location.href = `/dashboard/saver-details?id=${row.id}`;
+				navigate({ to: "/dashboard/saver-details", search: { id: row.id } });
 			}}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1732,11 +1634,11 @@ function SaversManagement() {
 					}
 				/>
 
-				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 w-full animate-in fade-in slide-in-from-bottom-3 duration-500">
+				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{viewMode === "standard" ? (
 						<>
 							{/* Action Banner */}
-							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
 								<div>
 									<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 										Gestão de Ticantes
@@ -1785,9 +1687,9 @@ function SaversManagement() {
 							</div>
 
 							{/* KPI Cards */}
-							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 								{kpiData.map((kpi) => (
-									<KPICard key={kpi.title} {...kpi} />
+									<PrototypeKPICard key={kpi.title} {...kpi} />
 								))}
 							</div>
 
@@ -1861,6 +1763,9 @@ function SaversManagement() {
 							onLoanClick={(saver) => {
 								setSelectedSaver(saver);
 								setIsLoanModalOpen(true);
+							}}
+							onSaverClick={(saverId) => {
+								navigate({ to: "/dashboard/saver-details", search: { id: saverId } });
 							}}
 						/>
 					)}
@@ -1960,7 +1865,12 @@ function SaversManagement() {
 							className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
 							onClick={() => {
 								setIsSaverPopupOpen(false);
-								navigate({ to: "/dashboard/saver-details" });
+								if (selectedSaver?.id) {
+									navigate({
+										to: "/dashboard/saver-details",
+										search: { id: selectedSaver.id },
+									});
+								}
 							}}
 						>
 							Ver Detalhes

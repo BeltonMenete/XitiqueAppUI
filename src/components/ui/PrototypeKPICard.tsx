@@ -58,7 +58,7 @@ export function PrototypeKPICard({
 				<button
 					type="button"
 					className={cn(
-						"bg-slate-50 p-4 rounded-xl shadow-sm w-full text-left",
+						"bg-slate-50 p-3 shadow-sm w-full text-left rounded-r-xl",
 						borderColorMap[borderColor],
 						"cursor-pointer hover:shadow-md transition-shadow",
 					)}
@@ -70,20 +70,20 @@ export function PrototypeKPICard({
 						}
 					}}
 				>
-					<span className="text-xs text-slate-500 block mb-2 uppercase tracking-wider font-semibold">
+					<span className="text-xs text-slate-500 block mb-1 uppercase tracking-wider font-semibold">
 						{title}
 					</span>
 					<div className="flex items-baseline gap-2">
-						<span className={cn("text-2xl font-bold", textColorMap[borderColor])}>
+						<span className={cn("text-xl font-bold", textColorMap[borderColor])}>
 							{value}
 						</span>
 						{subtext && <span className="text-xs text-slate-500">{subtext}</span>}
 					</div>
-					{icon && <div className="mt-2">{icon}</div>}
+					{icon && <div className="mt-1">{icon}</div>}
 					{expandedContent && clickable && (
 						<button
 							type="button"
-							className="mt-2 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors cursor-pointer bg-transparent border-none p-0"
+							className="mt-1 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors cursor-pointer bg-transparent border-none p-0"
 							onClick={(e) => {
 								e.stopPropagation();
 								setIsExpanded(!isExpanded);
@@ -103,7 +103,7 @@ export function PrototypeKPICard({
 						</button>
 					)}
 					{isExpanded && expandedContent && (
-						<div className="mt-4 pt-4 border-t border-slate-200">
+						<div className="mt-3 pt-3 border-t border-slate-200">
 							{expandedContent}
 						</div>
 					)}
@@ -111,20 +111,20 @@ export function PrototypeKPICard({
 			) : (
 				<div
 					className={cn(
-						"bg-slate-50 p-4 rounded-xl shadow-sm",
+						"bg-slate-50 p-3 shadow-sm rounded-r-xl",
 						borderColorMap[borderColor],
 					)}
 				>
-					<span className="text-xs text-slate-500 block mb-2 uppercase tracking-wider font-semibold">
+					<span className="text-xs text-slate-500 block mb-1 uppercase tracking-wider font-semibold">
 						{title}
 					</span>
 					<div className="flex items-baseline gap-2">
-						<span className={cn("text-2xl font-bold", textColorMap[borderColor])}>
+						<span className={cn("text-xl font-bold", textColorMap[borderColor])}>
 							{value}
 						</span>
 						{subtext && <span className="text-xs text-slate-500">{subtext}</span>}
 					</div>
-					{icon && <div className="mt-2">{icon}</div>}
+					{icon && <div className="mt-1">{icon}</div>}
 				</div>
 			)}
 		</>

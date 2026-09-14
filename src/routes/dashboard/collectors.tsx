@@ -1,4 +1,4 @@
-import { createFileRoute, useLocation } from "@tanstack/react-router";
+import { createFileRoute, useLocation, useNavigate } from "@tanstack/react-router";
 import {
 	CirclePlus,
 	Edit,
@@ -43,6 +43,7 @@ interface CollectorData {
 }
 
 function CollectorsManagement() {
+	const navigate = useNavigate();
 	const location = useLocation();
 	const [_searchTerm, _setSearchTerm] = useState("");
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -190,7 +191,22 @@ function CollectorsManagement() {
 							/>
 						</div>
 						<div>
-							<p className="font-bold text-sm text-slate-900">{String(value)}</p>
+							<button
+								type="button"
+								className="font-bold text-sm text-slate-900 hover:text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 text-left cursor-pointer"
+								onClick={() => {
+									console.log("Collector name click - navigating to collector-details for:", collector.id);
+									navigate({ to: "/dashboard/collector-details", search: { id: collector.id } });
+								}}
+								onKeyDown={(e) => {
+									if (e.key === "Enter" || e.key === " ") {
+										e.preventDefault();
+										navigate({ to: "/dashboard/collector-details", search: { id: collector.id } });
+									}
+								}}
+							>
+								{String(value)}
+							</button>
 							<p className="text-xs text-slate-400 font-mono">{collector.phone}</p>
 						</div>
 					</div>
@@ -278,31 +294,38 @@ function CollectorsManagement() {
 			key: "actions",
 			header: "ACÇÕES",
 			className: "text-center",
-			render: (_: unknown, _row: Record<string, unknown>) => (
-				<div className="flex justify-center gap-2">
-					<button
-						type="button"
-						className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
-						title="Atribuir Clientes"
-					>
-						<CirclePlus size={16} />
-					</button>
-					<button
-						type="button"
-						className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
-						title="Editar"
-					>
-						<Edit size={16} />
-					</button>
-					<button
-						type="button"
-						className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
-						title="Ver Relatório"
-					>
-						<Eye size={16} />
-					</button>
-				</div>
-			),
+			render: (_: unknown, row: Record<string, unknown>) => {
+				const collector = row as unknown as Collector;
+				return (
+					<div className="flex justify-center gap-2">
+						<button
+							type="button"
+							className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
+							title="Ver Detalhes"
+							onClick={() => {
+								console.log("View collector details:", collector.id);
+								navigate({ to: "/dashboard/collector-details", search: { id: collector.id } });
+							}}
+						>
+							<Eye size={16} />
+						</button>
+						<button
+							type="button"
+							className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
+							title="Atribuir Clientes"
+						>
+							<CirclePlus size={16} />
+						</button>
+						<button
+							type="button"
+							className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
+							title="Editar"
+						>
+							<Edit size={16} />
+						</button>
+					</div>
+				);
+			},
 		},
 	];
 
@@ -314,11 +337,6 @@ function CollectorsManagement() {
 				<Header
 					title="Gestão de Cobradores"
 					description="Gerencie sua equipe de campo e acompanhe o desempenho"
-					breadcrumbs={[
-						{ label: "Dashboard", href: "/dashboard/overview" },
-						{ label: "Gestão", href: "/dashboard/savers" },
-						{ label: "Cobradores" },
-					]}
 					rightContent={
 						<Button
 							size="sm"
@@ -381,7 +399,11 @@ function CollectorsManagement() {
 							columns={columns}
 							showAvatars={true}
 							showStatusBadges={true}
-							onRowClick={(row) => console.log("View collector:", row)}
+							onRowClick={(row) => {
+								const collector = row as unknown as Collector;
+								console.log("View collector:", collector.id);
+								navigate({ to: "/dashboard/collector-details", search: { id: collector.id } });
+							}}
 							pagination={{
 								currentPage: 1,
 								totalPages: Math.ceil(filteredCollectors.length / 10),
