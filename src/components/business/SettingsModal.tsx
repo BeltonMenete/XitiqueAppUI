@@ -426,7 +426,7 @@ export function SettingsModal({ isOpen, onClose, onSave }: SettingsModalProps) {
 			title="Configurações da Organização"
 			tabs={tabs}
 			defaultTab={activeTab}
-			size="lg"
+			size="md"
 		/>
 	);
 }

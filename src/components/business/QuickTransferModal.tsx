@@ -63,7 +63,7 @@ export function QuickTransferModal({
 			isOpen={isOpen}
 			onClose={handleCancel}
 			title="Transferir Clientes"
-			size="lg"
+			size="md"
 		>
 			<form onSubmit={handleSubmit} className="space-4">
 				{collectorName && (

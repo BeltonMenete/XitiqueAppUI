@@ -46,7 +46,7 @@ export function EditSaverModal({
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} title="Editar Ticante" size="lg">
+		<Modal isOpen={isOpen} onClose={onClose} title="Editar Ticante" size="md">
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<div>
 					<label
