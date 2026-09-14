@@ -189,6 +189,7 @@ export function ContextMenu({ actions, children }: ContextMenuProps) {
 
 	return (
 		<>
+			{/* biome-ignore lint/a11y/noStaticElementInteractions: This is a context menu wrapper that triggers on right-click */}
 			<div onContextMenu={handleContextMenu}>{children}</div>
 
 			{isOpen && (

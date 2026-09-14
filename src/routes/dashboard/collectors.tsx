@@ -6,9 +6,7 @@ import {
 	MapPin,
 	Phone,
 	Plus,
-	TrendingUp,
 	Users,
-	Wallet,
 } from "lucide-react";
 import { useState } from "react";
 import { QuickTransferModal } from "#/components/business/QuickTransferModal";
@@ -30,21 +28,11 @@ import {
 import { SupportSection } from "#/components/ui/SupportSection";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
 import { cn } from "#/lib/design-system";
+import type { Collector } from "#/features/collectors/types";
 
 export const Route = createFileRoute("/dashboard/collectors")({
 	component: CollectorsManagement,
 });
-
-interface Collector {
-	id: string;
-	name: string;
-	phone: string;
-	clients: number;
-	monthlyVolume: number;
-	difference: number;
-	status: "active" | "suspended" | "inactive";
-	avatar?: string;
-}
 
 interface CollectorData {
 	name: string;
@@ -226,7 +214,7 @@ function CollectorsManagement() {
 			header: "CLIENTES ESTE MÊS",
 			className: "text-right",
 			render: (_value: unknown, row: Record<string, unknown>) => {
-				const collector = row as unknown as Collector;
+				const _collector = row as unknown as Collector;
 				const newClients = Math.floor(Math.random() * 5) + 1; // Mock data
 				return (
 					<span className="font-mono text-sm font-bold text-emerald-600">

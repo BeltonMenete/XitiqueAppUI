@@ -301,7 +301,7 @@ function SaverDetailsPage() {
 												let stateClass =
 													"bg-slate-100 border-slate-300 text-slate-400";
 												let icon: "check" | number = day;
-												let status: "paid" | "partial" | "unpaid" | "deleted" | "not_deposited" | "in_debt" | "current" = "not_deposited";
+												let status: "paid" | "partial" | "unpaid" | "deleted" | "not_deposited" | "in_debt" | "current" | "normal_deposit" = "not_deposited";
 												let amount = saver.dailyAmount;
 												let collector = "N/A";
 
@@ -312,7 +312,7 @@ function SaverDetailsPage() {
 
 												if (paymentDay) {
 													if (paymentDay.paid && paymentDay.isDebtPayment) {
-														// Pagamento de Dívida
+														// Pagamento de Dívida (Debt Payment) - this is the only case where status = "paid"
 														stateClass =
 															"bg-amber-100 border-amber-500 text-amber-600";
 														icon = "check";
@@ -323,15 +323,15 @@ function SaverDetailsPage() {
 														paymentDay.paid &&
 														!paymentDay.isDebtPayment
 													) {
-														// Depósito Normal
+														// Depósito Normal (Normal Deposit)
 														stateClass =
 															"bg-emerald-100 border-emerald-500 text-emerald-600";
 														icon = "check";
-														status = "paid";
+														status = "normal_deposit";
 														amount = paymentDay.amount || saver.dailyAmount;
 														collector = paymentDay.collector || "N/A";
 													} else if (!paymentDay.paid && paymentDay.isInDebt) {
-														// Em Dívida
+														// Em Dívida (In Debt)
 														stateClass =
 															"bg-red-100 border-red-300 text-red-600";
 														icon = day;
@@ -339,7 +339,7 @@ function SaverDetailsPage() {
 														amount = 0;
 														collector = "N/A";
 													} else {
-														// Não Depositado
+														// Não Depositado (Not Deposited)
 														stateClass =
 															"bg-slate-100 border-slate-300 text-slate-400";
 														icon = day;

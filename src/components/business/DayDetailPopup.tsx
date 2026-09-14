@@ -17,7 +17,8 @@ interface DayDetailPopupProps {
 	| "deleted"
 	| "not_deposited"
 	| "in_debt"
-	| "current";
+	| "current"
+	| "normal_deposit";
 	amount?: number;
 	collector?: string;
 	isLoading?: boolean;
@@ -51,7 +52,9 @@ export function DayDetailPopup({
 	const getStatusColor = (status: string) => {
 		switch (status) {
 			case "paid":
-				return "bg-emerald-100 text-emerald-600";
+				return "bg-amber-100 text-amber-600"; // Pagamento de Dívida (Debt Payment)
+			case "normal_deposit":
+				return "bg-emerald-100 text-emerald-600"; // Depósito Normal (Normal Deposit)
 			case "partial":
 				return "bg-amber-100 text-amber-600";
 			case "deleted":
@@ -68,7 +71,9 @@ export function DayDetailPopup({
 	const getStatusText = (status: string) => {
 		switch (status) {
 			case "paid":
-				return "Depósito Normal";
+				return "Pagamento de Dívida"; // Only for debt payments
+			case "normal_deposit":
+				return "Depósito Normal"; // Normal deposits
 			case "partial":
 				return "Pagamento de Dívida";
 			case "deleted":
@@ -276,16 +281,19 @@ export function DayDetailPopup({
 							</Button>
 						</div>
 					</div>
-				) : dayStatus === "paid" || dayStatus === "partial" ? (
+				) : dayStatus === "paid" || dayStatus === "partial" || dayStatus === "normal_deposit" ? (
 					<div className="space-y-2">
 						<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
 							<span className="text-xs text-slate-600">Estado</span>
 							<div className="flex items-center gap-1">
 								{dayStatus === "paid" && (
-									<Check size={12} className="text-emerald-600" />
+									<Check size={12} className="text-amber-600" />
 								)}
 								{dayStatus === "partial" && (
 									<Check size={12} className="text-amber-600" />
+								)}
+								{dayStatus === "normal_deposit" && (
+									<Check size={12} className="text-emerald-600" />
 								)}
 								<span
 									className={cn(

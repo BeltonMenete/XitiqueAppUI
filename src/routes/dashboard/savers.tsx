@@ -155,7 +155,7 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 							key={dayData.day}
 							type="button"
 							className={cn(
-								"w-2 h-2 sm:w-3 sm:h-3 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto flex items-center justify-center",
+								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto flex items-center justify-center",
 								dayData.paid && dayData.isDebtPayment
 									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
 									: dayData.paid && !dayData.isDebtPayment
@@ -167,7 +167,7 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 							onClick={() => onDayClick?.(dayData)}
 						>
 							{dayData.paid && (
-								<Check size={6} className="text-white font-bold" />
+								<Check size={8} className="text-white font-bold" />
 							)}
 							{/* Beautiful Tooltip - Tonal Layering style consistent with step-1 */}
 							<div
@@ -346,6 +346,8 @@ function SaversCalendarView({
 	onDepositClick,
 	onLoanClick,
 }: SaversCalendarViewProps) {
+	const totalCommission = savers.reduce((sum, s) => sum + s.dailyAmount, 0);
+
 	const months = [
 		"Jan 2024",
 		"Fev 2024",
@@ -399,13 +401,13 @@ function SaversCalendarView({
 					<table className="w-full text-left border-collapse">
 						<thead className="bg-slate-50 border-b border-slate-200">
 							<tr>
-								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-28">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold min-w-[120px]">
 									TICANTE
 								</th>
-								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-12 text-right">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold min-w-[60px] text-right">
 									DIÁRIO
 								</th>
-								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-full">
 									<MonthCalendarGrid
 										days={Array.from({ length: 30 }, (_, i) => ({
 											day: i + 1,
@@ -416,13 +418,13 @@ function SaversCalendarView({
 										selectedMonth={selectedMonth}
 									/>
 								</th>
-								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-16 text-right">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold min-w-[80px] text-right">
 									TOTAL
 								</th>
-								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-14">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold min-w-[70px]">
 									ESTADO
 								</th>
-								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold w-14">
+								<th className="px-1 py-0.5 text-[10px] text-slate-500 font-semibold min-w-[70px]">
 									AÇÕES
 								</th>
 							</tr>
@@ -1730,7 +1732,7 @@ function SaversManagement() {
 					}
 				/>
 
-				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
+				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 w-full animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{viewMode === "standard" ? (
 						<>
 							{/* Action Banner */}
