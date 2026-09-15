@@ -89,10 +89,12 @@ function OrganizationDashboard() {
 						<span className="text-slate-500">Total Solicitado</span>
 						<span className="font-semibold text-slate-900">85.000 MZN</span>
 					</div>
+
 					<div className="flex justify-between text-xs">
-						<span className="text-slate-500">Em Atraso</span>
-						<span className="font-semibold text-red-600">2 empréstimos</span>
+						<span className="text-slate-500">Dívida Ativa</span>
+						<span className="font-semibold text-amber-600">45.000 MZN</span>
 					</div>
+
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Taxa de Aprovação</span>
 						<span className="font-semibold text-emerald-500">94%</span>

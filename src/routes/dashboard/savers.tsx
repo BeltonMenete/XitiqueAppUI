@@ -48,8 +48,8 @@ interface MonthCalendarGridProps {
 		paid: boolean;
 		amount?: number;
 		collector?: string;
-		isDebtPayment?: boolean;
-		isInDebt?: boolean;
+		isDebtPayment?: boolean; // true if this payment is repaying loan
+		isInDebt?: boolean; // true if client has active loan
 	}>;
 	onDayClick?: (dayData: {
 		day: number;
@@ -157,11 +157,9 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto flex items-center justify-center",
 								dayData.paid && dayData.isDebtPayment
 									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
-									: dayData.paid && !dayData.isDebtPayment
+									: dayData.paid
 										? "border-emerald-300 bg-emerald-500 hover:bg-emerald-600"
-										: dayData.isInDebt
-											? "border-red-200 bg-red-100 hover:bg-red-200"
-											: "border-slate-200 bg-slate-50 hover:bg-slate-100",
+										: "border-slate-200 bg-slate-50 hover:bg-slate-100",
 							)}
 							onClick={() => onDayClick?.(dayData)}
 						>
@@ -174,11 +172,9 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 									"absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 sm:px-3 py-2 sm:py-2.5 text-[10px] sm:text-xs rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] w-32 sm:w-40 pointer-events-none border bg-white",
 									dayData.paid && dayData.isDebtPayment
 										? "border-amber-100"
-										: dayData.paid && !dayData.isDebtPayment
+										: dayData.paid
 											? "border-emerald-100"
-											: dayData.isInDebt && !dayData.paid
-												? "border-red-100"
-												: "border-slate-200",
+											: "border-slate-200",
 								)}
 							>
 								<div className="font-semibold text-gray-900 mb-1 text-[10px] sm:text-xs">
@@ -190,22 +186,18 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 								<div
 									className={cn(
 										"mt-1 font-medium text-[9px] sm:text-[10px]",
-										dayData.isDebtPayment
+										dayData.paid && dayData.isDebtPayment
 											? "text-amber-700"
-											: dayData.isInDebt && !dayData.paid
-												? "text-red-700"
-												: dayData.paid
-													? "text-emerald-700"
-													: "text-slate-600",
+											: dayData.paid
+												? "text-emerald-700"
+												: "text-slate-600",
 									)}
 								>
-									{dayData.isDebtPayment
+									{dayData.paid && dayData.isDebtPayment
 										? `Pagamento de Dívida: ${dayData.amount || 0} MZN`
-										: dayData.isInDebt && !dayData.paid
-											? "Em Dívida"
-											: dayData.paid
-												? `Depósito Normal: ${dayData.amount || 0} MZN`
-												: "Não Depositado"}
+										: dayData.paid
+											? `Depósito: ${dayData.amount || 0} MZN`
+											: "Não Depositado"}
 								</div>
 								{dayData.collector && (
 									<div className="text-[8px] sm:text-[9px] text-gray-500 mt-1">
@@ -216,13 +208,11 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 								<div
 									className={cn(
 										"absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-white border-r border-b rotate-45",
-										dayData.paid
-											? "border-emerald-100"
-											: dayData.isInDebt && !dayData.paid
-												? "border-red-100"
-												: dayData.isDebtPayment
-													? "border-amber-100"
-													: "border-slate-200",
+										dayData.paid && dayData.isDebtPayment
+											? "border-amber-100"
+											: dayData.paid
+												? "border-emerald-100"
+												: "border-slate-200",
 									)}
 								/>
 							</div>
@@ -439,8 +429,8 @@ function SaversCalendarView({
 									<td className="px-1 py-0.5">
 										<div className="flex gap-0.5">
 											{saver.status === "active" && <ActiveBadge />}
+											{saver.status === "in_debt" && <DebtBadge />}
 											{saver.status === "inactive" && <InactiveBadge />}
-											{saver.currentDebt > 0 && <DebtBadge />}
 										</div>
 									</td>
 									<td className="px-1 py-0.5">
@@ -519,18 +509,6 @@ function SaversCalendarView({
 									{savers.reduce((sum, s) => sum + (s.totalInterest || 0), 0).toLocaleString()} MZN
 								</span>
 							</div>
-							<div className="flex items-center gap-1.5 px-2 py-1 bg-red-100 rounded-lg">
-								<span className="text-red-700">Total Dívidas:</span>
-								<span className="text-red-900 font-bold">
-									{savers.reduce((sum, s) => sum + (s.currentDebt || 0), 0).toLocaleString()} MZN
-								</span>
-							</div>
-							<div className="flex items-center gap-1.5 px-2 py-1 bg-red-100 rounded-lg">
-								<span className="text-red-700">Em Dívida:</span>
-								<span className="text-red-900 font-bold">
-									{savers.filter((s) => s.status === "in_debt").length}
-								</span>
-							</div>
 						</div>
 						<div className="flex items-center gap-3 text-[10px] font-semibold">
 							<div className="flex items-center gap-1.5 px-2 py-1 bg-slate-200 rounded-lg">
@@ -565,30 +543,22 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-15",
 		totalSaved: 7500,
-		currentDebt: 2300,
 		daysInCycle: 15,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A01",
 		totalLoans: 5000,
 		totalInterest: 750,
-		paymentDays: (() => {
-			const debtDays = Math.floor(2300 / 500);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 8;
-				const isDebtPayment = i < 3;
-				const isInDebt = !paid && i < 8 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 500 : 0,
-					collector: paid ? "Arsénio Matusse" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 8;
+			return {
+				day,
+				paid,
+				amount: paid ? 500 : 0,
+				collector: paid ? "Arsénio Matusse" : undefined,
+			};
+		}),
 	},
 	{
 		id: "2",
@@ -599,30 +569,27 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-02-01",
 		totalSaved: 2500,
-		currentDebt: 1500,
+		currentDebt: 1500, // Unpaid loan amount
 		daysInCycle: 5,
-		status: "in_debt",
+		status: "in_debt", // Has active unpaid loan
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A02",
 		totalLoans: 3000,
 		totalInterest: 450,
-		paymentDays: (() => {
-			const debtDays = Math.floor(1500 / 250);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 5 && i % 2 === 0;
-				const isDebtPayment = i === 2;
-				const isInDebt = !paid && i < 5 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 250 : 0,
-					collector: paid ? "Célia Mondlane" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 5 && i % 2 === 0;
+			const isDebtPayment = i === 2; // This payment repays loan
+			const isInDebt = true; // Client has active loan
+			return {
+				day,
+				paid,
+				amount: paid ? 250 : 0,
+				collector: paid ? "Célia Mondlane" : undefined,
+				isDebtPayment,
+				isInDebt,
+			};
+		}),
 	},
 	{
 		id: "3",
@@ -633,9 +600,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-03-10",
 		totalSaved: 6600,
-		currentDebt: 0,
+
 		daysInCycle: 22,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A03",
 		totalLoans: 0,
@@ -645,8 +612,6 @@ const mockSavers: Saver[] = [
 			paid: i < 22,
 			amount: i < 22 ? 300 : 0,
 			collector: i < 22 ? "Filipe Nyusi Jr." : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
 		})),
 	},
 	{
@@ -658,30 +623,23 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-10",
 		totalSaved: 12000,
-		currentDebt: 2000,
+
 		daysInCycle: 12,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A04",
 		totalLoans: 8000,
 		totalInterest: 1200,
-		paymentDays: (() => {
-			const debtDays = Math.floor(2000 / 1000);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 12;
-				const isDebtPayment = i < 5;
-				const isInDebt = !paid && i < 12 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 1000 : 0,
-					collector: paid ? "Arsénio Matusse" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 12;
+			return {
+				day,
+				paid,
+				amount: paid ? 1000 : 0,
+				collector: paid ? "Arsénio Matusse" : undefined,
+			};
+		}),
 	},
 	{
 		id: "5",
@@ -692,9 +650,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-05",
 		totalSaved: 4500,
-		currentDebt: 0,
+
 		daysInCycle: 30,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A05",
 		totalLoans: 0,
@@ -704,8 +662,8 @@ const mockSavers: Saver[] = [
 			paid: i < 28,
 			amount: i < 28 ? 150 : 0,
 			collector: i < 28 ? "Célia Mondlane" : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -717,9 +675,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-02-15",
 		totalSaved: 5000,
-		currentDebt: 0,
+
 		daysInCycle: 25,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A06",
 		totalLoans: 0,
@@ -729,8 +687,8 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 200 : 0,
 			collector: i < 25 ? "Filipe Nyusi Jr." : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -742,30 +700,19 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-20",
 		totalSaved: 8000,
-		currentDebt: 3200,
+
 		daysInCycle: 20,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A07",
 		totalLoans: 6000,
 		totalInterest: 900,
-		paymentDays: (() => {
-			const debtDays = Math.floor(3200 / 400);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 12;
-				const isDebtPayment = i < 4;
-				const isInDebt = !paid && i < 12 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 400 : 0,
-					collector: paid ? "Arsénio Matusse" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 12,
+			amount: i < 12 ? 400 : 0,
+			collector: i < 12 ? "Arsénio Matusse" : undefined,
+		})),
 	},
 	{
 		id: "8",
@@ -776,9 +723,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-03-01",
 		totalSaved: 3600,
-		currentDebt: 0,
+
 		daysInCycle: 24,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A08",
 		totalLoans: 0,
@@ -788,8 +735,8 @@ const mockSavers: Saver[] = [
 			paid: i < 24,
 			amount: i < 24 ? 150 : 0,
 			collector: i < 24 ? "Célia Mondlane" : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -801,30 +748,19 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-12",
 		totalSaved: 15000,
-		currentDebt: 4500,
+
 		daysInCycle: 20,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A09",
 		totalLoans: 10000,
 		totalInterest: 1500,
-		paymentDays: (() => {
-			const debtDays = Math.floor(4500 / 750);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 15;
-				const isDebtPayment = i < 6;
-				const isInDebt = !paid && i < 15 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 750 : 0,
-					collector: paid ? "Filipe Nyusi Jr." : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 15,
+			amount: i < 15 ? 750 : 0,
+			collector: i < 15 ? "Filipe Nyusi Jr." : undefined,
+		})),
 	},
 	{
 		id: "10",
@@ -835,30 +771,19 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-02-20",
 		totalSaved: 3600,
-		currentDebt: 900,
+
 		daysInCycle: 20,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A10",
 		totalLoans: 2000,
 		totalInterest: 300,
-		paymentDays: (() => {
-			const debtDays = Math.floor(900 / 180);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 15;
-				const isDebtPayment = i < 3;
-				const isInDebt = !paid && i < 15 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 180 : 0,
-					collector: paid ? "Arsénio Matusse" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 15,
+			amount: i < 15 ? 180 : 0,
+			collector: i < 15 ? "Arsénio Matusse" : undefined,
+		})),
 	},
 	{
 		id: "11",
@@ -869,9 +794,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-03-05",
 		totalSaved: 6250,
-		currentDebt: 0,
+
 		daysInCycle: 25,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A11",
 		totalLoans: 0,
@@ -881,8 +806,8 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 250 : 0,
 			collector: i < 25 ? "Célia Mondlane" : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -894,30 +819,19 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-25",
 		totalSaved: 8750,
-		currentDebt: 1750,
+
 		daysInCycle: 25,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A12",
 		totalLoans: 4000,
 		totalInterest: 600,
-		paymentDays: (() => {
-			const debtDays = Math.floor(1750 / 350);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 20;
-				const isDebtPayment = i < 5;
-				const isInDebt = !paid && i < 20 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 350 : 0,
-					collector: paid ? "Filipe Nyusi Jr." : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 20,
+			amount: i < 20 ? 350 : 0,
+			collector: i < 20 ? "Filipe Nyusi Jr." : undefined,
+		})),
 	},
 	{
 		id: "13",
@@ -928,9 +842,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-02-10",
 		totalSaved: 3000,
-		currentDebt: 0,
+
 		daysInCycle: 25,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A13",
 		totalLoans: 0,
@@ -940,8 +854,8 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 120 : 0,
 			collector: i < 25 ? "Arsénio Matusse" : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -953,30 +867,19 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-08",
 		totalSaved: 12500,
-		currentDebt: 3000,
+
 		daysInCycle: 25,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A14",
 		totalLoans: 7000,
 		totalInterest: 1050,
-		paymentDays: (() => {
-			const debtDays = Math.floor(3000 / 500);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid: boolean = i < 19;
-				const isDebtPayment = i < 6;
-				const isInDebt = !paid && i < 19 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 500 : 0,
-					collector: paid ? "Célia Mondlane" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 19,
+			amount: i < 19 ? 500 : 0,
+			collector: i < 19 ? "Célia Mondlane" : undefined,
+		})),
 	},
 	{
 		id: "15",
@@ -987,9 +890,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-03-15",
 		totalSaved: 4400,
-		currentDebt: 0,
+
 		daysInCycle: 20,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A15",
 		totalLoans: 0,
@@ -999,8 +902,8 @@ const mockSavers: Saver[] = [
 			paid: i < 20,
 			amount: i < 20 ? 220 : 0,
 			collector: i < 20 ? "Filipe Nyusi Jr." : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -1012,30 +915,19 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-02-05",
 		totalSaved: 4200,
-		currentDebt: 525,
+
 		daysInCycle: 24,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A16",
 		totalLoans: 1000,
 		totalInterest: 150,
-		paymentDays: (() => {
-			const debtDays = Math.floor(525 / 175);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 18;
-				const isDebtPayment = i < 3;
-				const isInDebt = !paid && i < 18 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 175 : 0,
-					collector: paid ? "Arsénio Matusse" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 18,
+			amount: i < 18 ? 175 : 0,
+			collector: i < 18 ? "Arsénio Matusse" : undefined,
+		})),
 	},
 	{
 		id: "17",
@@ -1046,9 +938,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-18",
 		totalSaved: 7500,
-		currentDebt: 0,
+
 		daysInCycle: 25,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A17",
 		totalLoans: 0,
@@ -1058,8 +950,8 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 300 : 0,
 			collector: i < 25 ? "Célia Mondlane" : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -1071,30 +963,19 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-02-25",
 		totalSaved: 6600,
-		currentDebt: 1375,
+
 		daysInCycle: 24,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A18",
 		totalLoans: 2500,
 		totalInterest: 375,
-		paymentDays: (() => {
-			const debtDays = Math.floor(1375 / 275);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 18;
-				const isDebtPayment = i < 5;
-				const isInDebt = !paid && i < 18 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 275 : 0,
-					collector: paid ? "Filipe Nyusi Jr." : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 18,
+			amount: i < 18 ? 275 : 0,
+			collector: i < 18 ? "Filipe Nyusi Jr." : undefined,
+		})),
 	},
 	{
 		id: "19",
@@ -1105,9 +986,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-03-20",
 		totalSaved: 4500,
-		currentDebt: 0,
+
 		daysInCycle: 20,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A19",
 		totalLoans: 0,
@@ -1117,8 +998,8 @@ const mockSavers: Saver[] = [
 			paid: i < 20,
 			amount: i < 20 ? 225 : 0,
 			collector: i < 20 ? "Arsénio Matusse" : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -1130,9 +1011,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-30",
 		totalSaved: 3125,
-		currentDebt: 0,
+
 		daysInCycle: 25,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A20",
 		totalLoans: 0,
@@ -1142,8 +1023,8 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 125 : 0,
 			collector: i < 25 ? "Célia Mondlane" : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -1155,30 +1036,19 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-22",
 		totalSaved: 30000,
-		currentDebt: 7500,
+
 		daysInCycle: 20,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A21",
 		totalLoans: 15000,
 		totalInterest: 2250,
-		paymentDays: (() => {
-			const debtDays = Math.floor(7500 / 1500);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 15;
-				const isDebtPayment = i < 5;
-				const isInDebt = !paid && i < 15 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 1500 : 0,
-					collector: paid ? "Filipe Nyusi Jr." : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 15,
+			amount: i < 15 ? 1500 : 0,
+			collector: i < 15 ? "Filipe Nyusi Jr." : undefined,
+		})),
 	},
 	{
 		id: "22",
@@ -1189,7 +1059,7 @@ const mockSavers: Saver[] = [
 		isActive: false,
 		registrationDate: "2023-12-15",
 		totalSaved: 5700,
-		currentDebt: 0,
+
 		daysInCycle: 30,
 		status: "inactive",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -1201,8 +1071,8 @@ const mockSavers: Saver[] = [
 			paid: i < 30,
 			amount: i < 30 ? 190 : 0,
 			collector: i < 30 ? "Arsénio Matusse" : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -1214,28 +1084,17 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-02-28",
 		totalSaved: 3200,
-		currentDebt: 480,
+
 		daysInCycle: 20,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A23",
-		paymentDays: (() => {
-			const debtDays = Math.floor(480 / 160);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 17;
-				const isDebtPayment = i < 3;
-				const isInDebt = !paid && i < 17 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 160 : 0,
-					collector: paid ? "Célia Mondlane" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 17,
+			amount: i < 17 ? 160 : 0,
+			collector: i < 17 ? "Célia Mondlane" : undefined,
+		})),
 	},
 	{
 		id: "24",
@@ -1246,9 +1105,9 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-03-25",
 		totalSaved: 4700,
-		currentDebt: 0,
+
 		daysInCycle: 20,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A24",
 		paymentDays: Array.from({ length: 30 }, (_, i) => ({
@@ -1256,8 +1115,8 @@ const mockSavers: Saver[] = [
 			paid: i < 20,
 			amount: i < 20 ? 235 : 0,
 			collector: i < 20 ? "Filipe Nyusi Jr." : undefined,
-			isDebtPayment: false,
-			isInDebt: false,
+
+
 		})),
 	},
 	{
@@ -1269,28 +1128,17 @@ const mockSavers: Saver[] = [
 		isActive: true,
 		registrationDate: "2024-01-14",
 		totalSaved: 11250,
-		currentDebt: 2700,
+
 		daysInCycle: 25,
-		status: "in_debt",
+		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A25",
-		paymentDays: (() => {
-			const debtDays = Math.floor(2700 / 450);
-			return Array.from({ length: 30 }, (_, i) => {
-				const day = i + 1;
-				const paid = i < 20;
-				const isDebtPayment = i < 6;
-				const isInDebt = !paid && i < 20 + debtDays;
-				return {
-					day,
-					paid,
-					amount: paid ? 450 : 0,
-					collector: paid ? "Arsénio Matusse" : undefined,
-					isDebtPayment,
-					isInDebt,
-				};
-			});
-		})(),
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 20,
+			amount: i < 20 ? 450 : 0,
+			collector: i < 20 ? "Arsénio Matusse" : undefined,
+		})),
 	},
 ];
 
@@ -1317,8 +1165,7 @@ function SaversManagement() {
 		| "unpaid"
 		| "deleted"
 		| "not_deposited"
-		| "in_debt"
-		| "current";
+		| "in_debt";
 		amount?: number;
 		collector?: string;
 	} | null>(null);
@@ -1331,7 +1178,6 @@ function SaversManagement() {
 	const statusFilters = [
 		{ id: "active", label: "Activo" },
 		{ id: "inactive", label: "Inativo" },
-		{ id: "has_debt", label: "Com Dívida" },
 	];
 
 	const filteredSavers = savers.filter((saver) => {
@@ -1339,7 +1185,6 @@ function SaversManagement() {
 		return selectedStatuses.some((status) => {
 			if (status === "active") return saver.status === "active";
 			if (status === "inactive") return saver.status === "inactive";
-			if (status === "has_debt") return saver.currentDebt > 0;
 			return false;
 		});
 	});
@@ -1374,9 +1219,9 @@ function SaversManagement() {
 			borderColor: "warning" as const,
 		},
 		{
-			title: "Em Incumprimento",
-			value: String(savers.filter((s) => s.status === "in_debt").length),
-			subtext: "Ticantes em dívida",
+			title: "Dívida de Empréstimos",
+			value: `${String(savers.reduce((sum, s) => sum + (s.currentDebt || 0), 0).toLocaleString())} MZN`,
+			subtext: `${savers.filter((s) => s.status === "in_debt").length} clientes com dívida`,
 			borderColor: "error" as const,
 		},
 	];
@@ -1432,20 +1277,22 @@ function SaversManagement() {
 				<span className="text-sm">{Number(value).toLocaleString()} MZN</span>
 			),
 		},
+
 		{
 			key: "currentDebt",
-			header: "DÍVIDA ATUAL",
+			header: "DÍVIDA DE EMPRÉSTIMO",
 			render: (value: unknown) => (
 				<span
 					className={cn(
 						"text-sm",
-						Number(value) > 0 ? "text-red-600" : "text-slate-500",
+						Number(value) > 0 ? "text-amber-600" : "text-slate-500",
 					)}
 				>
 					{Number(value).toLocaleString()} MZN
 				</span>
 			),
 		},
+
 		{
 			key: "daysInCycle",
 			header: "DIAS NO CICLO",
@@ -1490,15 +1337,15 @@ function SaversManagement() {
 				<div className="space-y-2">
 					<div className="flex items-center gap-2 text-xs text-slate-500">
 						<AlertCircle size={14} />
-						<span>Dívida Atual</span>
+						<span>Dívida de Empréstimo</span>
 					</div>
 					<p
 						className={cn(
 							"text-lg font-bold",
-							row.currentDebt > 0 ? "text-red-600" : "text-slate-900",
+							row.currentDebt > 0 ? "text-amber-600" : "text-slate-900",
 						)}
 					>
-						{row.currentDebt.toLocaleString()} MZN
+						{row.currentDebt > 0 ? row.currentDebt.toLocaleString() : "0"} MZN
 					</p>
 				</div>
 				<div className="space-y-2 flex items-center gap-4">
@@ -1748,9 +1595,7 @@ function SaversManagement() {
 										? dayData.isDebtPayment
 											? "partial"
 											: "paid"
-										: dayData.isInDebt
-											? "in_debt"
-											: "not_deposited",
+										: "not_deposited",
 									amount: dayData.amount,
 									collector: dayData.collector,
 								});

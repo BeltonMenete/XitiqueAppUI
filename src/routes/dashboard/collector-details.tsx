@@ -311,8 +311,8 @@ function CollectorDetailsPage() {
 													</p>
 													<span
 														className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${record.status === "completed"
-																? "bg-emerald-500/10 text-emerald-500"
-																: "bg-orange-500/10 text-orange-600"
+															? "bg-emerald-500/10 text-emerald-500"
+															: "bg-orange-500/10 text-orange-600"
 															}`}
 													>
 														{record.status === "completed" ? "Sincronizado" : "Pendente"}

@@ -12,9 +12,9 @@ export interface Saver {
 	isActive: boolean;
 	registrationDate: string;
 	totalSaved: number;
-	currentDebt: number;
+	currentDebt: number; // Amount of unpaid loan
 	daysInCycle: number;
-	status: "active" | "inactive" | "in_debt";
+	status: "active" | "inactive" | "in_debt"; // in_debt = has active unpaid loan
 	organization?: {
 		id: string;
 		name: string;
@@ -24,8 +24,8 @@ export interface Saver {
 		paid: boolean;
 		amount?: number;
 		collector?: string;
-		isDebtPayment?: boolean;
-		isInDebt?: boolean;
+		isDebtPayment?: boolean; // true if this payment is repaying loan
+		isInDebt?: boolean; // true if client has active loan
 	}>;
 	totalLoans?: number;
 	totalInterest?: number;
@@ -49,7 +49,7 @@ export interface SaverLoan {
 	saverId: string;
 	amount: number;
 	interest: number;
-	daysInDebt: number;
+	daysInDebt: number; // Days this loan has been unpaid
 	totalDays: number;
 	status: "active" | "paid" | "defaulted";
 	requestDate: string;

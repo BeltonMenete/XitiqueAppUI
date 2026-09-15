@@ -37,13 +37,13 @@ function Home() {
 					</div>
 
 					<nav className="flex items-center space-x-6">
-						<a
-							href="#modelo-de-negocio"
+						<button
+							type="button"
 							onClick={(e) => scrollToSection(e, "modelo-de-negocio")}
-							className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200 hidden sm:block"
+							className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200 hidden sm:block bg-transparent border-none cursor-pointer"
 						>
 							Como Funciona
-						</a>
+						</button>
 						<Link to="/login">
 							<AppButton className="bg-white/10 hover:bg-white/20 border border-white/10 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-300 shadow-sm hover:border-white/20 active:scale-95">
 								Entrar
@@ -75,27 +75,19 @@ function Home() {
 
 				{/* Interactive Call to Action Buttons */}
 				<div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto animate-[fadeInUp_0.8s_ease-out_0.6s_both]">
-					<a
-						href="http://localhost:4000/signup"
-						className="w-full sm:w-auto"
-					>
+					<Link to="/signup" className="w-full sm:w-auto">
 						<AppButton className="w-full sm:w-auto bg-[#21996B] hover:bg-[#1b7d57] text-white font-semibold text-base px-8 py-3.5 rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/40 active:translate-y-0 active:scale-95">
 							Tornar-se membro da comunidade
 						</AppButton>
-					</a>
+					</Link>
 
-					<a
-						href="#modelo-de-negocio"
+					<button
+						type="button"
 						onClick={(e) => scrollToSection(e, "modelo-de-negocio")}
-						className="w-full sm:w-auto"
+						className="w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 font-semibold text-base px-6 py-3.5 rounded-xl transition-all duration-300 hover:border-white/20 active:scale-95"
 					>
-						<AppButton
-							type="button"
-							className="w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 font-semibold text-base px-6 py-3.5 rounded-xl transition-all duration-300 hover:border-white/20 active:scale-95"
-						>
-							Conhecer o Modelo
-						</AppButton>
-					</a>
+						Conhecer o Modelo
+					</button>
 				</div>
 
 				{/* Interactive Feature Highlight Cards */}
@@ -141,7 +133,7 @@ function Home() {
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
 							<h3 className="text-emerald-400 font-semibold mb-2">2. Gestão de Empréstimos</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								Acesso flexível a microcrédito sem taxas ocultas, com juros fixos de 10%. Caso haja saldo pendente, a dívida é unificada com a poupança do mês seguinte.
+								Acesso flexível a microcrédito sem taxas ocultas, com juros fixos de 10%. Quando aprovado, o cliente tem uma dívida que é paga através dos depósitos diários correspondentes. Não poupar num dia é normal e não cria dívida.
 							</p>
 						</div>
 

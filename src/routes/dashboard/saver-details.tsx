@@ -221,12 +221,12 @@ function SaverDetailsPage() {
 											{saver.totalSaved.toLocaleString()} MZN
 										</p>
 									</div>
-									<div className="bg-red-50 p-2 rounded-lg border border-red-200 text-center min-w-[80px]">
-										<p className="text-[8px] uppercase font-bold text-red-600 tracking-wider mb-0.5">
-											Dívida
+									<div className="bg-amber-50 p-2 rounded-lg border border-amber-200 text-center min-w-[80px]">
+										<p className="text-[8px] uppercase font-bold text-amber-600 tracking-wider mb-0.5">
+											Dívida de Empréstimo
 										</p>
-										<p className="font-mono text-red-600 font-bold text-xs">
-											{saver.currentDebt.toLocaleString()} MZN
+										<p className="font-mono text-amber-600 font-bold text-xs">
+											{saver.currentDebt > 0 ? saver.currentDebt.toLocaleString() : "0"} MZN
 										</p>
 									</div>
 								</div>
@@ -286,10 +286,6 @@ function SaverDetailsPage() {
 													Dívida
 												</div>
 												<div className="flex items-center gap-1">
-													<span className="w-2 h-2 rounded-full bg-red-200"></span>{" "}
-													Em Dívida
-												</div>
-												<div className="flex items-center gap-1">
 													<span className="w-2 h-2 rounded-full bg-slate-200"></span>{" "}
 													Não Depositado
 												</div>
@@ -301,7 +297,7 @@ function SaverDetailsPage() {
 												let stateClass =
 													"bg-slate-100 border-slate-300 text-slate-400";
 												let icon: "check" | number = day;
-												let status: "paid" | "partial" | "unpaid" | "deleted" | "not_deposited" | "in_debt" | "current" | "normal_deposit" = "not_deposited";
+												let status: "paid" | "partial" | "not_deposited" = "not_deposited";
 												let amount = saver.dailyAmount;
 												let collector = "N/A";
 
@@ -312,32 +308,21 @@ function SaverDetailsPage() {
 
 												if (paymentDay) {
 													if (paymentDay.paid && paymentDay.isDebtPayment) {
-														// Pagamento de Dívida (Debt Payment) - this is the only case where status = "paid"
+														// Pagamento de Dívida (Debt Payment) - repaying loan
 														stateClass =
 															"bg-amber-100 border-amber-500 text-amber-600";
 														icon = "check";
-														status = "paid";
+														status = "partial";
 														amount = paymentDay.amount || saver.dailyAmount;
 														collector = paymentDay.collector || "N/A";
-													} else if (
-														paymentDay.paid &&
-														!paymentDay.isDebtPayment
-													) {
+													} else if (paymentDay.paid) {
 														// Depósito Normal (Normal Deposit)
 														stateClass =
 															"bg-emerald-100 border-emerald-500 text-emerald-600";
 														icon = "check";
-														status = "normal_deposit";
+														status = "paid";
 														amount = paymentDay.amount || saver.dailyAmount;
 														collector = paymentDay.collector || "N/A";
-													} else if (!paymentDay.paid && paymentDay.isInDebt) {
-														// Em Dívida (In Debt)
-														stateClass =
-															"bg-red-100 border-red-300 text-red-600";
-														icon = day;
-														status = "in_debt";
-														amount = 0;
-														collector = "N/A";
 													} else {
 														// Não Depositado (Not Deposited)
 														stateClass =
