@@ -5,6 +5,14 @@ import { APP_NAME, APP_TAGLINE } from "#/lib/constants";
 export const Route = createFileRoute("/")({ component: Home });
 
 function Home() {
+	const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+		e.preventDefault();
+		const element = document.getElementById(id);
+		if (element) {
+			element.scrollIntoView({ behavior: "smooth" });
+		}
+	};
+
 	return (
 		<div className="min-h-screen bg-[#0E1512] text-slate-100 flex flex-col justify-between selection:bg-[#4CAF50] selection:text-white font-sans antialiased">
 			{/* Animated Ambient Background Glows */}
@@ -31,6 +39,7 @@ function Home() {
 					<nav className="flex items-center space-x-6">
 						<a
 							href="#modelo-de-negocio"
+							onClick={(e) => scrollToSection(e, "modelo-de-negocio")}
 							className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200 hidden sm:block"
 						>
 							Como Funciona
@@ -70,12 +79,16 @@ function Home() {
 						href="http://localhost:4000/signup"
 						className="w-full sm:w-auto"
 					>
-						<AppButton className="w-full sm:w-auto bg-[#21996B] hover:bg-[#1b7d57] text-white font-semibold text-base px-8 py-3.5 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/40 active:translate-y-0 active:scale-95">
+						<AppButton className="w-full sm:w-auto bg-[#21996B] hover:bg-[#1b7d57] text-white font-semibold text-base px-8 py-3.5 rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/40 active:translate-y-0 active:scale-95">
 							Tornar-se membro da comunidade
 						</AppButton>
 					</a>
 
-					<a href="#modelo-de-negocio" className="w-full sm:w-auto">
+					<a
+						href="#modelo-de-negocio"
+						onClick={(e) => scrollToSection(e, "modelo-de-negocio")}
+						className="w-full sm:w-auto"
+					>
 						<AppButton
 							type="button"
 							className="w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200 font-semibold text-base px-6 py-3.5 rounded-xl transition-all duration-300 hover:border-white/20 active:scale-95"
@@ -87,19 +100,19 @@ function Home() {
 
 				{/* Interactive Feature Highlight Cards */}
 				<div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full text-left animate-[fadeInUp_0.8s_ease-out_0.8s_both]">
-					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30 hover:-translate-y-1">
+					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30">
 						<div className="text-emerald-400 font-bold text-2xl mb-1">0.5s</div>
 						<div className="text-white font-semibold text-sm">Registo Ultra-rápido</div>
 						<div className="text-slate-400 text-xs mt-1">Marcação instantânea no cartão digital, mesmo offline.</div>
 					</div>
 
-					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30 hover:-translate-y-1">
+					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30">
 						<div className="text-emerald-400 font-bold text-2xl mb-1">100%</div>
 						<div className="text-white font-semibold text-sm">Auditoria Anti-Fraude</div>
 						<div className="text-slate-400 text-xs mt-1">Fechamento diário e detecção de diferenças em tempo real.</div>
 					</div>
 
-					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30 hover:-translate-y-1">
+					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30">
 						<div className="text-emerald-400 font-bold text-2xl mb-1">Total</div>
 						<div className="text-white font-semibold text-sm">Transparência em Tempo Real</div>
 						<div className="text-slate-400 text-xs mt-1">Ticantes e organizadores veem exatamente a mesma informação.</div>
@@ -108,7 +121,7 @@ function Home() {
 			</main>
 
 			{/* Modelo de Negócio Section */}
-			<section id="modelo-de-negocio" className="relative z-10 border-t border-white/5 bg-[#0A0F0D] py-20 px-6">
+			<section id="modelo-de-negocio" className="relative z-10 border-t border-white/5 bg-[#0A0F0D] py-20 px-6 scroll-mt-28">
 				<div className="max-w-5xl mx-auto space-y-12">
 					<div className="text-center space-y-3">
 						<h2 className="text-3xl font-bold text-white tracking-tight">Como Funciona o Modelo de Negócio</h2>
