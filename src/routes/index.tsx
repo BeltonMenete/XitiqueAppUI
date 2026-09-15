@@ -6,40 +6,42 @@ export const Route = createFileRoute("/")({ component: Home });
 
 function Home() {
 	return (
-		<div className="min-h-screen bg-[#0E1512] text-slate-100 flex flex-col justify-between selection:bg-[#4CAF50] selection:text-white font-sans antialiased overflow-x-hidden">
+		<div className="min-h-screen bg-[#0E1512] text-slate-100 flex flex-col justify-between selection:bg-[#4CAF50] selection:text-white font-sans antialiased">
 			{/* Animated Ambient Background Glows */}
 			<div className="fixed inset-0 pointer-events-none overflow-hidden">
 				<div className="absolute -top-40 -left-40 w-96 h-96 bg-[#21996B]/20 rounded-full blur-3xl animate-pulse duration-[7000ms]" />
 				<div className="absolute top-1/3 -right-40 w-96 h-96 bg-[#4CAF50]/15 rounded-full blur-3xl animate-pulse duration-[10000ms]" />
 			</div>
 
-			{/* Header */}
-			<header className="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center border-b border-white/5 animate-[fadeIn_0.6s_ease-out]">
-				<div className="flex items-center space-x-3 group cursor-pointer">
-					<img
-						src="/Xitique-logo-transparent.svg"
-						alt={`${APP_NAME} Logo`}
-						className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-					/>
-					{/* Custom Gradient Wordmark matching logo */}
-					<span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-[#4CAF50] via-[#21996B] to-[#03A091] bg-clip-text text-transparent">
-						Xitique
-					</span>
-				</div>
+			{/* Header Sticky Totalmente Transparente */}
+			<header className="sticky top-0 z-50 w-full bg-transparent backdrop-blur-md border-b border-white/5 animate-[fadeIn_0.6s_ease-out]">
+				<div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+					<div className="flex items-center space-x-3 group cursor-pointer">
+						<img
+							src="/Xitique-logo-transparent.svg"
+							alt={`${APP_NAME} Logo`}
+							className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+						/>
+						{/* Custom Gradient Wordmark matching logo */}
+						<span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-[#4CAF50] via-[#21996B] to-[#03A091] bg-clip-text text-transparent">
+							Xitique
+						</span>
+					</div>
 
-				<nav className="flex items-center space-x-6">
-					<a
-						href="#modelo-de-negocio"
-						className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200 hidden sm:block"
-					>
-						Como Funciona
-					</a>
-					<Link to="/login">
-						<AppButton className="bg-white/10 hover:bg-white/20 border border-white/10 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-300 shadow-sm hover:border-white/20 active:scale-95">
-							Entrar
-						</AppButton>
-					</Link>
-				</nav>
+					<nav className="flex items-center space-x-6">
+						<a
+							href="#modelo-de-negocio"
+							className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200 hidden sm:block"
+						>
+							Como Funciona
+						</a>
+						<Link to="/login">
+							<AppButton className="bg-white/10 hover:bg-white/20 border border-white/10 text-white font-medium px-5 py-2.5 rounded-xl transition-all duration-300 shadow-sm hover:border-white/20 active:scale-95">
+								Entrar
+							</AppButton>
+						</Link>
+					</nav>
+				</div>
 			</header>
 
 			{/* Main Hero Section */}
@@ -88,19 +90,19 @@ function Home() {
 					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30 hover:-translate-y-1">
 						<div className="text-emerald-400 font-bold text-2xl mb-1">0.5s</div>
 						<div className="text-white font-semibold text-sm">Registo Ultra-rápido</div>
-						<div className="text-slate-400 text-xs mt-1">Marcação instantânea no cartão digital, mesmo offline[cite: 1].</div>
+						<div className="text-slate-400 text-xs mt-1">Marcação instantânea no cartão digital, mesmo offline.</div>
 					</div>
 
 					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30 hover:-translate-y-1">
 						<div className="text-emerald-400 font-bold text-2xl mb-1">100%</div>
 						<div className="text-white font-semibold text-sm">Auditoria Anti-Fraude</div>
-						<div className="text-slate-400 text-xs mt-1">Fechamento diário e detecção de diferenças em tempo real[cite: 1].</div>
+						<div className="text-slate-400 text-xs mt-1">Fechamento diário e detecção de diferenças em tempo real.</div>
 					</div>
 
 					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30 hover:-translate-y-1">
 						<div className="text-emerald-400 font-bold text-2xl mb-1">Total</div>
 						<div className="text-white font-semibold text-sm">Transparência em Tempo Real</div>
-						<div className="text-slate-400 text-xs mt-1">Ticantes e organizadores veem exatamente a mesma informação[cite: 1].</div>
+						<div className="text-slate-400 text-xs mt-1">Ticantes e organizadores veem exatamente a mesma informação.</div>
 					</div>
 				</div>
 			</main>
@@ -111,7 +113,7 @@ function Home() {
 					<div className="text-center space-y-3">
 						<h2 className="text-3xl font-bold text-white tracking-tight">Como Funciona o Modelo de Negócio</h2>
 						<p className="text-slate-400 max-w-xl mx-auto text-sm">
-							Regras simples, transparentes e adaptadas à realidade dos grupos de poupança no local de trabalho[cite: 1].
+							Regras simples, transparentes e adaptadas à realidade dos grupos de poupança no local de trabalho.
 						</p>
 					</div>
 
@@ -119,28 +121,28 @@ function Home() {
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
 							<h3 className="text-emerald-400 font-semibold mb-2">1. Taxa Diária Fixa & Comissão</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								O cliente define o valor fixo diário no início do mês[cite: 1]. Independentemente da taxa, a organização fica com a comissão equivalente a 1 dia pelo serviço de gestão[cite: 1].
+								O cliente define o valor fixo diário no início do mês. Independentemente da taxa, a organização fica com a comissão equivalente a 1 dia pelo serviço de gestão.
 							</p>
 						</div>
 
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
 							<h3 className="text-emerald-400 font-semibold mb-2">2. Gestão de Empréstimos</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								Acesso flexível a microcrédito sem taxas ocultas, com juros fixos de 10%[cite: 1]. Caso haja saldo pendente, a dívida é unificada com a poupança do mês seguinte[cite: 1].
+								Acesso flexível a microcrédito sem taxas ocultas, com juros fixos de 10%. Caso haja saldo pendente, a dívida é unificada com a poupança do mês seguinte.
 							</p>
 						</div>
 
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
 							<h3 className="text-emerald-400 font-semibold mb-2">3. Fechamento Diário Obrigatório</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								Os cobradores declaram o caixa físico diariamente no app[cite: 1]. Qualquer divergência entre o valor físico e digital gera alerta imediato para o organizador[cite: 1].
+								Os cobradores declaram o caixa físico diariamente no app. Qualquer divergência entre o valor físico e digital gera alerta imediato para o organizador.
 							</p>
 						</div>
 
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
 							<h3 className="text-emerald-400 font-semibold mb-2">4. Operação Offline-First</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								Sem dependência contínua da internet durante o dia[cite: 1]. Os cobradores registam os pagamentos e sincronizam todas as transações em segundos quando houver rede[cite: 1].
+								Sem dependência contínua da internet durante o dia. Os cobradores registam os pagamentos e sincronizam todas as transações em segundos quando houver rede.
 							</p>
 						</div>
 					</div>
