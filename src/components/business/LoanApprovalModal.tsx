@@ -50,7 +50,10 @@ export function LoanApprovalModal({
 	const COMMISSION_AMOUNT = loanRequest.dailyDepositAmount || 100;
 	const dailyDepositAmount = loanRequest.dailyDepositAmount || 100;
 
-	const loanToProvide = Math.max(0, loanRequest.requestedAmount - loanRequest.totalSaved);
+	const loanToProvide = Math.max(
+		0,
+		loanRequest.requestedAmount - loanRequest.totalSaved,
+	);
 	const interestAmount = Math.round((loanToProvide * INTEREST_RATE) / 100);
 	const totalToRepay = loanToProvide + interestAmount;
 	const repaymentDays = Math.ceil(totalToRepay / dailyDepositAmount);
@@ -332,9 +335,7 @@ export function LoanApprovalModal({
 									</span>
 								</div>
 								<div className="flex items-center justify-between">
-									<span className="text-sm text-slate-600">
-										Poupança Atual
-									</span>
+									<span className="text-sm text-slate-600">Poupança Atual</span>
 									<span className="text-sm font-medium text-slate-900">
 										{loanRequest.totalSaved.toLocaleString()} MZN
 									</span>
@@ -456,7 +457,7 @@ export function LoanApprovalModal({
 						</>
 					)}
 				</div>
-			</div >
-		</SuperModal >
+			</div>
+		</SuperModal>
 	);
 }

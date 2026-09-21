@@ -17,6 +17,10 @@ import { Route as AuthResetRouteImport } from './routes/_auth/reset'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthTermsRouteImport } from './routes/_auth/terms'
 import { Route as ClientAuthRouteImport } from './routes/client/_auth'
+import { Route as ClientDashboardRouteImport } from './routes/client/dashboard'
+import { Route as ClientDepositsRouteImport } from './routes/client/deposits'
+import { Route as ClientLoansRouteImport } from './routes/client/loans'
+import { Route as ClientProfileRouteImport } from './routes/client/profile'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardCollectorDetailsRouteImport } from './routes/dashboard/collector-details'
 import { Route as DashboardCollectorsRouteImport } from './routes/dashboard/collectors'
@@ -81,6 +85,26 @@ const AuthTermsRoute = AuthTermsRouteImport.update({
 const ClientAuthRoute = ClientAuthRouteImport.update({
   id: '/client/_auth',
   path: '/client',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientDashboardRoute = ClientDashboardRouteImport.update({
+  id: '/client/dashboard',
+  path: '/client/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientDepositsRoute = ClientDepositsRouteImport.update({
+  id: '/client/deposits',
+  path: '/client/deposits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientLoansRoute = ClientLoansRouteImport.update({
+  id: '/client/loans',
+  path: '/client/loans',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientProfileRoute = ClientProfileRouteImport.update({
+  id: '/client/profile',
+  path: '/client/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -223,6 +247,10 @@ export interface FileRoutesByFullPath {
   '/signup': typeof AuthSignupRoute
   '/terms': typeof AuthTermsRoute
   '/client': typeof ClientAuthRouteWithChildren
+  '/client/dashboard': typeof ClientDashboardRoute
+  '/client/deposits': typeof ClientDepositsRoute
+  '/client/loans': typeof ClientLoansRoute
+  '/client/profile': typeof ClientProfileRoute
   '/dashboard/collector-details': typeof DashboardCollectorDetailsRoute
   '/dashboard/collectors': typeof DashboardCollectorsRoute
   '/dashboard/financial': typeof DashboardFinancialRoute
@@ -257,6 +285,10 @@ export interface FileRoutesByTo {
   '/signup': typeof AuthSignupRoute
   '/terms': typeof AuthTermsRoute
   '/client': typeof ClientAuthRouteWithChildren
+  '/client/dashboard': typeof ClientDashboardRoute
+  '/client/deposits': typeof ClientDepositsRoute
+  '/client/loans': typeof ClientLoansRoute
+  '/client/profile': typeof ClientProfileRoute
   '/dashboard/collector-details': typeof DashboardCollectorDetailsRoute
   '/dashboard/collectors': typeof DashboardCollectorsRoute
   '/dashboard/financial': typeof DashboardFinancialRoute
@@ -293,6 +325,10 @@ export interface FileRoutesById {
   '/_auth/signup': typeof AuthSignupRoute
   '/_auth/terms': typeof AuthTermsRoute
   '/client/_auth': typeof ClientAuthRouteWithChildren
+  '/client/dashboard': typeof ClientDashboardRoute
+  '/client/deposits': typeof ClientDepositsRoute
+  '/client/loans': typeof ClientLoansRoute
+  '/client/profile': typeof ClientProfileRoute
   '/dashboard/collector-details': typeof DashboardCollectorDetailsRoute
   '/dashboard/collectors': typeof DashboardCollectorsRoute
   '/dashboard/financial': typeof DashboardFinancialRoute
@@ -330,6 +366,10 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms'
     | '/client'
+    | '/client/dashboard'
+    | '/client/deposits'
+    | '/client/loans'
+    | '/client/profile'
     | '/dashboard/collector-details'
     | '/dashboard/collectors'
     | '/dashboard/financial'
@@ -364,6 +404,10 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms'
     | '/client'
+    | '/client/dashboard'
+    | '/client/deposits'
+    | '/client/loans'
+    | '/client/profile'
     | '/dashboard/collector-details'
     | '/dashboard/collectors'
     | '/dashboard/financial'
@@ -399,6 +443,10 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/_auth/terms'
     | '/client/_auth'
+    | '/client/dashboard'
+    | '/client/deposits'
+    | '/client/loans'
+    | '/client/profile'
     | '/dashboard/collector-details'
     | '/dashboard/collectors'
     | '/dashboard/financial'
@@ -435,6 +483,10 @@ export interface RootRouteChildren {
   AuthSignupRoute: typeof AuthSignupRoute
   AuthTermsRoute: typeof AuthTermsRoute
   ClientAuthRoute: typeof ClientAuthRouteWithChildren
+  ClientDashboardRoute: typeof ClientDashboardRoute
+  ClientDepositsRoute: typeof ClientDepositsRoute
+  ClientLoansRoute: typeof ClientLoansRoute
+  ClientProfileRoute: typeof ClientProfileRoute
   OrganizationAuthRoute: typeof OrganizationAuthRouteWithChildren
 }
 
@@ -494,6 +546,34 @@ declare module '@tanstack/react-router' {
       path: '/client'
       fullPath: '/client'
       preLoaderRoute: typeof ClientAuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/dashboard': {
+      id: '/client/dashboard'
+      path: '/client/dashboard'
+      fullPath: '/client/dashboard'
+      preLoaderRoute: typeof ClientDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/deposits': {
+      id: '/client/deposits'
+      path: '/client/deposits'
+      fullPath: '/client/deposits'
+      preLoaderRoute: typeof ClientDepositsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/loans': {
+      id: '/client/loans'
+      path: '/client/loans'
+      fullPath: '/client/loans'
+      preLoaderRoute: typeof ClientLoansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/profile': {
+      id: '/client/profile'
+      path: '/client/profile'
+      fullPath: '/client/profile'
+      preLoaderRoute: typeof ClientProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -761,6 +841,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthSignupRoute: AuthSignupRoute,
   AuthTermsRoute: AuthTermsRoute,
   ClientAuthRoute: ClientAuthRouteWithChildren,
+  ClientDashboardRoute: ClientDashboardRoute,
+  ClientDepositsRoute: ClientDepositsRoute,
+  ClientLoansRoute: ClientLoansRoute,
+  ClientProfileRoute: ClientProfileRoute,
   OrganizationAuthRoute: OrganizationAuthRouteWithChildren,
 }
 export const routeTree = rootRouteImport

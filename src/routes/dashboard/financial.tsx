@@ -17,6 +17,7 @@ import {
 	useFinancialSummary,
 	useTransactions,
 } from "#/features/financial";
+import { useAuth } from "#/hooks/useAuth";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/financial")({
@@ -25,17 +26,21 @@ export const Route = createFileRoute("/dashboard/financial")({
 
 function FinancialDashboard() {
 	const location = useLocation();
+	const { user } = useAuth();
 	const [selectedType, setSelectedType] = useState<string[]>([]);
 	const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
 
 	const { data: summary, isLoading: _summaryLoading } = useFinancialSummary();
 	const { data: transactions, isLoading: transactionsLoading } =
 		useTransactions({
-			type: selectedType.length > 0 ? (selectedType[0] as "income" | "expense" | "loan" | "deposit") : undefined,
+			type:
+				selectedType.length > 0
+					? (selectedType[0] as "income" | "expense" | "loan" | "deposit")
+					: undefined,
 		});
 	const { data: cashFlow, isLoading: cashFlowLoading } = useCashFlow();
 
-	const sidebarItems = getDashboardSidebar(location.pathname);
+	const sidebarItems = getDashboardSidebar(location.pathname, user?.role);
 
 	const typeFilters = [
 		{ id: "income", label: "Caderno" },
@@ -52,37 +57,37 @@ function FinancialDashboard() {
 
 	const kpiData = summary
 		? [
-			{
-				title: "Total Colectado (Mês)",
-				value: `${summary.balance.toLocaleString()} MZN`,
-				subtext: "Disponível",
-				borderColor: "success" as const,
-			},
-			{
-				title: "Total Guardado",
-				value: `${summary.totalDeposits.toLocaleString()} MZN`,
-				subtext: "Valor total guardado",
-				borderColor: "info" as const,
-			},
-			{
-				title: "Caderno",
-				value: `${summary.totalIncome.toLocaleString()} MZN`,
-				subtext: "+12.5% vs mês anterior",
-				borderColor: "success" as const,
-			},
-			{
-				title: "Despesas (Mês)",
-				value: `${summary.totalExpense.toLocaleString()} MZN`,
-				subtext: "+5.2% vs mês anterior",
-				borderColor: "error" as const,
-			},
-			{
-				title: "Empréstimos Ativos",
-				value: `${summary.totalLoans.toLocaleString()} MZN`,
-				subtext: "Valor total",
-				borderColor: "warning" as const,
-			},
-		]
+				{
+					title: "Total Colectado (Mês)",
+					value: `${summary.balance.toLocaleString()} MZN`,
+					subtext: "Disponível",
+					borderColor: "success" as const,
+				},
+				{
+					title: "Total Guardado",
+					value: `${summary.totalDeposits.toLocaleString()} MZN`,
+					subtext: "Valor total guardado",
+					borderColor: "info" as const,
+				},
+				{
+					title: "Caderno",
+					value: `${summary.totalIncome.toLocaleString()} MZN`,
+					subtext: "+12.5% vs mês anterior",
+					borderColor: "success" as const,
+				},
+				{
+					title: "Despesas (Mês)",
+					value: `${summary.totalExpense.toLocaleString()} MZN`,
+					subtext: "+5.2% vs mês anterior",
+					borderColor: "error" as const,
+				},
+				{
+					title: "Empréstimos Ativos",
+					value: `${summary.totalLoans.toLocaleString()} MZN`,
+					subtext: "Valor total",
+					borderColor: "warning" as const,
+				},
+			]
 		: [];
 
 	const columns = [
@@ -123,7 +128,9 @@ function FinancialDashboard() {
 								: "text-red-600",
 						)}
 					>
-						{typedRow.type === "income" || typedRow.type === "deposit" ? "+" : ""}
+						{typedRow.type === "income" || typedRow.type === "deposit"
+							? "+"
+							: ""}
 						{Number(value).toLocaleString()} MZN
 					</span>
 				);

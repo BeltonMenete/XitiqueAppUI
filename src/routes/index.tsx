@@ -5,7 +5,10 @@ import { APP_NAME, APP_TAGLINE } from "#/lib/constants";
 export const Route = createFileRoute("/")({ component: Home });
 
 function Home() {
-	const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+	const scrollToSection = (
+		e: React.MouseEvent<HTMLAnchorElement>,
+		id: string,
+	) => {
 		e.preventDefault();
 		const element = document.getElementById(id);
 		if (element) {
@@ -94,60 +97,97 @@ function Home() {
 				<div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full text-left animate-[fadeInUp_0.8s_ease-out_0.8s_both]">
 					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30">
 						<div className="text-emerald-400 font-bold text-2xl mb-1">0.5s</div>
-						<div className="text-white font-semibold text-sm">Registo Ultra-rápido</div>
-						<div className="text-slate-400 text-xs mt-1">Marcação instantânea no cartão digital, mesmo offline.</div>
+						<div className="text-white font-semibold text-sm">
+							Registo Ultra-rápido
+						</div>
+						<div className="text-slate-400 text-xs mt-1">
+							Marcação instantânea no cartão digital, mesmo offline.
+						</div>
 					</div>
 
 					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30">
 						<div className="text-emerald-400 font-bold text-2xl mb-1">100%</div>
-						<div className="text-white font-semibold text-sm">Auditoria Anti-Fraude</div>
-						<div className="text-slate-400 text-xs mt-1">Fechamento diário e detecção de diferenças em tempo real.</div>
+						<div className="text-white font-semibold text-sm">
+							Auditoria Anti-Fraude
+						</div>
+						<div className="text-slate-400 text-xs mt-1">
+							Fechamento diário e detecção de diferenças em tempo real.
+						</div>
 					</div>
 
 					<div className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.06] hover:border-emerald-500/30">
-						<div className="text-emerald-400 font-bold text-2xl mb-1">Total</div>
-						<div className="text-white font-semibold text-sm">Transparência em Tempo Real</div>
-						<div className="text-slate-400 text-xs mt-1">Ticantes e organizadores veem exatamente a mesma informação.</div>
+						<div className="text-emerald-400 font-bold text-2xl mb-1">
+							Total
+						</div>
+						<div className="text-white font-semibold text-sm">
+							Transparência em Tempo Real
+						</div>
+						<div className="text-slate-400 text-xs mt-1">
+							Ticantes e organizadores veem exatamente a mesma informação.
+						</div>
 					</div>
 				</div>
 			</main>
 
 			{/* Modelo de Negócio Section */}
-			<section id="modelo-de-negocio" className="relative z-10 border-t border-white/5 bg-[#0A0F0D] py-20 px-6 scroll-mt-28">
+			<section
+				id="modelo-de-negocio"
+				className="relative z-10 border-t border-white/5 bg-[#0A0F0D] py-20 px-6 scroll-mt-28"
+			>
 				<div className="max-w-5xl mx-auto space-y-12">
 					<div className="text-center space-y-3">
-						<h2 className="text-3xl font-bold text-white tracking-tight">Como Funciona o Modelo de Negócio</h2>
+						<h2 className="text-3xl font-bold text-white tracking-tight">
+							Como Funciona o Modelo de Negócio
+						</h2>
 						<p className="text-slate-400 max-w-xl mx-auto text-sm">
-							Regras simples, transparentes e adaptadas à realidade dos grupos de poupança no local de trabalho.
+							Regras simples, transparentes e adaptadas à realidade dos grupos
+							de poupança no local de trabalho.
 						</p>
 					</div>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
-							<h3 className="text-emerald-400 font-semibold mb-2">1. Taxa Diária Fixa & Comissão</h3>
+							<h3 className="text-emerald-400 font-semibold mb-2">
+								1. Taxa Diária Fixa & Comissão
+							</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								O cliente define o valor fixo diário no início do mês. Independentemente da taxa, a organização fica com a comissão equivalente a 1 dia pelo serviço de gestão.
+								O cliente define o valor fixo diário no início do mês.
+								Independentemente da taxa, a organização fica com a comissão
+								equivalente a 1 dia pelo serviço de gestão.
 							</p>
 						</div>
 
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
-							<h3 className="text-emerald-400 font-semibold mb-2">2. Gestão de Empréstimos</h3>
+							<h3 className="text-emerald-400 font-semibold mb-2">
+								2. Gestão de Empréstimos
+							</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								Acesso flexível a microcrédito sem taxas ocultas, com juros fixos de 10%. Quando aprovado, o cliente tem uma dívida que é paga através dos depósitos diários correspondentes. Não poupar num dia é normal e não cria dívida.
+								Acesso flexível a microcrédito sem taxas ocultas, com juros
+								fixos de 10%. Quando aprovado, o cliente tem uma dívida que é
+								paga através dos depósitos diários correspondentes. Não poupar
+								num dia é normal e não cria dívida.
 							</p>
 						</div>
 
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
-							<h3 className="text-emerald-400 font-semibold mb-2">3. Fechamento Diário Obrigatório</h3>
+							<h3 className="text-emerald-400 font-semibold mb-2">
+								3. Fechamento Diário Obrigatório
+							</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								Os cobradores declaram o caixa físico diariamente no app. Qualquer divergência entre o valor físico e digital gera alerta imediato para o organizador.
+								Os cobradores declaram o caixa físico diariamente no app.
+								Qualquer divergência entre o valor físico e digital gera alerta
+								imediato para o organizador.
 							</p>
 						</div>
 
 						<div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-300 hover:border-emerald-500/20 hover:bg-white/[0.04]">
-							<h3 className="text-emerald-400 font-semibold mb-2">4. Operação Offline-First</h3>
+							<h3 className="text-emerald-400 font-semibold mb-2">
+								4. Operação Offline-First
+							</h3>
 							<p className="text-slate-300 text-sm leading-relaxed">
-								Sem dependência contínua da internet durante o dia. Os cobradores registam os pagamentos e sincronizam todas as transações em segundos quando houver rede.
+								Sem dependência contínua da internet durante o dia. Os
+								cobradores registam os pagamentos e sincronizam todas as
+								transações em segundos quando houver rede.
 							</p>
 						</div>
 					</div>

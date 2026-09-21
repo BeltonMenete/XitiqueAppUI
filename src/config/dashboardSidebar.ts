@@ -1,5 +1,15 @@
 import type { LucideIcon } from "lucide-react";
-import { FileText, Settings, TrendingUp, Users, Wallet, Users2 } from "lucide-react";
+import {
+	FileText,
+	Settings,
+	TrendingUp,
+	User,
+	Users,
+	Users2,
+	Wallet,
+	Wallet2,
+} from "lucide-react";
+import type { UserRole } from "#/contexts/AuthContext";
 
 export interface SidebarItem {
 	label: string;
@@ -12,8 +22,8 @@ export interface DashboardSidebarConfig {
 	items: SidebarItem[];
 }
 
-// Standard sidebar configuration for all dashboard pages
-export const getDashboardSidebar = (currentPath: string): SidebarItem[] => {
+// Admin sidebar - Full access
+export const getAdminSidebar = (currentPath: string): SidebarItem[] => {
 	const items: SidebarItem[] = [
 		{
 			label: "Painel",
@@ -25,7 +35,9 @@ export const getDashboardSidebar = (currentPath: string): SidebarItem[] => {
 			label: "Gestão",
 			icon: Users,
 			href: "/dashboard/savers",
-			isActive: currentPath.startsWith("/dashboard/savers") || currentPath === "/dashboard/saver-details",
+			isActive:
+				currentPath.startsWith("/dashboard/savers") ||
+				currentPath === "/dashboard/saver-details",
 		},
 		{
 			label: "Cobradores",
@@ -54,4 +66,88 @@ export const getDashboardSidebar = (currentPath: string): SidebarItem[] => {
 	];
 
 	return items;
+};
+
+// Collector sidebar - Limited access
+export const getCollectorSidebar = (currentPath: string): SidebarItem[] => {
+	const items: SidebarItem[] = [
+		{
+			label: "Painel",
+			icon: TrendingUp,
+			href: "/dashboard/overview",
+			isActive: currentPath === "/dashboard/overview",
+		},
+		{
+			label: "Meus Ticantes",
+			icon: Users,
+			href: "/dashboard/savers",
+			isActive:
+				currentPath.startsWith("/dashboard/savers") ||
+				currentPath === "/dashboard/saver-details",
+		},
+		{
+			label: "Minhas Coleções",
+			icon: Wallet2,
+			href: "/dashboard/financial",
+			isActive: currentPath.startsWith("/dashboard/financial"),
+		},
+		{
+			label: "Perfil",
+			icon: User,
+			href: "/dashboard/settings",
+			isActive: currentPath.startsWith("/dashboard/settings"),
+		},
+	];
+
+	return items;
+};
+
+// Saver sidebar - Personal access (for client portal)
+export const getSaverSidebar = (currentPath: string): SidebarItem[] => {
+	const items: SidebarItem[] = [
+		{
+			label: "Meu Painel",
+			icon: TrendingUp,
+			href: "/client/dashboard",
+			isActive: currentPath === "/client/dashboard",
+		},
+		{
+			label: "Meus Depósitos",
+			icon: Wallet,
+			href: "/client/deposits",
+			isActive: currentPath === "/client/deposits",
+		},
+		{
+			label: "Meus Empréstimos",
+			icon: Wallet2,
+			href: "/client/loans",
+			isActive: currentPath === "/client/loans",
+		},
+		{
+			label: "Perfil",
+			icon: User,
+			href: "/client/profile",
+			isActive: currentPath === "/client/profile",
+		},
+	];
+
+	return items;
+};
+
+// Main function to get sidebar based on role
+export const getDashboardSidebar = (
+	currentPath: string,
+	role?: UserRole,
+): SidebarItem[] => {
+	switch (role) {
+		case "admin":
+			return getAdminSidebar(currentPath);
+		case "collector":
+			return getCollectorSidebar(currentPath);
+		case "saver":
+			return getSaverSidebar(currentPath);
+		default:
+			// Fallback to admin sidebar for now
+			return getAdminSidebar(currentPath);
+	}
 };

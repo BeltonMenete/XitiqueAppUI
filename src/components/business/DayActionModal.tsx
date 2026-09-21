@@ -28,13 +28,13 @@ interface DayActionModalProps {
 	saverName: string;
 	day: number;
 	dayStatus:
-	| "paid"
-	| "partial"
-	| "unpaid"
-	| "deleted"
-	| "not_deposited"
-	| "in_debt"
-	| "current";
+		| "paid"
+		| "partial"
+		| "unpaid"
+		| "deleted"
+		| "not_deposited"
+		| "in_debt"
+		| "current";
 	amount?: number;
 	collector?: string;
 	onActionComplete?: (action: string, data?: Record<string, unknown>) => void;
@@ -43,13 +43,13 @@ interface DayActionModalProps {
 interface DayData {
 	day: number;
 	status:
-	| "paid"
-	| "partial"
-	| "unpaid"
-	| "deleted"
-	| "not_deposited"
-	| "in_debt"
-	| "current";
+		| "paid"
+		| "partial"
+		| "unpaid"
+		| "deleted"
+		| "not_deposited"
+		| "in_debt"
+		| "current";
 	amount?: number;
 	collector?: string;
 }

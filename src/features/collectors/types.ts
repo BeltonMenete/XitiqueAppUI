@@ -11,6 +11,7 @@ export interface Collector {
 	avatar?: string;
 	district?: string;
 	province?: string;
+	registrationDate?: string;
 }
 
 export interface CollectorClient {

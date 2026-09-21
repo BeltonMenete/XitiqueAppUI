@@ -1,4 +1,8 @@
-import { createFileRoute, useLocation, useNavigate } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	useLocation,
+	useNavigate,
+} from "@tanstack/react-router";
 import {
 	CirclePlus,
 	Edit,
@@ -27,8 +31,9 @@ import {
 } from "#/components/ui/StatusBadge";
 import { SupportSection } from "#/components/ui/SupportSection";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
-import { cn } from "#/lib/design-system";
 import type { Collector } from "#/features/collectors/types";
+import { useAuth } from "#/hooks/useAuth";
+import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/collectors")({
 	component: CollectorsManagement,
@@ -45,6 +50,7 @@ interface CollectorData {
 function CollectorsManagement() {
 	const navigate = useNavigate();
 	const location = useLocation();
+	const { user } = useAuth();
 	const [_searchTerm, _setSearchTerm] = useState("");
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 	const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
@@ -68,6 +74,7 @@ function CollectorsManagement() {
 			saved: 118000,
 			difference: 1200,
 			status: "active",
+			registrationDate: "2024-09-15",
 		},
 		{
 			id: "2",
@@ -78,16 +85,18 @@ function CollectorsManagement() {
 			saved: 75000,
 			difference: -4500,
 			status: "suspended",
+			registrationDate: "2024-10-03",
 		},
 		{
 			id: "3",
-			name: "Filipe Nyusi Jr.",
+			name: "Filipe Chissano",
 			phone: "+258 84 654 3210",
 			clients: 28,
 			monthlyVolume: 72100,
 			saved: 68000,
 			difference: 3200,
 			status: "active",
+			registrationDate: "2024-11-20",
 		},
 		{
 			id: "4",
@@ -98,6 +107,7 @@ function CollectorsManagement() {
 			saved: 102000,
 			difference: -1200,
 			status: "active",
+			registrationDate: "2024-09-28",
 		},
 		{
 			id: "5",
@@ -108,6 +118,7 @@ function CollectorsManagement() {
 			saved: 89000,
 			difference: 5600,
 			status: "suspended",
+			registrationDate: "2024-12-05",
 		},
 		{
 			id: "6",
@@ -118,6 +129,161 @@ function CollectorsManagement() {
 			saved: 110000,
 			difference: 7800,
 			status: "active",
+			registrationDate: "2024-10-18",
+		},
+		{
+			id: "7",
+			name: "Carlos Machel",
+			phone: "+258 84 777 8888",
+			clients: 52,
+			monthlyVolume: 156800,
+			saved: 148000,
+			difference: 9200,
+			status: "active",
+			registrationDate: "2024-09-02",
+		},
+		{
+			id: "8",
+			name: "Ana Magaia",
+			phone: "+258 82 999 0000",
+			clients: 19,
+			monthlyVolume: 45600,
+			saved: 42000,
+			difference: -2800,
+			status: "inactive",
+			registrationDate: "2024-11-12",
+		},
+		{
+			id: "9",
+			name: "Bernardo Sitoe",
+			phone: "+258 84 222 3333",
+			clients: 65,
+			monthlyVolume: 195400,
+			saved: 182000,
+			difference: 12400,
+			status: "active",
+			registrationDate: "2024-09-25",
+		},
+		{
+			id: "10",
+			name: "Dolores Massinga",
+			phone: "+258 82 444 5555",
+			clients: 38,
+			monthlyVolume: 98700,
+			saved: 92000,
+			difference: 6300,
+			status: "active",
+			registrationDate: "2024-10-30",
+		},
+		{
+			id: "11",
+			name: "Eduardo Zunguza",
+			phone: "+258 84 666 7777",
+			clients: 24,
+			monthlyVolume: 63200,
+			saved: 58000,
+			difference: -5200,
+			status: "suspended",
+			registrationDate: "2024-12-15",
+		},
+		{
+			id: "12",
+			name: "Fátima Ussene",
+			phone: "+258 82 888 9999",
+			clients: 71,
+			monthlyVolume: 215600,
+			saved: 198000,
+			difference: 17600,
+			status: "active",
+			registrationDate: "2024-09-10",
+		},
+		{
+			id: "13",
+			name: "Gaspar Moiane",
+			phone: "+258 84 101 2020",
+			clients: 15,
+			monthlyVolume: 38400,
+			saved: 35000,
+			difference: 3400,
+			status: "active",
+			registrationDate: "2025-01-08",
+		},
+		{
+			id: "14",
+			name: "Helena Timana",
+			phone: "+258 82 303 4040",
+			clients: 56,
+			monthlyVolume: 167800,
+			saved: 155000,
+			difference: 12800,
+			status: "active",
+			registrationDate: "2024-10-22",
+		},
+		{
+			id: "15",
+			name: "Inácio Machava",
+			phone: "+258 84 505 6060",
+			clients: 29,
+			monthlyVolume: 74500,
+			saved: 68000,
+			difference: -3500,
+			status: "inactive",
+			registrationDate: "2024-11-28",
+		},
+		{
+			id: "16",
+			name: "Joaquina Baloi",
+			phone: "+258 82 707 8080",
+			clients: 83,
+			monthlyVolume: 248900,
+			saved: 232000,
+			difference: 16900,
+			status: "active",
+			registrationDate: "2024-09-08",
+		},
+		{
+			id: "17",
+			name: "Khalid Tembe",
+			phone: "+258 84 909 1010",
+			clients: 44,
+			monthlyVolume: 132400,
+			saved: 124000,
+			difference: 8400,
+			status: "active",
+			registrationDate: "2024-11-05",
+		},
+		{
+			id: "18",
+			name: "Lurdes Macuácua",
+			phone: "+258 82 111 2121",
+			clients: 12,
+			monthlyVolume: 31200,
+			saved: 28000,
+			difference: -3200,
+			status: "suspended",
+			registrationDate: "2025-01-20",
+		},
+		{
+			id: "19",
+			name: "Marcelino Nhampossa",
+			phone: "+258 84 313 4141",
+			clients: 67,
+			monthlyVolume: 201200,
+			saved: 188000,
+			difference: 13200,
+			status: "active",
+			registrationDate: "2024-10-12",
+		},
+		{
+			id: "20",
+			name: "Noémia Cuamba",
+			phone: "+258 82 515 6161",
+			clients: 95,
+			monthlyVolume: 285700,
+			saved: 268000,
+			difference: 17700,
+			status: "active",
+			registrationDate: "2024-09-20",
 		},
 	];
 
@@ -132,7 +298,7 @@ function CollectorsManagement() {
 		return selectedStatuses.includes(collector.status);
 	});
 
-	const sidebarItems = getDashboardSidebar(location.pathname);
+	const sidebarItems = getDashboardSidebar(location.pathname, user?.role);
 
 	const kpiData = [
 		{
@@ -195,19 +361,30 @@ function CollectorsManagement() {
 								type="button"
 								className="font-bold text-sm text-slate-900 hover:text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 text-left cursor-pointer"
 								onClick={() => {
-									console.log("Collector name click - navigating to collector-details for:", collector.id);
-									navigate({ to: "/dashboard/collector-details", search: { id: collector.id } });
+									console.log(
+										"Collector name click - navigating to collector-details for:",
+										collector.id,
+									);
+									navigate({
+										to: "/dashboard/collector-details",
+										search: { id: collector.id },
+									});
 								}}
 								onKeyDown={(e) => {
 									if (e.key === "Enter" || e.key === " ") {
 										e.preventDefault();
-										navigate({ to: "/dashboard/collector-details", search: { id: collector.id } });
+										navigate({
+											to: "/dashboard/collector-details",
+											search: { id: collector.id },
+										});
 									}
 								}}
 							>
 								{String(value)}
 							</button>
-							<p className="text-xs text-slate-400 font-mono">{collector.phone}</p>
+							<p className="text-xs text-slate-400 font-mono">
+								{collector.phone}
+							</p>
 						</div>
 					</div>
 				);
@@ -304,7 +481,10 @@ function CollectorsManagement() {
 							title="Ver Detalhes"
 							onClick={() => {
 								console.log("View collector details:", collector.id);
-								navigate({ to: "/dashboard/collector-details", search: { id: collector.id } });
+								navigate({
+									to: "/dashboard/collector-details",
+									search: { id: collector.id },
+								});
 							}}
 						>
 							<Eye size={16} />
@@ -402,7 +582,10 @@ function CollectorsManagement() {
 							onRowClick={(row) => {
 								const collector = row as unknown as Collector;
 								console.log("View collector:", collector.id);
-								navigate({ to: "/dashboard/collector-details", search: { id: collector.id } });
+								navigate({
+									to: "/dashboard/collector-details",
+									search: { id: collector.id },
+								});
 							}}
 							pagination={{
 								currentPage: 1,

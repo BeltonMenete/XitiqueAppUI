@@ -1,4 +1,8 @@
-import { createFileRoute, useLocation, useNavigate } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	useLocation,
+	useNavigate,
+} from "@tanstack/react-router";
 import {
 	AlertCircle,
 	Calendar,
@@ -16,6 +20,7 @@ import {
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { DayDetailPopup } from "#/components/business/DayDetailPopup";
+import { IndividualCycleClosureModal } from "#/components/business/IndividualCycleClosureModal";
 import { QuickDepositModal } from "#/components/business/QuickDepositModal";
 import { QuickLoanModal } from "#/components/business/QuickLoanModal";
 import { RegisterSaverModal } from "#/components/business/RegisterSaverModal";
@@ -28,9 +33,9 @@ import { DataTable } from "#/components/ui/DataTable";
 import { EmptyState } from "#/components/ui/EmptyState";
 import { ExpandableRowContent } from "#/components/ui/ExpandableRow";
 import { FilterChips } from "#/components/ui/FilterChips";
-import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { LoadingSkeleton } from "#/components/ui/LoadingSkeleton";
 import { ProgressCircle } from "#/components/ui/ProgressCircle";
+import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import {
 	ActiveBadge,
 	DebtBadge,
@@ -39,6 +44,7 @@ import {
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
 import { enrichSaversWithAlphanumericIds, useSavers } from "#/features/savers";
 import type { Saver } from "#/features/savers/types";
+import { useAuth } from "#/hooks/useAuth";
 import { cn } from "#/lib/design-system";
 
 // MonthCalendarGrid Component
@@ -243,6 +249,7 @@ interface SaversCalendarViewProps {
 	onDepositClick?: (saver: Saver) => void;
 	onLoanClick?: (saver: Saver) => void;
 	onSaverClick?: (saverId: string) => void;
+	canCloseCycle?: boolean;
 }
 
 function SaversCalendarView({
@@ -253,6 +260,7 @@ function SaversCalendarView({
 	onDepositClick,
 	onLoanClick,
 	onSaverClick,
+	canCloseCycle = false,
 }: SaversCalendarViewProps) {
 	const totalCommission = savers.reduce((sum, s) => sum + s.dailyAmount, 0);
 	const [visibleCount, setVisibleCount] = useState(25);
@@ -335,7 +343,10 @@ function SaversCalendarView({
 
 			{/* Calendar Table */}
 			<div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
-				<div ref={tableContainerRef} className="overflow-x-auto max-h-[600px] overflow-y-auto">
+				<div
+					ref={tableContainerRef}
+					className="overflow-x-auto max-h-[600px] overflow-y-auto"
+				>
 					<table className="w-full text-left border-collapse">
 						<thead className="bg-slate-50 border-b border-slate-200">
 							<tr>
@@ -462,6 +473,18 @@ function SaversCalendarView({
 													label: "Solicitar Empréstimo",
 													onClick: () => onLoanClick?.(saver),
 												},
+												...(saver.status === "active" && canCloseCycle
+													? [
+															{
+																id: "close-cycle",
+																label: "Fechar Ciclo",
+																onClick: () => {
+																	setSelectedSaverForClosure(saver);
+																	setShowCycleClosureModal(true);
+																},
+															},
+														]
+													: []),
 											]}
 										/>
 									</td>
@@ -488,7 +511,10 @@ function SaversCalendarView({
 							<div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 rounded-lg">
 								<span className="text-emerald-700">Colecção do Dia:</span>
 								<span className="text-emerald-900 font-bold">
-									{savers.reduce((sum, s) => sum + (s.totalSaved || 0), 0).toLocaleString()} MZN
+									{savers
+										.reduce((sum, s) => sum + (s.totalSaved || 0), 0)
+										.toLocaleString()}{" "}
+									MZN
 								</span>
 							</div>
 							<div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 rounded-lg">
@@ -497,28 +523,39 @@ function SaversCalendarView({
 									{totalCommission.toLocaleString()} MZN
 								</span>
 							</div>
-							<div className="flex items-center gap-1.5 px-2 py-1 bg-blue-100 rounded-lg">
-								<span className="text-blue-700">Total Empréstimos:</span>
-								<span className="text-blue-900 font-bold">
-									{savers.reduce((sum, s) => sum + (s.totalLoans || 0), 0).toLocaleString()} MZN
+							<div className="flex items-center gap-1.5 px-2 py-1 bg-red-100 rounded-lg">
+								<span className="text-red-700">Total Empréstimos:</span>
+								<span className="text-red-900 font-bold">
+									{savers
+										.reduce((sum, s) => sum + (s.totalLoans || 0), 0)
+										.toLocaleString()}{" "}
+									MZN
 								</span>
 							</div>
 							<div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 rounded-lg">
 								<span className="text-emerald-700">Total Juros:</span>
 								<span className="text-emerald-900 font-bold">
-									{savers.reduce((sum, s) => sum + (s.totalInterest || 0), 0).toLocaleString()} MZN
+									{savers
+										.reduce((sum, s) => sum + (s.totalInterest || 0), 0)
+										.toLocaleString()}{" "}
+									MZN
 								</span>
 							</div>
 						</div>
 						<div className="flex items-center gap-3 text-[10px] font-semibold">
 							<div className="flex items-center gap-1.5 px-2 py-1 bg-slate-200 rounded-lg">
 								<span className="text-slate-600">Total Ticantes:</span>
-								<span className="text-slate-900 font-bold">{savers.length}</span>
+								<span className="text-slate-900 font-bold">
+									{savers.length}
+								</span>
 							</div>
 							<div className="flex items-center gap-1.5 px-2 py-1 bg-slate-200 rounded-lg">
 								<span className="text-slate-600">Total Poupado:</span>
 								<span className="text-slate-900 font-bold">
-									{savers.reduce((sum, s) => sum + (s.totalSaved || 0), 0).toLocaleString()} MZN
+									{savers
+										.reduce((sum, s) => sum + (s.totalSaved || 0), 0)
+										.toLocaleString()}{" "}
+									MZN
 								</span>
 							</div>
 						</div>
@@ -541,7 +578,7 @@ const mockSavers: Saver[] = [
 		dailyAmount: 500,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-15",
+		registrationDate: "2024-09-15",
 		totalSaved: 7500,
 		daysInCycle: 15,
 		status: "active",
@@ -567,11 +604,11 @@ const mockSavers: Saver[] = [
 		dailyAmount: 250,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-02-01",
+		registrationDate: "2024-10-01",
 		totalSaved: 2500,
-		currentDebt: 1500, // Unpaid loan amount
+		currentDebt: 1500,
 		daysInCycle: 5,
-		status: "in_debt", // Has active unpaid loan
+		status: "in_debt",
 		organization: { id: "org-1", name: "Xitique Central" },
 		alphanumericId: "A02",
 		totalLoans: 3000,
@@ -579,8 +616,8 @@ const mockSavers: Saver[] = [
 		paymentDays: Array.from({ length: 30 }, (_, i) => {
 			const day = i + 1;
 			const paid = i < 5 && i % 2 === 0;
-			const isDebtPayment = i === 2; // This payment repays loan
-			const isInDebt = true; // Client has active loan
+			const isDebtPayment = i === 2;
+			const isInDebt = true;
 			return {
 				day,
 				paid,
@@ -598,9 +635,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 300,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-03-10",
+		registrationDate: "2024-11-10",
 		totalSaved: 6600,
-
 		daysInCycle: 22,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -621,9 +657,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 1000,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-10",
+		registrationDate: "2024-09-10",
 		totalSaved: 12000,
-
 		daysInCycle: 12,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -648,9 +683,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 150,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-05",
+		registrationDate: "2024-12-05",
 		totalSaved: 4500,
-
 		daysInCycle: 30,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -662,8 +696,6 @@ const mockSavers: Saver[] = [
 			paid: i < 28,
 			amount: i < 28 ? 150 : 0,
 			collector: i < 28 ? "Célia Mondlane" : undefined,
-
-
 		})),
 	},
 	{
@@ -673,9 +705,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 200,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-02-15",
+		registrationDate: "2024-10-15",
 		totalSaved: 5000,
-
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -687,8 +718,6 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 200 : 0,
 			collector: i < 25 ? "Filipe Nyusi Jr." : undefined,
-
-
 		})),
 	},
 	{
@@ -698,9 +727,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 400,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-20",
+		registrationDate: "2024-09-20",
 		totalSaved: 8000,
-
 		daysInCycle: 20,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -721,9 +749,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 150,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-03-01",
+		registrationDate: "2024-11-01",
 		totalSaved: 3600,
-
 		daysInCycle: 24,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -735,8 +762,6 @@ const mockSavers: Saver[] = [
 			paid: i < 24,
 			amount: i < 24 ? 150 : 0,
 			collector: i < 24 ? "Célia Mondlane" : undefined,
-
-
 		})),
 	},
 	{
@@ -746,9 +771,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 750,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-12",
+		registrationDate: "2024-09-12",
 		totalSaved: 15000,
-
 		daysInCycle: 20,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -769,9 +793,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 180,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-02-20",
+		registrationDate: "2024-10-20",
 		totalSaved: 3600,
-
 		daysInCycle: 20,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -792,9 +815,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 250,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-03-05",
+		registrationDate: "2024-11-05",
 		totalSaved: 6250,
-
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -806,8 +828,6 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 250 : 0,
 			collector: i < 25 ? "Célia Mondlane" : undefined,
-
-
 		})),
 	},
 	{
@@ -817,9 +837,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 350,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-25",
+		registrationDate: "2024-09-25",
 		totalSaved: 8750,
-
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -840,9 +859,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 120,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-02-10",
+		registrationDate: "2024-10-10",
 		totalSaved: 3000,
-
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -854,8 +872,6 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 120 : 0,
 			collector: i < 25 ? "Arsénio Matusse" : undefined,
-
-
 		})),
 	},
 	{
@@ -865,9 +881,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 500,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-08",
+		registrationDate: "2024-09-08",
 		totalSaved: 12500,
-
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -888,9 +903,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 220,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-03-15",
+		registrationDate: "2024-11-15",
 		totalSaved: 4400,
-
 		daysInCycle: 20,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -902,8 +916,6 @@ const mockSavers: Saver[] = [
 			paid: i < 20,
 			amount: i < 20 ? 220 : 0,
 			collector: i < 20 ? "Filipe Nyusi Jr." : undefined,
-
-
 		})),
 	},
 	{
@@ -913,9 +925,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 175,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-02-05",
+		registrationDate: "2024-10-05",
 		totalSaved: 4200,
-
 		daysInCycle: 24,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -936,9 +947,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 300,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-18",
+		registrationDate: "2024-09-18",
 		totalSaved: 7500,
-
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -950,8 +960,6 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 300 : 0,
 			collector: i < 25 ? "Célia Mondlane" : undefined,
-
-
 		})),
 	},
 	{
@@ -961,9 +969,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 275,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-02-25",
+		registrationDate: "2024-10-25",
 		totalSaved: 6600,
-
 		daysInCycle: 24,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -984,9 +991,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 225,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-03-20",
+		registrationDate: "2024-11-20",
 		totalSaved: 4500,
-
 		daysInCycle: 20,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -998,8 +1004,6 @@ const mockSavers: Saver[] = [
 			paid: i < 20,
 			amount: i < 20 ? 225 : 0,
 			collector: i < 20 ? "Arsénio Matusse" : undefined,
-
-
 		})),
 	},
 	{
@@ -1009,9 +1013,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 125,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-30",
+		registrationDate: "2024-09-30",
 		totalSaved: 3125,
-
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -1023,8 +1026,6 @@ const mockSavers: Saver[] = [
 			paid: i < 25,
 			amount: i < 25 ? 125 : 0,
 			collector: i < 25 ? "Célia Mondlane" : undefined,
-
-
 		})),
 	},
 	{
@@ -1034,9 +1035,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 1500,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-22",
+		registrationDate: "2024-09-22",
 		totalSaved: 30000,
-
 		daysInCycle: 20,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -1057,9 +1057,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 190,
 		organizationId: "org-1",
 		isActive: false,
-		registrationDate: "2023-12-15",
+		registrationDate: "2024-09-15",
 		totalSaved: 5700,
-
 		daysInCycle: 30,
 		status: "inactive",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -1071,8 +1070,6 @@ const mockSavers: Saver[] = [
 			paid: i < 30,
 			amount: i < 30 ? 190 : 0,
 			collector: i < 30 ? "Arsénio Matusse" : undefined,
-
-
 		})),
 	},
 	{
@@ -1082,9 +1079,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 160,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-02-28",
+		registrationDate: "2024-10-28",
 		totalSaved: 3200,
-
 		daysInCycle: 20,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -1103,9 +1099,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 235,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-03-25",
+		registrationDate: "2024-11-25",
 		totalSaved: 4700,
-
 		daysInCycle: 20,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -1115,8 +1110,6 @@ const mockSavers: Saver[] = [
 			paid: i < 20,
 			amount: i < 20 ? 235 : 0,
 			collector: i < 20 ? "Filipe Nyusi Jr." : undefined,
-
-
 		})),
 	},
 	{
@@ -1126,9 +1119,8 @@ const mockSavers: Saver[] = [
 		dailyAmount: 450,
 		organizationId: "org-1",
 		isActive: true,
-		registrationDate: "2024-01-14",
+		registrationDate: "2024-09-14",
 		totalSaved: 11250,
-
 		daysInCycle: 25,
 		status: "active",
 		organization: { id: "org-1", name: "Xitique Central" },
@@ -1140,11 +1132,616 @@ const mockSavers: Saver[] = [
 			collector: i < 20 ? "Arsénio Matusse" : undefined,
 		})),
 	},
+	{
+		id: "26",
+		cardNumber: 1026,
+		name: "Esther Nhleko",
+		dailyAmount: 1800,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-12-01",
+		totalSaved: 36000,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A26",
+		totalLoans: 20000,
+		totalInterest: 3000,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 16,
+			amount: i < 16 ? 1800 : 0,
+			collector: i < 16 ? "Célia Mondlane" : undefined,
+		})),
+	},
+	{
+		id: "27",
+		cardNumber: 1027,
+		name: "Francisco Nkuna",
+		dailyAmount: 320,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-09-28",
+		totalSaved: 6400,
+		currentDebt: 1600,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A27",
+		totalLoans: 5000,
+		totalInterest: 750,
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 12 && i % 3 === 0;
+			const isDebtPayment = i < 5;
+			const isInDebt = true;
+			return {
+				day,
+				paid,
+				amount: paid ? 320 : 0,
+				collector: paid ? "Arsénio Matusse" : undefined,
+				isDebtPayment,
+				isInDebt,
+			};
+		}),
+	},
+	{
+		id: "28",
+		cardNumber: 1028,
+		name: "Graça Machel",
+		dailyAmount: 450,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-10-12",
+		totalSaved: 11250,
+		daysInCycle: 25,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A28",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 23,
+			amount: i < 23 ? 450 : 0,
+			collector: i < 23 ? "Filipe Nyusi Jr." : undefined,
+		})),
+	},
+	{
+		id: "29",
+		cardNumber: 1029,
+		name: "Henrique Chipande",
+		dailyAmount: 175,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-11-08",
+		totalSaved: 4200,
+		daysInCycle: 24,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A29",
+		totalLoans: 800,
+		totalInterest: 120,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 18,
+			amount: i < 18 ? 175 : 0,
+			collector: i < 18 ? "Célia Mondlane" : undefined,
+		})),
+	},
+	{
+		id: "30",
+		cardNumber: 1030,
+		name: "Ilda Moiane",
+		dailyAmount: 2000,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-09-05",
+		totalSaved: 40000,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A30",
+		totalLoans: 25000,
+		totalInterest: 3750,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 14,
+			amount: i < 14 ? 2000 : 0,
+			collector: i < 14 ? "Arsénio Matusse" : undefined,
+		})),
+	},
+	{
+		id: "31",
+		cardNumber: 1031,
+		name: "Jorge Macamo",
+		dailyAmount: 280,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-12-10",
+		totalSaved: 5600,
+		currentDebt: 1400,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A31",
+		totalLoans: 3500,
+		totalInterest: 525,
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 10 && i % 2 === 0;
+			const isDebtPayment = i < 4;
+			const isInDebt = true;
+			return {
+				day,
+				paid,
+				amount: paid ? 280 : 0,
+				collector: paid ? "Filipe Nyusi Jr." : undefined,
+				isDebtPayment,
+				isInDebt,
+			};
+		}),
+	},
+	{
+		id: "32",
+		cardNumber: 1032,
+		name: "Kátia Nhampossa",
+		dailyAmount: 1500,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-09-22",
+		totalSaved: 30000,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A32",
+		totalLoans: 12000,
+		totalInterest: 1800,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 18,
+			amount: i < 18 ? 1500 : 0,
+			collector: i < 18 ? "Célia Mondlane" : undefined,
+		})),
+	},
+	{
+		id: "33",
+		cardNumber: 1033,
+		name: "Lídia Sitoe",
+		dailyAmount: 190,
+		organizationId: "org-1",
+		isActive: false,
+		registrationDate: "2024-09-18",
+		totalSaved: 5700,
+		daysInCycle: 30,
+		status: "inactive",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A33",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 30,
+			amount: i < 30 ? 190 : 0,
+			collector: i < 30 ? "Arsénio Matusse" : undefined,
+		})),
+	},
+	{
+		id: "34",
+		cardNumber: 1034,
+		name: "Moisés Muendane",
+		dailyAmount: 160,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-10-30",
+		totalSaved: 3200,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A34",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 15,
+			amount: i < 15 ? 160 : 0,
+			collector: i < 15 ? "Filipe Nyusi Jr." : undefined,
+		})),
+	},
+	{
+		id: "35",
+		cardNumber: 1035,
+		name: "Norberto Macuácua",
+		dailyAmount: 235,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-11-03",
+		totalSaved: 4700,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A35",
+		totalLoans: 1500,
+		totalInterest: 225,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 16,
+			amount: i < 16 ? 235 : 0,
+			collector: i < 16 ? "Célia Mondlane" : undefined,
+		})),
+	},
+	{
+		id: "36",
+		cardNumber: 1036,
+		name: "Olívia Chissano",
+		dailyAmount: 1200,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-09-11",
+		totalSaved: 24000,
+		currentDebt: 6000,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A36",
+		totalLoans: 15000,
+		totalInterest: 2250,
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 12;
+			const isDebtPayment = i < 6;
+			const isInDebt = true;
+			return {
+				day,
+				paid,
+				amount: paid ? 1200 : 0,
+				collector: paid ? "Arsénio Matusse" : undefined,
+				isDebtPayment,
+				isInDebt,
+			};
+		}),
+	},
+	{
+		id: "37",
+		cardNumber: 1037,
+		name: "Pedro Munguambe",
+		dailyAmount: 375,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-12-15",
+		totalSaved: 7500,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A37",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 19,
+			amount: i < 19 ? 375 : 0,
+			collector: i < 19 ? "Filipe Nyusi Jr." : undefined,
+		})),
+	},
+	{
+		id: "38",
+		cardNumber: 1038,
+		name: "Quitéria Nkuna",
+		dailyAmount: 250,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-10-18",
+		totalSaved: 6250,
+		daysInCycle: 25,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A38",
+		totalLoans: 3000,
+		totalInterest: 450,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 20,
+			amount: i < 20 ? 250 : 0,
+			collector: i < 20 ? "Célia Mondlane" : undefined,
+		})),
+	},
+	{
+		id: "39",
+		cardNumber: 1039,
+		name: "Rogério Sitoe",
+		dailyAmount: 145,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-11-22",
+		totalSaved: 2900,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A39",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 18,
+			amount: i < 18 ? 145 : 0,
+			collector: i < 18 ? "Arsénio Matusse" : undefined,
+		})),
+	},
+	{
+		id: "40",
+		cardNumber: 1040,
+		name: "Sónia Macamo",
+		dailyAmount: 650,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-09-26",
+		totalSaved: 13000,
+		currentDebt: 3250,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A40",
+		totalLoans: 8000,
+		totalInterest: 1200,
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 10 && i % 2 === 0;
+			const isDebtPayment = i < 5;
+			const isInDebt = true;
+			return {
+				day,
+				paid,
+				amount: paid ? 650 : 0,
+				collector: paid ? "Filipe Nyusi Jr." : undefined,
+				isDebtPayment,
+				isInDebt,
+			};
+		}),
+	},
+	{
+		id: "41",
+		cardNumber: 1041,
+		name: "Tomé Mondlane",
+		dailyAmount: 210,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-12-05",
+		totalSaved: 4200,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A41",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 17,
+			amount: i < 17 ? 210 : 0,
+			collector: i < 17 ? "Célia Mondlane" : undefined,
+		})),
+	},
+	{
+		id: "42",
+		cardNumber: 1042,
+		name: "Ursula Machel",
+		dailyAmount: 1750,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-09-03",
+		totalSaved: 35000,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A42",
+		totalLoans: 22000,
+		totalInterest: 3300,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 16,
+			amount: i < 16 ? 1750 : 0,
+			collector: i < 16 ? "Arsénio Matusse" : undefined,
+		})),
+	},
+	{
+		id: "43",
+		cardNumber: 1043,
+		name: "Vasco Nhleko",
+		dailyAmount: 185,
+		organizationId: "org-1",
+		isActive: false,
+		registrationDate: "2024-09-20",
+		totalSaved: 5550,
+		daysInCycle: 30,
+		status: "inactive",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A43",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 30,
+			amount: i < 30 ? 185 : 0,
+			collector: i < 30 ? "Filipe Nyusi Jr." : undefined,
+		})),
+	},
+	{
+		id: "44",
+		cardNumber: 1044,
+		name: "Wilhelmina Zunguza",
+		dailyAmount: 330,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-10-25",
+		totalSaved: 6600,
+		currentDebt: 1650,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A44",
+		totalLoans: 4000,
+		totalInterest: 600,
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 8 && i % 2 === 0;
+			const isDebtPayment = i < 4;
+			const isInDebt = true;
+			return {
+				day,
+				paid,
+				amount: paid ? 330 : 0,
+				collector: paid ? "Célia Mondlane" : undefined,
+				isDebtPayment,
+				isInDebt,
+			};
+		}),
+	},
+	{
+		id: "45",
+		cardNumber: 1045,
+		name: "Xavier Chambule",
+		dailyAmount: 290,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-11-12",
+		totalSaved: 5800,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A45",
+		totalLoans: 1200,
+		totalInterest: 180,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 18,
+			amount: i < 18 ? 290 : 0,
+			collector: i < 18 ? "Arsénio Matusse" : undefined,
+		})),
+	},
+	{
+		id: "46",
+		cardNumber: 1046,
+		name: "Yara Mucavele",
+		dailyAmount: 165,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-12-20",
+		totalSaved: 3300,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A46",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 19,
+			amount: i < 19 ? 165 : 0,
+			collector: i < 19 ? "Filipe Nyusi Jr." : undefined,
+		})),
+	},
+	{
+		id: "47",
+		cardNumber: 1047,
+		name: "Zélia Tembe",
+		dailyAmount: 1100,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-09-07",
+		totalSaved: 22000,
+		currentDebt: 5500,
+		daysInCycle: 20,
+		status: "in_debt",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A47",
+		totalLoans: 13000,
+		totalInterest: 1950,
+		paymentDays: Array.from({ length: 30 }, (_, i) => {
+			const day = i + 1;
+			const paid = i < 11;
+			const isDebtPayment = i < 5;
+			const isInDebt = true;
+			return {
+				day,
+				paid,
+				amount: paid ? 1100 : 0,
+				collector: paid ? "Célia Mondlane" : undefined,
+				isDebtPayment,
+				isInDebt,
+			};
+		}),
+	},
+	{
+		id: "48",
+		cardNumber: 1048,
+		name: "Abel Matusse",
+		dailyAmount: 255,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-10-14",
+		totalSaved: 5100,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A48",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 19,
+			amount: i < 19 ? 255 : 0,
+			collector: i < 19 ? "Arsénio Matusse" : undefined,
+		})),
+	},
+	{
+		id: "49",
+		cardNumber: 1049,
+		name: "Beatriz Langa",
+		dailyAmount: 425,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-11-28",
+		totalSaved: 8500,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A49",
+		totalLoans: 3500,
+		totalInterest: 525,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 17,
+			amount: i < 17 ? 425 : 0,
+			collector: i < 17 ? "Filipe Nyusi Jr." : undefined,
+		})),
+	},
+	{
+		id: "50",
+		cardNumber: 1050,
+		name: "Constantino Machava",
+		dailyAmount: 195,
+		organizationId: "org-1",
+		isActive: true,
+		registrationDate: "2024-12-25",
+		totalSaved: 3900,
+		daysInCycle: 20,
+		status: "active",
+		organization: { id: "org-1", name: "Xitique Central" },
+		alphanumericId: "A50",
+		totalLoans: 0,
+		totalInterest: 0,
+		paymentDays: Array.from({ length: 30 }, (_, i) => ({
+			day: i + 1,
+			paid: i < 18,
+			amount: i < 18 ? 195 : 0,
+			collector: i < 18 ? "Célia Mondlane" : undefined,
+		})),
+	},
 ];
 
 function SaversManagement() {
 	const navigate = useNavigate();
 	const location = useLocation();
+	const { user } = useAuth();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedMonth, setSelectedMonth] = useState("Maio 2024");
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -1152,7 +1749,10 @@ function SaversManagement() {
 	const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
 	const [isDayActionModalOpen, setIsDayActionModalOpen] = useState(false);
 	const [isSaverPopupOpen, setIsSaverPopupOpen] = useState(false);
+	const [showCycleClosureModal, setShowCycleClosureModal] = useState(false);
 	const [selectedSaver, setSelectedSaver] = useState<Saver | null>(null);
+	const [selectedSaverForClosure, setSelectedSaverForClosure] =
+		useState<Saver | null>(null);
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 	const [viewMode, setViewMode] = useState<"standard" | "calendar">("standard");
 	const [selectedDayData, setSelectedDayData] = useState<{
@@ -1160,12 +1760,12 @@ function SaversManagement() {
 		saverName: string;
 		saverDailyAmount: number;
 		status:
-		| "paid"
-		| "partial"
-		| "unpaid"
-		| "deleted"
-		| "not_deposited"
-		| "in_debt";
+			| "paid"
+			| "partial"
+			| "unpaid"
+			| "deleted"
+			| "not_deposited"
+			| "in_debt";
 		amount?: number;
 		collector?: string;
 	} | null>(null);
@@ -1189,9 +1789,34 @@ function SaversManagement() {
 		});
 	});
 
-	const sidebarItems = getDashboardSidebar(location.pathname);
+	const sidebarItems = getDashboardSidebar(location.pathname, user?.role);
 
 	const totalCommission = savers.reduce((sum, s) => sum + s.dailyAmount, 0);
+
+	const handleCycleClosure = (data: {
+		transferDebtDays: boolean;
+		reactivateNextCycle: boolean;
+		sendNotification: boolean;
+	}) => {
+		if (!selectedSaverForClosure) return;
+
+		// Mock implementation - in real app, this would call an API
+		console.log("Closing cycle for saver:", selectedSaverForClosure.id, data);
+
+		// Show success toast
+		let message = `Ciclo fechado com sucesso para ${selectedSaverForClosure.name}`;
+		if (data.transferDebtDays && selectedSaverForClosure.currentDebt > 0) {
+			const debtDays = selectedSaverForClosure.paymentDays?.filter(
+				(pd) => pd.paid && pd.isDebtPayment,
+			).length;
+			message += `. ${debtDays} dias de dívida transferidos para o próximo ciclo`;
+		}
+		toast.success(message);
+
+		// Close modal
+		setShowCycleClosureModal(false);
+		setSelectedSaverForClosure(null);
+	};
 
 	const kpiData = [
 		{
@@ -1251,12 +1876,18 @@ function SaversManagement() {
 									"Standard table name click - navigating to saver-details for:",
 									row.id,
 								);
-								navigate({ to: "/dashboard/saver-details", search: { id: row.id } });
+								navigate({
+									to: "/dashboard/saver-details",
+									search: { id: row.id },
+								});
 							}}
 							onKeyDown={(e) => {
 								if (e.key === "Enter" || e.key === " ") {
 									e.preventDefault();
-									navigate({ to: "/dashboard/saver-details", search: { id: row.id } });
+									navigate({
+										to: "/dashboard/saver-details",
+										search: { id: row.id },
+									});
 								}
 							}}
 						>
@@ -1610,8 +2241,12 @@ function SaversManagement() {
 								setIsLoanModalOpen(true);
 							}}
 							onSaverClick={(saverId) => {
-								navigate({ to: "/dashboard/saver-details", search: { id: saverId } });
+								navigate({
+									to: "/dashboard/saver-details",
+									search: { id: saverId },
+								});
 							}}
+							canCloseCycle={user?.isAdmin || user?.isCollector}
 						/>
 					)}
 				</main>
@@ -1631,7 +2266,7 @@ function SaversManagement() {
 				}}
 				onSubmit={(data) => console.log("Deposit:", data)}
 				saverName={selectedSaver?.name}
-				lastAmount={selectedSaver?.dailyAmount}
+				dailyAmount={selectedSaver?.dailyAmount}
 			/>
 
 			<QuickLoanModal
@@ -1722,6 +2357,20 @@ function SaversManagement() {
 						</Button>
 					</div>
 				</div>
+			)}
+
+			{/* Individual Cycle Closure Modal */}
+			{selectedSaverForClosure && (
+				<IndividualCycleClosureModal
+					isOpen={showCycleClosureModal}
+					onClose={() => {
+						setShowCycleClosureModal(false);
+						setSelectedSaverForClosure(null);
+					}}
+					onSubmit={handleCycleClosure}
+					saver={selectedSaverForClosure}
+					currentMonth={selectedMonth}
+				/>
 			)}
 		</DashboardLayout>
 	);

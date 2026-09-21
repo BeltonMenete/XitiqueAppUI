@@ -1,7 +1,8 @@
-import { Bell, Search, X } from "lucide-react";
+import { Bell, LogOut, Search, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { Breadcrumbs } from "#/components/ui";
+import { useAuth } from "#/hooks/useAuth";
 import { cn } from "#/lib/design-system";
 
 interface HeaderProps {
@@ -30,6 +31,33 @@ export function Header({
 	actions,
 }: HeaderProps) {
 	const [showMobileSearch, setShowMobileSearch] = useState(false);
+	const { user, logout } = useAuth();
+
+	const getRoleBadgeColor = (role?: string) => {
+		switch (role) {
+			case "admin":
+				return "bg-blue-100 text-blue-800";
+			case "collector":
+				return "bg-emerald-100 text-emerald-800";
+			case "saver":
+				return "bg-orange-100 text-orange-800";
+			default:
+				return "bg-slate-100 text-slate-800";
+		}
+	};
+
+	const getRoleLabel = (role?: string) => {
+		switch (role) {
+			case "admin":
+				return "Admin";
+			case "collector":
+				return "Cobrador";
+			case "saver":
+				return "Cliente";
+			default:
+				return "Usuário";
+		}
+	};
 
 	return (
 		<header
@@ -55,6 +83,30 @@ export function Header({
 
 			<div className="flex items-center gap-2 sm:gap-4">
 				{actions}
+
+				{user && (
+					<div className="hidden md:flex items-center gap-3 px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200">
+						<div className="text-right">
+							<p className="text-xs font-medium text-slate-900">{user.name}</p>
+							<p className="text-[10px] text-slate-600">
+								{user.organizationName || "Organização"}
+							</p>
+						</div>
+						<span
+							className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${getRoleBadgeColor(user.role)}`}
+						>
+							{getRoleLabel(user.role)}
+						</span>
+						<button
+							type="button"
+							onClick={logout}
+							className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+							title="Sair"
+						>
+							<LogOut size={14} />
+						</button>
+					</div>
+				)}
 
 				{showSearch && (
 					<>

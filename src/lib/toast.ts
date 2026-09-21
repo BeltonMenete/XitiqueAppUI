@@ -18,6 +18,10 @@ export const showWarningToast = (message: string) => {
 	toast.warning(message);
 };
 
+export const showLoadingToast = (message: string) => {
+	return toast.loading(message);
+};
+
 export const showPromiseToast = <T>(
 	promise: Promise<T>,
 	{

@@ -3,6 +3,7 @@ import "ldrs/react/Ring2.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
 import { ErrorBoundary } from "#/components/ErrorBoundary";
+import { AuthProvider } from "#/contexts/AuthContext";
 import { queryClient } from "#/lib/query-client";
 import { getRouter } from "#/router";
 import "#/styles.css";
@@ -16,9 +17,11 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(
-	<QueryClientProvider client={queryClient}>
-		<ErrorBoundary>
-			<RouterProvider router={router} />
-		</ErrorBoundary>
-	</QueryClientProvider>,
+	<AuthProvider>
+		<QueryClientProvider client={queryClient}>
+			<ErrorBoundary>
+				<RouterProvider router={router} />
+			</ErrorBoundary>
+		</QueryClientProvider>
+	</AuthProvider>,
 );

@@ -9,7 +9,7 @@ interface QuickDepositModalProps {
 	onClose: () => void;
 	onSubmit: (data: DepositData) => void;
 	saverName?: string;
-	lastAmount?: number;
+	dailyAmount?: number;
 }
 
 interface DepositData {
@@ -23,10 +23,10 @@ export function QuickDepositModal({
 	onClose,
 	onSubmit,
 	saverName,
-	lastAmount,
+	dailyAmount,
 }: QuickDepositModalProps) {
 	const [formData, setFormData] = useState<DepositData>({
-		amount: lastAmount ? String(lastAmount) : "",
+		amount: dailyAmount ? String(dailyAmount) : "",
 		date: new Date().toISOString().split("T")[0],
 		notes: "",
 	});
@@ -40,7 +40,7 @@ export function QuickDepositModal({
 
 	const handleCancel = () => {
 		setFormData({
-			amount: lastAmount ? String(lastAmount) : "",
+			amount: dailyAmount ? String(dailyAmount) : "",
 			date: new Date().toISOString().split("T")[0],
 			notes: "",
 		});
@@ -64,43 +64,52 @@ export function QuickDepositModal({
 					</div>
 				)}
 
-				<div>
-					<label
-						htmlFor="amount"
-						className="block text-sm font-medium text-slate-700 mb-1"
-					>
-						Valor do Depósito (MZN) *
-					</label>
-					<div className="relative">
-						<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-							<DollarSign size={16} className="text-slate-400" />
+				{dailyAmount ? (
+					<div>
+						<span className="block text-sm font-medium text-slate-700 mb-1">
+							Valor do Depósito (MZN)
+						</span>
+						<div className="relative">
+							<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+								<DollarSign size={16} className="text-slate-400" />
+							</div>
+							<div className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-100 text-slate-700 font-semibold">
+								{Number(formData.amount).toLocaleString()} MZN
+							</div>
+							<input type="hidden" name="amount" value={formData.amount} />
 						</div>
-						<input
-							id="amount"
-							type="number"
-							placeholder="0.00"
-							required
-							value={formData.amount}
-							onChange={(e) =>
-								setFormData({ ...formData, amount: e.target.value })
-							}
-							className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-							min="0"
-							step="0.01"
-						/>
+						<p className="text-xs text-slate-500 mt-1">
+							Taxa diária fixa do cliente (não alterável)
+						</p>
 					</div>
-					{lastAmount && (
-						<button
-							type="button"
-							onClick={() =>
-								setFormData({ ...formData, amount: String(lastAmount) })
-							}
-							className="text-xs text-emerald-600 hover:text-emerald-700 mt-1"
+				) : (
+					<div>
+						<label
+							htmlFor="amount"
+							className="block text-sm font-medium text-slate-700 mb-1"
 						>
-							Usar último valor: {lastAmount} MZN
-						</button>
-					)}
-				</div>
+							Valor do Depósito (MZN) *
+						</label>
+						<div className="relative">
+							<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+								<DollarSign size={16} className="text-slate-400" />
+							</div>
+							<input
+								id="amount"
+								type="number"
+								placeholder="0.00"
+								required
+								value={formData.amount}
+								onChange={(e) =>
+									setFormData({ ...formData, amount: e.target.value })
+								}
+								className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+								min="0"
+								step="0.01"
+							/>
+						</div>
+					</div>
+				)}
 
 				<div>
 					<label

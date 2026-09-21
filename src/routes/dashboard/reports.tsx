@@ -23,6 +23,7 @@ import { PrototypeTable } from "#/components/ui/PrototypeTable";
 import { SupportSection } from "#/components/ui/SupportSection";
 import { TimeRangeSelector } from "#/components/ui/TimeRangeSelector";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
+import { useAuth } from "#/hooks/useAuth";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/reports")({
@@ -31,10 +32,11 @@ export const Route = createFileRoute("/dashboard/reports")({
 
 function ReportsDashboard() {
 	const location = useLocation();
+	const { user } = useAuth();
 	const [timeRange, setTimeRange] = useState("month");
 	const [activeTab, setActiveTab] = useState("overview");
 
-	const sidebarItems = getDashboardSidebar(location.pathname);
+	const sidebarItems = getDashboardSidebar(location.pathname, user?.role);
 
 	const tabs = [
 		{ id: "overview", label: "Visão Geral", icon: BarChart3 },
@@ -47,38 +49,38 @@ function ReportsDashboard() {
 	const reportCards = [
 		{
 			title: "Total Colectado",
-			value: "450.000 MZN",
-			subtext: "+12.5% vs mês anterior",
+			value: "545.000 MZN",
+			subtext: "+21.1% vs mês anterior",
 			borderColor: "success" as const,
 		},
 		{
 			title: "Total Guardado",
-			value: "380.000 MZN",
-			subtext: "+8.2% vs mês anterior",
+			value: "420.000 MZN",
+			subtext: "+10.5% vs mês anterior",
 			borderColor: "info" as const,
 		},
 		{
 			title: "Caderno Total",
-			value: "450.000 MZN",
-			subtext: "+12.5% vs mês anterior",
+			value: "545.000 MZN",
+			subtext: "+21.1% vs mês anterior",
 			borderColor: "success" as const,
 		},
 		{
 			title: "Crescimento de Membros",
-			value: "+34",
-			subtext: "+8.2% vs mês anterior",
+			value: "+5",
+			subtext: "50 membros totais",
 			borderColor: "info" as const,
 		},
 		{
 			title: "Taxa de Retenção",
-			value: "94.2%",
-			subtext: "+2.1% vs mês anterior",
+			value: "94%",
+			subtext: "+1.8% vs mês anterior",
 			borderColor: "primary" as const,
 		},
 		{
 			title: "Valor Médio por Membro",
-			value: "1.315 MZN",
-			subtext: "-3.4% vs mês anterior",
+			value: "10.900 MZN",
+			subtext: "+8.3% vs mês anterior",
 			borderColor: "warning" as const,
 		},
 	];
@@ -178,12 +180,11 @@ function ReportsDashboard() {
 								<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100 p-4">
 									<div className="w-full space-y-4">
 										{[
-											{ label: "Jan", value: 320 },
-											{ label: "Fev", value: 380 },
-											{ label: "Mar", value: 350 },
-											{ label: "Abr", value: 420 },
-											{ label: "Mai", value: 450 },
-											{ label: "Jun", value: 480 },
+											{ label: "Set", value: 420 },
+											{ label: "Out", value: 450 },
+											{ label: "Nov", value: 480 },
+											{ label: "Dez", value: 510 },
+											{ label: "Jan", value: 545 },
 										].map((item) => (
 											<div key={item.label} className="flex items-center gap-3">
 												<span className="text-xs text-slate-600 w-8 font-medium">
@@ -192,7 +193,7 @@ function ReportsDashboard() {
 												<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
 													<div
 														className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-400"
-														style={{ width: `${(item.value / 500) * 100}%` }}
+														style={{ width: `${(item.value / 600) * 100}%` }}
 													/>
 												</div>
 												<span className="text-xs font-semibold text-slate-900 w-12">
@@ -266,27 +267,43 @@ function ReportsDashboard() {
 								data={[
 									{
 										id: "1",
-										period: "Jan 2024",
-										revenue: "380.000 MZN",
-										expenses: "120.000 MZN",
-										profit: "260.000 MZN",
-										growth: "+8.5%",
+										period: "Set 2024",
+										revenue: "420.000 MZN",
+										expenses: "125.000 MZN",
+										profit: "295.000 MZN",
+										growth: "+7.1%",
 									},
 									{
 										id: "2",
-										period: "Fev 2024",
-										revenue: "410.000 MZN",
+										period: "Out 2024",
+										revenue: "450.000 MZN",
 										expenses: "130.000 MZN",
-										profit: "280.000 MZN",
-										growth: "+7.9%",
+										profit: "320.000 MZN",
+										growth: "+7.1%",
 									},
 									{
 										id: "3",
-										period: "Mar 2024",
-										revenue: "450.000 MZN",
+										period: "Nov 2024",
+										revenue: "480.000 MZN",
+										expenses: "135.000 MZN",
+										profit: "345.000 MZN",
+										growth: "+6.7%",
+									},
+									{
+										id: "4",
+										period: "Dez 2024",
+										revenue: "510.000 MZN",
 										expenses: "140.000 MZN",
-										profit: "310.000 MZN",
-										growth: "+10.7%",
+										profit: "370.000 MZN",
+										growth: "+6.3%",
+									},
+									{
+										id: "5",
+										period: "Jan 2025",
+										revenue: "545.000 MZN",
+										expenses: "125.000 MZN",
+										profit: "420.000 MZN",
+										growth: "+6.8%",
 									},
 								]}
 								columns={[

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Ring2 } from "ldrs/react";
 import { UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { FormError } from "#/components/FormError";
 import { PasswordInput } from "#/components/PasswordInput";
 import { LOGIN_SUBMIT_DELAY } from "#/lib/constants";
 import { validateLoginForm } from "#/lib/validation";
+import { useAuth } from "#/hooks/useAuth";
 
 export const Route = createFileRoute("/_auth/login")({
   component: Login,
@@ -45,19 +46,30 @@ function Login() {
 
     setErrors({});
     setIsLoading(true);
-    await new Promise((resolve) =>
-      window.setTimeout(resolve, LOGIN_SUBMIT_DELAY),
-    );
-    setIsLoading(false);
 
-    // Show success toast
-    toast.success("Sessão iniciada com sucesso!");
+    try {
+      await login({ email, password });
 
-    // Save remember me preference
-    if (rememberMe) {
-      localStorage.setItem("remembered_email", email);
-    } else {
-      localStorage.removeItem("remembered_email");
+      // Redirect based on role
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      if (user.role === "saver") {
+        navigate({ to: "/client/dashboard" });
+      } else {
+        navigate({ to: "/dashboard/overview" });
+      }
+
+      // Show success toast
+      toast.success("Sessão iniciada com sucesso!");
+
+      // Save remember me preference
+      if (rememberMe) {
+        localStorage.setItem("remembered_email", email);
+      } else {
+        localStorage.removeItem("remembered_email");
+      }
+    } catch (error) {
+      toast.error("Erro ao fazer login. Verifique suas credenciais.");
+      setIsLoading(false);
     }
   };
 

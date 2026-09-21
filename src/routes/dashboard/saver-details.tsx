@@ -17,6 +17,7 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { DayDetailPopup } from "#/components/business/DayDetailPopup";
+import { IndividualCycleClosureModal } from "#/components/business/IndividualCycleClosureModal";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
 import { Sidebar } from "#/components/layout/Sidebar";
@@ -24,6 +25,7 @@ import { Button } from "#/components/ui/Button";
 import { Card, CardContent } from "#/components/ui/Card";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
 import { useSaver } from "#/features/savers/hooks";
+import { useAuth } from "#/hooks/useAuth";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/saver-details")({
@@ -40,16 +42,17 @@ function SaverDetailsPage() {
 	>("card");
 	const [selectedMonth, _setSelectedMonth] = useState("Outubro 2023");
 	const [searchTerm, setSearchTerm] = useState("");
+	const [showCycleClosureModal, setShowCycleClosureModal] = useState(false);
 	const [selectedDay, setSelectedDay] = useState<{
 		day: number;
 		status:
-		| "paid"
-		| "partial"
-		| "unpaid"
-		| "deleted"
-		| "not_deposited"
-		| "in_debt"
-		| "current";
+			| "paid"
+			| "partial"
+			| "unpaid"
+			| "deleted"
+			| "not_deposited"
+			| "in_debt"
+			| "current";
 		amount?: number;
 		collector?: string;
 	} | null>(null);
@@ -78,7 +81,38 @@ function SaverDetailsPage() {
 	// Fetch saver data using the ID from search params
 	const { data: saver, isLoading, error } = useSaver(saverId);
 
-	const sidebarItems = getDashboardSidebar(location.pathname);
+	const { user } = useAuth();
+	const sidebarItems = getDashboardSidebar(location.pathname, user?.role);
+
+	const handleCycleClosure = (data: {
+		transferDebtDays: boolean;
+		reactivateNextCycle: boolean;
+		sendNotification: boolean;
+	}) => {
+		// Mock implementation - in real app, this would call an API
+		console.log("Closing cycle for saver:", saver.id, data);
+
+		// Update saver status to inactive
+		// const updatedSaver = {
+		// 	...saver,
+		// 	status: "inactive" as const,
+		// 	isActive: false,
+		// };
+
+		// Show success toast
+		let message = `Ciclo fechado com sucesso para ${saver.name}`;
+		if (data.transferDebtDays && saver.currentDebt > 0) {
+			const debtDays = saver.paymentDays?.filter(
+				(pd) => pd.paid && pd.isDebtPayment,
+			).length;
+			message += `. ${debtDays} dias de dívida transferidos para o próximo ciclo`;
+		}
+		toast.success(message);
+
+		// In real app, you would update the data via API here
+		// For now, just close the modal
+		setShowCycleClosureModal(false);
+	};
 
 	if (isLoading) {
 		return (
@@ -226,7 +260,10 @@ function SaverDetailsPage() {
 											Dívida de Empréstimo
 										</p>
 										<p className="font-mono text-amber-600 font-bold text-xs">
-											{saver.currentDebt > 0 ? saver.currentDebt.toLocaleString() : "0"} MZN
+											{saver.currentDebt > 0
+												? saver.currentDebt.toLocaleString()
+												: "0"}{" "}
+											MZN
 										</p>
 									</div>
 								</div>
@@ -282,8 +319,8 @@ function SaverDetailsPage() {
 													<Check size={8} className="text-emerald-500" /> Pago
 												</div>
 												<div className="flex items-center gap-1">
-													<Check size={8} className="text-amber-500" /> Pagamento
-													Dívida
+													<Check size={8} className="text-amber-500" />{" "}
+													Pagamento Dívida
 												</div>
 												<div className="flex items-center gap-1">
 													<span className="w-2 h-2 rounded-full bg-slate-200"></span>{" "}
@@ -297,7 +334,8 @@ function SaverDetailsPage() {
 												let stateClass =
 													"bg-slate-100 border-slate-300 text-slate-400";
 												let icon: "check" | number = day;
-												let status: "paid" | "partial" | "not_deposited" = "not_deposited";
+												let status: "paid" | "partial" | "not_deposited" =
+													"not_deposited";
 												let amount = saver.dailyAmount;
 												let collector = "N/A";
 
@@ -407,6 +445,7 @@ function SaverDetailsPage() {
 										<div className="space-y-2">
 											<button
 												type="button"
+												onClick={() => setShowCycleClosureModal(true)}
 												className="w-full flex items-center justify-between p-2 bg-slate-50 hover:bg-slate-100 rounded-lg transition-all group"
 											>
 												<div className="flex items-center gap-2">
@@ -519,6 +558,15 @@ function SaverDetailsPage() {
 							</CardContent>
 						</Card>
 					)}
+
+					{/* Individual Cycle Closure Modal */}
+					<IndividualCycleClosureModal
+						isOpen={showCycleClosureModal}
+						onClose={() => setShowCycleClosureModal(false)}
+						onSubmit={handleCycleClosure}
+						saver={saver}
+						currentMonth={selectedMonth}
+					/>
 				</main>
 			</div>
 		</DashboardLayout>

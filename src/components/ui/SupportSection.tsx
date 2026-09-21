@@ -1,9 +1,9 @@
 import {
 	ArrowRight,
 	CheckCircle,
+	Mail,
 	MessageCircle,
 	Phone,
-	Mail,
 } from "lucide-react";
 
 interface SupportSectionProps {

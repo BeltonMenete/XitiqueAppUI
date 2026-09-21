@@ -219,7 +219,7 @@ export function QuickActionsModal({
 							className={cn(
 								"w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0",
 								action.category === "deposit" &&
-								"bg-emerald-600/10 text-emerald-600",
+									"bg-emerald-600/10 text-emerald-600",
 								action.category === "loan" && "bg-amber-500/10 text-amber-500",
 								action.category === "info" && "bg-blue-500/10 text-blue-500",
 								action.category === "admin" && "bg-slate-200 text-slate-600",

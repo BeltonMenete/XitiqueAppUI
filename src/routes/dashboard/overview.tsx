@@ -9,6 +9,7 @@ import { Card, CardContent } from "#/components/ui/Card";
 import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { SupportSection } from "#/components/ui/SupportSection";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
+import { useAuth } from "#/hooks/useAuth";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/overview")({
@@ -17,31 +18,32 @@ export const Route = createFileRoute("/dashboard/overview")({
 
 function OrganizationDashboard() {
 	const location = useLocation();
+	const { user } = useAuth();
 	const [searchTerm, setSearchTerm] = useState("");
-	const sidebarItems = getDashboardSidebar(location.pathname);
+	const sidebarItems = getDashboardSidebar(location.pathname, user?.role);
 
 	const kpiData = [
 		{
 			title: "Arrecadado Mês",
-			value: "450.000 MZN",
-			subtext: "+12.5% vs mês anterior",
+			value: "545.000 MZN",
+			subtext: "+8.2% vs mês anterior",
 			borderColor: "success" as const,
 			clickable: true,
 			expandedContent: (
 				<div className="space-y-4">
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Meta Mensal</span>
-						<span className="font-semibold text-slate-900">500.000 MZN</span>
+						<span className="font-semibold text-slate-900">600.000 MZN</span>
 					</div>
 					<div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
 						<div
 							className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-							style={{ width: "90%" }}
+							style={{ width: "91%" }}
 						/>
 					</div>
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Progresso</span>
-						<span className="font-semibold text-emerald-500">90%</span>
+						<span className="font-semibold text-emerald-500">91%</span>
 					</div>
 					<Button size="sm" variant="outline" className="w-full mt-2">
 						Ver Relatório Detalhado
@@ -51,7 +53,7 @@ function OrganizationDashboard() {
 		},
 		{
 			title: "Comissão Mês",
-			value: "45.000 MZN",
+			value: "54.500 MZN",
 			subtext: "No caminho da meta",
 			borderColor: "warning" as const,
 			clickable: true,
@@ -59,17 +61,17 @@ function OrganizationDashboard() {
 				<div className="space-y-4">
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Meta de Comissão</span>
-						<span className="font-semibold text-slate-900">50.000 MZN</span>
+						<span className="font-semibold text-slate-900">60.000 MZN</span>
 					</div>
 					<div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
 						<div
 							className="h-full bg-amber-500 rounded-full transition-all duration-500"
-							style={{ width: "90%" }}
+							style={{ width: "91%" }}
 						/>
 					</div>
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Progresso</span>
-						<span className="font-semibold text-amber-600">90%</span>
+						<span className="font-semibold text-amber-600">91%</span>
 					</div>
 					<Button size="sm" variant="outline" className="w-full mt-2">
 						Ver Detalhes de Comissão
@@ -79,25 +81,25 @@ function OrganizationDashboard() {
 		},
 		{
 			title: "Emprestado",
-			value: "60.000 MZN",
-			subtext: "8 Empréstimos Activos",
+			value: "78.000 MZN",
+			subtext: "12 Empréstimos Activos",
 			borderColor: "primary" as const,
 			clickable: true,
 			expandedContent: (
 				<div className="space-y-4">
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Total Solicitado</span>
-						<span className="font-semibold text-slate-900">85.000 MZN</span>
+						<span className="font-semibold text-slate-900">186.000 MZN</span>
 					</div>
 
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Dívida Ativa</span>
-						<span className="font-semibold text-amber-600">45.000 MZN</span>
+						<span className="font-semibold text-amber-600">108.000 MZN</span>
 					</div>
 
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Taxa de Aprovação</span>
-						<span className="font-semibold text-emerald-500">94%</span>
+						<span className="font-semibold text-emerald-500">96%</span>
 					</div>
 					<Button size="sm" variant="outline" className="w-full mt-2">
 						Gerir Empréstimos
@@ -107,7 +109,7 @@ function OrganizationDashboard() {
 		},
 		{
 			title: "Diferença Caixa",
-			value: "-2.300 MZN",
+			value: "-1.800 MZN",
 			subtext: "Requer Reconciliação",
 			borderColor: "error" as const,
 			clickable: true,
@@ -115,11 +117,11 @@ function OrganizationDashboard() {
 				<div className="space-y-4">
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Última Reconciliação</span>
-						<span className="font-semibold text-slate-900">Há 3 dias</span>
+						<span className="font-semibold text-slate-900">Há 2 dias</span>
 					</div>
 					<div className="flex justify-between text-xs">
 						<span className="text-slate-500">Itens Pendentes</span>
-						<span className="font-semibold text-amber-600">5 transações</span>
+						<span className="font-semibold text-amber-600">3 transações</span>
 					</div>
 					<div className="p-2 bg-amber-50 rounded-lg border border-amber-200">
 						<p className="text-xs text-amber-800">Reconciliação recomendada</p>
@@ -187,12 +189,11 @@ function OrganizationDashboard() {
 									<div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-200 p-4">
 										<div className="w-full space-y-4">
 											{[
-												{ label: "Jan", value: 75 },
-												{ label: "Fev", value: 82 },
-												{ label: "Mar", value: 68 },
-												{ label: "Abr", value: 90 },
-												{ label: "Mai", value: 85 },
-												{ label: "Jun", value: 92 },
+												{ label: "Set", value: 81 },
+												{ label: "Out", value: 90 },
+												{ label: "Nov", value: 85 },
+												{ label: "Dez", value: 100 },
+												{ label: "Jan", value: 94 },
 											].map((item) => (
 												<div
 													key={item.label}
@@ -231,25 +232,25 @@ function OrganizationDashboard() {
 												id: "1",
 												action: "Nova colecta",
 												user: "Maria Silva",
-												time: "Há 5 min",
+												time: "Há 10 min",
 											},
 											{
 												id: "2",
 												action: "Empréstimo aprovado",
 												user: "João Machava",
-												time: "Há 15 min",
+												time: "Há 25 min",
 											},
 											{
 												id: "3",
 												action: "Pagamento recebido",
 												user: "Alberto Chongo",
-												time: "Há 30 min",
+												time: "Há 45 min",
 											},
 											{
 												id: "4",
 												action: "Membro registado",
 												user: "Sofia Macamo",
-												time: "Há 1 hora",
+												time: "Há 2 horas",
 											},
 										].map((activity, index) => {
 											const icons = [Users, Wallet, DollarSign, Users];
@@ -290,19 +291,19 @@ function OrganizationDashboard() {
 									</h3>
 									<div className="grid grid-cols-2 gap-4">
 										<div className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer border border-transparent hover:border-slate-200">
-											<p className="text-2xl font-bold text-slate-900">342</p>
+											<p className="text-2xl font-bold text-slate-900">50</p>
 											<p className="text-xs text-slate-400">Total de Membros</p>
 										</div>
 										<div className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer border border-transparent hover:border-slate-200">
-											<p className="text-2xl font-bold text-slate-900">318</p>
+											<p className="text-2xl font-bold text-slate-900">47</p>
 											<p className="text-xs text-slate-400">Membros Activos</p>
 										</div>
 										<div className="p-4 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors cursor-pointer border border-transparent hover:border-amber-200">
-											<p className="text-2xl font-bold text-amber-600">18</p>
+											<p className="text-2xl font-bold text-amber-600">5</p>
 											<p className="text-xs text-slate-400">Novos este mês</p>
 										</div>
 										<div className="p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors cursor-pointer border border-transparent hover:border-red-200">
-											<p className="text-2xl font-bold text-red-600">6</p>
+											<p className="text-2xl font-bold text-red-600">3</p>
 											<p className="text-xs text-slate-400">Em Incumprimento</p>
 										</div>
 									</div>
@@ -322,26 +323,26 @@ function OrganizationDashboard() {
 											{
 												id: "1",
 												name: "João Machava",
-												amount: "15.000 MZN",
+												amount: "25.000 MZN",
 												status: "approved",
 											},
 											{
 												id: "2",
 												name: "Maria Santos",
-												amount: "10.000 MZN",
+												amount: "18.000 MZN",
 												status: "pending",
 											},
 											{
 												id: "3",
 												name: "Alberto Chongo",
-												amount: "20.000 MZN",
+												amount: "30.000 MZN",
 												status: "approved",
 											},
 											{
 												id: "4",
 												name: "Sofia Macamo",
-												amount: "8.000 MZN",
-												status: "rejected",
+												amount: "22.000 MZN",
+												status: "pending",
 											},
 										].map((loan) => (
 											<div

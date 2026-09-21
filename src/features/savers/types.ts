@@ -29,6 +29,21 @@ export interface Saver {
 	}>;
 	totalLoans?: number;
 	totalInterest?: number;
+	cycleHistory?: CycleClosure[];
+	pendingDebtDays?: number[]; // Days marked for next cycle transfer
+}
+
+export interface CycleClosure {
+	id: string;
+	saverId: string;
+	month: number;
+	year: number;
+	closedAt: string;
+	closedBy: string;
+	totalSaved: number;
+	debtDaysTransferred: number;
+	debtTransferred: number;
+	rolloverToNextCycle: boolean;
 }
 
 export interface SaverDeposit {

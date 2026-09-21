@@ -1,5 +1,6 @@
 export { DayActionModal } from "./DayActionModal";
 export { DayDetailPopup } from "./DayDetailPopup";
+export { IndividualCycleClosureModal } from "./IndividualCycleClosureModal";
 export { LoanApprovalModal } from "./LoanApprovalModal";
 export { NotificationCenter } from "./NotificationCenter";
 export { QuickActionsModal } from "./QuickActionsModal";

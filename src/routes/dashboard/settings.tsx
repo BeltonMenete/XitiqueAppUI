@@ -1,5 +1,12 @@
 import { createFileRoute, useLocation } from "@tanstack/react-router";
-import { Bell, Building2, CreditCard, RotateCcw, Save, Users } from "lucide-react";
+import {
+	Bell,
+	Building2,
+	CreditCard,
+	RotateCcw,
+	Save,
+	Users,
+} from "lucide-react";
 import { useState } from "react";
 import { DashboardLayout } from "#/components/layout/DashboardLayout";
 import { Header } from "#/components/layout/Header";
@@ -10,6 +17,7 @@ import { PrototypeKPICard } from "#/components/ui/PrototypeKPICard";
 import { SupportSection } from "#/components/ui/SupportSection";
 import { getDashboardSidebar } from "#/config/dashboardSidebar";
 import { useSettings } from "#/features/settings";
+import { useAuth } from "#/hooks/useAuth";
 import { cn } from "#/lib/design-system";
 
 export const Route = createFileRoute("/dashboard/settings")({
@@ -18,6 +26,7 @@ export const Route = createFileRoute("/dashboard/settings")({
 
 function SettingsPage() {
 	const location = useLocation();
+	const { user } = useAuth();
 	const [activeTab, setActiveTab] = useState("organization");
 	const {
 		settings,
@@ -47,7 +56,7 @@ function SettingsPage() {
 		overdueLoanAlert: settings?.notifications.overdueLoanAlert || false,
 	});
 
-	const sidebarItems = getDashboardSidebar(location.pathname);
+	const sidebarItems = getDashboardSidebar(location.pathname, user?.role);
 
 	const tabs = [
 		{ id: "organization", label: "Organização", icon: Building2 },
@@ -342,14 +351,20 @@ function SettingsPage() {
 														onChange={(e) => {
 															const newMethods = e.target.checked
 																? [
-																	...(settings?.payments.acceptedMethods ??
-																		[]),
-																	method,
-																]
+																		...(settings?.payments.acceptedMethods ??
+																			[]),
+																		method,
+																	]
 																: (settings?.payments.acceptedMethods.filter(
-																	(m) => m !== method,
-																) ?? []);
-															updatePayments({ acceptedMethods: newMethods as ("mobile" | "bank" | "cash")[] });
+																		(m) => m !== method,
+																	) ?? []);
+															updatePayments({
+																acceptedMethods: newMethods as (
+																	| "mobile"
+																	| "bank"
+																	| "cash"
+																)[],
+															});
 														}}
 														className="rounded border-slate-300 text-slate-900 focus:ring-slate-900"
 													/>

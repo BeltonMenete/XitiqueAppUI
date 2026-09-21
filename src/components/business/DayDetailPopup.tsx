@@ -11,14 +11,14 @@ interface DayDetailPopupProps {
 	saverName: string;
 	saverDailyAmount: number;
 	dayStatus:
-	| "paid"
-	| "partial"
-	| "unpaid"
-	| "deleted"
-	| "not_deposited"
-	| "in_debt"
-	| "current"
-	| "normal_deposit";
+		| "paid"
+		| "partial"
+		| "unpaid"
+		| "deleted"
+		| "not_deposited"
+		| "in_debt"
+		| "current"
+		| "normal_deposit";
 	amount?: number;
 	collector?: string;
 	isLoading?: boolean;
@@ -281,7 +281,9 @@ export function DayDetailPopup({
 							</Button>
 						</div>
 					</div>
-				) : dayStatus === "paid" || dayStatus === "partial" || dayStatus === "normal_deposit" ? (
+				) : dayStatus === "paid" ||
+					dayStatus === "partial" ||
+					dayStatus === "normal_deposit" ? (
 					<div className="space-y-2">
 						<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
 							<span className="text-xs text-slate-600">Estado</span>

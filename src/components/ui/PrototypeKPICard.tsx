@@ -74,10 +74,14 @@ export function PrototypeKPICard({
 						{title}
 					</span>
 					<div className="flex items-baseline gap-2">
-						<span className={cn("text-xl font-bold", textColorMap[borderColor])}>
+						<span
+							className={cn("text-xl font-bold", textColorMap[borderColor])}
+						>
 							{value}
 						</span>
-						{subtext && <span className="text-xs text-slate-500">{subtext}</span>}
+						{subtext && (
+							<span className="text-xs text-slate-500">{subtext}</span>
+						)}
 					</div>
 					{icon && <div className="mt-1">{icon}</div>}
 					{expandedContent && clickable && (
@@ -119,10 +123,14 @@ export function PrototypeKPICard({
 						{title}
 					</span>
 					<div className="flex items-baseline gap-2">
-						<span className={cn("text-xl font-bold", textColorMap[borderColor])}>
+						<span
+							className={cn("text-xl font-bold", textColorMap[borderColor])}
+						>
 							{value}
 						</span>
-						{subtext && <span className="text-xs text-slate-500">{subtext}</span>}
+						{subtext && (
+							<span className="text-xs text-slate-500">{subtext}</span>
+						)}
 					</div>
 					{icon && <div className="mt-1">{icon}</div>}
 				</div>
