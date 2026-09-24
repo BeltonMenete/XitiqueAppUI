@@ -85,13 +85,22 @@ export function PrototypeKPICard({
 					</div>
 					{icon && <div className="mt-1">{icon}</div>}
 					{expandedContent && clickable && (
-						<button
-							type="button"
-							className="mt-1 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors cursor-pointer bg-transparent border-none p-0"
+						// biome-ignore lint/a11y/useSemanticElements: Nested button is invalid HTML, using div with role="button" instead
+						<div
+							className="mt-1 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors cursor-pointer"
 							onClick={(e) => {
 								e.stopPropagation();
 								setIsExpanded(!isExpanded);
 							}}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									e.preventDefault();
+									e.stopPropagation();
+									setIsExpanded(!isExpanded);
+								}
+							}}
+							role="button"
+							tabIndex={0}
 						>
 							{isExpanded ? (
 								<>
@@ -104,7 +113,7 @@ export function PrototypeKPICard({
 									<span>Mostrar mais</span>
 								</>
 							)}
-						</button>
+						</div>
 					)}
 					{isExpanded && expandedContent && (
 						<div className="mt-3 pt-3 border-t border-slate-200">

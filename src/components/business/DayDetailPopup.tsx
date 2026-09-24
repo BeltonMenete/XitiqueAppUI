@@ -22,7 +22,13 @@ interface DayDetailPopupProps {
 	amount?: number;
 	collector?: string;
 	isLoading?: boolean;
-	onDeposit?: (data: { amount: number; type: string; days: number }) => void;
+	paymentDays?: Array<{ day: number; paid: boolean }>;
+	onDeposit?: (data: {
+		amount: number;
+		type: string;
+		days: number;
+		daysToDeposit: number[];
+	}) => void;
 	onEdit?: () => void;
 	onDelete?: () => void;
 }
@@ -38,6 +44,7 @@ export function DayDetailPopup({
 	amount,
 	collector,
 	isLoading = false,
+	paymentDays,
 	onDeposit,
 	onEdit,
 	onDelete,
@@ -46,6 +53,37 @@ export function DayDetailPopup({
 	const [depositAmount, setDepositAmount] = useState("");
 	const [depositType, setDepositType] = useState("normal");
 	const [numberOfDays, setNumberOfDays] = useState(1);
+
+	// Calculate unpaid days
+	const unpaidDays = paymentDays?.filter((d) => !d.paid) || [];
+	const maxDays = unpaidDays.length > 0 ? unpaidDays.length : 30;
+
+	// Calculate which days will be deposited
+	// Start from the selected day and fill subsequent days
+	const sortedUnpaidDays = unpaidDays.map((d) => d.day).sort((a, b) => a - b);
+
+	const selectedDayIndex = sortedUnpaidDays.indexOf(day);
+
+	let daysToDeposit: number[];
+	if (selectedDayIndex >= 0) {
+		// If selected day is unpaid, start from there and take subsequent days
+		daysToDeposit = sortedUnpaidDays.slice(
+			selectedDayIndex,
+			selectedDayIndex + numberOfDays,
+		);
+		// If not enough days after, take days before (but not the selected day again)
+		if (daysToDeposit.length < numberOfDays) {
+			const remaining = numberOfDays - daysToDeposit.length;
+			const daysBefore = sortedUnpaidDays
+				.slice(0, selectedDayIndex)
+				.filter((d) => !daysToDeposit.includes(d))
+				.slice(-remaining);
+			daysToDeposit = [...daysToDeposit, ...daysBefore];
+		}
+	} else {
+		// If selected day is already paid, just take first unpaid days
+		daysToDeposit = sortedUnpaidDays.slice(0, numberOfDays);
+	}
 
 	if (!isOpen) return null;
 
@@ -88,11 +126,19 @@ export function DayDetailPopup({
 	};
 
 	const handleDepositSubmit = () => {
+		console.log("handleDepositSubmit called");
 		const amount = parseFloat(depositAmount) || saverDailyAmount;
+		console.log("Calling onDeposit with:", {
+			amount,
+			type: depositType,
+			days: numberOfDays,
+			daysToDeposit,
+		});
 		onDeposit?.({
 			amount,
 			type: depositType,
 			days: numberOfDays,
+			daysToDeposit,
 		});
 		setShowDepositForm(false);
 		setDepositAmount("");
@@ -183,23 +229,24 @@ export function DayDetailPopup({
 								Dia {day} - {month}
 							</p>
 						</div>
-						<div className="space-y-2">
-							<div>
-								<label
-									htmlFor="deposit-amount"
-									className="block text-xs font-medium text-slate-700 mb-1"
-								>
-									Valor Diário (MZN)
-								</label>
-								<input
-									id="deposit-amount"
-									type="number"
-									value={depositAmount}
-									onChange={(e) => setDepositAmount(e.target.value)}
-									placeholder={saverDailyAmount.toString()}
-									className="w-full px-2 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-xs"
-								/>
+
+						{depositType !== "debt_payment" && (
+							<div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+								<div className="flex items-center gap-2">
+									<DollarSign size={14} className="text-emerald-600" />
+									<div>
+										<p className="text-xs text-emerald-700 font-medium">
+											Taxa Diária Fixa
+										</p>
+										<p className="text-sm font-bold text-emerald-900">
+											{saverDailyAmount.toLocaleString()} MZN
+										</p>
+									</div>
+								</div>
 							</div>
+						)}
+
+						<div className="space-y-2">
 							{depositType !== "debt_payment" && (
 								<div>
 									<label
@@ -212,25 +259,36 @@ export function DayDetailPopup({
 										id="number-of-days"
 										type="number"
 										min="1"
-										max="30"
+										max={maxDays}
 										value={numberOfDays}
 										onChange={(e) =>
 											setNumberOfDays(
-												Math.max(1, parseInt(e.target.value, 10) || 1),
+												Math.min(
+													maxDays,
+													Math.max(1, parseInt(e.target.value, 10) || 1),
+												),
 											)
 										}
 										className="w-full px-2 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-xs"
 									/>
+									<p className="text-[10px] text-slate-500 mt-1">
+										Dias disponíveis: {maxDays}
+									</p>
 								</div>
 							)}
 							{numberOfDays > 1 && depositType !== "debt_payment" && (
 								<div className="p-2 bg-slate-50 rounded-lg border border-slate-200">
-									<div className="flex justify-between items-center">
+									<div className="flex justify-between items-center mb-1">
 										<span className="text-xs text-slate-600">Total:</span>
 										<span className="text-sm font-bold text-slate-900">
 											{totalAmount.toLocaleString()} MZN
 										</span>
 									</div>
+									{daysToDeposit.length > 0 && (
+										<p className="text-[10px] text-slate-500">
+											Dias {daysToDeposit.join(", ")} serão depositados
+										</p>
+									)}
 								</div>
 							)}
 							{dayStatus === "in_debt" && (
@@ -354,13 +412,21 @@ export function DayDetailPopup({
 								{getStatusText(dayStatus)}
 							</span>
 						</div>
-						<div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-							<span className="text-xs text-slate-600">Valor</span>
-							<span className="text-xs font-bold text-slate-900">
-								{amount?.toLocaleString() || saverDailyAmount.toLocaleString()}{" "}
-								MZN
-							</span>
+
+						<div className="bg-emerald-50 p-2 rounded-lg border border-emerald-200">
+							<div className="flex items-center gap-2">
+								<DollarSign size={12} className="text-emerald-600" />
+								<div>
+									<p className="text-[10px] text-emerald-700 font-medium">
+										Taxa Diária Fixa
+									</p>
+									<p className="text-xs font-bold text-emerald-900">
+										{saverDailyAmount.toLocaleString()} MZN
+									</p>
+								</div>
+							</div>
 						</div>
+
 						{dayStatus === "in_debt" ? (
 							<div className="flex gap-2 pt-2">
 								<Button

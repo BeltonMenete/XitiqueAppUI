@@ -12,7 +12,6 @@ interface RegisterSaverData {
 	cardNumber: string;
 	name: string;
 	phone: string;
-	dailyAmount: string;
 	organizationId: string;
 	contact?: string;
 	identityDocument?: string;
@@ -29,7 +28,6 @@ export function RegisterSaverModal({
 		cardNumber: "",
 		name: "",
 		phone: "",
-		dailyAmount: "",
 		organizationId: "",
 		contact: "",
 		identityDocument: "",
@@ -92,45 +90,24 @@ export function RegisterSaverModal({
 					</div>
 				</div>
 
-				<div className="grid grid-cols-2 gap-4">
-					<div>
-						<label
-							htmlFor="phone"
-							className="block text-xs font-semibold text-slate-700 mb-1"
-						>
-							Telefone *
-						</label>
-						<input
-							id="phone"
-							type="tel"
-							value={formData.phone}
-							onChange={(e) =>
-								setFormData({ ...formData, phone: e.target.value })
-							}
-							className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-							placeholder="+258 84 XXX XXXX"
-							required
-						/>
-					</div>
-					<div>
-						<label
-							htmlFor="dailyAmount"
-							className="block text-xs font-semibold text-slate-700 mb-1"
-						>
-							Valor Diário (MZN) *
-						</label>
-						<input
-							id="dailyAmount"
-							type="number"
-							value={formData.dailyAmount}
-							onChange={(e) =>
-								setFormData({ ...formData, dailyAmount: e.target.value })
-							}
-							className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-							placeholder="Ex: 500"
-							required
-						/>
-					</div>
+				<div>
+					<label
+						htmlFor="phone"
+						className="block text-xs font-semibold text-slate-700 mb-1"
+					>
+						Telefone *
+					</label>
+					<input
+						id="phone"
+						type="tel"
+						value={formData.phone}
+						onChange={(e) =>
+							setFormData({ ...formData, phone: e.target.value })
+						}
+						className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+						placeholder="+258 84 XXX XXXX"
+						required
+					/>
 				</div>
 
 				<div>

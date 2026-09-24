@@ -287,22 +287,6 @@ export function SaverMasterDetail({
 										type="tel"
 									/>
 								</div>
-								<div>
-									<label
-										htmlFor="saver-daily-amount"
-										className="block text-xs font-semibold text-slate-600 mb-2"
-									>
-										Valor Diário (MZN)
-									</label>
-									<InlineEditor
-										id="saver-daily-amount"
-										value={String(selectedSaver.dailyAmount)}
-										onSave={(value) =>
-											console.log("Update daily amount:", value)
-										}
-										type="number"
-									/>
-								</div>
 							</div>
 						</div>
 

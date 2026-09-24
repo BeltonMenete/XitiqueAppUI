@@ -4,7 +4,6 @@ export { IndividualCycleClosureModal } from "./IndividualCycleClosureModal";
 export { LoanApprovalModal } from "./LoanApprovalModal";
 export { NotificationCenter } from "./NotificationCenter";
 export { QuickActionsModal } from "./QuickActionsModal";
-export { QuickDepositModal } from "./QuickDepositModal";
 export { QuickLoanModal } from "./QuickLoanModal";
 export { QuickTransferModal } from "./QuickTransferModal";
 export { RegisterCollectorModal } from "./RegisterCollectorModal";

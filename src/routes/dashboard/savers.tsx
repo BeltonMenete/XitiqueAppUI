@@ -17,11 +17,10 @@ import {
 	Plus,
 	Users,
 } from "lucide-react";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { DayDetailPopup } from "#/components/business/DayDetailPopup";
 import { IndividualCycleClosureModal } from "#/components/business/IndividualCycleClosureModal";
-import { QuickDepositModal } from "#/components/business/QuickDepositModal";
 import { QuickLoanModal } from "#/components/business/QuickLoanModal";
 import { RegisterSaverModal } from "#/components/business/RegisterSaverModal";
 import { QuickActionMenu } from "#/components/interactive/QuickActionMenu";
@@ -73,7 +72,7 @@ interface MonthCalendarGridProps {
 	selectedMonth?: string;
 }
 
-const MonthCalendarGrid = memo(function MonthCalendarGrid({
+const MonthCalendarGrid = function MonthCalendarGrid({
 	days,
 	onDayClick,
 	onSaverClick: _onSaverClick,
@@ -227,7 +226,7 @@ const MonthCalendarGrid = memo(function MonthCalendarGrid({
 			</div>
 		</div>
 	);
-});
+};
 
 // SaversCalendarView Component
 interface SaversCalendarViewProps {
@@ -235,6 +234,7 @@ interface SaversCalendarViewProps {
 	onRowDoubleClick?: (saver: Saver) => void;
 	selectedMonth: string;
 	onMonthChange: (month: string) => void;
+	forceUpdate?: number;
 	onDayClick?: (
 		saver: Saver,
 		dayData: {
@@ -246,7 +246,6 @@ interface SaversCalendarViewProps {
 			isInDebt?: boolean;
 		},
 	) => void;
-	onDepositClick?: (saver: Saver) => void;
 	onLoanClick?: (saver: Saver) => void;
 	onSaverClick?: (saverId: string) => void;
 	canCloseCycle?: boolean;
@@ -256,8 +255,8 @@ function SaversCalendarView({
 	savers,
 	selectedMonth,
 	onMonthChange,
+	forceUpdate = 0,
 	onDayClick,
-	onDepositClick,
 	onLoanClick,
 	onSaverClick,
 	canCloseCycle = false,
@@ -418,8 +417,19 @@ function SaversCalendarView({
 									</td>
 									<td className="px-2 py-0.5">
 										<MonthCalendarGrid
+											key={`${saver.id}-${saver.totalSaved}-${forceUpdate}`}
 											days={saver.paymentDays || []}
-											onDayClick={(dayData) => onDayClick?.(saver, dayData)}
+											onDayClick={(dayData) => {
+												console.log(
+													"Day clicked for saver:",
+													saver.name,
+													"day:",
+													dayData.day,
+													"paid:",
+													dayData.paid,
+												);
+												onDayClick?.(saver, dayData);
+											}}
 											onSaverClick={onSaverClick}
 											showHeader={false}
 											saverName={saver.name}
@@ -462,11 +472,6 @@ function SaversCalendarView({
 															onSaverClick?.(saver.id);
 														}, 50);
 													},
-												},
-												{
-													id: "deposit",
-													label: "Registar Depósito",
-													onClick: () => onDepositClick?.(saver),
 												},
 												{
 													id: "loan",
@@ -1745,7 +1750,6 @@ function SaversManagement() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedMonth, setSelectedMonth] = useState("Maio 2024");
 	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-	const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 	const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
 	const [isDayActionModalOpen, setIsDayActionModalOpen] = useState(false);
 	const [isSaverPopupOpen, setIsSaverPopupOpen] = useState(false);
@@ -1768,19 +1772,21 @@ function SaversManagement() {
 			| "in_debt";
 		amount?: number;
 		collector?: string;
+		paymentDays?: Array<{ day: number; paid: boolean }>;
 	} | null>(null);
 
 	const { data: saversData, isLoading } = useSavers({ page: 1, pageSize: 20 });
-	const savers = enrichSaversWithAlphanumericIds(
-		saversData?.data || mockSavers,
+	const [saversState, setSaversState] = useState<Saver[]>(
+		enrichSaversWithAlphanumericIds(saversData?.data || mockSavers),
 	);
+	const [forceUpdate, setForceUpdate] = useState(0);
 
 	const statusFilters = [
 		{ id: "active", label: "Activo" },
 		{ id: "inactive", label: "Inativo" },
 	];
 
-	const filteredSavers = savers.filter((saver) => {
+	const filteredSavers = saversState.filter((saver) => {
 		if (selectedStatuses.length === 0) return true;
 		return selectedStatuses.some((status) => {
 			if (status === "active") return saver.status === "active";
@@ -1791,7 +1797,10 @@ function SaversManagement() {
 
 	const sidebarItems = getDashboardSidebar(location.pathname, user?.role);
 
-	const totalCommission = savers.reduce((sum, s) => sum + s.dailyAmount, 0);
+	const totalCommission = saversState.reduce(
+		(sum, s) => sum + s.dailyAmount,
+		0,
+	);
 
 	const handleCycleClosure = (data: {
 		transferDebtDays: boolean;
@@ -1821,7 +1830,7 @@ function SaversManagement() {
 	const kpiData = [
 		{
 			title: "Total Ticantes",
-			value: String(savers.length),
+			value: String(saversState.length),
 			subtext: "Total registado",
 			borderColor: "success" as const,
 		},
@@ -1833,20 +1842,20 @@ function SaversManagement() {
 		},
 		{
 			title: "Total Sob Gestão",
-			value: "450.000 MZN",
+			value: `${saversState.reduce((sum, s) => sum + (s.totalSaved || 0), 0).toLocaleString()} MZN`,
 			subtext: "+12.5% vs mês anterior",
 			borderColor: "primary" as const,
 		},
 		{
 			title: "Empréstimos Activos",
-			value: "8.000 MZN",
-			subtext: "3 empréstimos activos",
+			value: `${saversState.reduce((sum, s) => sum + (s.totalLoans || 0), 0).toLocaleString()} MZN`,
+			subtext: `${saversState.filter((s) => s.status === "in_debt").length} empréstimos activos`,
 			borderColor: "warning" as const,
 		},
 		{
 			title: "Dívida de Empréstimos",
-			value: `${String(savers.reduce((sum, s) => sum + (s.currentDebt || 0), 0).toLocaleString())} MZN`,
-			subtext: `${savers.filter((s) => s.status === "in_debt").length} clientes com dívida`,
+			value: `${String(saversState.reduce((sum, s) => sum + (s.currentDebt || 0), 0).toLocaleString())} MZN`,
+			subtext: `${saversState.filter((s) => s.status === "in_debt").length} clientes com dívida`,
 			borderColor: "error" as const,
 		},
 	];
@@ -2006,7 +2015,16 @@ function SaversManagement() {
 						onClick={(e) => {
 							e.stopPropagation();
 							setSelectedSaver(row);
-							setIsDepositModalOpen(true);
+							// Find first unpaid day
+							const firstUnpaidDay = row.paymentDays?.find((d) => !d.paid);
+							setSelectedDayData({
+								day: firstUnpaidDay?.day || 1,
+								saverName: row.name,
+								saverDailyAmount: row.dailyAmount,
+								status: "not_deposited",
+								paymentDays: row.paymentDays,
+							});
+							setIsDayActionModalOpen(true);
 						}}
 					>
 						Registar Depósito
@@ -2211,6 +2229,7 @@ function SaversManagement() {
 					) : (
 						<SaversCalendarView
 							savers={filteredSavers}
+							forceUpdate={forceUpdate}
 							onRowDoubleClick={(saver) => {
 								setSelectedSaver(saver);
 								setIsSaverPopupOpen(true);
@@ -2229,12 +2248,9 @@ function SaversManagement() {
 										: "not_deposited",
 									amount: dayData.amount,
 									collector: dayData.collector,
+									paymentDays: saver.paymentDays,
 								});
 								setIsDayActionModalOpen(true);
-							}}
-							onDepositClick={(saver) => {
-								setSelectedSaver(saver);
-								setIsDepositModalOpen(true);
 							}}
 							onLoanClick={(saver) => {
 								setSelectedSaver(saver);
@@ -2258,17 +2274,6 @@ function SaversManagement() {
 				onSubmit={(data) => console.log("Register saver:", data)}
 			/>
 
-			<QuickDepositModal
-				isOpen={isDepositModalOpen}
-				onClose={() => {
-					setIsDepositModalOpen(false);
-					setSelectedSaver(null);
-				}}
-				onSubmit={(data) => console.log("Deposit:", data)}
-				saverName={selectedSaver?.name}
-				dailyAmount={selectedSaver?.dailyAmount}
-			/>
-
 			<QuickLoanModal
 				isOpen={isLoanModalOpen}
 				onClose={() => {
@@ -2285,6 +2290,7 @@ function SaversManagement() {
 			/>
 
 			<DayDetailPopup
+				key={`${selectedDayData?.saverName}-${selectedDayData?.day}`}
 				isOpen={isDayActionModalOpen}
 				onClose={() => setIsDayActionModalOpen(false)}
 				day={selectedDayData?.day || 1}
@@ -2294,11 +2300,73 @@ function SaversManagement() {
 				dayStatus={selectedDayData?.status || "not_deposited"}
 				amount={selectedDayData?.amount}
 				collector={selectedDayData?.collector}
+				paymentDays={selectedDayData?.paymentDays}
 				onDeposit={(data) => {
+					console.log("=== DEPOSIT START ===");
+					console.log("Deposit data:", data);
+					console.log("Selected saver before:", selectedSaver);
+
+					// Update the selected saver's paymentDays to mark days as paid
+					if (selectedSaver?.paymentDays) {
+						const updatedPaymentDays = selectedSaver.paymentDays.map((pd) => {
+							if (data.daysToDeposit.includes(pd.day)) {
+								return {
+									...pd,
+									paid: true,
+									amount: data.amount / data.days, // distribute amount evenly
+									collector: user?.name || "Admin",
+								};
+							}
+							return pd;
+						});
+
+						console.log("Updated paymentDays:", updatedPaymentDays);
+
+						const updatedSaver = {
+							...selectedSaver,
+							paymentDays: updatedPaymentDays,
+							totalSaved: selectedSaver.totalSaved + data.amount,
+							daysInCycle: selectedSaver.daysInCycle + data.days,
+						};
+
+						console.log("Updated saver:", updatedSaver);
+						setSelectedSaver(updatedSaver);
+
+						// Update saversState directly
+						setSaversState((prev) => {
+							const newState = prev.map((s) =>
+								s.id === updatedSaver.id ? updatedSaver : s,
+							);
+							console.log(
+								"SaversState updated. New saver in state:",
+								newState.find((s) => s.id === updatedSaver.id),
+							);
+							return newState;
+						});
+
+						// Force re-render by incrementing counter
+						setForceUpdate((prev) => prev + 1);
+
+						// Also update selectedDayData with the new paymentDays
+						if (selectedDayData) {
+							setSelectedDayData({
+								...selectedDayData,
+								paymentDays: updatedPaymentDays,
+							});
+						}
+					}
+
+					// If only 1 day was deposited, show just that day (the selected one)
+					// If multiple days, show all of them
+					const daysText =
+						data.days === 1
+							? `dia ${selectedDayData?.day}`
+							: `dias ${data.daysToDeposit.join(", ")}`;
 					toast.success(
-						`Depósito de ${data.amount.toLocaleString()} MZN registrado com sucesso para ${selectedDayData?.saverName}`,
+						`Depósito de ${data.amount.toLocaleString()} MZN para ${daysText} registrado com sucesso para ${selectedDayData?.saverName}`,
 					);
 					setIsDayActionModalOpen(false);
+					console.log("=== DEPOSIT END ===");
 				}}
 				onEdit={() => {
 					toast.info("Funcionalidade de editar depósito em desenvolvimento");
