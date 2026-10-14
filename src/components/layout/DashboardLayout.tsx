@@ -13,7 +13,7 @@ export function DashboardLayout({
 	return (
 		<div
 			className={cn(
-				"h-screen w-screen flex bg-slate-50/50 overflow-hidden font-sans selection:bg-emerald-900/10 antialiased text-slate-900",
+				"h-screen w-screen flex bg-slate-100 overflow-hidden font-sans selection:bg-emerald-900/10 antialiased text-slate-900",
 				className,
 			)}
 		>
