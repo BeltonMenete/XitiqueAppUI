@@ -141,6 +141,26 @@ export const transitions = {
 	slow: "300ms cubic-bezier(0.4, 0, 0.2, 1)",
 };
 
+export const animations = {
+	// Duration
+	durationFast: "150ms",
+	durationNormal: "200ms",
+	durationSlow: "300ms",
+	durationSlower: "500ms",
+
+	// Easing
+	easeOut: "cubic-bezier(0.4, 0, 0.2, 1)",
+	easeIn: "cubic-bezier(0.4, 0, 1, 1)",
+	easeInOut: "cubic-bezier(0.4, 0, 0.2, 1)",
+	easingBounce: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+
+	// Presets
+	default: "transition-all duration-200 ease-out",
+	fast: "transition-all duration-150 ease-out",
+	slow: "transition-all duration-300 ease-out",
+	bounce: "transition-all duration-200 cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+};
+
 export const zIndex = {
 	dropdown: 1000,
 	sticky: 1020,

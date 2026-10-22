@@ -149,7 +149,7 @@ function OrganizationDashboard() {
 
 				<main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{/* Action Banner */}
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up">
 						<div>
 							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 								Painel de Organização
@@ -158,29 +158,35 @@ function OrganizationDashboard() {
 								Visão geral das actividades da sua organização
 							</p>
 						</div>
-						<Button size="sm" leftIcon={<Plus size={16} />}>
+						<Button size="sm" leftIcon={<Plus size={16} />} className="animate-bounce-in">
 							Nova Colecta
 						</Button>
 					</div>
 
 					{/* KPI Cards */}
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-						{kpiData.map((kpi) => (
-							<PrototypeKPICard key={kpi.title} {...kpi} />
+						{kpiData.map((kpi, index) => (
+							<div
+								key={kpi.title}
+								className="animate-slide-up"
+								style={{ animationDelay: `${index * 0.1}s` }}
+							>
+								<PrototypeKPICard {...kpi} />
+							</div>
 						))}
 					</div>
 
 					{/* Dashboard Content Grid */}
 					<div className="grid grid-cols-12 gap-6">
 						{/* Collection Evolution Chart */}
-						<div className="col-span-12 lg:col-span-8">
-							<Card>
+						<div className="col-span-12 lg:col-span-8 animate-slide-up">
+							<Card className="transition-all duration-300 hover:shadow-lg">
 								<CardContent className="p-5">
 									<div className="flex items-center justify-between mb-4">
-										<h3 className="text-sm font-semibold text-slate-900">
+										<h3 className="text-sm font-semibold text-slate-900 animate-smooth-fade">
 											Evolução de Colectas
 										</h3>
-										<select className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+										<select className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-200 hover:border-emerald-300">
 											<option>Últimos 6 meses</option>
 											<option>Último ano</option>
 										</select>
@@ -194,17 +200,18 @@ function OrganizationDashboard() {
 												{ label: "Nov", value: 85 },
 												{ label: "Dez", value: 100 },
 												{ label: "Jan", value: 94 },
-											].map((item) => (
+											].map((item, index) => (
 												<div
 													key={item.label}
-													className="flex items-center gap-3"
+													className="flex items-center gap-3 animate-slide-up"
+													style={{ animationDelay: `${index * 0.1}s` }}
 												>
 													<span className="text-xs text-slate-600 w-8 font-medium">
 														{item.label}
 													</span>
 													<div className="flex-1 h-4 bg-slate-200 rounded-full overflow-hidden">
 														<div
-															className="h-full bg-emerald-500 rounded-full transition-all duration-300 hover:bg-emerald-400"
+															className="h-full bg-emerald-500 rounded-full transition-all duration-500 ease-out hover:bg-emerald-400 hover:shadow-md animate-pulse-glow"
 															style={{ width: `${item.value}%` }}
 														/>
 													</div>

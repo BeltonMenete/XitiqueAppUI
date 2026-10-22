@@ -47,7 +47,7 @@ export function Modal({
 			{/* Backdrop */}
 			<button
 				type="button"
-				className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+				className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-smooth-fade"
 				onClick={onClose}
 				aria-label="Close modal"
 			/>
@@ -55,7 +55,7 @@ export function Modal({
 			{/* Modal */}
 			<div
 				className={cn(
-					"relative bg-white rounded-xl shadow-xl w-full mx-4 animate-in fade-in zoom-in-95 duration-200",
+					"relative bg-white rounded-xl shadow-xl w-full mx-4 animate-scale-in",
 					sizeClasses[size],
 					className,
 				)}

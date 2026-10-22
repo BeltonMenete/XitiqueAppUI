@@ -106,10 +106,10 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 								href={item.href}
 								onClick={() => setIsOpen(false)}
 								className={cn(
-									"flex items-center rounded-xl text-xs font-medium transition-all",
+									"flex items-center rounded-xl text-xs font-medium transition-all duration-200",
 									isCollapsed ? "justify-center p-4" : "gap-3 px-3 py-2.5",
 									item.isActive
-										? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/10"
+										? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/10 animate-gentle-bounce"
 										: "text-slate-600 hover:bg-slate-50 hover:text-slate-900 group",
 								)}
 								title={isCollapsed ? item.label : undefined}
@@ -117,9 +117,10 @@ export function Sidebar({ items, className = "" }: SidebarProps) {
 								<item.icon
 									size={isCollapsed ? 24 : 18}
 									className={cn(
+										"transition-colors duration-200",
 										item.isActive
 											? "text-white"
-											: "text-slate-400 group-hover:text-slate-600",
+											: "text-slate-400 group-hover:text-emerald-600",
 									)}
 								/>
 								{!isCollapsed && <span>{item.label}</span>}

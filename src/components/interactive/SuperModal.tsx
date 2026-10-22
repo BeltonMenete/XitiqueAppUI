@@ -61,7 +61,7 @@ export function SuperModal({
 			{/* Backdrop */}
 			<button
 				type="button"
-				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-in fade-in duration-200 border-0 p-0 cursor-pointer"
+				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-smooth-fade border-0 p-0 cursor-pointer"
 				onClick={onClose}
 				aria-label="Fechar"
 			/>
@@ -69,7 +69,7 @@ export function SuperModal({
 			{/* Modal */}
 			<div
 				className={cn(
-					"relative bg-white rounded-xl shadow-2xl w-full animate-in scale-in duration-200 flex flex-col max-h-[90vh]",
+					"relative bg-white rounded-xl shadow-2xl w-full animate-scale-in flex flex-col max-h-[90vh]",
 					sizeClasses[size],
 				)}
 			>
@@ -89,7 +89,7 @@ export function SuperModal({
 						<button
 							type="button"
 							onClick={onClose}
-							className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
+							className="p-2 hover:bg-slate-100 rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 hover:scale-110 active:scale-95"
 						>
 							<X size={20} />
 						</button>
@@ -120,10 +120,10 @@ export function SuperModal({
 								onClick={onPrevious}
 								disabled={currentStep === 1}
 								className={cn(
-									"flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",
+									"flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200",
 									currentStep === 1
 										? "text-slate-400 cursor-not-allowed"
-										: "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+										: "text-slate-600 hover:bg-slate-100 hover:text-slate-900 active:scale-95",
 								)}
 							>
 								<ChevronLeft size={18} />
@@ -137,10 +137,10 @@ export function SuperModal({
 								onClick={onNext}
 								disabled={currentStep === totalSteps}
 								className={cn(
-									"flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",
+									"flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200",
 									currentStep === totalSteps
 										? "text-slate-400 cursor-not-allowed"
-										: "bg-secondary text-white hover:bg-secondary-dark",
+										: "bg-secondary text-white hover:bg-secondary-dark active:scale-95",
 								)}
 							>
 								{currentStep === totalSteps ? "Concluir" : "Próximo"}
@@ -182,7 +182,7 @@ export function SuperModalWithTabs({
 			{/* Backdrop */}
 			<button
 				type="button"
-				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-in fade-in duration-200 border-0 p-0 cursor-pointer"
+				className="absolute inset-0 bg-slate-100/80 backdrop-blur-sm animate-smooth-fade border-0 p-0 cursor-pointer"
 				onClick={onClose}
 				aria-label="Fechar"
 			/>
@@ -190,7 +190,7 @@ export function SuperModalWithTabs({
 			{/* Modal */}
 			<div
 				className={cn(
-					"relative bg-white rounded-xl shadow-2xl w-full animate-in scale-in duration-200 flex flex-col max-h-[90vh]",
+					"relative bg-white rounded-xl shadow-2xl w-full animate-scale-in flex flex-col max-h-[90vh]",
 					sizeClasses[size],
 				)}
 			>
@@ -202,7 +202,7 @@ export function SuperModalWithTabs({
 					<button
 						type="button"
 						onClick={onClose}
-						className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600 hover:text-slate-900"
+						className="p-2 hover:bg-slate-100 rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 hover:scale-110 active:scale-95"
 					>
 						<X size={20} />
 					</button>
@@ -216,10 +216,10 @@ export function SuperModalWithTabs({
 							key={tab.id}
 							onClick={() => setActiveTab(tab.id)}
 							className={cn(
-								"flex items-center gap-2 px-6 py-3 font-medium transition-colors border-b-2",
+								"flex items-center gap-2 px-6 py-3 font-medium transition-all duration-200 border-b-2",
 								activeTab === tab.id
-									? "border-secondary text-emerald-600 bg-white"
-									: "border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100",
+									? "border-secondary text-emerald-600 bg-white animate-gentle-bounce"
+									: "border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100 active:scale-95",
 							)}
 						>
 							{tab.icon}

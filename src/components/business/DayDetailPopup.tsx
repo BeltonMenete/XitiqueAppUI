@@ -1,5 +1,6 @@
-import { Check, DollarSign, User, X } from "lucide-react";
+import { Check, DollarSign, Minus, Plus, User, X } from "lucide-react";
 import { useState } from "react";
+import { AnimatedNumber } from "#/components/ui/AnimatedNumber";
 import { Button } from "#/components/ui/Button";
 import { cn } from "#/lib/design-system";
 
@@ -11,14 +12,14 @@ interface DayDetailPopupProps {
 	saverName: string;
 	saverDailyAmount: number;
 	dayStatus:
-		| "paid"
-		| "partial"
-		| "unpaid"
-		| "deleted"
-		| "not_deposited"
-		| "in_debt"
-		| "current"
-		| "normal_deposit";
+	| "paid"
+	| "partial"
+	| "unpaid"
+	| "deleted"
+	| "not_deposited"
+	| "in_debt"
+	| "current"
+	| "normal_deposit";
 	amount?: number;
 	collector?: string;
 	isLoading?: boolean;
@@ -161,7 +162,7 @@ export function DayDetailPopup({
 			aria-modal="true"
 		>
 			<div
-				className="bg-white rounded-xl shadow-xl p-4 max-w-xs w-full mx-4 animate-in scale-in duration-200"
+				className="bg-white rounded-xl shadow-xl p-4 max-w-xs w-full mx-4 animate-scale-in"
 				onClick={(e) => e.stopPropagation()}
 				onKeyDown={(e) => {
 					e.stopPropagation();
@@ -231,7 +232,7 @@ export function DayDetailPopup({
 						</div>
 
 						{depositType !== "debt_payment" && (
-							<div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+							<div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200 animate-smooth-fade">
 								<div className="flex items-center gap-2">
 									<DollarSign size={14} className="text-emerald-600" />
 									<div>
@@ -239,7 +240,12 @@ export function DayDetailPopup({
 											Taxa Diária Fixa
 										</p>
 										<p className="text-sm font-bold text-emerald-900">
-											{saverDailyAmount.toLocaleString()} MZN
+											<AnimatedNumber
+												value={saverDailyAmount}
+												format={false}
+												duration={300}
+												key={`daily-${saverDailyAmount}`}
+											/> MZN
 										</p>
 									</div>
 								</div>
@@ -255,33 +261,60 @@ export function DayDetailPopup({
 									>
 										Quantidade de Dias
 									</label>
-									<input
-										id="number-of-days"
-										type="number"
-										min="1"
-										max={maxDays}
-										value={numberOfDays}
-										onChange={(e) =>
-											setNumberOfDays(
-												Math.min(
-													maxDays,
-													Math.max(1, parseInt(e.target.value, 10) || 1),
-												),
-											)
-										}
-										className="w-full px-2 py-1.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-xs"
-									/>
-									<p className="text-[10px] text-slate-500 mt-1">
+									<div className="flex items-center gap-2">
+										<button
+											type="button"
+											onClick={() =>
+												setNumberOfDays((prev) =>
+													Math.max(1, prev - 1),
+												)
+											}
+											disabled={numberOfDays <= 1}
+											className="w-12 h-10 flex items-center justify-center rounded-lg border border-slate-300 bg-slate-50 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 animate-button-press"
+										>
+											<Minus size={20} className="text-slate-700" />
+										</button>
+										<div className="flex-1 text-center">
+											<span
+												className="text-lg font-bold text-slate-900 inline-block"
+												key={`days-counter-${numberOfDays}`}
+											>
+												<AnimatedNumber
+													value={numberOfDays}
+													format={false}
+													duration={150}
+												/>
+											</span>
+										</div>
+										<button
+											type="button"
+											onClick={() =>
+												setNumberOfDays((prev) =>
+													Math.min(maxDays, prev + 1),
+												)
+											}
+											disabled={numberOfDays >= maxDays}
+											className="w-12 h-10 flex items-center justify-center rounded-lg border border-slate-300 bg-slate-50 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 animate-button-press"
+										>
+											<Plus size={20} className="text-slate-700" />
+										</button>
+									</div>
+									<p className="text-[10px] text-slate-500 mt-1 text-center">
 										Dias disponíveis: {maxDays}
 									</p>
 								</div>
 							)}
 							{numberOfDays > 1 && depositType !== "debt_payment" && (
-								<div className="p-2 bg-slate-50 rounded-lg border border-slate-200">
+								<div className="p-2 bg-slate-50 rounded-lg border border-slate-200 animate-smooth-fade">
 									<div className="flex justify-between items-center mb-1">
 										<span className="text-xs text-slate-600">Total:</span>
-										<span className="text-sm font-bold text-slate-900">
-											{totalAmount.toLocaleString()} MZN
+										<span className="text-sm font-bold text-slate-900 inline-block">
+											<AnimatedNumber
+												value={totalAmount}
+												format={false}
+												duration={150}
+												key={`total-${totalAmount}-${numberOfDays}`}
+											/> MZN
 										</span>
 									</div>
 									{daysToDeposit.length > 0 && (

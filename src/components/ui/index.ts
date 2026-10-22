@@ -1,3 +1,5 @@
+export { AnimatedNumber } from "./AnimatedNumber";
+export { AnimatedText } from "./AnimatedText";
 export { AppButton } from "./AppButton";
 export { Badge as OriginalBadge } from "./Badge";
 export { Breadcrumbs } from "./Breadcrumbs";
@@ -42,6 +44,7 @@ export { PageSection } from "./PageSection";
 export { ProgressCircle } from "./ProgressCircle";
 export { PrototypeKPICard } from "./PrototypeKPICard";
 export { PrototypeTable } from "./PrototypeTable";
+export { RippleButton } from "./RippleButton";
 export { ShadcnBadge as Badge } from "./ShadcnBadge";
 export {
 	ActiveBadge,

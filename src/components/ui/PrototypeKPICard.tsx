@@ -60,7 +60,7 @@ export function PrototypeKPICard({
 					className={cn(
 						"bg-slate-50 p-3 shadow-sm w-full text-left rounded-r-xl",
 						borderColorMap[borderColor],
-						"cursor-pointer hover:shadow-md transition-shadow",
+						"cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-[1.02]",
 					)}
 					onClick={handleClick}
 					onKeyDown={(e) => {
@@ -75,7 +75,10 @@ export function PrototypeKPICard({
 					</span>
 					<div className="flex items-baseline gap-2">
 						<span
-							className={cn("text-xl font-bold", textColorMap[borderColor])}
+							className={cn(
+								"text-xl font-bold",
+								textColorMap[borderColor],
+							)}
 						>
 							{value}
 						</span>
@@ -133,7 +136,10 @@ export function PrototypeKPICard({
 					</span>
 					<div className="flex items-baseline gap-2">
 						<span
-							className={cn("text-xl font-bold", textColorMap[borderColor])}
+							className={cn(
+								"text-xl font-bold",
+								textColorMap[borderColor],
+							)}
 						>
 							{value}
 						</span>

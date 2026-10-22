@@ -70,6 +70,7 @@ interface MonthCalendarGridProps {
 	headerOnly?: boolean;
 	saver?: Saver;
 	selectedMonth?: string;
+	forceUpdate?: number;
 }
 
 const MonthCalendarGrid = function MonthCalendarGrid({
@@ -81,6 +82,7 @@ const MonthCalendarGrid = function MonthCalendarGrid({
 	headerOnly = false,
 	saver: _saver,
 	selectedMonth: _selectedMonth,
+	forceUpdate = 0,
 }: MonthCalendarGridProps) {
 	const weekDays = useMemo(() => ["S", "T", "Q", "Q", "S", "S", "D"], []);
 
@@ -156,15 +158,16 @@ const MonthCalendarGrid = function MonthCalendarGrid({
 				{!headerOnly &&
 					days.map((dayData) => (
 						<button
-							key={dayData.day}
+							key={`${dayData.day}-${dayData.paid}-${forceUpdate}`}
 							type="button"
 							className={cn(
-								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all hover:scale-110 hover:shadow-md relative group mx-auto flex items-center justify-center",
+								"w-3 h-3 sm:w-4 sm:h-4 rounded-sm border cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md relative group mx-auto flex items-center justify-center",
+								dayData.paid ? "animate-pop-in" : "",
 								dayData.paid && dayData.isDebtPayment
-									? "border-amber-300 bg-amber-500 hover:bg-amber-600"
+									? "border-amber-300 bg-amber-500 hover:bg-amber-600 hover:shadow-amber-500/30 animate-pulse-glow"
 									: dayData.paid
-										? "border-emerald-300 bg-emerald-500 hover:bg-emerald-600"
-										: "border-slate-200 bg-slate-50 hover:bg-slate-100",
+										? "border-emerald-300 bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-500/30 animate-pulse-glow"
+										: "border-slate-200 bg-slate-50 hover:bg-slate-100 hover:shadow-slate-400/20",
 							)}
 							onClick={() => onDayClick?.(dayData)}
 						>
@@ -306,17 +309,18 @@ function SaversCalendarView({
 			{/* Month Selector & Filters */}
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
 				<div className="flex items-center space-x-2 overflow-x-auto">
-					{months.map((month) => (
+					{months.map((month, index) => (
 						<button
 							key={month}
 							type="button"
 							className={cn(
-								"px-3 py-1 rounded-full text-xs font-semibold transition-colors whitespace-nowrap",
+								"px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 whitespace-nowrap",
 								selectedMonth === month
-									? "bg-emerald-500 text-white shadow-sm"
-									: "bg-slate-100 text-slate-500 hover:bg-slate-200",
+									? "bg-emerald-500 text-white shadow-sm animate-gentle-bounce hover:scale-105 active:scale-95"
+									: "bg-slate-100 text-slate-500 hover:bg-slate-200 hover:scale-105 active:scale-95",
 							)}
 							onClick={() => onMonthChange(month)}
+							style={{ animationDelay: `${index * 0.05}s` }}
 						>
 							{month}
 						</button>
@@ -325,7 +329,7 @@ function SaversCalendarView({
 				<div className="flex space-x-2">
 					<button
 						type="button"
-						className="flex items-center space-x-2 px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+						className="flex items-center space-x-2 px-3 py-1.5 border border-slate-200 rounded-xl hover:bg-slate-50 transition-all duration-200 hover:scale-105 active:scale-95"
 					>
 						<Filter size={16} />
 						<span className="text-xs font-semibold">Filtros</span>
@@ -361,6 +365,7 @@ function SaversCalendarView({
 											day: i + 1,
 											paid: false,
 										}))}
+										forceUpdate={forceUpdate}
 										showHeader={true}
 										headerOnly={true}
 										selectedMonth={selectedMonth}
@@ -378,10 +383,11 @@ function SaversCalendarView({
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-slate-200">
-							{visibleSavers.map((saver) => (
+							{visibleSavers.map((saver, index) => (
 								<tr
-									key={saver.id}
-									className="hover:bg-slate-50 transition-colors border-b border-slate-200/50"
+									key={`${saver.id}-${forceUpdate}`}
+									className="border-b border-slate-200/50 transition-all duration-200 hover:bg-slate-50/50 animate-slide-up"
+									style={{ animationDelay: `${index * 0.05}s` }}
 								>
 									<td className="px-1 py-0.5">
 										{/* CALENDAR VIEW - Saver Name Click Navigation to Details */}
@@ -417,8 +423,9 @@ function SaversCalendarView({
 									</td>
 									<td className="px-2 py-0.5">
 										<MonthCalendarGrid
-											key={`${saver.id}-${saver.totalSaved}-${forceUpdate}`}
+											key={`${saver.id}-${forceUpdate}`}
 											days={saver.paymentDays || []}
+											forceUpdate={forceUpdate}
 											onDayClick={(dayData) => {
 												console.log(
 													"Day clicked for saver:",
@@ -480,15 +487,15 @@ function SaversCalendarView({
 												},
 												...(saver.status === "active" && canCloseCycle
 													? [
-															{
-																id: "close-cycle",
-																label: "Fechar Ciclo",
-																onClick: () => {
-																	setSelectedSaverForClosure(saver);
-																	setShowCycleClosureModal(true);
-																},
+														{
+															id: "close-cycle",
+															label: "Fechar Ciclo",
+															onClick: () => {
+																setSelectedSaverForClosure(saver);
+																setShowCycleClosureModal(true);
 															},
-														]
+														},
+													]
 													: []),
 											]}
 										/>
@@ -1764,12 +1771,12 @@ function SaversManagement() {
 		saverName: string;
 		saverDailyAmount: number;
 		status:
-			| "paid"
-			| "partial"
-			| "unpaid"
-			| "deleted"
-			| "not_deposited"
-			| "in_debt";
+		| "paid"
+		| "partial"
+		| "unpaid"
+		| "deleted"
+		| "not_deposited"
+		| "in_debt";
 		amount?: number;
 		collector?: string;
 		paymentDays?: Array<{ day: number; paid: boolean }>;
@@ -2095,9 +2102,9 @@ function SaversManagement() {
 								<button
 									type="button"
 									className={cn(
-										"p-1.5 rounded-md transition-colors",
+										"p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95",
 										viewMode === "standard"
-											? "bg-white text-slate-900 shadow-sm"
+											? "bg-white text-slate-900 shadow-sm animate-gentle-bounce"
 											: "text-slate-500 hover:text-slate-700",
 									)}
 									onClick={() => setViewMode("standard")}
@@ -2108,9 +2115,9 @@ function SaversManagement() {
 								<button
 									type="button"
 									className={cn(
-										"p-1.5 rounded-md transition-colors",
+										"p-1.5 rounded-md transition-all duration-200 hover:scale-110 active:scale-95",
 										viewMode === "calendar"
-											? "bg-white text-slate-900 shadow-sm"
+											? "bg-white text-slate-900 shadow-sm animate-gentle-bounce"
 											: "text-slate-500 hover:text-slate-700",
 									)}
 									onClick={() => setViewMode("calendar")}
@@ -2123,6 +2130,7 @@ function SaversManagement() {
 								size="sm"
 								leftIcon={<Plus size={16} />}
 								onClick={() => setIsRegisterModalOpen(true)}
+								className="animate-bounce-in"
 							>
 								Novo Ticante
 							</Button>
@@ -2134,7 +2142,7 @@ function SaversManagement() {
 					{viewMode === "standard" ? (
 						<>
 							{/* Action Banner */}
-							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
+							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up">
 								<div>
 									<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 										Gestão de Ticantes
@@ -2184,13 +2192,19 @@ function SaversManagement() {
 
 							{/* KPI Cards */}
 							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-								{kpiData.map((kpi) => (
-									<PrototypeKPICard key={kpi.title} {...kpi} />
+								{kpiData.map((kpi, index) => (
+									<div
+										key={kpi.title}
+										className="animate-slide-up"
+										style={{ animationDelay: `${index * 0.1}s` }}
+									>
+										<PrototypeKPICard {...kpi} />
+									</div>
 								))}
 							</div>
 
 							{/* Main Content */}
-							<div className="grid grid-cols-12 gap-4">
+							<div className="grid grid-cols-12 gap-4 animate-slide-up" style={{ animationDelay: "0.3s" }}>
 								{/* Savers Table */}
 								<div className="col-span-12">
 									{isLoading ? (
@@ -2198,7 +2212,7 @@ function SaversManagement() {
 											<LoadingSkeleton variant="table" />
 										</div>
 									) : filteredSavers.length === 0 ? (
-										<div className="p-4">
+										<div className="p-4 animate-bounce-in">
 											<EmptyState
 												icon={Users}
 												title="Nenhum ticante encontrado"
@@ -2227,43 +2241,46 @@ function SaversManagement() {
 							</div>
 						</>
 					) : (
-						<SaversCalendarView
-							savers={filteredSavers}
-							forceUpdate={forceUpdate}
-							onRowDoubleClick={(saver) => {
-								setSelectedSaver(saver);
-								setIsSaverPopupOpen(true);
-							}}
-							selectedMonth={selectedMonth}
-							onMonthChange={setSelectedMonth}
-							onDayClick={(saver, dayData) => {
-								setSelectedDayData({
-									day: dayData.day,
-									saverName: saver.name,
-									saverDailyAmount: saver.dailyAmount,
-									status: dayData.paid
-										? dayData.isDebtPayment
-											? "partial"
-											: "paid"
-										: "not_deposited",
-									amount: dayData.amount,
-									collector: dayData.collector,
-									paymentDays: saver.paymentDays,
-								});
-								setIsDayActionModalOpen(true);
-							}}
-							onLoanClick={(saver) => {
-								setSelectedSaver(saver);
-								setIsLoanModalOpen(true);
-							}}
-							onSaverClick={(saverId) => {
-								navigate({
-									to: "/dashboard/saver-details",
-									search: { id: saverId },
-								});
-							}}
-							canCloseCycle={user?.isAdmin || user?.isCollector}
-						/>
+						<div className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
+							<SaversCalendarView
+								key={`calendar-view-${forceUpdate}`}
+								savers={filteredSavers}
+								forceUpdate={forceUpdate}
+								onRowDoubleClick={(saver) => {
+									setSelectedSaver(saver);
+									setIsSaverPopupOpen(true);
+								}}
+								selectedMonth={selectedMonth}
+								onMonthChange={setSelectedMonth}
+								onDayClick={(saver, dayData) => {
+									setSelectedDayData({
+										day: dayData.day,
+										saverName: saver.name,
+										saverDailyAmount: saver.dailyAmount,
+										status: dayData.paid
+											? dayData.isDebtPayment
+												? "partial"
+												: "paid"
+											: "not_deposited",
+										amount: dayData.amount,
+										collector: dayData.collector,
+										paymentDays: saver.paymentDays,
+									});
+									setIsDayActionModalOpen(true);
+								}}
+								onLoanClick={(saver) => {
+									setSelectedSaver(saver);
+									setIsLoanModalOpen(true);
+								}}
+								onSaverClick={(saverId) => {
+									navigate({
+										to: "/dashboard/saver-details",
+										search: { id: saverId },
+									});
+								}}
+								canCloseCycle={user?.isAdmin || user?.isCollector}
+							/>
+						</div>
 					)}
 				</main>
 			</div>

@@ -359,7 +359,7 @@ function CollectorsManagement() {
 						<div>
 							<button
 								type="button"
-								className="font-bold text-sm text-slate-900 hover:text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 text-left cursor-pointer"
+								className="font-bold text-sm text-slate-900 hover:text-emerald-600 hover:underline transition-all duration-200 bg-transparent border-none p-0 text-left cursor-pointer hover:scale-105 active:scale-95"
 								onClick={() => {
 									console.log(
 										"Collector name click - navigating to collector-details for:",
@@ -531,13 +531,19 @@ function CollectorsManagement() {
 				<main className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 max-w-7xl w-full mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
 					{/* KPI Cards */}
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-						{kpiData.map((kpi) => (
-							<PrototypeKPICard key={kpi.title} {...kpi} />
+						{kpiData.map((kpi, index) => (
+							<div
+								key={kpi.title}
+								className="animate-slide-up"
+								style={{ animationDelay: `${index * 0.08}s` }}
+							>
+								<PrototypeKPICard {...kpi} />
+							</div>
 						))}
 					</div>
 
 					{/* Action Banner with Filters */}
-					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow">
+					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style={{ animationDelay: "0.3s" }}>
 						<div>
 							<h2 className="text-sm font-bold text-slate-950 tracking-tight">
 								Filtros
@@ -564,7 +570,7 @@ function CollectorsManagement() {
 
 					{/* Table */}
 					{filteredCollectors.length === 0 ? (
-						<div className="p-8">
+						<div className="p-8 animate-bounce-in">
 							<EmptyState
 								icon={Users}
 								title="Nenhum cobrador encontrado"
@@ -574,26 +580,28 @@ function CollectorsManagement() {
 							/>
 						</div>
 					) : (
-						<PrototypeTable
-							data={filteredCollectors as unknown as Record<string, unknown>[]}
-							columns={columns}
-							showAvatars={true}
-							showStatusBadges={true}
-							onRowClick={(row) => {
-								const collector = row as unknown as Collector;
-								console.log("View collector:", collector.id);
-								navigate({
-									to: "/dashboard/collector-details",
-									search: { id: collector.id },
-								});
-							}}
-							pagination={{
-								currentPage: 1,
-								totalPages: Math.ceil(filteredCollectors.length / 10),
-								totalItems: filteredCollectors.length,
-								onPageChange: (page) => console.log("Page change:", page),
-							}}
-						/>
+						<div className="animate-slide-up" style={{ animationDelay: "0.4s" }}>
+							<PrototypeTable
+								data={filteredCollectors as unknown as Record<string, unknown>[]}
+								columns={columns}
+								showAvatars={true}
+								showStatusBadges={true}
+								onRowClick={(row) => {
+									const collector = row as unknown as Collector;
+									console.log("View collector:", collector.id);
+									navigate({
+										to: "/dashboard/collector-details",
+										search: { id: collector.id },
+									});
+								}}
+								pagination={{
+									currentPage: 1,
+									totalPages: Math.ceil(filteredCollectors.length / 10),
+									totalItems: filteredCollectors.length,
+									onPageChange: (page) => console.log("Page change:", page),
+								}}
+							/>
+						</div>
 					)}
 
 					{/* Support Section */}
